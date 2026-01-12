@@ -11,12 +11,12 @@ class PERSALYS_PLOTPV_API PVSpreadSheetViewWidget : public PVViewWidget
   Q_OBJECT
 public:
   PVSpreadSheetViewWidget(QWidget *parent, PVServerManagerInterface *smb);
-  ~PVSpreadSheetViewWidget();
+  ~PVSpreadSheetViewWidget() override;
   const char *getRepresentationName() const override
   {
     return PV_REPRESENTATION_TYPE;
   }
-  static QWidget * GetSpreadSheetViewWidget(PVSpreadSheetViewWidget *pvWidget, const OT::Sample &sample, Item *item = 0, const OT::Description& errorDesc = OT::Description());
+  static QWidget * GetSpreadSheetViewWidget(PVSpreadSheetViewWidget *pvWidget, const OT::Sample &sample, Item *item = nullptr, const OT::Description& errorDesc = OT::Description());
 signals:
   void exportDataRequested();
   void copyDataRequested();

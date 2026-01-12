@@ -26,7 +26,7 @@
 #include "persalys/ExportableTableView.hxx"
 #include "persalys/PlotWidget.hxx"
 #include "persalys/DocumentationToolButton.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 #include "persalys/GraphConfigurationWidget.hxx"
 #include "persalys/ParametersTableView.hxx"
 
@@ -43,7 +43,7 @@ class PERSALYS_VIEW_API InferenceResultWidget : public QScrollArea
   Q_OBJECT
 
 public:
-  InferenceResultWidget(const bool displayPDF_QQPlot = true, QWidget* parent = nullptr);
+  explicit InferenceResultWidget(const bool displayPDF_QQPlot = true, QWidget* parent = nullptr);
 
   OT::Distribution getDistribution() const;
   bool isSelectedDistributionValid() const;
@@ -61,23 +61,23 @@ signals:
   void currentDistributionChanged();
 
 private:
-  bool displayPDF_QQPlot_ = true;
-  QTabWidget * tabWidget_ = nullptr;
-  FittingTestResult currentFittingTestResult_;
-  ExportableTableView * distTableView_ = nullptr;
-  CustomStandardItemModel * distTableModel_ = nullptr;
-  CopyableTableView * distParamTableView_ = nullptr;
-  CustomStandardItemModel * distParamTableModel_ = nullptr;
-  DocumentationToolButton * infoButton_ = nullptr;
-  TemporaryLabel * analysisErrorMessageLabel_ = nullptr;
-  PDFGraphSetting * pdf_cdfPlotSettingWidget_ = nullptr;
-  PlotWidget * pdfPlot_ = nullptr;
-  PlotWidget * cdfPlot_ = nullptr;
-  PlotWidget * qqPlot_ = nullptr;
-  PlotWidget * survPlot_ = nullptr;
-  PlotWidget * quantilePlot_ = nullptr;
-  ParametersTableView * sizeTable_ = nullptr;
-  QLabel * qqPlotWarningLabel_ = nullptr;
+  bool                    displayPDF_QQPlot_            = true;
+  QTabWidget              * tabWidget_                  = nullptr;
+  FittingTestResult       currentFittingTestResult_;
+  ExportableTableView     * distTableView_              = nullptr;
+  CustomStandardItemModel * distTableModel_             = nullptr;
+  CopyableTableView       * distParamTableView_         = nullptr;
+  CustomStandardItemModel * distParamTableModel_        = nullptr;
+  DocumentationToolButton * infoButton_                 = nullptr;
+  ErrorWidget             * analysisErrorMessageLabel_  = nullptr;
+  PDFGraphSetting         * pdf_cdfPlotSettingWidget_   = nullptr;
+  PlotWidget              * pdfPlot_                    = nullptr;
+  PlotWidget              * cdfPlot_                    = nullptr;
+  PlotWidget              * qqPlot_                     = nullptr;
+  PlotWidget              * survPlot_                   = nullptr;
+  PlotWidget              * quantilePlot_               = nullptr;
+  ParametersTableView     * sizeTable_                  = nullptr;
+  ErrorWidget             * qqPlotWarningLabel_         = nullptr;
 };
 }
 #endif

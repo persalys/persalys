@@ -26,7 +26,7 @@
 #include "persalys/EditableExportableTableView.hxx"
 #include "persalys/SubWindow.hxx"
 #include "persalys/ResizableHeaderlessTableView.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <QLineEdit>
 #include <QResizeEvent>
@@ -67,11 +67,11 @@ private:
   ResizableHeaderlessTableView * tableView_;
   DataModelTableModel * tableModel_;
   EditableExportableTableView * dataTableView1_;
-  EditableExportableTableView * dataTableView2_;
-  QLineEdit * filePathLineEdit_;
+  EditableExportableTableView * dataTableView2_ = nullptr;
+  QLineEdit * filePathLineEdit_ = nullptr;
   QPalette defaultLineEditPalette_;
-  QLabel * sampleSizeLabel_;
-  TemporaryLabel * errorMessageLabel_;
+  QLabel * sampleSizeLabel_ = nullptr;
+  ErrorWidget * errorWidget_ = nullptr;
 };
 }
 #endif

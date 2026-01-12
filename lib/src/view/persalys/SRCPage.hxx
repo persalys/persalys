@@ -24,7 +24,7 @@
 #include "persalys/Analysis.hxx"
 #include "persalys/LogSpinBox.hxx"
 #include "persalys/UIntSpinBox.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <QWizardPage>
 
@@ -35,7 +35,7 @@ class PERSALYS_VIEW_API SRCPage : public QWizardPage
   Q_OBJECT
 
 public:
-  SRCPage(QWidget* parent = 0);
+  explicit SRCPage(QWidget* parent = nullptr);
 
   void initialize(const Analysis& analysis);
   Analysis getAnalysis(const OT::String& name, const PhysicalModel& physicalModel) const;
@@ -47,10 +47,10 @@ protected:
   void buildInterface();
 
 private:
-  LogSpinBox * sampleSizeSpinbox_;
-  UIntSpinBox * blockSizeSpinbox_;
-  QSpinBox * seedSpinbox_;
-  TemporaryLabel * errorMessageLabel_;
+  LogSpinBox  * sampleSizeSpinbox_  = nullptr;
+  UIntSpinBox * blockSizeSpinbox_   = nullptr;
+  QSpinBox    * seedSpinbox_        = nullptr;
+  ErrorWidget * errorWidget_        = nullptr;
 };
 }
 #endif

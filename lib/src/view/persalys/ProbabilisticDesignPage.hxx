@@ -23,6 +23,7 @@
 
 #include "persalys/Analysis.hxx"
 #include "persalys/LogSpinBox.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <QWizardPage>
 #include <QLabel>
@@ -50,7 +51,7 @@ private:
 private:
   OT::Scalar      modelEvalTime_        = 0.0;
   int             blockSize_            = 1;
-  QLabel        * lhsWarningLabel_      = nullptr;
+  ErrorWidget   * lhsWarningLabel_      = nullptr;
   QButtonGroup  * designButtonsGroup_   = nullptr;
   QComboBox     * optimComboBox_        = nullptr;
   LogSpinBox    * mcLhsSizeSB_          = nullptr;

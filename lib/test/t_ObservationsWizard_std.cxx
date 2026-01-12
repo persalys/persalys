@@ -2,6 +2,7 @@
 #include "persalys/ObservationsWizard.hxx"
 #include "persalys/SymbolicPhysicalModel.hxx"
 #include "persalys/SampleTableModel.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <openturns/OTType.hxx>
 #include <openturns/Normal.hxx>
@@ -55,7 +56,7 @@ private slots:
     ObservationsWizard wizard(obs);
     wizard.show();
 
-    TemporaryLabel * errorMessageLabel = wizard.page_->findChild<TemporaryLabel*>();
+    ErrorWidget * errorMessageLabel = wizard.page_->findChild<ErrorWidget*>();
     SampleTableModel * model = wizard.page_->findChild<SampleTableModel*>();
     QLineEdit * fileLineEdit = wizard.page_->findChild<QLineEdit*>();
 
@@ -67,19 +68,19 @@ private slots:
 
     model->setHeaderData(0, Qt::Horizontal, QString(), Qt::DisplayRole);
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
-    QVERIFY2(!errorMessageLabel->text().isEmpty(), "Label must be not empty");
+    QVERIFY2(!errorMessageLabel->toPlainText().isEmpty(), "Label must be not empty");
 
     model->setHeaderData(0, Qt::Horizontal, "Ep2", Qt::DisplayRole);
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(errorMessageLabel->text().isEmpty(), "Label must be empty");
+    QVERIFY2(errorMessageLabel->toPlainText().isEmpty(), "Label must be empty");
 
     model->setHeaderData(2, Qt::Horizontal, "", Qt::DisplayRole);
     QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
-    QVERIFY2(!errorMessageLabel->text().isEmpty(), "Label must be not empty");
+    QVERIFY2(!errorMessageLabel->toPlainText().isEmpty(), "Label must be not empty");
 
     model->setHeaderData(2, Qt::Horizontal, "E", Qt::DisplayRole);
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(errorMessageLabel->text().isEmpty(), "Label must be empty");
+    QVERIFY2(errorMessageLabel->toPlainText().isEmpty(), "Label must be empty");
 
     QVERIFY2(wizard.getDesignOfExperiment().__repr__() == obs.__repr__(), "The two Observations must be equal");
 

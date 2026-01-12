@@ -68,11 +68,11 @@ namespace PERSALYS
     pageLayout->addWidget(methodBox);
 
     // error message
-    errorMessageLabel_ = new TemporaryLabel;
-    connect(outputsSelectionGroupBox_, SIGNAL(outputsSelectionChanged(QStringList)), errorMessageLabel_, SLOT(reset()));
+    errorWidget_ = new ErrorWidget;
+    connect(outputsSelectionGroupBox_, SIGNAL(outputsSelectionChanged(QStringList)), errorWidget_, SLOT(reset()));
 
     pageLayout->addStretch();
-    pageLayout->addWidget(errorMessageLabel_);
+    pageLayout->addWidget(errorWidget_);
   }
 
   void QuantileAnalysisIntroPage::initialize(const Analysis& analysis)
@@ -103,7 +103,7 @@ namespace PERSALYS
   {
     if (outputsSelectionGroupBox_->getSelectedOutputsNames().size() < 1)
     {
-      errorMessageLabel_->setErrorMessage(tr("At least 1 outputs must be selected"));
+      errorWidget_->setFramelessErrorMessage(tr("At least 1 outputs must be selected"));
       return false;
     }
     emit outputSelected();
@@ -168,8 +168,8 @@ namespace PERSALYS
     pageLayout->addWidget(advancedParamGroupBox);
 
     //// error message
-    errorMessageLabel_ = new TemporaryLabel;
-    pageLayout->addWidget(errorMessageLabel_, 0, Qt::AlignBottom);
+    errorWidget_ = new ErrorWidget;
+    pageLayout->addWidget(errorWidget_, 0, Qt::AlignBottom);
   }
 
   void QuantileAnalysisProbabilityPage::initialize(const Analysis& analysis)
@@ -187,7 +187,7 @@ namespace PERSALYS
 
     // fill table
     tableModel_ = new QuantileTableModel(*analysis_ptr, this);
-    connect(tableModel_, SIGNAL(errorMessageChanged(QString)), errorMessageLabel_, SLOT(setErrorMessage(QString)));
+    connect(tableModel_, SIGNAL(errorMessageChanged(QString)), errorWidget_, SLOT(setFramelessErrorMessage(QString)));
     tableView_->setModel(tableModel_);
     tableView_->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
     tableView_->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
@@ -230,7 +230,7 @@ namespace PERSALYS
 
   bool QuantileAnalysisProbabilityPage::validatePage()
   {
-    if (!errorMessageLabel_->text().isEmpty())
+    if (!errorWidget_->toPlainText().isEmpty())
       return false;
     emit probabilitiesSelected();
     return QWizardPage::validatePage();
@@ -275,8 +275,8 @@ namespace PERSALYS
     tabLayout->addWidget(plotWidget_, 1, 0, 1, 3);
     tabWidget->addTab(tab, tr("Mean excess"));
 
-    errorMessageLabel_ = new TemporaryLabel;
-    pageLayout->addWidget(errorMessageLabel_, 0, Qt::AlignBottom);
+    errorWidget_ = new ErrorWidget;
+    pageLayout->addWidget(errorWidget_, 0, Qt::AlignBottom);
   }
 
   void QuantileAnalysisThresholdPage::initialize(const Analysis& analysis)
@@ -299,7 +299,7 @@ namespace PERSALYS
     tableView_->setSpan(0,3,1,2);
     tableView_->setSpan(0,5,1,2);
 
-    connect(tableModel_, SIGNAL(errorMessageChanged(QString)), errorMessageLabel_, SLOT(setErrorMessage(QString)));
+    connect(tableModel_, SIGNAL(errorMessageChanged(QString)), errorWidget_, SLOT(setFramelessErrorMessage(QString)));
 
     tableModel_->validateCurrentValues();
 
@@ -371,7 +371,7 @@ namespace PERSALYS
     if (tableModel_)
       tableModel_->validateCurrentValues();
 
-    if (!errorMessageLabel_->text().isEmpty())
+    if (!errorWidget_->toPlainText().isEmpty())
       return false;
 
     return QWizardPage::validatePage();

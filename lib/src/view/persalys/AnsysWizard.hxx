@@ -24,7 +24,7 @@
 
 #include "persalys/Wizard.hxx"
 #include "persalys/AnsysParser.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 #include "persalys/AnsysVariableTableModel.hxx"
 #include "persalys/AnsysSystemTableModel.hxx"
 
@@ -51,7 +51,7 @@ signals:
   void executableFileFound();
 
 private:
-  TemporaryLabel          * errorMessageLabel_  = nullptr;
+  ErrorWidget             * errorMessageWidget_ = nullptr;
   QLineEdit               * executableLineEdit_ = nullptr;
   QLineEdit               * modelFileLineEdit_  = nullptr;
   AnsysVariableTableModel * varModel_           = nullptr;
@@ -67,7 +67,7 @@ public:
   bool validatePage() override;
 
 private:
-  TemporaryLabel        * errorMessageLabel_  = nullptr;
+  ErrorWidget           * errorMessageWidget_ = nullptr;
   AnsysSystemTableModel * sysModel_           = nullptr;
   QTableView            * sysTable_           = nullptr;
 };

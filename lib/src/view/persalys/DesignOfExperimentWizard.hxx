@@ -28,6 +28,7 @@
 #include "persalys/ImportedDesignPage.hxx"
 
 #include <QButtonGroup>
+#include <QLabel>
 
 namespace PERSALYS
 {

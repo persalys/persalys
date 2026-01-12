@@ -23,7 +23,7 @@
 
 #include "persalys/AnalysisWizard.hxx"
 #include "persalys/OutputsSelectionGroupBox.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <QTableWidget>
 #include <QLabel>
@@ -47,7 +47,7 @@ protected:
 private:
   QTableWidget * table_ = nullptr;
   OutputsSelectionGroupBox * outputsGroupBox_ = nullptr;
-  TemporaryLabel * errorMessageLabel_ = nullptr;
+  ErrorWidget * errorWidget_ = nullptr;
 };
 }
 #endif

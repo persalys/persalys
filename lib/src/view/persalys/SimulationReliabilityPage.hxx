@@ -25,7 +25,7 @@
 #include "persalys/LimitState.hxx"
 #include "persalys/StopCriteriaGroupBox.hxx"
 #include "persalys/BlockSizeGroupBox.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <QWizardPage>
 
@@ -36,7 +36,7 @@ class PERSALYS_VIEW_API SimulationReliabilityPage : public QWizardPage
   Q_OBJECT
 
 public:
-  SimulationReliabilityPage(QWidget* parent = 0);
+  explicit SimulationReliabilityPage(QWidget* parent = nullptr);
 
   void initialize(const Analysis& analysis);
   void updateAnalysis(const Analysis& analysis);
@@ -47,10 +47,10 @@ protected:
   void buildInterface();
 
 private:
-  StopCriteriaGroupBox * stopCriteriaGroupBox_;
-  BlockSizeGroupBox * blockSizeGroupBox_;
-  QSpinBox * seedSpinbox_;
-  TemporaryLabel * errorMessageLabel_;
+  StopCriteriaGroupBox  * stopCriteriaGroupBox_ = nullptr;
+  BlockSizeGroupBox     * blockSizeGroupBox_    = nullptr;
+  QSpinBox              * seedSpinbox_          = nullptr;
+  ErrorWidget           * errorWidget_    = nullptr;
 };
 }
 #endif

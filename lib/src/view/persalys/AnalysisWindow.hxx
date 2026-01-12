@@ -23,7 +23,7 @@
 
 #include "persalys/SubWindow.hxx"
 #include "persalys/AnalysisItem.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <QPushButton>
 #include <QProgressBar>
@@ -51,13 +51,13 @@ protected slots:
   void updateProgressBar(const int value);
 
 private:
-  StudyManager * studyManager_ = nullptr;
-  AnalysisItem * analysisItem_ = nullptr;
-  QProgressBar * progressBar_ = nullptr;
-  QPushButton * runButton_ = nullptr;
-  QPushButton * stopButton_ = nullptr;
-  QPushButton * detachButton_ = nullptr;
-  TemporaryLabel * messageLabel_ = nullptr;
+  StudyManager  * studyManager_   = nullptr;
+  AnalysisItem  * analysisItem_   = nullptr;
+  QProgressBar  * progressBar_    = nullptr;
+  QPushButton   * runButton_      = nullptr;
+  QPushButton   * stopButton_     = nullptr;
+  QPushButton   * detachButton_   = nullptr;
+  ErrorWidget   * messageWidget_  = nullptr;
 };
 }
 #endif

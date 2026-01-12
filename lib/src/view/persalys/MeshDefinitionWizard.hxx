@@ -27,6 +27,7 @@
 #include "persalys/GridMeshModel.hxx"
 #include "persalys/ImportedMeshModel.hxx"
 #include "persalys/CopyableTableView.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <QButtonGroup>
 #include <QResizeEvent>
@@ -64,7 +65,7 @@ private:
   ImportMeshWidget        * sampleWidget_       = nullptr;
   CopyableTableView       * tableView_          = nullptr;
   CustomStandardItemModel * tableModel_         = nullptr;
-  TemporaryLabel          * errorMessageLabel_  = nullptr;
+  ErrorWidget             * errorWidget_  = nullptr;
 };
 }
 #endif

@@ -24,6 +24,7 @@
 #include "persalys/Analysis.hxx"
 #include "persalys/DesignOfExperiment.hxx"
 #include "persalys/UIntSpinBox.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <QWizardPage>
 #include <QCheckBox>
@@ -36,7 +37,7 @@ class PERSALYS_VIEW_API MetaModelValidationPage : public QWizardPage
   Q_OBJECT
 
 public:
-  MetaModelValidationPage(QWidget* parent = 0);
+  explicit MetaModelValidationPage(QWidget* parent = nullptr);
 
   void initialize(const Analysis& analysis);
   void updateMetamodelValidation(Analysis& analysis);
@@ -51,17 +52,16 @@ public slots:
   void percentageValueChanged(double);
 
 private:
-  OT::UnsignedInteger inputSampleSize_;
-  QCheckBox * analyticalCheckBox_;
-  QCheckBox * kFoldCheckBox_;
-  QCheckBox * testSampleCheckBox_;
-  QLabel * trainingSampleSize_;
-//   QCheckBox * looCheckBox_;
-  UIntSpinBox * percentageOfPointsSpinBox_;
-  UIntSpinBox * seedTestSampleSpinBox_;
-  UIntSpinBox * nbFoldsSpinBox_;
-  UIntSpinBox * seedKFoldSpinBox_;
-  QLabel * errorMessageLabel_;
+  OT::UnsignedInteger inputSampleSize_              = 0;
+  QCheckBox           * analyticalCheckBox_         = nullptr;
+  QCheckBox           * kFoldCheckBox_              = nullptr;
+  QCheckBox           * testSampleCheckBox_         = nullptr;
+  QLabel              * trainingSampleSize_         = nullptr;
+  UIntSpinBox         * percentageOfPointsSpinBox_  = nullptr;
+  UIntSpinBox         * seedTestSampleSpinBox_      = nullptr;
+  UIntSpinBox         * nbFoldsSpinBox_             = nullptr;
+  UIntSpinBox         * seedKFoldSpinBox_           = nullptr;
+  ErrorWidget         * errorWidget_          = nullptr;
 };
 }
 #endif

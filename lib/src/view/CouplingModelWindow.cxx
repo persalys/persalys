@@ -268,11 +268,11 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
   CheckModelButtonGroup *buttons = new CheckModelButtonGroup;
 
   // - error message label
-  errorMessageLabel_ = buttons->getErrorMessageLabel();
+  errorMessageWidget_ = buttons->getErrorMessageWidget();
 
   connect(buttons, &CheckModelButtonGroup::evaluateOutputsRequested, [ = ] ()
   {
-    errorMessageLabel_->repaint();
+    errorMessageWidget_->repaint();
     timeInfo->clear();
     evaluateOutputs();
     mainTabWidget->setCurrentIndex(2);
@@ -283,11 +283,11 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
 
   connect(buttons, &CheckModelButtonGroup::evaluateGradientRequested, [ = ] ()
   {
-    errorMessageLabel_->repaint();
+    errorMessageWidget_->repaint();
     gradientTableModel->evaluateGradient();
     mainTabWidget->setCurrentIndex(1);
     if (!gradientTableModel->getErrorMessage().isEmpty())
-      errorMessageLabel_->setErrorMessage(gradientTableModel->getErrorMessage());
+      errorMessageWidget_->setMessage(gradientTableModel->getErrorMessage());
   });
 
   mainLayout->addWidget(buttons, 2, 0, 1, 2);
@@ -306,7 +306,7 @@ void CouplingModelWindow::updateStepTabWidget(PhysicalModelItem *item)
   if (stepTabWidget_->count() < 2)
     stepTabWidget_->newTabRequested();
 
-  item->update(0, "inputStepChanged");
+  item->update(nullptr, "inputStepChanged");
   stepTabWidget_->setCurrentIndex(0);
 }
 
@@ -328,13 +328,13 @@ void CouplingModelWindow::evaluateOutputs()
   // check
   if (!eval.getErrorMessage().empty())
   {
-    errorMessageLabel_->setErrorMessage(eval.getErrorMessage().c_str());
+    errorMessageWidget_->setMessage(eval.getErrorMessage().c_str());
     model_->setEvalTime(0);
     return;
   }
   if (!outputSample.getSize())
   {
-    errorMessageLabel_->setErrorMessage(tr("Not possible to evaluate the outputs"));
+    errorMessageWidget_->setMessage(tr("Not possible to evaluate the outputs"));
     model_->setEvalTime(0);
     return;
   }
@@ -344,7 +344,7 @@ void CouplingModelWindow::evaluateOutputs()
     model_->setOutputValue(outputSample.getDescription()[i], outputSample(0, i));
   model_->setEvalTime(eval.getElapsedTime());
 
-  // TODO: clear errorMessageLabel_ if model modification after an error message
+  // TODO: clear errorWidget_ if model modification after an error message
 }
 
 

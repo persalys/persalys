@@ -104,8 +104,8 @@ void MeshDefinitionWizard::buildInterface()
   pageLayout->addWidget(aWidget, 0, Qt::AlignTop);
 
   // error message
-  errorMessageLabel_ = new TemporaryLabel;
-  pageLayout->addWidget(errorMessageLabel_);
+  errorWidget_ = new ErrorWidget;
+  pageLayout->addWidget(errorWidget_);
 
   // import
   QRadioButton * importButton = new QRadioButton(tr("Import mesh"));
@@ -120,10 +120,10 @@ void MeshDefinitionWizard::buildInterface()
   addPage(page);
 
   // connections
-  connect(tableModel_, SIGNAL(dataChanged(QModelIndex, QModelIndex)), errorMessageLabel_, SLOT(reset()));
+  connect(tableModel_, SIGNAL(dataChanged(QModelIndex, QModelIndex)), errorWidget_, SLOT(reset()));
   connect(importButton, SIGNAL(toggled(bool)), sampleWidget_, SLOT(setEnabled(bool)));
   connect(importButton, SIGNAL(toggled(bool)), tableView_, SLOT(setDisabled(bool)));
-  connect(importButton, SIGNAL(toggled(bool)), errorMessageLabel_, SLOT(setDisabled(bool)));
+  connect(importButton, SIGNAL(toggled(bool)), errorWidget_, SLOT(setDisabled(bool)));
 
   // initialize widgets
   const auto * importedMeshModel = dynamic_cast<ImportedMeshModel*> (mesh_.getImplementation().get());
@@ -175,11 +175,11 @@ void MeshDefinitionWizard::checkColumns()
   {
     importedMesh_.setParameterColumns(sampleWidget_->getColumns(paramNames));
     sampleWidget_->tableValidity_ = true;
-    sampleWidget_->errorMessageLabel_->reset();
+    sampleWidget_->errorWidget_->reset();
   }
   catch (const InvalidArgumentException &)
   {
-    sampleWidget_->errorMessageLabel_->setErrorMessage(tr("The parameter must be associated with one column."));
+    sampleWidget_->errorWidget_->setFramelessErrorMessage(tr("The parameter must be associated with one column."));
     sampleWidget_->tableValidity_ = false;
   }
 }
@@ -203,15 +203,15 @@ MeshModel MeshDefinitionWizard::getMesh() const
 
 bool MeshDefinitionWizard::validateCurrentPage()
 {
-  errorMessageLabel_->reset();
+  errorWidget_->reset();
   if (methodGroup_->checkedId() == MeshDefinitionWizard::Grid)
   {
     const Interval bounds(tableModel_->item(0, 2)->data(Qt::DisplayRole).toDouble(), tableModel_->item(0, 3)->data(Qt::DisplayRole).toDouble());
     if (bounds.isNumericallyEmpty())
-      errorMessageLabel_->setErrorMessage(tr("The lower bound must be less than the upper bound"));
+      errorWidget_->setFramelessErrorMessage(tr("The lower bound must be less than the upper bound"));
     if (tableModel_->item(0, 4)->data(Qt::DisplayRole).toInt() < 2)
-      errorMessageLabel_->setErrorMessage(tr("The mesh must contain at least two nodes"));
-    return errorMessageLabel_->text().isEmpty();
+      errorWidget_->setFramelessErrorMessage(tr("The mesh must contain at least two nodes"));
+    return errorWidget_->toPlainText().isEmpty();
   }
   else
   {

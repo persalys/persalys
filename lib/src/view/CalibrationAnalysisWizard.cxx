@@ -200,9 +200,9 @@ CalibrationReferencePointPage::CalibrationReferencePointPage(QWidget *parent)
   tableView_->setModel(tableModel_);
   pageLayout->addWidget(tableView_, 0, Qt::AlignTop);
 
-  errorMessageLabel_ = new TemporaryLabel;
-  connect(tableModel_, SIGNAL(modelChanged(PhysicalModel)), errorMessageLabel_, SLOT(reset()));
-  pageLayout->addWidget(errorMessageLabel_, 0, Qt::AlignBottom);
+  errorMessageWidget_ = new ErrorWidget;
+  connect(tableModel_, SIGNAL(modelChanged(PhysicalModel)), errorMessageWidget_, SLOT(reset()));
+  pageLayout->addWidget(errorMessageWidget_, 0, Qt::AlignBottom);
 }
 
 
@@ -238,7 +238,7 @@ bool CalibrationReferencePointPage::validatePage()
   // check
   if (!tableModel_->getCalibratedInputs().getSize())
   {
-    errorMessageLabel_->setErrorMessage(tr("Define at least a variable to calibrate"));
+    errorMessageWidget_->setMessage(tr("Define at least a variable to calibrate"), ErrorWidget::MessageType::Error, false, false);
     return false;
   }
 

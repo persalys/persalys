@@ -65,9 +65,9 @@ void MultiObjectiveOptimizationAlgoPage::buildInterface()
   pageLayout->addWidget(docButton);
 
   // error message
-  errorMessageLabel_ = new TemporaryLabel;
-  connect(outputsSelectionGroupBox_, SIGNAL(outputsSelectionChanged(QStringList)), errorMessageLabel_, SLOT(reset()));
-  pageLayout->addWidget(errorMessageLabel_);
+  errorWidget_ = new ErrorWidget;
+  connect(outputsSelectionGroupBox_, SIGNAL(outputsSelectionChanged(QStringList)), errorWidget_, SLOT(reset()));
+  pageLayout->addWidget(errorWidget_);
 }
 
 void MultiObjectiveOptimizationAlgoPage::initialize(MultiObjectiveOptimizationAnalysis& analysis)
@@ -75,7 +75,7 @@ void MultiObjectiveOptimizationAlgoPage::initialize(MultiObjectiveOptimizationAn
   algoTableModel_->clear();
   algoTableModel_->setHorizontalHeaderItem(0, new QStandardItem(tr("Name")));
 
-  errorMessageLabel_->reset();
+  errorWidget_->reset();
   solverNames_ = MultiObjectiveOptimizationAnalysis::GetSolverNames(analysis.getBounds(), analysis.getVariablesType(), analysis.getEqualityConstraints(), analysis.getInequalityConstraints());
 
   for (UnsignedInteger i = 0; i < solverNames_.getSize(); ++i)
@@ -104,12 +104,12 @@ bool MultiObjectiveOptimizationAlgoPage::validatePage()
 {
   if (outputsSelectionGroupBox_->getSelectedOutputsNames().size() < 2)
   {
-    errorMessageLabel_->setErrorMessage(tr("At least 2 outputs must be selected"));
+    errorWidget_->setFramelessErrorMessage(tr("At least 2 outputs must be selected"));
     return false;
   }
   if (getSolverName().empty())
     return false;
-  if (!errorMessageLabel_->text().isEmpty())
+  if (!errorWidget_->toPlainText().isEmpty())
     return false;
   emit outputSelected();
   return QWizardPage::validatePage();
@@ -205,8 +205,8 @@ MultiObjectiveOptimizationBoundsPage::MultiObjectiveOptimizationBoundsPage(QWidg
   groupBoxLayout->setSizeConstraint(QLayout::SetMaximumSize);
   pageLayout->addWidget(inputsBox);
 
-  errorMessageLabel_ = new TemporaryLabel;
-  pageLayout->addWidget(errorMessageLabel_, 0, Qt::AlignBottom);
+  errorWidget_ = new ErrorWidget;
+  pageLayout->addWidget(errorWidget_, 0, Qt::AlignBottom);
 }
 
 void MultiObjectiveOptimizationBoundsPage::initialize(const Analysis& analysis)
@@ -218,7 +218,7 @@ void MultiObjectiveOptimizationBoundsPage::initialize(const Analysis& analysis)
 
   // fill table
   tableModel_ = new MultiObjectiveOptimizationTableModel(*analysis_ptr, this);
-  connect(tableModel_, SIGNAL(errorMessageChanged(QString)), errorMessageLabel_, SLOT(setTemporaryErrorMessage(QString)));
+  connect(tableModel_, SIGNAL(errorMessageChanged(QString)), errorWidget_, SLOT(setTemporaryFramelessErrorMessage(QString)));
   tableView_->setModel(tableModel_);
 
   // combobox delegate column 2
@@ -259,7 +259,7 @@ bool MultiObjectiveOptimizationBoundsPage::validatePage()
     {
       if (bounds.getMarginal(i).isEmpty())
       {
-        errorMessageLabel_->setErrorMessage(tr("The lower bounds must be less than the upper bounds"));
+        errorWidget_->setFramelessErrorMessage(tr("The lower bounds must be less than the upper bounds"));
         return false;
       }
       variablesIndices.add(i);
@@ -268,7 +268,7 @@ bool MultiObjectiveOptimizationBoundsPage::validatePage()
   // check
   if (!variablesIndices.getSize())
   {
-    errorMessageLabel_->setErrorMessage(tr("At least one variable must vary"));
+    errorWidget_->setFramelessErrorMessage(tr("At least one variable must vary"));
     return false;
   }
 

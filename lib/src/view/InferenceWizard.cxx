@@ -34,6 +34,7 @@
 #include <QGroupBox>
 #include <QPushButton>
 #include <QIcon>
+#include <QLabel>
 
 using namespace OT;
 
@@ -264,8 +265,8 @@ void InferenceWizard::buildInterface()
   varTableView->selectRow(0);
 
   // error message
-  errorMessageLabel_ = new TemporaryLabel;
-  pageLayout->addWidget(errorMessageLabel_);
+  errorWidget_ = new ErrorWidget;
+  pageLayout->addWidget(errorWidget_);
 
   addPage(page);
 }
@@ -285,7 +286,7 @@ void InferenceWizard::selectedVarChanged(QModelIndex current, QModelIndex /*prev
 
 void InferenceWizard::updateDistListForVar(QStringList dist)
 {
-  errorMessageLabel_->reset();
+  errorWidget_->reset();
   FittingTest::DistributionFactoryCollection distCollection;
   for (int i = 0; i < dist.size(); ++i)
   {
@@ -333,7 +334,7 @@ void InferenceWizard::applyCurrentDistToAll()
 
 void InferenceWizard::addAllDistributionsToAllVariables()
 {
-  errorMessageLabel_->reset();
+  errorWidget_->reset();
 
   QStringList allDist = TranslationManager::GetTranslatedContinuousDistributions();
 
@@ -360,7 +361,7 @@ void InferenceWizard::addAllDistributionsToAllVariables()
 
 void InferenceWizard::updateInterestVar(const Description &interestVar, const String &varName)
 {
-  errorMessageLabel_->reset();
+  errorWidget_->reset();
   pageValidity_ = true;
 
   interestVar_ = interestVar;
@@ -368,7 +369,7 @@ void InferenceWizard::updateInterestVar(const Description &interestVar, const St
   if (!interestVar.getSize())
   {
     pageValidity_ = false;
-    errorMessageLabel_->setTemporaryErrorMessage(tr("Select at least one variable"));
+    errorWidget_->setTemporaryFramelessErrorMessage(tr("Select at least one variable"));
   }
 
   emit currentVarChecked(interestVar.contains(varName));
@@ -414,7 +415,7 @@ bool InferenceWizard::validateCurrentPage()
 
   if (!interestVar_.getSize())
   {
-    errorMessageLabel_->setTemporaryErrorMessage(tr("Select at least one variable"));
+    errorWidget_->setTemporaryFramelessErrorMessage(tr("Select at least one variable"));
     return false;
   }
 
@@ -426,7 +427,7 @@ bool InferenceWizard::validateCurrentPage()
       if (!factoryCollection.getSize())
       {
         const QString errorMessage = tr("At least one distribution must be tested for the selected variable '%1'").arg(interestVar_[i].c_str());
-        errorMessageLabel_->setTemporaryErrorMessage(errorMessage);
+        errorWidget_->setTemporaryFramelessErrorMessage(errorMessage);
         return false;
       }
     }

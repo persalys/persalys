@@ -36,7 +36,7 @@ ScreeningIntroPage::ScreeningIntroPage(QWidget* parent)
   : QWizardPage(parent)
   , outputsSelectionGroupBox_(0)
 //   , methodGroup_(0)
-  , errorMessageLabel_(0)
+  , errorWidget_(0)
 {
   setTitle(tr("Screening method"));
 
@@ -62,11 +62,11 @@ ScreeningIntroPage::ScreeningIntroPage(QWidget* parent)
   pageLayout->addWidget(methodBox);
 
   // error message
-  errorMessageLabel_ = new TemporaryLabel;
-  connect(outputsSelectionGroupBox_, SIGNAL(outputsSelectionChanged(QStringList)), errorMessageLabel_, SLOT(reset()));
+  errorWidget_ = new ErrorWidget;
+  connect(outputsSelectionGroupBox_, SIGNAL(outputsSelectionChanged(QStringList)), errorWidget_, SLOT(reset()));
 
   pageLayout->addStretch();
-  pageLayout->addWidget(errorMessageLabel_);
+  pageLayout->addWidget(errorWidget_);
 }
 
 
@@ -104,7 +104,7 @@ bool ScreeningIntroPage::validatePage()
 {
   if (!outputsSelectionGroupBox_->getSelectedOutputsNames().size())
   {
-    errorMessageLabel_->setErrorMessage(tr("At least one output must be selected"));
+    errorWidget_->setFramelessErrorMessage(tr("At least one output must be selected"));
     return false;
   }
   return QWizardPage::validatePage();

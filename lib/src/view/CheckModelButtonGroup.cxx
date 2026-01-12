@@ -33,8 +33,10 @@ CheckModelButtonGroup::CheckModelButtonGroup(QWidget * parent, bool isDifferenti
 {
   auto * buttonLayout = new QHBoxLayout(this);
   buttonLayout->setContentsMargins(0, 0, 0, 0);
-  errorMessageLabel_ = new TemporaryLabel;
-  buttonLayout->addWidget(errorMessageLabel_);
+  errorMessageWidget_ = new ErrorWidget;
+  errorMessageWidget_->forceVisible(true);
+  errorMessageWidget_->usePadding(false);
+  buttonLayout->addWidget(errorMessageWidget_);
   buttonLayout->setStretch(0, 1);
 
   // button Evaluate outputs -------------------------------------------
@@ -50,11 +52,11 @@ CheckModelButtonGroup::CheckModelButtonGroup(QWidget * parent, bool isDifferenti
     evaluateGradientButton->setToolTip(tr("Evaluate the gradient"));
     connect(evaluateGradientButton, SIGNAL(clicked()), this, SIGNAL(evaluateGradientRequested()));
     buttonLayout->addWidget(evaluateGradientButton);
-    
-    connect(this, SIGNAL(evaluateGradientRequested()), errorMessageLabel_, SLOT(reset()));
+
+    connect(this, SIGNAL(evaluateGradientRequested()), errorMessageWidget_, SLOT(reset()));
   }
 
-  connect(this, SIGNAL(evaluateOutputsRequested()), errorMessageLabel_, SLOT(reset()));
+  connect(this, SIGNAL(evaluateOutputsRequested()), errorMessageWidget_, SLOT(reset()));
 }
 
 }

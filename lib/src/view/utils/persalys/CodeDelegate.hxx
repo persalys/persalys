@@ -34,7 +34,7 @@ class PERSALYS_UTILS_API CodeEditor : public QPlainTextEdit
   Q_OBJECT
 
 public:
-  CodeEditor(QWidget *parent = nullptr);
+  explicit CodeEditor(QWidget *parent = nullptr);
 
   void lineNumberAreaPaintEvent(QPaintEvent * event);
   int lineNumberAreaWidth();
@@ -71,7 +71,7 @@ private:
 class PERSALYS_UTILS_API LineNumberArea : public QWidget
 {
 public:
-  LineNumberArea(CodeEditor *editor)
+  explicit LineNumberArea(CodeEditor *editor)
     : QWidget(editor)
     , codeEditor_(editor)
   {
@@ -125,7 +125,7 @@ private:
     QRegularExpression pattern;
     QTextCharFormat format;
     int matchIndex = 0;
-    HighlightingRule() { }
+    HighlightingRule() = default;
     HighlightingRule(const QRegularExpression &r, int i, const QTextCharFormat &f)
       : pattern(r), format(f), matchIndex(i) { }
     HighlightingRule(const QString &p, int i, const QTextCharFormat &f)

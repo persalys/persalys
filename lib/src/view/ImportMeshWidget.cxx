@@ -89,8 +89,8 @@ void ImportMeshWidget::buildInterface()
   mainGridLayout->addWidget(groupBox, row++, 0, 1, 1);
 
   // error message
-  errorMessageLabel_ = new TemporaryLabel;
-  mainGridLayout->addWidget(errorMessageLabel_, row++, 0, 1, 1);
+  errorWidget_ = new ErrorWidget;
+  mainGridLayout->addWidget(errorWidget_, row++, 0, 1, 1);
 }
 
 void ImportMeshWidget::openFileRequested()
@@ -125,7 +125,7 @@ void ImportMeshWidget::setData(const QString& fileName)
   filePathLineEdit_->setText(fileName);
   try
   {
-    errorMessageLabel_->reset();
+    errorWidget_->reset();
     emit updateTableRequested(fileName); // connected to MeshDefinitionWizard::setTable
     tableValidity_ = true;
   }
@@ -134,7 +134,7 @@ void ImportMeshWidget::setData(const QString& fileName)
     dataPreviewTableView_->setModel(nullptr);
     // DOE size
     DOESizeLabel_->setText("");
-    errorMessageLabel_->setErrorMessage(tr("Impossible to load the file.%1%2").arg("\n").arg(e.what()));
+    errorWidget_->setFramelessErrorMessage(tr("Impossible to load the file.%1%2").arg("\n").arg(e.what()));
     tableValidity_ = false;
   }
 }

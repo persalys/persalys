@@ -25,7 +25,7 @@
 #include "persalys/ResizableStackedWidget.hxx"
 #include "persalys/QtTools.hxx" // for Q_DECLARE_METATYPE(OT::Distribution)
 #include "persalys/TranslationManager.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <QSplitter>
 #include <QVBoxLayout>
@@ -158,8 +158,8 @@ void CopulaInferenceResultWidget::buildInterface()
       const QString message(QString::fromUtf8(currentSetResult_.getErrorMessages()[indices[i]].c_str()));
       aWidget = new QWidget;
       QVBoxLayout * aWidgetLayout = new QVBoxLayout(aWidget);
-      TemporaryLabel * errorMessageLabel = new TemporaryLabel;
-      errorMessageLabel->setErrorMessage(message);
+      ErrorWidget * errorMessageLabel = new ErrorWidget;
+      errorMessageLabel->setFramelessErrorMessage(message);
       aWidgetLayout->addWidget(errorMessageLabel);
       aWidgetLayout->addStretch();
       paramWidget->addTab(aWidget, tr("Parameters"));

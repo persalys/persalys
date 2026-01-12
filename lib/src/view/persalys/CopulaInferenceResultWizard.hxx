@@ -23,7 +23,7 @@
 
 #include "persalys/Wizard.hxx"
 #include "persalys/Study.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 #include "persalys/ResizableStackedWidget.hxx"
 
 #include <QComboBox>
@@ -50,13 +50,13 @@ public slots:
   void updateVariablesTable(int);
 
 private:
-  Study study_;
-  OT::Description variables_;
-  QComboBox * inferenceResultsComboBox_;
-  QComboBox * variablesComboBox_;
-  QTableView * tableView_;
-  ResizableStackedWidget * inferenceResultStackWidget_;
-  TemporaryLabel * errorMessageLabel_;
+  Study                   study_;
+  OT::Description         variables_;
+  QComboBox               * inferenceResultsComboBox_   = nullptr;
+  QComboBox               * variablesComboBox_          = nullptr;
+  QTableView              * tableView_                  = nullptr;
+  ResizableStackedWidget  * inferenceResultStackWidget_ = nullptr;
+  ErrorWidget             * errorMessageWidget_         = nullptr;
 };
 }
 #endif

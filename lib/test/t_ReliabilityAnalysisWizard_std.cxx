@@ -4,6 +4,7 @@
 #include "persalys/SORMAnalysis.hxx"
 #include "persalys/ReliabilityAnalysisWizard.hxx"
 #include "persalys/SymbolicPhysicalModel.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <openturns/OTtypes.hxx>
 #include <openturns/Normal.hxx>
@@ -58,10 +59,10 @@ private slots:
     QVERIFY2(wizard.currentId() == 0, "Current page ID must be 0");
     // - second page
     wizard.next();
-    TemporaryLabel * errorMessageLabel = wizard.simulationPage_->findChild<TemporaryLabel*>();
+    ErrorWidget * errorMessageLabel = wizard.simulationPage_->findChild<ErrorWidget*>();
     QVERIFY2(wizard.currentId() == ReliabilityAnalysisWizard::Page_SimuMethod, "Current page ID must be 1");
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(errorMessageLabel->text().isEmpty(), "Label must be empty");
+    QVERIFY2(errorMessageLabel->toPlainText().isEmpty(), "Label must be empty");
 
     QVERIFY2(wizard.nextId() == -1, "Next page ID must be -1");
 
@@ -87,10 +88,10 @@ private slots:
     QVERIFY2(wizard.currentId() == 0, "Current page ID must be 0");
     // - second page
     wizard.next();
-    TemporaryLabel * errorMessageLabel = wizard.simulationPage_->findChild<TemporaryLabel*>();
+    ErrorWidget * errorMessageLabel = wizard.simulationPage_->findChild<ErrorWidget*>();
     QVERIFY2(wizard.currentId() == ReliabilityAnalysisWizard::Page_SimuMethod, "Current page ID must be 1");
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-    QVERIFY2(errorMessageLabel->text().isEmpty(), "Label must be empty");
+    QVERIFY2(errorMessageLabel->toPlainText().isEmpty(), "Label must be empty");
     // - third page
     wizard.next();
     QVERIFY2(wizard.currentId() == ReliabilityAnalysisWizard::Page_ApproxMethod, "Current page ID must be 2");

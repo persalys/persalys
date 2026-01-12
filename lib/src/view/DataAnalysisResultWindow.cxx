@@ -21,7 +21,7 @@
 #include "persalys/DataAnalysisResultWindow.hxx"
 
 #include "persalys/DataAnalysis.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 #include "persalys/ParametersTableView.hxx"
 #include "persalys/MomentsEstimatesTableGroupBox.hxx"
 #include "persalys/MinMaxTableGroupBox.hxx"
@@ -79,8 +79,8 @@ void DataAnalysisResultWindow::addSummaryTab()
 
   if (!analysisErrorMessage_.isEmpty())
   {
-    auto * analysisErrorMessageLabel = new TemporaryLabel;
-    analysisErrorMessageLabel->setErrorMessage(analysisErrorMessage_);
+    auto * analysisErrorMessageLabel = new ErrorWidget;
+    analysisErrorMessageLabel->setFramelessErrorMessage(analysisErrorMessage_);
     parametersGroupBoxLayout->addWidget(analysisErrorMessageLabel);
   }
 

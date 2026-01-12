@@ -23,7 +23,7 @@
 
 #include "persalys/Analysis.hxx"
 #include "persalys/DesignOfExperiment.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 #include "persalys/ValueLineEdit.hxx"
 
 #include <QWizardPage>
@@ -39,7 +39,7 @@ class PERSALYS_VIEW_API FunctionalChaosPage : public QWizardPage
   Q_OBJECT
 
 public:
-  FunctionalChaosPage(QWidget* parent = 0);
+  explicit FunctionalChaosPage(QWidget* parent = nullptr);
 
   void initialize(const Analysis& analysis);
   Analysis getAnalysis(const OT::String& name, const DesignOfExperiment& doe) const;
@@ -57,11 +57,11 @@ public slots:
 private:
   OT::UnsignedInteger inputSampleSize_;
   OT::UnsignedInteger inputSampleDimension_;
-  QLabel * basisLabel_;
-  QLabel * basisSizeLabel_;
-  QSpinBox * chaosDegreeSpinbox_;
-  QCheckBox * sparseCheckBox_;
-  TemporaryLabel * errorMessageLabel_;
+  QLabel              * basisLabel_         = nullptr;
+  QLabel              * basisSizeLabel_     = nullptr;
+  QSpinBox            * chaosDegreeSpinbox_ = nullptr;
+  QCheckBox           * sparseCheckBox_     = nullptr;
+  ErrorWidget         * errorWidget_        = nullptr;
 };
 }
 #endif

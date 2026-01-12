@@ -24,7 +24,7 @@
 #include "persalys/SubWindow.hxx"
 #include "persalys/LimitStateItem.hxx"
 #include "persalys/ValueLineEdit.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <QComboBox>
 
@@ -56,10 +56,10 @@ signals:
 private:
   LimitState limitState_;
 
-  QComboBox * outputsComboBox_;
-  QComboBox * failureComboBox_;
-  ValueLineEdit * thresholdLineEdit_;
-  TemporaryLabel * errorMessageLabel_;
+  QComboBox * outputsComboBox_ = nullptr;
+  QComboBox * failureComboBox_ = nullptr;
+  ValueLineEdit * thresholdLineEdit_ = nullptr;
+  ErrorWidget * errorWidget_ = nullptr;
 };
 }
 #endif

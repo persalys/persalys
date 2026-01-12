@@ -25,7 +25,7 @@
 #include "persalys/QuantileTableModel.hxx"
 #include "persalys/QuantileThresholdTableModel.hxx"
 #include "persalys/OutputsSelectionGroupBox.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 #include "persalys/ResizableHeaderlessTableView.hxx"
 #include "persalys/ValueLineEdit.hxx"
 #include "persalys/PlotWidget.hxx"
@@ -57,7 +57,7 @@ namespace PERSALYS
   private:
     OutputsSelectionGroupBox * outputsSelectionGroupBox_  = nullptr;
     QButtonGroup * methodGroup_                           = nullptr;
-    TemporaryLabel * errorMessageLabel_                   = nullptr;
+    ErrorWidget * errorWidget_                   = nullptr;
     OT::Description interestVariables_;
   };
 
@@ -93,7 +93,7 @@ namespace PERSALYS
   private:
     ResizableHeaderlessTableView * tableView_       = nullptr;
     QuantileTableModel * tableModel_                = nullptr;
-    TemporaryLabel * errorMessageLabel_             = nullptr;
+    ErrorWidget * errorWidget_             = nullptr;
     ValuesLineEdit * targetLineEdit_                = nullptr;
     DoubleSpinBox * levelConfidenceIntervalSpinbox_ = nullptr;
 
@@ -123,7 +123,7 @@ namespace PERSALYS
   private:
     ResizableHeaderlessTableView * tableView_ = nullptr;
     QuantileThresholdTableModel * tableModel_ = nullptr;
-    TemporaryLabel * errorMessageLabel_       = nullptr;
+    ErrorWidget * errorWidget_       = nullptr;
     QComboBox * marginalComboBox_             = nullptr;
     QComboBox * tailComboBox_                 = nullptr;
     PlotWidget * plotWidget_                  = nullptr;

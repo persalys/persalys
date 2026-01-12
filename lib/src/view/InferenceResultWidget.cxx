@@ -154,12 +154,10 @@ void InferenceResultWidget::buildInterface()
 
     // --- qq plot
     qqPlot_ = new PlotWidget(tr("qqPlot"));
-    plotWidgetLayout->addWidget(qqPlot_);
+    plotWidgetLayout->addWidget(qqPlot_, 9);
 
-    qqPlotWarningLabel_ = new QLabel;
-    qqPlotWarningLabel_->setStyleSheet("QLabel { color : orange; font-weight: bold; background-color: transparent; border: 1px solid orange; }");
-    qqPlotWarningLabel_->hide();
-    plotWidgetLayout->addWidget(qqPlotWarningLabel_);
+    qqPlotWarningLabel_ = new ErrorWidget;
+    plotWidgetLayout->addWidget(qqPlotWarningLabel_, 1);
 
     // --- GraphConfigurationWidget
     SimpleGraphSetting * qqPlotSettingWidget = new SimpleGraphSetting(qqPlot_, this);
@@ -179,7 +177,7 @@ void InferenceResultWidget::buildInterface()
     infoButton_ = new DocumentationToolButton("", FileTools::docOT);
     connect(infoButton_, SIGNAL(clicked()), this, SLOT(openUrl()));
     paramGroupBoxLayout->addWidget(infoButton_);
-    analysisErrorMessageLabel_ = new TemporaryLabel;
+    analysisErrorMessageLabel_ = new ErrorWidget;
     paramGroupBoxLayout->addWidget(analysisErrorMessageLabel_);
     paramGroupBoxLayout->addStretch();
 
@@ -193,7 +191,7 @@ void InferenceResultWidget::buildInterface()
     QGroupBox * paramGroupBox = new QGroupBox(tr("Distribution parameters"));
     QVBoxLayout * paramGroupBoxLayout = new QVBoxLayout(paramGroupBox);
     paramGroupBoxLayout->addWidget(distParamTableView_);
-    analysisErrorMessageLabel_ = new TemporaryLabel;
+    analysisErrorMessageLabel_ = new ErrorWidget;
     paramGroupBoxLayout->addWidget(analysisErrorMessageLabel_);
     paramGroupBoxLayout->addWidget(pdfPlot_);
     paramGroupBoxLayout->addStretch();
@@ -217,7 +215,7 @@ void InferenceResultWidget::updateDistributionTable(const double level, const In
 
   // reset
   distTableModel_->clear();
-  analysisErrorMessageLabel_->clear();
+  analysisErrorMessageLabel_->reset();
 
   // horizontal header
   distTableModel_->setNotEditableHeaderItem(0, 0, tr("Distribution"));
@@ -348,7 +346,7 @@ void InferenceResultWidget::updateParametersTable(QModelIndex current)
 
   // reset
   distParamTableModel_->clear();
-  analysisErrorMessageLabel_->clear();
+  analysisErrorMessageLabel_->reset();
 
   // if the selected distribution is not valid (failed inference)
   if (current.isValid())
@@ -358,8 +356,7 @@ void InferenceResultWidget::updateParametersTable(QModelIndex current)
     const String testResultMessage = currentFittingTestResult_.getErrorMessages()[resultIndex];
     if (!testResultMessage.empty())
     {
-      analysisErrorMessageLabel_->setErrorMessage(QString::fromUtf8(testResultMessage.c_str()));
-      analysisErrorMessageLabel_->show();
+      analysisErrorMessageLabel_->setMessage(QString::fromUtf8(testResultMessage.c_str()), ErrorWidget::Error, false, !displayPDF_QQPlot_);
       distParamTableView_->hide();
       if (infoButton_)
         infoButton_->hide();
@@ -368,7 +365,6 @@ void InferenceResultWidget::updateParametersTable(QModelIndex current)
   }
 
   // if the distribution is valid
-  analysisErrorMessageLabel_->hide();
   distParamTableView_->show();
   if (infoButton_)
     infoButton_->show();
@@ -598,12 +594,7 @@ void InferenceResultWidget::updateGraphs(QModelIndex current)
   if (sampleValues.getSize() > 10000)
   {
     sampleValues.split(10000);
-    qqPlotWarningLabel_->setText(tr("Warning: Only the first 10000 points are being displayed."));
-    qqPlotWarningLabel_->show();
-  }
-  else
-  {
-    qqPlotWarningLabel_->hide();
+    qqPlotWarningLabel_->setMessage(tr("Warning: Only the first 10000 points are being displayed."), ErrorWidget::Warning);
   }
 
   Graph qqPlotGraph(VisualTest::DrawQQplot(sampleValues, distribution));

@@ -25,6 +25,7 @@
 #include "persalys/Study.hxx"
 #include "persalys/CustomStandardItemModel.hxx"
 #include "persalys/InferenceResultWidget.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <QComboBox>
 #include <QLabel>
@@ -36,7 +37,7 @@ class PERSALYS_VIEW_API InferenceResultWizard : public Wizard
   Q_OBJECT
 
 public:
-  InferenceResultWizard(const Study& study, QWidget* parent = 0);
+  explicit InferenceResultWizard(const Study& study, QWidget* parent = nullptr);
 
   OT::Distribution getDistribution() const;
 
@@ -51,11 +52,11 @@ public slots:
   void updateInferenceResultWidget(int);
 
 private:
-  Study study_;
-  QComboBox * inferenceResultsComboBox_;
-  QComboBox * variablesComboBox_;
-  InferenceResultWidget * inferenceResultWidget_;
-  QLabel * errorMessageLabel_;
+  Study                 study_;
+  QComboBox             * inferenceResultsComboBox_ = nullptr;
+  QComboBox             * variablesComboBox_        = nullptr;
+  InferenceResultWidget * inferenceResultWidget_    = nullptr;
+  ErrorWidget           * errorWidget_        = nullptr;
 };
 }
 #endif

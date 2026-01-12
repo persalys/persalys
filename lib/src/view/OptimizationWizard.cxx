@@ -39,9 +39,6 @@ namespace PERSALYS
 
 OptimizationBoundsPage::OptimizationBoundsPage(const QString& subTitle, QWidget* parent)
   : QWizardPage(parent)
-  , tableView_(0)
-  , tableModel_(0)
-  , errorMessageLabel_(0)
 {
   setSubTitle(subTitle);
 
@@ -55,8 +52,8 @@ OptimizationBoundsPage::OptimizationBoundsPage(const QString& subTitle, QWidget*
   groupBoxLayout->setSizeConstraint(QLayout::SetMaximumSize);
   pageLayout->addWidget(inputsBox);
 
-  errorMessageLabel_ = new TemporaryLabel;
-  pageLayout->addWidget(errorMessageLabel_, 0, Qt::AlignBottom);
+  errorWidget_ = new ErrorWidget;
+  pageLayout->addWidget(errorWidget_, 0, Qt::AlignBottom);
 }
 
 
@@ -69,7 +66,7 @@ void OptimizationBoundsPage::initialize(const Analysis& analysis)
 
   // fill table
   tableModel_ = new OptimizationTableModel(*analysis_ptr, this);
-  connect(tableModel_, SIGNAL(errorMessageChanged(QString)), errorMessageLabel_, SLOT(setTemporaryErrorMessage(QString)));
+  connect(tableModel_, SIGNAL(errorMessageChanged(QString)), errorWidget_, SLOT(setTemporaryFramelessErrorMessage(QString)));
   tableView_->setModel(tableModel_);
 
   // combobox delegate column 2
@@ -120,12 +117,12 @@ bool OptimizationBoundsPage::validatePage()
     {
       if (bounds.getMarginal(i).isEmpty())
       {
-        errorMessageLabel_->setErrorMessage(tr("The lower bounds must be less than the upper bounds"));
+        errorWidget_->setFramelessErrorMessage(tr("The lower bounds must be less than the upper bounds"));
         return false;
       }
       if (!bounds.getMarginal(i).contains(Point(1, tableModel_->getAnalysis().getStartingPoint()[i])))
       {
-        errorMessageLabel_->setErrorMessage(tr("The interval must contain the starting point"));
+        errorWidget_->setFramelessErrorMessage(tr("The interval must contain the starting point"));
         return false;
       }
       variablesIndices.add(i);
@@ -134,7 +131,7 @@ bool OptimizationBoundsPage::validatePage()
   // check
   if (!variablesIndices.getSize())
   {
-    errorMessageLabel_->setErrorMessage(tr("At least one variable must vary"));
+    errorWidget_->setFramelessErrorMessage(tr("At least one variable must vary"));
     return false;
   }
   return QWizardPage::validatePage();

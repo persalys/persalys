@@ -46,10 +46,6 @@ SRCResultWindow::SRCResultWindow(AnalysisItem * item, QWidget * parent)
 
   result_ = SRCanalysis->getResult();
 
-  // add warning if the model does not have an independent copula
-  if (!SRCanalysis->getWarningMessage().empty())
-    warningMessage_ = tr("The model does not have an independent copula, the result could be false.");
-
   // parameters widget
   setParameters(item->getAnalysis(), tr("Sensitivity analysis parameters"));
 
@@ -130,12 +126,6 @@ void SRCResultWindow::buildInterface()
   }
   vbox->addWidget(stackedWidget);
 
-  // add a warning (if the model does not have an independent copula when doing a SensitivityAnalysis)
-  if (!warningMessage_.isEmpty())
-  {
-    QLabel * warningLabel = new QLabel(QString("<font color=red>%1</font>").arg(warningMessage_));
-    vbox->addWidget(warningLabel);
-  }
   vbox->setContentsMargins(0, 0, 0, 0);
   scrollArea->setWidget(widget);
   tabWidget->addTab(scrollArea, tr("Indices"));

@@ -96,11 +96,11 @@ void ImportedDesignPage::checkColumns()
   {
     designOfExperiment_.setColumns(sampleWidget_->getColumns(inputNames), sampleWidget_->getColumns(outputNames));
     sampleWidget_->tableValidity_ = true;
-    sampleWidget_->errorMessageLabel_->reset();
+    sampleWidget_->errorWidget_->reset();
   }
   catch (const InvalidArgumentException &)
   {
-    sampleWidget_->errorMessageLabel_->setErrorMessage(tr("Each variable must be associated with one column."));
+    sampleWidget_->errorWidget_->setFramelessErrorMessage(tr("Each variable must be associated with one column."));
     sampleWidget_->tableValidity_ = false;
   }
 }

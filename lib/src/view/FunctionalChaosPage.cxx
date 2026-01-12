@@ -35,11 +35,6 @@ namespace PERSALYS
 
 FunctionalChaosPage::FunctionalChaosPage(QWidget* parent)
   : QWizardPage(parent)
-  , inputSampleSize_(0)
-  , inputSampleDimension_(0)
-  , chaosDegreeSpinbox_(0)
-  , sparseCheckBox_(0)
-  , errorMessageLabel_(0)
 {
   buildInterface();
 }
@@ -73,10 +68,10 @@ void FunctionalChaosPage::buildInterface()
   chaosParametersLayout->addWidget(sparseCheckBox_, 2, 0);
 
   // error message
-  errorMessageLabel_ = new TemporaryLabel;
+  errorWidget_ = new ErrorWidget;
 
   pageLayout->addStretch();
-  pageLayout->addWidget(errorMessageLabel_);
+  pageLayout->addWidget(errorWidget_);
 
   initialize(FunctionalChaosAnalysis());
 }
@@ -126,7 +121,7 @@ Analysis FunctionalChaosPage::getAnalysis(const String& name, const DesignOfExpe
 
 void FunctionalChaosPage::updateInputSampleSizeAndDimension(DesignOfExperiment doe)
 {
-  errorMessageLabel_->reset();
+  errorWidget_->reset();
   inputSampleSize_ = doe.getInputSample().getSize();
   inputSampleDimension_ = doe.getEffectiveInputIndices().getSize();
   updateBasisSizeLabel();
@@ -146,7 +141,7 @@ bool FunctionalChaosPage::validatePage()
       const QString errorMessage = tr("Design of experiments size too small : %1. It must be greater or equal to C(degree+nbInputs, degree) = %2")
                                    .arg(inputSampleSize_)
                                    .arg(minimumSize);
-      errorMessageLabel_->setErrorMessage(errorMessage);
+      errorWidget_->setFramelessErrorMessage(errorMessage);
       return false;
     }
   }

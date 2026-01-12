@@ -24,6 +24,7 @@
 #include "persalys/Wizard.hxx"
 #include "persalys/Study.hxx"
 #include "persalys/MorrisResultTableModel.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <QComboBox>
 #include <QLabel>
@@ -50,12 +51,12 @@ public slots:
   void updateTableModel(const int);
 
 private:
-  Study study_;
-  PhysicalModel model_;
-  QComboBox * screeningResultsComboBox_ = nullptr;
-  QComboBox * variablesComboBox_ = nullptr;
-  MorrisResultTableModel * tableModel_ = nullptr;
-  QLabel * errorMessageLabel_ = nullptr;
+  Study                   study_;
+  PhysicalModel           model_;
+  QComboBox               * screeningResultsComboBox_ = nullptr;
+  QComboBox               * variablesComboBox_        = nullptr;
+  MorrisResultTableModel  * tableModel_               = nullptr;
+  ErrorWidget             * errorWidget_        = nullptr;
 };
 }
 #endif

@@ -78,11 +78,11 @@ void ImportObservationsPage::checkColumns()
     inColumns = sampleWidget_->getColumns(inputNames);
     outColumns = sampleWidget_->getColumns(outputNames);
     sampleWidget_->tableValidity_ = true;
-    sampleWidget_->errorMessageLabel_->reset();
+    sampleWidget_->errorWidget_->reset();
   }
   catch (const InvalidArgumentException &)
   {
-    sampleWidget_->errorMessageLabel_->setErrorMessage(tr("Each variable must be associated with one column."));
+    sampleWidget_->errorWidget_->setFramelessErrorMessage(tr("Each variable must be associated with one column."));
     sampleWidget_->tableValidity_ = false;
   }
 
@@ -95,7 +95,7 @@ void ImportObservationsPage::checkColumns()
 
   if (inNames.size() == (int)inputNames.getSize())
   {
-    sampleWidget_->errorMessageLabel_->setErrorMessage(tr("All the input variables can not be observed. At least an input variable must be calibrated."));
+    sampleWidget_->errorWidget_->setFramelessErrorMessage(tr("All the input variables can not be observed. At least an input variable must be calibrated."));
     sampleWidget_->tableValidity_ = false;
     return;
   }
@@ -104,11 +104,11 @@ void ImportObservationsPage::checkColumns()
   {
     observations_.setColumns(inColumns, QtOT::StringListToDescription(inNames), outColumns, QtOT::StringListToDescription(outNames));
     sampleWidget_->tableValidity_ = true;
-    sampleWidget_->errorMessageLabel_->reset();
+    sampleWidget_->errorWidget_->reset();
   }
   catch (const InvalidArgumentException &)
   {
-    sampleWidget_->errorMessageLabel_->setErrorMessage(tr("Define observations for at least an output variable and an input variable. A variable must be associated with only one column."));
+    sampleWidget_->errorWidget_->setFramelessErrorMessage(tr("Define observations for at least an output variable and an input variable. A variable must be associated with only one column."));
     sampleWidget_->tableValidity_ = false;
   }
 }

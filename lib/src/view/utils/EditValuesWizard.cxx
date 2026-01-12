@@ -44,7 +44,7 @@ EditValuesWizard::EditValuesWizard(QWidget *parent, OT::UnsignedInteger nMinValu
   : QWizard(parent)
   , model_(0)
   , proxy_(new QSortFilterProxyModel(this))
-  , errorMessageLabel_(new TemporaryLabel)
+  , errorWidget_(new ErrorWidget)
   , sampleDescription_()
   , valueTable_(new QTableView(this))
   , valueNumber_(new QLabel("0"))
@@ -59,7 +59,7 @@ EditValuesWizard::EditValuesWizard(const Sample &values, QWidget *parent, OT::Un
   : QWizard(parent)
   , model_(new SampleTableModel(values, true, false, Description(), this))
   , proxy_(new QSortFilterProxyModel(this))
-  , errorMessageLabel_(new TemporaryLabel)
+  , errorWidget_(new ErrorWidget)
   , sampleDescription_(values.getDescription())
   , valueTable_(new QTableView(this))
   , valueNumber_(new QLabel("0"))
@@ -75,7 +75,7 @@ EditValuesWizard::EditValuesWizard(const QString &variableName, const Point &val
   : QWizard(parent)
   , model_(0)
   , proxy_(new QSortFilterProxyModel(this))
-  , errorMessageLabel_(new TemporaryLabel)
+  , errorWidget_(new ErrorWidget)
   , sampleDescription_()
   , valueTable_(new QTableView(this))
   , valueNumber_(new QLabel("0"))
@@ -147,7 +147,7 @@ void EditValuesWizard::buildInterface()
   QGridLayout * pageLayout = new QGridLayout(page);
   pageLayout->addWidget(valueTable_, 0, 0);
   pageLayout->addLayout(optionLayout, 0, 1);
-  pageLayout->addWidget(errorMessageLabel_, 1, 0, 1, 2);
+  pageLayout->addWidget(errorWidget_, 1, 0, 1, 2);
 
   addPage(page);
 
@@ -272,7 +272,7 @@ bool EditValuesWizard::validateCurrentPage()
 {
   if (nMinValues_ && model_->getSample().getSize() < nMinValues_)
   {
-    errorMessageLabel_->setErrorMessage(tr("Number of value(s) must be at least ")
+    errorWidget_->setFramelessErrorMessage(tr("Number of value(s) must be at least ")
                                         + QString::number(nMinValues_));
     return false;
   }
@@ -305,8 +305,8 @@ UserDefinedWizard::UserDefinedWizard(const Distribution::PointWithDescriptionCol
   description[1] = tr("Weight (>0, optional)").toStdString();
   sample.setDescription(description);
   model_ = new WeightTableModel(sample, this);
-  connect(model_, SIGNAL(dataChanged(QModelIndex, QModelIndex)), errorMessageLabel_, SLOT(reset()));
-  connect(model_, SIGNAL(errorMessageChanged(QString)), errorMessageLabel_, SLOT(setTemporaryErrorMessage(QString)));
+  connect(model_, SIGNAL(dataChanged(QModelIndex, QModelIndex)), errorWidget_, SLOT(reset()));
+  connect(model_, SIGNAL(errorMessageChanged(QString)), errorWidget_, SLOT(setTemporaryFramelessErrorMessage(QString)));
 
   buildInterface();
 }
@@ -370,8 +370,8 @@ HistogramWizard::HistogramWizard(Scalar first, const Point &widths, const Point 
   sample.setDescription(sampleDescription_);
   model_ = new HistogramTableModel(sample, this);
 
-  connect(model_, SIGNAL(dataChanged(QModelIndex, QModelIndex)), errorMessageLabel_, SLOT(reset()));
-  connect(model_, SIGNAL(errorMessageChanged(QString)), errorMessageLabel_, SLOT(setTemporaryErrorMessage(QString)));
+  connect(model_, SIGNAL(dataChanged(QModelIndex, QModelIndex)), errorWidget_, SLOT(reset()));
+  connect(model_, SIGNAL(errorMessageChanged(QString)), errorWidget_, SLOT(setTemporaryFramelessErrorMessage(QString)));
 
   sortValues_ = false;
 
@@ -407,12 +407,12 @@ ImportedDistributionPage::ImportedDistributionPage(QWidget *parent)
   sampleWidget_ = new ImportSampleWidget;
   pageLayout->addWidget(sampleWidget_);
 
-  errorMessageLabel_ = new TemporaryLabel;
-  pageLayout->addWidget(errorMessageLabel_);
+  errorWidget_ = new ErrorWidget;
+  pageLayout->addWidget(errorWidget_);
 
   connect(sampleWidget_, &ImportSampleWidget::updateTableRequested, [ = ](const QString & fileName)
   {
-    errorMessageLabel_->setText("");
+    errorWidget_->reset();
     Sample sample = Tools::ImportSample(fileName.toStdString());
     Indices allIndices = Indices(sample.getDimension());
     allIndices.fill(0, 1);
@@ -433,7 +433,7 @@ bool ImportedDistributionPage::validatePage()
     {
       if (desc[i] == desc[j] && desc[i] != "")
       {
-        errorMessageLabel_->setErrorMessage(tr("Values and weights must be associated with one column"));
+        errorWidget_->setFramelessErrorMessage(tr("Values and weights must be associated with one column"));
         return false;
       }
     }

@@ -22,7 +22,7 @@
 #define PERSALYS_EDITVALUESWIZARD_HXX
 
 #include "persalys/SampleTableModel.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 #include "persalys/ImportSampleWidget.hxx"
 
 
@@ -61,18 +61,18 @@ protected:
   void buildInterface();
   void check();
 
-  SampleTableModel * model_;
-  QSortFilterProxyModel * proxy_;
-  TemporaryLabel * errorMessageLabel_;
+  SampleTableModel * model_ = nullptr;
+  QSortFilterProxyModel * proxy_ = nullptr;
+  ErrorWidget * errorWidget_ = nullptr;
   bool sortValues_ = true;
 
 private:
-  OT::Description sampleDescription_;
-  QTableView * valueTable_;
-  QLabel * valueNumber_;
-  QPushButton * removeButton_;
-  OT::UnsignedInteger nMinValues_ = 2;
-  OT::Scalar factor_ = 1.;
+  OT::Description     sampleDescription_;
+  QTableView          * valueTable_       = nullptr;
+  QLabel              * valueNumber_      = nullptr;
+  QPushButton         * removeButton_     = nullptr;
+  OT::UnsignedInteger nMinValues_         = 2;
+  OT::Scalar          factor_             = 1.;
 
 };
 
@@ -170,8 +170,8 @@ public:
   };
 
 private:
-  ImportSampleWidget * sampleWidget_;
-  TemporaryLabel * errorMessageLabel_;
+  ImportSampleWidget  * sampleWidget_ = nullptr;
+  ErrorWidget         * errorWidget_  = nullptr;
 };
 }
 #endif

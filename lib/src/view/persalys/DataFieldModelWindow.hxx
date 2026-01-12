@@ -26,7 +26,7 @@
 #include "persalys/SampleTableModel.hxx"
 #include "persalys/EditableExportableTableView.hxx"
 #include "persalys/SubWindow.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 #include "persalys/ImportSampleWidget.hxx"
 
 #include <QLineEdit>
@@ -66,7 +66,7 @@ private:
   QLineEdit                   * filePathLineEdit_       = nullptr;
   QButtonGroup                * orderButtonGroup_       = nullptr;
   EditableExportableTableView * dataTableView_          = nullptr;
-  TemporaryLabel              * errorMessageLabel_      = nullptr;
+  ErrorWidget              * errorWidget_      = nullptr;
   QCheckBox                   * includeMeshCB_          = nullptr;
 };
 

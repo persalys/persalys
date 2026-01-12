@@ -28,6 +28,7 @@
 #include <QGridLayout>
 #include <QHeaderView>
 #include <QtGlobal>
+#include <QLabel>
 
 using namespace OT;
 
@@ -38,11 +39,6 @@ CopulaInferenceResultWizard::CopulaInferenceResultWizard(const Study &study, con
   : Wizard(parent)
   , study_(study)
   , variables_(variables)
-  , inferenceResultsComboBox_(0)
-  , variablesComboBox_(0)
-  , tableView_(0)
-  , inferenceResultStackWidget_(0)
-  , errorMessageLabel_(0)
 {
   buildInterface();
   resize(1000, 700);
@@ -115,8 +111,8 @@ void CopulaInferenceResultWizard::buildInterface()
   connect(variablesComboBox_, SIGNAL(currentIndexChanged(int)), inferenceResultStackWidget_, SLOT(setCurrentIndex(int)));
 
   // error message
-  errorMessageLabel_ = new TemporaryLabel;
-  mainLayout->addWidget(errorMessageLabel_);
+  errorMessageWidget_ = new ErrorWidget;
+  mainLayout->addWidget(errorMessageWidget_);
 
   // update tables
   connect(inferenceResultsComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateVariablesComboBox(int)));
@@ -128,7 +124,7 @@ void CopulaInferenceResultWizard::buildInterface()
 
 void CopulaInferenceResultWizard::updateVariablesComboBox(int currentAnalysis)
 {
-  if (!(errorMessageLabel_ && variablesComboBox_ && inferenceResultsComboBox_))
+  if (!(errorMessageWidget_ && variablesComboBox_ && inferenceResultsComboBox_))
     return;
 
   // reset
@@ -223,7 +219,7 @@ void CopulaInferenceResultWizard::updateVariablesTable(int index)
 
 Distribution CopulaInferenceResultWizard::getCopula() const
 {
-  CopulaInferenceResultWidget * widget = static_cast<CopulaInferenceResultWidget*>(inferenceResultStackWidget_->currentWidget());
+  const auto * widget = static_cast<CopulaInferenceResultWidget*>(inferenceResultStackWidget_->currentWidget());
   Distribution copula(widget->getCopula());
 
   // if Normal copula
@@ -249,15 +245,15 @@ Distribution CopulaInferenceResultWizard::getCopula() const
 
 bool CopulaInferenceResultWizard::validateCurrentPage()
 {
-  CopulaInferenceResultWidget * widget = dynamic_cast<CopulaInferenceResultWidget*>(inferenceResultStackWidget_->currentWidget());
+  const auto * widget = dynamic_cast<CopulaInferenceResultWidget*>(inferenceResultStackWidget_->currentWidget());
   if (!widget)
   {
-    errorMessageLabel_->setTemporaryErrorMessage(tr("No copula with a dimension of %1 in this result").arg(variables_.getSize()));
+    errorMessageWidget_->setMessage(tr("No copula with a dimension of %1 in this result").arg(variables_.getSize()), ErrorWidget::Error, true);
     return false;
   }
   if (!widget->isSelectedCopulaValid())
   {
-    errorMessageLabel_->setTemporaryErrorMessage(tr("The selected copula is not valid."));
+    errorMessageWidget_->setMessage(tr("The selected copula is not valid."), ErrorWidget::Error, true);
     return false;
   }
   if (tableView_)
@@ -277,7 +273,7 @@ bool CopulaInferenceResultWizard::validateCurrentPage()
     }
     if (!indices.check(variables_.getSize()))
     {
-      errorMessageLabel_->setTemporaryErrorMessage(tr("Invalid list %1. The elements must be single-use.").arg(varList.__str__().c_str()));
+      errorMessageWidget_->setMessage(tr("Invalid list %1. The elements must be single-use.").arg(varList.__str__().c_str()), ErrorWidget::Error, true);
       return false;
     }
   }

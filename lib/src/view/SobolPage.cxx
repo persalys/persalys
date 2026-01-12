@@ -24,6 +24,7 @@
 #include "persalys/CollapsibleGroupBox.hxx"
 
 #include <QVBoxLayout>
+#include <QLabel>
 
 using namespace OT;
 
@@ -38,7 +39,7 @@ SobolPage::SobolPage(QWidget* parent)
   , totalNbSimuLabel_(0)
   , confidenceLevelSpinbox_(0)
   , seedSpinbox_(0)
-  , errorMessageLabel_(0)
+  , errorWidget_(0)
 {
   buildInterface();
 }
@@ -99,10 +100,10 @@ void SobolPage::buildInterface()
   pageLayout->addStretch();
 
   // error message
-  errorMessageLabel_ = new TemporaryLabel;
-  connect(stopCriteriaGroupBox_, SIGNAL(criteriaChanged()), errorMessageLabel_, SLOT(reset()));
-  connect(blockSizeGroupBox_, SIGNAL(blockSizeChanged(double)), errorMessageLabel_, SLOT(reset()));
-  pageLayout->addWidget(errorMessageLabel_);
+  errorWidget_ = new ErrorWidget;
+  connect(stopCriteriaGroupBox_, SIGNAL(criteriaChanged()), errorWidget_, SLOT(reset()));
+  connect(blockSizeGroupBox_, SIGNAL(blockSizeChanged(double)), errorWidget_, SLOT(reset()));
+  pageLayout->addWidget(errorWidget_);
 
   initialize(SobolAnalysis());
 }
@@ -130,7 +131,7 @@ void SobolPage::initialize(const Analysis& analysis)
 
 void SobolPage::updateNumberSimulations(double replicationSize)
 {
-  errorMessageLabel_->reset();
+  errorWidget_->reset();
   // total nb simu/iteration: N=replicationSize*(nb_inputs+2)
   const int nbSimu = replicationSize * numberStochasticVariables_;
   totalNbSimuLabel_->setText(QString::number(nbSimu));
@@ -176,7 +177,7 @@ bool SobolPage::validatePage()
     }
   }
 
-  errorMessageLabel_->setErrorMessage(errorMessage);
+  errorWidget_->setFramelessErrorMessage(errorMessage);
   if (!errorMessage.isEmpty())
     return false;
 

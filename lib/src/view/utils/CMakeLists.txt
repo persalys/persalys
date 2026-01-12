@@ -25,13 +25,13 @@ ot_add_source_file (TitledComboBox.cxx)
 ot_add_source_file (Arrow.cxx)
 ot_add_source_file (DiagramPushButton.cxx)
 ot_add_source_file (ResizableHeaderlessTableView.cxx)
-ot_add_source_file (TemporaryLabel.cxx)
 ot_add_source_file (DocumentationToolButton.cxx)
 ot_add_source_file (EditButtonDelegate.cxx)
 ot_add_source_file (LinkableItemDelegate.cxx)
 ot_add_source_file (EditValuesWizard.cxx)
 ot_add_source_file (ImportSampleWidget.cxx)
 ot_add_source_file (ParametersTableView.cxx)
+ot_add_source_file (ErrorWidget.cxx)
 
 ot_install_header_file ( ListWidgetWithCheckBox.hxx )
 ot_install_header_file ( TimeLineEdit.hxx )
@@ -57,12 +57,12 @@ ot_install_header_file ( ParametersTableView.hxx )
 ot_install_header_file ( Arrow.hxx )
 ot_install_header_file ( DiagramPushButton.hxx )
 ot_install_header_file ( ResizableHeaderlessTableView.hxx )
-ot_install_header_file ( TemporaryLabel.hxx )
 ot_install_header_file ( DocumentationToolButton.hxx )
 ot_install_header_file ( EditButtonDelegate.hxx )
 ot_install_header_file ( LinkableItemDelegate.hxx)
 ot_install_header_file ( EditValuesWizard.hxx )
 ot_install_header_file ( ImportSampleWidget.hxx )
+ot_install_header_file ( ErrorWidget.hxx )
 
 
 qt_wrap_cpp (PERSALYS_UTILS_MOC_SRCS
@@ -89,12 +89,12 @@ qt_wrap_cpp (PERSALYS_UTILS_MOC_SRCS
               persalys/TitledComboBox.hxx
               persalys/Arrow.hxx
               persalys/DiagramPushButton.hxx
-              persalys/TemporaryLabel.hxx
               persalys/DocumentationToolButton.hxx
               persalys/EditButtonDelegate.hxx
               persalys/LinkableItemDelegate.hxx
               persalys/EditValuesWizard.hxx
               persalys/ImportSampleWidget.hxx
+              persalys/ErrorWidget.hxx
              )
 
 include_directories (${INTERNAL_INCLUDE_DIRS})

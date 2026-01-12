@@ -24,9 +24,10 @@
 #include "persalys/Analysis.hxx"
 #include "persalys/StopCriteriaGroupBox.hxx"
 #include "persalys/BlockSizeGroupBox.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <QWizardPage>
+#include <QLabel>
 
 namespace PERSALYS
 {
@@ -51,12 +52,12 @@ public slots:
 
 private:
   OT::UnsignedInteger numberStochasticVariables_;
-  StopCriteriaGroupBox * stopCriteriaGroupBox_;
-  BlockSizeGroupBox * blockSizeGroupBox_;
-  QLabel * totalNbSimuLabel_;
-  DoubleSpinBox * confidenceLevelSpinbox_;
-  QSpinBox * seedSpinbox_;
-  TemporaryLabel * errorMessageLabel_;
+  StopCriteriaGroupBox * stopCriteriaGroupBox_ = nullptr;
+  BlockSizeGroupBox * blockSizeGroupBox_ = nullptr;
+  QLabel * totalNbSimuLabel_ = nullptr;
+  DoubleSpinBox * confidenceLevelSpinbox_ = nullptr;
+  QSpinBox * seedSpinbox_ = nullptr;
+  ErrorWidget * errorWidget_ = nullptr;
 };
 }
 #endif

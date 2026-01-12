@@ -25,7 +25,7 @@
 #include "persalys/StopCriteriaGroupBox.hxx"
 #include "persalys/BlockSizeGroupBox.hxx"
 #include "persalys/OutputsSelectionGroupBox.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 namespace PERSALYS
 {
@@ -51,7 +51,7 @@ private:
   BlockSizeGroupBox * blockSizeGroupBox_ = nullptr;
   DoubleSpinBox * klSpinbox_ = nullptr;
   QSpinBox * seedSpinbox_ = nullptr;
-  TemporaryLabel * errorMessageLabel_ = nullptr;
+  ErrorWidget * errorWidget_ = nullptr;
 };
 }
 #endif

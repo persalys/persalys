@@ -38,13 +38,9 @@ namespace PERSALYS
 InferenceResultWizard::InferenceResultWizard(const Study& study, QWidget* parent)
   : Wizard(parent)
   , study_(study)
-  , inferenceResultsComboBox_(0)
-  , variablesComboBox_(0)
-  , inferenceResultWidget_(0)
-  , errorMessageLabel_(0)
 {
   buildInterface();
-  adjustSize();//resize(1000, 600);
+  //adjustSize();
 }
 
 
@@ -82,9 +78,8 @@ void InferenceResultWizard::buildInterface()
   connect(inferenceResultWidget_, SIGNAL(currentDistributionChanged()), this, SLOT(clearErrorMessage()));
 
   // error message
-  errorMessageLabel_ = new QLabel;
-  errorMessageLabel_->setWordWrap(true);
-  mainLayout->addWidget(errorMessageLabel_);
+  errorWidget_ = new ErrorWidget;
+  mainLayout->addWidget(errorWidget_);
 
   // update tables
   connect(variablesComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateInferenceResultWidget(int)));
@@ -97,7 +92,7 @@ void InferenceResultWizard::buildInterface()
 
 void InferenceResultWizard::updateVariablesComboBox(int currentAnalysis)
 {
-  if (!(errorMessageLabel_ && variablesComboBox_ && inferenceResultsComboBox_))
+  if (!(errorWidget_ && variablesComboBox_ && inferenceResultsComboBox_))
     return;
 
   // reset
@@ -129,7 +124,7 @@ void InferenceResultWizard::updateInferenceResultWidget(int index)
   if (inferenceResultsComboBox_->count())
   {
     const int analysisIndex = inferenceResultsComboBox_->itemData(inferenceResultsComboBox_->currentIndex()).toInt();
-    InferenceAnalysis * analysis = dynamic_cast<InferenceAnalysis*>(study_.getAnalyses()[analysisIndex].getImplementation().get());
+    const auto * analysis = dynamic_cast<InferenceAnalysis*>(study_.getAnalyses()[analysisIndex].getImplementation().get());
 
     inferenceResultWidget_->updateDistributionTable(analysis->getLevel(), analysis->getResult(), variableName);
   }
@@ -144,21 +139,16 @@ Distribution InferenceResultWizard::getDistribution() const
 
 void InferenceResultWizard::clearErrorMessage()
 {
-  if (errorMessageLabel_)
-    errorMessageLabel_->setText("");
+  if (errorWidget_)
+    errorWidget_->reset();
 }
 
 
 bool InferenceResultWizard::validateCurrentPage()
 {
-  if (!inferenceResultsComboBox_->count())
-  {
-    errorMessageLabel_->setText(QString("%1%2%3").arg("<font color=red>").arg(tr("The current study has not inference analyses results.")).arg("</font>"));
-    return false;
-  }
   if (!inferenceResultWidget_->isSelectedDistributionValid())
   {
-    errorMessageLabel_->setText(QString("%1%2%3").arg("<font color=red>").arg(tr("The selected distribution is not valid.")).arg("</font>"));
+    errorWidget_->setMessage(tr("The selected distribution is not valid."));
     return false;
   }
 

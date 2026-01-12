@@ -23,7 +23,7 @@
 
 #include "persalys/Analysis.hxx"
 #include "persalys/OutputsSelectionGroupBox.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <QWizardPage>
 #include <QButtonGroup>
@@ -48,7 +48,7 @@ public:
 
 private:
   OutputsSelectionGroupBox * outputsSelectionGroupBox_ = nullptr;
-  TemporaryLabel * errorMessageLabel_ = nullptr;
+  ErrorWidget * errorWidget_ = nullptr;
 };
 }
 #endif

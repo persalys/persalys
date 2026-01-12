@@ -38,7 +38,7 @@ ModelEvaluationWizard::ModelEvaluationWizard(const Analysis& analysis, QWidget* 
   : AnalysisWizard(analysis, parent)
   , table_(0)
   , outputsGroupBox_(0)
-  , errorMessageLabel_(new TemporaryLabel)
+  , errorWidget_(new ErrorWidget)
 {
   buildInterface();
 }
@@ -61,7 +61,7 @@ void ModelEvaluationWizard::buildInterface()
 
   // output selection
   outputsGroupBox_ = new OutputsSelectionGroupBox(model.getSelectedOutputsNames(), analysis.getInterestVariables(), this);
-  connect(outputsGroupBox_, SIGNAL(outputsSelectionChanged(QStringList)), errorMessageLabel_, SLOT(reset()));
+  connect(outputsGroupBox_, SIGNAL(outputsSelectionChanged(QStringList)), errorWidget_, SLOT(reset()));
   pageLayout->addWidget(outputsGroupBox_, 0, Qt::AlignTop);
 
   // table
@@ -112,7 +112,7 @@ void ModelEvaluationWizard::buildInterface()
   pageLayout->addStretch();
 
   /// -- error message
-  pageLayout->addWidget(errorMessageLabel_, 0, Qt::AlignBottom);
+  pageLayout->addWidget(errorWidget_, 0, Qt::AlignBottom);
 
   addPage(page);
 }
@@ -120,10 +120,10 @@ void ModelEvaluationWizard::buildInterface()
 
 bool ModelEvaluationWizard::validateCurrentPage()
 {
-  errorMessageLabel_->reset();
+  errorWidget_->reset();
   if (!outputsGroupBox_->getSelectedOutputsNames().size())
   {
-    errorMessageLabel_->setErrorMessage(tr("At least one output must be selected"));
+    errorWidget_->setFramelessErrorMessage(tr("At least one output must be selected"));
     return false;
   }
 

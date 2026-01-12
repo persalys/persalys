@@ -25,7 +25,7 @@
 #include "persalys/OutputsSelectionGroupBox.hxx"
 #include "persalys/BlockSizeGroupBox.hxx"
 #include "persalys/Analysis.hxx"
-#include "persalys/TemporaryLabel.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <QStandardItemModel>
 #include <QComboBox>
@@ -57,7 +57,7 @@ private:
   QLabel                    * doeLabel_                 = nullptr;
   OutputsSelectionGroupBox  * outputsSelectionGroupBox_ = nullptr;
   BlockSizeGroupBox         * blockSizeGroupBox_        = nullptr;
-  TemporaryLabel            * errorMessageLabel_        = nullptr;
+  ErrorWidget               * errorWidget_        = nullptr;
 };
 }
 #endif

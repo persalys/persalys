@@ -43,7 +43,7 @@ OptimizationAlgoPage::OptimizationAlgoPage(QWidget* parent)
   , algoTableView_(0)
   , algoTableModel_(0)
   , outputsSelectionGroupBox_(0)
-  , errorMessageLabel_(0)
+  , errorWidget_(0)
 {
 }
 
@@ -102,11 +102,11 @@ void OptimizationAlgoPage::buildInterface()
   pageLayout->addWidget(groupBox);
 
   // error message
-  errorMessageLabel_ = new TemporaryLabel;
-  connect(outputsSelectionGroupBox_, SIGNAL(outputsSelectionChanged(QStringList)), errorMessageLabel_, SLOT(reset()));
+  errorWidget_ = new ErrorWidget;
+  connect(outputsSelectionGroupBox_, SIGNAL(outputsSelectionChanged(QStringList)), errorWidget_, SLOT(reset()));
 
   //pageLayout->addStretch();
-  pageLayout->addWidget(errorMessageLabel_);
+  pageLayout->addWidget(errorWidget_);
 }
 
 
@@ -118,7 +118,7 @@ void OptimizationAlgoPage::initialize(OptimizationAnalysis& analysis)
   algoTableModel_->setHorizontalHeaderItem(2, new QStandardItem(tr("Derivative")));
   algoTableModel_->setHorizontalHeaderItem(3, new QStandardItem(tr("Doc")));
 
-  errorMessageLabel_->reset();
+  errorWidget_->reset();
   solverNames_ = OptimizationAnalysis::GetSolverNames(analysis.getBounds(),
                  analysis.getVariablesType(),
                  analysis.getEqualityConstraints(),
@@ -222,15 +222,15 @@ bool OptimizationAlgoPage::validatePage()
 {
   if (outputsSelectionGroupBox_->getSelectedOutputsNames().size() != 1)
   {
-    errorMessageLabel_->setErrorMessage(tr("Only one output must be selected"));
+    errorWidget_->setFramelessErrorMessage(tr("Only one output must be selected"));
     return false;
   }
   if (!solverNames_.getSize())
   {
-    errorMessageLabel_->setErrorMessage(tr("Cannot find a compatible algorithm"));
+    errorWidget_->setFramelessErrorMessage(tr("Cannot find a compatible algorithm"));
     return false;
   }
-  if (!errorMessageLabel_->text().isEmpty())
+  if (!errorWidget_->toPlainText().isEmpty())
     return false;
   emit outputSelected();
   return QWizardPage::validatePage();
@@ -266,7 +266,7 @@ void OptimizationAlgoPage::openDoc(QModelIndex current)
 
 void OptimizationAlgoPage::updateFilters()
 {
-  errorMessageLabel_->reset();
+  errorWidget_->reset();
   const int derivIndex = derivativeCombobox_->currentIndex();
   const int localIndex = localityCombobox_->currentIndex();
   QList<int> selectedDerivative;
@@ -316,7 +316,7 @@ void OptimizationAlgoPage::updateFilters()
   if (!selectedLocality.size() || !selectedDerivative.size())
   {
     algoTableModel_->setData(algoTableModel_->index(0, 0), true, Qt::CheckStateRole);
-    errorMessageLabel_->setErrorMessage(tr("Cannot find a compatible algorithm"));
+    errorWidget_->setFramelessErrorMessage(tr("Cannot find a compatible algorithm"));
   }
 
   algoTableView_->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
