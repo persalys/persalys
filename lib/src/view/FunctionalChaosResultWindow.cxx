@@ -141,6 +141,7 @@ void FunctionalChaosResultWindow::addMomentsTab(QTabWidget * tabWidget, const Va
       generalStackedWidget->addWidget(generalTableView);
     }
     summaryWidgetLayout->addWidget(generalStackedWidget);
+    connect(outputsListWidget, SIGNAL(currentRowChanged(int)), generalStackedWidget, SLOT(setCurrentIndex(int)));
 
     QGroupBox * basisGroupBox = new QGroupBox(tr("Polynomial basis"));
     QVBoxLayout * basisGroupBoxLayout = new QVBoxLayout(basisGroupBox);

@@ -38,14 +38,7 @@ namespace PERSALYS
 /* Default constructor */
 MetaModelAnalysis::MetaModelAnalysis()
   : DesignOfExperimentAnalysis()
-  , isDistributionComputed_(false)
-  , analyticalValidation_(true)
-  , testSampleValidation_(false)
-  , kFoldValidation_(false)
-  , leaveOneOutValidation_(false)
-  , percentageTestSample_(20)
   , seedTestSample_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
-  , nbFolds_(5)
   , seedKFold_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
 {
 }
@@ -54,14 +47,7 @@ MetaModelAnalysis::MetaModelAnalysis()
 /* Constructor with parameters */
 MetaModelAnalysis::MetaModelAnalysis(const String& name, const DesignOfExperiment& designOfExperiment)
   : DesignOfExperimentAnalysis(name, designOfExperiment)
-  , isDistributionComputed_(false)
-  , analyticalValidation_(true)
-  , testSampleValidation_(false)
-  , kFoldValidation_(false)
-  , leaveOneOutValidation_(false)
-  , percentageTestSample_(20)
   , seedTestSample_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
-  , nbFolds_(5)
   , seedKFold_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
 {
   if (designOfExperiment_.getOutputSample().getSize())
@@ -72,14 +58,7 @@ MetaModelAnalysis::MetaModelAnalysis(const String& name, const DesignOfExperimen
 /* Constructor with parameters */
 MetaModelAnalysis::MetaModelAnalysis(const String& name, const Analysis& analysis)
   : DesignOfExperimentAnalysis(name)
-  , isDistributionComputed_(false)
-  , analyticalValidation_(true)
-  , testSampleValidation_(false)
-  , kFoldValidation_(false)
-  , leaveOneOutValidation_(false)
-  , percentageTestSample_(20)
   , seedTestSample_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
-  , nbFolds_(5)
   , seedKFold_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
 {
   const auto * analysis_ptr = dynamic_cast<DesignOfExperimentEvaluation*>(analysis.getImplementation().get());
@@ -393,7 +372,7 @@ Function MetaModelAnalysis::runAlgoMarginal(const OT::Sample& /*inputSample*/, c
 
 void MetaModelAnalysis::computeError(const Sample& metaOutSample, const Sample& outSample, Point& mse, Point& q2)
 {
-  MetaModelValidation validation(outSample, metaOutSample);
+  const MetaModelValidation validation(outSample, metaOutSample);
   mse = validation.computeMeanSquaredError();
   q2 = validation.computeR2Score();
 }
@@ -401,7 +380,7 @@ void MetaModelAnalysis::computeError(const Sample& metaOutSample, const Sample& 
 
 void MetaModelAnalysis::validateMetaModelResult(MetaModelAnalysisResult& result, const Sample& inputSample)
 {
-  computeError(result.outputSample_, result.metaModelOutputSample_, result.mse_, result.r2_);
+  computeError(result.outputSample_, result.metaModelOutputSample_, result.mse_, result.r2_); 
 
   // check
   if (analyticalValidation_ || testSampleValidation_ || kFoldValidation_ || leaveOneOutValidation_)

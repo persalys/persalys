@@ -99,15 +99,15 @@ protected:
 
 protected:
   OT::Distribution distribution_;
-  bool isDistributionComputed_;
-  bool analyticalValidation_;
-  bool testSampleValidation_;
-  bool kFoldValidation_;
-  bool leaveOneOutValidation_;
-  OT::UnsignedInteger percentageTestSample_;
-  OT::UnsignedInteger seedTestSample_;
-  OT::UnsignedInteger nbFolds_;
-  OT::UnsignedInteger seedKFold_;
+  bool isDistributionComputed_ = false;
+  bool analyticalValidation_ = true;
+  bool testSampleValidation_ = false;
+  bool kFoldValidation_ = false;
+  bool leaveOneOutValidation_ = false;
+  OT::UnsignedInteger percentageTestSample_ = 20;
+  OT::UnsignedInteger seedTestSample_ = 0;
+  OT::UnsignedInteger nbFolds_ = 5;
+  OT::UnsignedInteger seedKFold_ = 0;
 };
 }
 #endif
