@@ -41,7 +41,7 @@ namespace PERSALYS
 
 CLASSNAMEINIT(ProbabilisticDesignOfExperiment)
 
-static Factory<ProbabilisticDesignOfExperiment> Factory_ProbabilisticDesignOfExperiment;
+const static Factory<ProbabilisticDesignOfExperiment> Factory_ProbabilisticDesignOfExperiment;
 
 Description ProbabilisticDesignOfExperiment::DesignNames_;
 Description ProbabilisticDesignOfExperiment::SpaceFillings_;

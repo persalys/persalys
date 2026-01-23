@@ -1,7 +1,7 @@
 obs= class=Observations name=obs physicalModel=aModelPhys observedInputs=[X3,X1] observedOutputs=[Y2,Y1] fileName=obs_normal2.csv inputColumns=[7,3] outputColumns=[6,2]
 InvalidArgumentException occurred: True
 InvalidArgumentException occurred: True
-obs2= class=Observations name=obs2 physicalModel=aModelPhys observedInputs=[X3,X1] observedOutputs=[Y2,Y1]
+obs2= class=Observations name=obs2 physicalModel=aModelPhys observedInputs=[X1,X3] observedOutputs=[Y1,Y2]
 #!/usr/bin/env python
 
 import openturns as ot
@@ -22,13 +22,18 @@ outputs = [Y0, Y1, Y2]
 formulas = ['sin(X0)+8*X1', 'sin(X0)+8*X1', 'sin(X0)+8*X1']
 aModelPhys = persalys.SymbolicPhysicalModel('aModelPhys', inputs, outputs, formulas)
 anOTStudy.add(aModelPhys)
-inputColumns = [4, 5, 1]
-outputColumns = [3, 0]
-inputNames = ['X3', 'X2', 'X1']
-outputNames = ['Y1', 'Y0']
-obs = persalys.Observations('obs', aModelPhys, 'obs_normal2.csv', inputColumns, outputColumns, inputNames, outputNames)
+name='obs'
+physicalModel=aModelPhys
+fileName='obs_normal2.csv'
+inputColumns=[4, 5, 1]
+outputColumns=[3, 0]
+inputNames=['X3', 'X2', 'X1']
+outputNames=['Y1', 'Y0']
+obs = persalys.Observations(name, physicalModel, fileName, inputColumns, outputColumns, inputNames, outputNames)
 anOTStudy.add(obs)
-inputSample = ot.Sample([
+name='obs2'
+physicalModel=aModelPhys
+inSample = ot.Sample([
 [1.20548, 1.43725],
 [0.261018, -0.0907838],
 [0.44549, -0.856712],
@@ -40,8 +45,8 @@ inputSample = ot.Sample([
 [-0.89182, 0.677958],
 [-1.66086, -0.633066]]
 )
-inputSample.setDescription(['X3', 'X1'])
-outputSample = ot.Sample([
+inSample.setDescription(['X1', 'X3'])
+outSample = ot.Sample([
 [-0.438266, -0.355007],
 [-0.470526, -1.31178],
 [-0.560206, -1.03808],
@@ -53,7 +58,7 @@ outputSample = ot.Sample([
 [0.103474, -0.483642],
 [-0.506925, -0.510764]]
 )
-outputSample.setDescription(['Y2', 'Y1'])
-obs2 = persalys.Observations('obs2', aModelPhys, inputSample, outputSample)
+outSample.setDescription(['Y1', 'Y2'])
+obs2 = persalys.Observations(name, physicalModel, inSample, outSample)
 anOTStudy.add(obs2)
 

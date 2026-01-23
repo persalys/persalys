@@ -39,23 +39,15 @@ Create the design of experiments:
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::DataImport::getResult
-"Result of the analysis of the data accessor.
+%feature("docstring") PERSALYS::ImportedDesignOfExperiment::setColumns
+"Set the columns of the variables.
 
-Returns
--------
-result : :class:`~persalys.DataAnalysisResult`
-   Result of the analysis of the data"
-
-// ---------------------------------------------------------------------
-
-%feature("docstring") PERSALYS::ImportedDesignOfExperiment::getType
-"Get the type of the imported design of experiments.
-
-Returns
--------
-type : :class:`~persalys.ImportedDesignOfExperiment.Type`
-   Type of the imported design of experiments"
+Parameters
+----------
+inputColumns : sequence of int
+    Columns of the input variables
+outputColumns : sequence of int (optional)
+    Columns of the output variables"
 
 // ---------------------------------------------------------------------
 
@@ -77,3 +69,23 @@ Returns
 -------
 type : int
    Type of the imported design of experiments"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::ImportedDesignOfExperiment::getImportedDataset
+"Get the imported dataset.
+
+Returns
+-------
+importedDataset : :class:`~persalys.ImportedDataset`
+   The imported dataset"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::ImportedDesignOfExperiment::setFileName
+"Set the name of the data file to load.
+
+Parameters
+----------
+fileName : str
+    Name of a data file to load"

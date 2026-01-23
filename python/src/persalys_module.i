@@ -104,7 +104,7 @@ PERSALYSTypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Coll
 %include Input.i
 %include Output.i
 %include DataSample.i
-%include DataImport.i
+%include ImportedDataset.i
 %include MeshModelImplementation.i
 %include MeshModel.i
 %include GridMeshModel.i

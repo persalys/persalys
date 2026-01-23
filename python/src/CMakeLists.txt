@@ -58,7 +58,7 @@ ot_add_python_module (persalys persalys_module.i
                       Input.i Input_doc.i
                       Output.i Output_doc.i
                       DataSample.i DataSample_doc.i
-                      DataImport.i DataImport_doc.i
+                      ImportedDataset.i ImportedDataset_doc.i
                       DataFieldModel.i DataFieldModel_doc.i
                       DataFieldModelImplementation.i DataFieldModelImplementation_doc.i
                       MeshModelImplementation.i MeshModelImplementation_doc.i

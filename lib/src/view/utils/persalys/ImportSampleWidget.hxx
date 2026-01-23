@@ -23,7 +23,6 @@
 
 #include "persalys/ExportableTableView.hxx"
 #include "persalys/ErrorWidget.hxx"
-#include "persalys/DataImport.hxx"
 
 #include <openturns/OTType.hxx>
 
@@ -69,7 +68,7 @@ private:
   QLineEdit           * filePathLineEdit_     = nullptr;
   ExportableTableView * dataPreviewTableView_ = nullptr;
   QLabel              * DOESizeLabel_         = nullptr;
-  ErrorWidget         * errorWidget_    = nullptr;
+  ErrorWidget         * errorWidget_          = nullptr;
   QButtonGroup        * orderButtonGroup_     = nullptr;
 };
 }

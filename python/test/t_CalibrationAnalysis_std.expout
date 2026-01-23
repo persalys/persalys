@@ -64,7 +64,9 @@ outputs = [sigma, fakeSigma]
 formulas = ['R + C * (1 - exp(-gam * strain))', '2*(R + C * (1 - exp(-gam * strain)))']
 model1 = persalys.SymbolicPhysicalModel('model1', inputs, outputs, formulas)
 myStudy.add(model1)
-inputSample = ot.Sample([
+name='obs1'
+physicalModel=model1
+inSample = ot.Sample([
 [0.0440914],
 [0.0617964],
 [0.00946934],
@@ -166,8 +168,8 @@ inputSample = ot.Sample([
 [0.0635452],
 [0.0524821]]
 )
-inputSample.setDescription(['strain'])
-outputSample = ot.Sample([
+inSample.setDescription(['strain'])
+outSample = ot.Sample([
 [1.73068e+09],
 [2.12389e+09],
 [1.00927e+09],
@@ -269,8 +271,8 @@ outputSample = ot.Sample([
 [2.02276e+09],
 [1.89882e+09]]
 )
-outputSample.setDescription(['sigma'])
-obs1 = persalys.Observations('obs1', model1, inputSample, outputSample)
+outSample.setDescription(['sigma'])
+obs1 = persalys.Observations(name, physicalModel, inSample, outSample)
 myStudy.add(obs1)
 myAnalysis = persalys.CalibrationAnalysis('myAnalysis', obs1)
 myAnalysis.setMethodName('LeastSquaresLinear')

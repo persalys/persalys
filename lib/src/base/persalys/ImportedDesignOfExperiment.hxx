@@ -22,11 +22,11 @@
 #define PERSALYS_IMPORTEDDESIGNOFEXPERIMENT_HXX
 
 #include "DesignOfExperimentEvaluation.hxx"
-#include "DataImport.hxx"
+#include "ImportedDataset.hxx"
 
 namespace PERSALYS
 {
-class PERSALYS_BASE_API ImportedDesignOfExperiment : public DesignOfExperimentEvaluation, public DataImport
+class PERSALYS_BASE_API ImportedDesignOfExperiment : public DesignOfExperimentEvaluation
 {
   CLASSNAME
 
@@ -48,13 +48,19 @@ public:
   ImportedDesignOfExperiment * clone() const override;
 
   void setColumns(const OT::Indices &inputColumns,
-                  const OT::Indices &outputColumns = OT::Indices()) override;
+                  const OT::Indices &outputColumns = OT::Indices());
 
   Parameters getParameters() const override;
   OT::String getPythonScript() const override;
 
   void setType(Type type);
   Type getType() const;
+
+  const ImportedDataset& getImportedDataset() const;
+
+  void setEvaluations(OT::Sample&) override;
+
+  void setFileName(const OT::String &fileName);
 
   /** String converter */
   OT::String __repr__() const override;
@@ -66,13 +72,16 @@ public:
   void load(OT::Advocate& adv) override;
 
 protected:
-  void check() override;
   OT::Sample generateInputSample(const OT::UnsignedInteger nbSimu) const override;
-  void setDefaultColumns() override;
+  void saveImportedSampleToResult();
   static OT::String TypeToString(Type type);
 
 private:
+  void loadOldFormat(OT::Advocate& adv);
+
+private:
     Type type_ = MC;
+    ImportedDataset importedDataset_;
 };
 }
 #endif

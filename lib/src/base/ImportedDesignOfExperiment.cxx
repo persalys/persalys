@@ -31,23 +31,19 @@ namespace PERSALYS
 
 CLASSNAMEINIT(ImportedDesignOfExperiment)
 
-static Factory<ImportedDesignOfExperiment> Factory_ImportedDesignOfExperiment;
+const static Factory<ImportedDesignOfExperiment> Factory_ImportedDesignOfExperiment;
 
 /* Default constructor */
 ImportedDesignOfExperiment::ImportedDesignOfExperiment()
   : DesignOfExperimentEvaluation()
-  , DataImport()
 {
 }
-
 
 /* Constructor with parameters */
 ImportedDesignOfExperiment::ImportedDesignOfExperiment(const String& name, const PhysicalModel& physicalModel)
   : DesignOfExperimentEvaluation(name, physicalModel)
-  , DataImport()
 {
 }
-
 
 /* Constructor with parameters */
 ImportedDesignOfExperiment::ImportedDesignOfExperiment(const String& name,
@@ -56,11 +52,9 @@ ImportedDesignOfExperiment::ImportedDesignOfExperiment(const String& name,
     const Indices& inputColumns,
     const Indices& outputColumns)
   : DesignOfExperimentEvaluation(name, physicalModel)
-  , DataImport(fileName, inputColumns, outputColumns)
+  , importedDataset_(fileName, inputColumns, outputColumns)
 {
-  // If outputcolumns, set result
-  if(outputColumns.getSize())
-    setColumns(inputColumns, outputColumns);
+  setColumns(inputColumns, outputColumns);
 }
 
 
@@ -70,59 +64,47 @@ ImportedDesignOfExperiment* ImportedDesignOfExperiment::clone() const
   return new ImportedDesignOfExperiment(*this);
 }
 
-
-void ImportedDesignOfExperiment::check()
-{
-  // try to use the same indices
-  setColumns(inputColumns_, outputColumns_);
-}
-
-
 Sample ImportedDesignOfExperiment::generateInputSample(const UnsignedInteger /*nbSimu*/) const
 {
-  if (!getSampleFromFile().getSize())
+  if (!importedDataset_.getSampleFromFile().getSize())
     return Sample();
-  Sample inS(getSampleFromFile().getMarginal(inputColumns_));
+  Sample inS(importedDataset_.getSampleFromFile().getMarginal(importedDataset_.getInputColumns()));
   inS.setDescription(getPhysicalModel().getInputNames());
   return inS;
 }
 
 
-void ImportedDesignOfExperiment::setColumns(const Indices &inputColumns,
-    const Indices &outputColumns)
+void ImportedDesignOfExperiment::setColumns(const Indices &inputColumns, const Indices &outputColumns)
 {
   // check columns
   if (inputColumns.getSize() != getPhysicalModel().getInputDimension())
     throw InvalidArgumentException(HERE) << "The dimension of the list of the column numbers has to be equal to the number of inputs of the physical model: " << getPhysicalModel().getInputDimension();
 
-  DataImport::setColumns(inputColumns, outputColumns);
+  importedDataset_.setColumns(inputColumns, outputColumns);
 
+  saveImportedSampleToResult();
+}
+
+void ImportedDesignOfExperiment::saveImportedSampleToResult()
+{
   // if outputColumns, consider the DoE already evaluated, set result
-  if(outputColumns.getSize())
+  if(importedDataset_.getOutputColumns().getSize())
   {
-    Sample inS = sampleFromFile_.getMarginal(inputColumns);
+    Sample inS = importedDataset_.getSampleFromFile().getMarginal(importedDataset_.getInputColumns());
     inS.setDescription(getPhysicalModel().getInputNames());
-    Sample outS = sampleFromFile_.getMarginal(outputColumns);
+    Sample outS = importedDataset_.getSampleFromFile().getMarginal(importedDataset_.getOutputColumns());
     outS.setDescription(getPhysicalModel().getSelectedOutputsNames());
     result_.designOfExperiment_.setInputSample(inS);
     result_.designOfExperiment_.setOutputSample(outS);
+    originalInputSample_ = inS;
   }
   else
   {
-    // reset
+    // ready for evaluation, clear samples
     originalInputSample_.clear();
     initialize();
   }
 }
-
-
-void ImportedDesignOfExperiment::setDefaultColumns()
-{
-  Indices inputColumns(getPhysicalModel().getInputDimension());
-  inputColumns.fill();
-  setColumns(inputColumns);
-}
-
 
 Parameters ImportedDesignOfExperiment::getParameters() const
 {
@@ -131,13 +113,13 @@ Parameters ImportedDesignOfExperiment::getParameters() const
   param.add("Design type", "Imported");
   param.add("Outputs of interest", getInterestVariables().__str__());
   param.add("Sample size", getOriginalInputSample().getSize());
-  param.add("File", getFileName());
+  param.add("File", importedDataset_.getFileName());
   OSS columns;
   if (getOriginalInputSample().getSize())
   {
     for (UnsignedInteger i = 0; i < getOriginalInputSample().getDimension(); ++i)
     {
-      columns << getOriginalInputSample().getDescription()[i] << " : " << getInputColumns()[i];
+      columns << getOriginalInputSample().getDescription()[i] << " : " << importedDataset_.getInputColumns()[i];
       if (i < getOriginalInputSample().getDimension() - 1)
         columns << "\n";
     }
@@ -165,39 +147,55 @@ Parameters ImportedDesignOfExperiment::getParameters() const
 
 void ImportedDesignOfExperiment::setType(Type type)
 {
-    type_ = type;
+  type_ = type;
 }
 
 ImportedDesignOfExperiment::Type ImportedDesignOfExperiment::getType() const
 {
-    return type_;
+  return type_;
+}
+
+const ImportedDataset& ImportedDesignOfExperiment::getImportedDataset() const
+{
+  return importedDataset_;
+}
+
+void ImportedDesignOfExperiment::setEvaluations(Sample & /*outputSample*/)
+{
+  throw NotDefinedException(HERE) << "Please import a DOE with output columns to set evaluations.";
+}
+
+void ImportedDesignOfExperiment::setFileName(const String &fileName)
+{
+  importedDataset_.setFileName(fileName);
+  saveImportedSampleToResult();
 }
 
 String ImportedDesignOfExperiment::TypeToString(Type type)
 {
-    switch(type)
-    {
-        case MC:
-            return "MC";
-        case QMC:
-            return "QMC";
-        case LHS:
-            return "LHS";
-        case GRID:
-            return "GRID";
-        default:
-            throw InvalidArgumentException(HERE) << "Invalid ImportedDesignOfExperiment type";
-    }
+  switch(type)
+  {
+    case MC:
+        return "MC";
+    case QMC:
+        return "QMC";
+    case LHS:
+        return "LHS";
+    case GRID:
+        return "GRID";
+    default:
+        throw InvalidArgumentException(HERE) << "Invalid ImportedDesignOfExperiment type";
+  }
 }
 
 String ImportedDesignOfExperiment::getPythonScript() const
 {
   OSS oss;
 
-  oss << "inputColumns = " << Parameters::GetOTIndicesStr(inputColumns_) << "\n";
+  oss << "inputColumns = " << Parameters::GetOTIndicesStr(importedDataset_.getInputColumns()) << "\n";
 
   oss << getName() << " = persalys.ImportedDesignOfExperiment('" << getName() << "', " << getPhysicalModel().getName() << ", ";
-  oss << "'" << fileName_ << "', inputColumns)\n";
+  oss << "'" << importedDataset_.getFileName() << "', inputColumns)\n";
 
   oss << getName() << ".setBlockSize(" << getBlockSize() << ")\n";
   oss << "interestVariables = " << Parameters::GetOTDescriptionStr(getInterestVariables()) << "\n";
@@ -215,8 +213,8 @@ String ImportedDesignOfExperiment::__repr__() const
   oss << "class=" << GetClassName()
       << " name=" << getName()
       << " physicalModel=" << getPhysicalModel().getName()
-      << " fileName=" << getFileName()
-      << " inputColumns=" << getInputColumns()
+      << " fileName=" << importedDataset_.getFileName()
+      << " inputColumns=" << importedDataset_.getInputColumns()
       << " blockSize=" << getBlockSize()
       << " type=" << TypeToString(type_);
 
@@ -228,8 +226,8 @@ String ImportedDesignOfExperiment::__repr__() const
 void ImportedDesignOfExperiment::save(Advocate& adv) const
 {
   DesignOfExperimentEvaluation::save(adv);
-  DataImport::save(adv);
   adv.saveAttribute("type_", static_cast<UnsignedInteger>(type_));
+  adv.saveAttribute("importedDataset_", importedDataset_);
 }
 
 
@@ -237,7 +235,6 @@ void ImportedDesignOfExperiment::save(Advocate& adv) const
 void ImportedDesignOfExperiment::load(Advocate& adv)
 {
   DesignOfExperimentEvaluation::load(adv);
-  DataImport::load(adv);
   UnsignedInteger type_as_uint;
   if (adv.hasAttribute("type_"))
   {
@@ -249,5 +246,55 @@ void ImportedDesignOfExperiment::load(Advocate& adv)
     // for backward compatibility, if type_ attribute does not exist, set to MC
     type_ = MC;
   }
+
+  if (adv.hasAttribute("importedDataset_"))
+    adv.loadAttribute("importedDataset_", importedDataset_);
+  else
+    loadOldFormat(adv);
 }
+
+void ImportedDesignOfExperiment::loadOldFormat(Advocate& adv)
+{
+  String fileName;
+  adv.loadAttribute("fileName_", fileName);
+  Indices inputColumns;
+  adv.loadAttribute("inputColumns_", inputColumns);
+  Indices outputColumns;
+  adv.loadAttribute("outputColumns_", outputColumns);
+  try
+  {
+    importedDataset_ = ImportedDataset(fileName, inputColumns, outputColumns);
+  }
+  catch (const Exception &)
+  {
+    importedDataset_ = ImportedDataset();
+    Sample sampleFromFile;
+    adv.loadAttribute("sampleFromFile_", sampleFromFile);
+    if (sampleFromFile.getSize())
+    {
+      importedDataset_.setSampleFromFile(sampleFromFile);
+      try
+      {
+        importedDataset_.setColumns(inputColumns, outputColumns);
+      }
+      catch(const Exception &)
+      {
+        // do nothing
+      }
+    }
+    else
+    {
+      UnsignedInteger maxColumn = 0;
+      for (UnsignedInteger i = 0; i < inputColumns.getSize(); ++i)
+        if (inputColumns[i] > maxColumn)
+          maxColumn = inputColumns[i];
+      for (UnsignedInteger i = 0; i < outputColumns.getSize(); ++i)
+        if (outputColumns[i] > maxColumn)
+          maxColumn = outputColumns[i];
+      importedDataset_.setSampleFromFile(Sample(0, maxColumn + 1));
+      importedDataset_.setColumns(inputColumns, outputColumns);
+    }
+  }
 }
+
+} // end namespace PERSALYS

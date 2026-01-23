@@ -351,7 +351,9 @@ void AnalysisItem::appendDataModelItem()
     }
     outSample.setDescription(outSampleDescription);
 
-    auto * newModel = new DataModel(newName, inSample, outSample);
+    auto * newModel = new DataModel(newName);
+    newModel->setInputSample(inSample);
+    newModel->setOutputSample(outSample);
     study.add(newModel);
     return;
   }
@@ -360,7 +362,9 @@ void AnalysisItem::appendDataModelItem()
 
   // create the data model
   const String newName{study.getAvailableDataModelName((QString(result.getName().c_str()) + "_").toStdString())};
-  auto * newModel = new DataModel(newName, result.getDesignOfExperiment());
+  auto * newModel = new DataModel(newName);
+  newModel->setInputSample(result.getDesignOfExperiment().getInputSample());
+  newModel->setOutputSample(result.getDesignOfExperiment().getOutputSample());
   study.add(newModel);  // implicit conversion DesignOfExperiment(DesignOfExperimentImplementation*)
 }
 

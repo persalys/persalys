@@ -30,7 +30,7 @@ namespace PERSALYS
 
 CLASSNAMEINIT(GridDesignOfExperiment)
 
-static Factory<GridDesignOfExperiment> Factory_GridDesignOfExperiment;
+const static Factory<GridDesignOfExperiment> Factory_GridDesignOfExperiment;
 
 /* Default constructor */
 GridDesignOfExperiment::GridDesignOfExperiment()

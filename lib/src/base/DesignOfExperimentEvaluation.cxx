@@ -36,7 +36,7 @@ namespace PERSALYS
 
 CLASSNAMEINIT(DesignOfExperimentEvaluation)
 
-static Factory<DesignOfExperimentEvaluation> Factory_DesignOfExperimentEvaluation;
+const static Factory<DesignOfExperimentEvaluation> Factory_DesignOfExperimentEvaluation;
 
 /* Default constructor */
 DesignOfExperimentEvaluation::DesignOfExperimentEvaluation()
@@ -45,7 +45,6 @@ DesignOfExperimentEvaluation::DesignOfExperimentEvaluation()
   , result_()
 {
 }
-
 
 /* Constructor with parameters */
 DesignOfExperimentEvaluation::DesignOfExperimentEvaluation(const String& name, const PhysicalModel& physicalModel)

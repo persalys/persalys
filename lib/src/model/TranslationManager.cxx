@@ -234,6 +234,8 @@ void TranslationManager::InitializeErrorMessages()
   // CalibrationAnalysis
   ErrorMessages_.insert("The Design Of Experiment must be built from a physical model", tr("The Design Of Experiment must be built from a physical model"));
   ErrorMessages_.insert("At least an input variable must be calibrated. Here, all the input variables are observed.", tr("At least an input variable must be calibrated. Here, all the input variables are observed."));
+  //ImportedDesignOfExperiment
+  ErrorMessages_.insert("The imported dataset must contain at least one input column.", tr("The imported dataset must contain at least one input column."));
 }
 
 

@@ -64,7 +64,7 @@ public:
    * of the given DOE to the current DOE
    */
   void checkAndSetEvaluations(const DesignOfExperiment &evaluatedDoE);
-  void setEvaluations(OT::Sample & outputSample);
+  virtual void setEvaluations(OT::Sample & outputSample);
 
   static bool CanBeLaunched(OT::String &errorMessage, const PhysicalModel &physicalModel);
 

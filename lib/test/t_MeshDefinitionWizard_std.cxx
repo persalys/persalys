@@ -14,12 +14,10 @@ class TestMeshDefinitionWizard : public QObject
   Q_OBJECT
 
 public:
-  TestMeshDefinitionWizard()
-  {
-  }
+  TestMeshDefinitionWizard() = default;
 
 private slots:
-  void TestGridMeshModel()
+  void TestGridMeshModel() const
   {
     // create the mesh
     GridMeshModel meshModel(OT::Interval(0., 12.), OT::Indices(1, 5));
@@ -60,7 +58,7 @@ private slots:
   }
 
 
-  void TestImportedMeshModel()
+  void TestImportedMeshModel() const
   {
     QTemporaryFile file;
     QVERIFY2(file.open(), "Can not open the file");
@@ -103,7 +101,7 @@ private slots:
   }
 
 
-  void TestMeshModification()
+  void TestMeshModification() const
   {
     // create the mesh
     GridMeshModel meshModel(OT::Interval(0., 12.), OT::Indices(1, 5));

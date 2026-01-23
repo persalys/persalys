@@ -55,10 +55,12 @@ public slots:
 
 private:
   void selectType(ImportedDesignOfExperiment::Type type);
-  ImportSampleWidget * sampleWidget_ = nullptr;
-  ImportedDesignOfExperiment designOfExperiment_;
-  QLabel * estimatedTimeValueLabel_ = nullptr;
-  QComboBox * typeCombo_ = nullptr;
+
+private:
+  ImportSampleWidget          * sampleWidget_             = nullptr;
+  ImportedDesignOfExperiment  importedDoE_;
+  QLabel                      * estimatedTimeValueLabel_  = nullptr;
+  QComboBox                   * typeCombo_                = nullptr;
 };
 }
 #endif

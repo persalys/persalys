@@ -63,7 +63,9 @@ public:
     Sample sampleNoise(noiseSigma.getSample(sampleSize));
     Sample sigmaSample(outputStress + sampleNoise);
 
-    observations = Observations("observations", model, strainSample, sigmaSample);
+    observations = Observations("observations", model);
+    observations.setInputSample(strainSample);
+    observations.setOutputSample(sigmaSample);
   }
 
 private:
@@ -152,7 +154,10 @@ private slots:
     // - observations1
     Sample inS1(Normal(0, 0.1).getSample(10));
     inS1.setDescription(Description(1, "epsilon"));
-    DesignOfExperiment observations1(Observations("obs1", aModel, inS1, outS));
+    Observations obs1("obs1", aModel);
+    obs1.setInputSample(inS1);
+    obs1.setOutputSample(outS);
+    DesignOfExperiment observations1(obs1);
     aStudy.add(observations1);
 
     QString text1(tr("Observed variables") + " : " );
@@ -164,7 +169,10 @@ private slots:
     outS2.setDescription(Description(1, "sigma2"));
     Sample inS2(Normal(0, 0.1).getSample(10));
     inS2.setDescription(Description(1, "R"));
-    DesignOfExperiment observations2(Observations("obs2", aModel, inS2, outS2));
+    Observations obs2("obs2", aModel);
+    obs2.setInputSample(inS2);
+    obs2.setOutputSample(outS2);
+    DesignOfExperiment observations2(obs2);
     aStudy.add(observations2);
 
     QString text2(tr("Observed variables") + " : " );

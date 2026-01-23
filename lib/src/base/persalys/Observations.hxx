@@ -45,6 +45,7 @@ public:
                const OT::Indices &outputColumns,
                const OT::Description &inputNames,
                const OT::Description &outputNames);
+  
   /** Constructor with parameters */
   Observations(const OT::String & name,
                const PhysicalModel &physicalModel,
@@ -56,18 +57,24 @@ public:
 
   void removeAllObservers() override;
 
+  OT::Description getInputNames() const override;
+  OT::Description getOutputNames() const override;
+
   void setColumns(const OT::Indices &inputColumns,
                   const OT::Description &inputNames,
                   const OT::Indices &outputColumns,
                   const OT::Description &outputNames) override;
+  
+  OT::String getPythonScript() const override;
 
   /** String converter */
   OT::String __repr__() const override;
 
 protected:
-  OT::Sample importSample(const OT::String& fileName, const Tools::DataOrder = Tools::DataOrder::Columns) override;
-  void setDefaultColumns() override;
   void update() override;
+  void checkColumnsAndNames(const OT::Description &inputNames,
+                            const OT::Indices &outputColumns,
+                            const OT::Description &outputNames) const;
   virtual void orderSamples();
 };
 }

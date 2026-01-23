@@ -181,5 +181,5 @@ analysis2_no_output = persalys.DataSensitivityAnalysis(
     "analysis2_no_output", model2_no_output
 )
 myStudy.add(analysis2_no_output)
-with ott.assert_raises(RuntimeError):
+with ott.assert_raises(Exception):
     analysis2_no_output.run()

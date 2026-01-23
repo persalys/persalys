@@ -2,9 +2,11 @@
 "Create observations for variables of a model.
 
 Available constructors:
-    Observations(*name, physicalModel, fileName, inputColumns, outputColumns, inputNames, outputNames*)
+    Observations(*name, physicalModel*)
 
-    Observations(*name, inputSample, outputSample*)
+    Observations(*name, physicalModel, inputSample, outputSample*)
+
+    Observations(*name, physicalModel, fileName, inputColumns, outputColumns, inputNames, outputNames*)
 
 Parameters
 ----------
@@ -17,11 +19,11 @@ fileName : str
 inputColumns : sequence of int
     Indices of columns of the input variables in file to consider
 outputColumns : sequence of int
-    Indices of columns of the output variables in file to consider (optional)
+    Indices of columns of the output variables in file to consider
 inputNames : sequence of str
-    Names of the input variables (optional)
+    Names of the input variables
 outputNames : sequence of str
-    Names of the output variables (optional)
+    Names of the output variables
 inputSample : :py:class:`openturns.Sample`
     Input sample (its description must be a list of input variable names)
 outputSample : :py:class:`openturns.Sample`

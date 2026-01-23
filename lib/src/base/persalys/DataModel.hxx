@@ -22,17 +22,19 @@
 #define PERSALYS_DATAMODEL_HXX
 
 #include "DesignOfExperiment.hxx"
-#include "DataImport.hxx"
+#include "ImportedDataset.hxx"
+
+#include <optional>
 
 namespace PERSALYS
 {
-class PERSALYS_BASE_API DataModel : public DesignOfExperimentImplementation, public DataImport
+class PERSALYS_BASE_API DataModel : public DesignOfExperimentImplementation
 {
   CLASSNAME
 
 public:
   /** Default constructor */
-  DataModel(const OT::String & name = "Unnamed");
+  explicit DataModel(const OT::String & name = "Unnamed");
 
   /** Constructor with parameters */
   DataModel(const OT::String & name,
@@ -47,22 +49,36 @@ public:
             const OT::Sample & inSample,
             const OT::Sample & outSample);
 
-  /** Constructor with parameters */
   DataModel(const OT::String & name,
-            const DesignOfExperiment & doe);
+            const PhysicalModel & physicalModel,
+            const std::optional<ImportedDataset> & importedDataset = std::nullopt,
+            const OT::Description & inputNames = OT::Description(),
+            const OT::Description & outputNames = OT::Description());
 
   /** Virtual constructor */
   DataModel * clone() const override;
 
   void removeAllObservers() override;
 
-  virtual OT::Description getInputNames();
-  virtual OT::Description getOutputNames();
-  using DataImport::setColumns;
+  void setInputSample(const OT::Sample & sample) override;
+  void setOutputSample(const OT::Sample & sample) override;
+
+  virtual OT::Description getInputNames() const;
+  virtual OT::Description getOutputNames() const;
   virtual void setColumns(const OT::Indices &inputColumns,
                           const OT::Description &inputNames,
                           const OT::Indices &outputColumns,
                           const OT::Description &outputNames);
+
+  void setSample(const OT::Sample & sample);
+
+  OT::Sample getSampleFromFile() const;
+  
+  OT::Indices getInputColumns() const;
+  OT::Indices getOutputColumns() const;
+
+  OT::String getFileName() const;
+  void setFileName(const OT::String & fileName);
 
   OT::String getPythonScript() const override;
 
@@ -75,17 +91,13 @@ public:
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv) override;
 
-  void setSample(const OT::Sample & sample);
 
 protected:
   void setNames(const OT::Description &inputNames, const OT::Description &outputNames);
-  void check() override;
   virtual void update();
-  void setDefaultColumns() override;
 
 protected:
-  OT::Description inputNames_;
-  OT::Description outputNames_;
+  std::optional<ImportedDataset> importedDataset_ = std::nullopt;
 };
 }
 #endif

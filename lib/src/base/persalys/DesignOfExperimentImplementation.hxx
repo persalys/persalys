@@ -64,7 +64,7 @@ public:
   void load(OT::Advocate & adv) override;
 
 protected:
-  bool hasPhysicalModel_;
+  bool hasPhysicalModel_ = false;
   PhysicalModel physicalModel_;
 
 };
