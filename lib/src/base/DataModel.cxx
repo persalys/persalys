@@ -276,6 +276,8 @@ String DataModel::getPythonScript() const
     oss << getName() << ".setOutputSample(outputSample)\n";
   }
 
+  oss << getName() << ".setType(persalys.DataModel." << TypeToString(type_) << ")\n";
+
   return oss;
 }
 
@@ -297,7 +299,8 @@ String DataModel::__repr__() const
     oss << " physicalModel=" << false;
   
   oss << " inputNames=" << getInputNames()
-      << " outputNames=" << getOutputNames();
+      << " outputNames=" << getOutputNames()
+      << " type=" << TypeToString(type_);
   
   return oss;
 }

@@ -120,6 +120,33 @@ Indices DesignOfExperimentImplementation::getEffectiveInputIndices() const
   return inputIndices;
 }
 
+void DesignOfExperimentImplementation::setType(Type type)
+{
+    type_ = type;
+}
+
+DesignOfExperimentImplementation::Type DesignOfExperimentImplementation::getType() const
+{
+    return type_;
+}
+
+String DesignOfExperimentImplementation::TypeToString(Type type)
+{
+    switch(type)
+    {
+        case MC:
+            return "MC";
+        case QMC:
+            return "QMC";
+        case LHS:
+            return "LHS";
+        case GRID:
+            return "GRID";
+        default:
+            throw InvalidArgumentException(HERE) << "Invalid ImportedDesignOfExperiment type";
+    }
+}
+
 String DesignOfExperimentImplementation::getPythonScript() const
 {
   OSS oss;
@@ -137,6 +164,7 @@ String DesignOfExperimentImplementation::getPythonScript() const
   oss << "outputSample = " << Parameters::GetOTSampleStr(getOutputSample()) << "\n";
   oss << getName() << ".setInputSample(inputSample)\n";
   oss << getName() << ".setOutputSample(outputSample)\n";
+  oss << getName() << ".setType(persalys.DesignOfExperimentImplementation." << TypeToString(type_) << ")\n";
 
   return oss;
 }
@@ -153,7 +181,8 @@ String DesignOfExperimentImplementation::__repr__() const
     oss << "None";
   
   oss << " inputSample=" << getInputSample()
-      << " outputSample=" << getOutputSample();
+      << " outputSample=" << getOutputSample()
+      << " type=" << TypeToString(type_);
   return oss;
 }
 
@@ -171,6 +200,7 @@ void DesignOfExperimentImplementation::save(Advocate& adv) const
   {
     adv.saveAttribute("hasPhysicalModel_", false);
   }
+  adv.saveAttribute("type_", static_cast<UnsignedInteger>(type_));
 }
 
 
@@ -185,6 +215,12 @@ void DesignOfExperimentImplementation::load(Advocate& adv)
     PhysicalModel physicalModel;
     adv.loadAttribute("physicalModel_", physicalModel);
     physicalModel_ = physicalModel;
+  }
+  if (adv.hasAttribute("type_"))
+  {
+    UnsignedInteger typeInt;
+    adv.loadAttribute("type_", typeInt);
+    type_ = static_cast<Type>(typeInt);
   }
 }
 

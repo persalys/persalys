@@ -1,4 +1,4 @@
-class=DataModel name=myDataModel importedDataset= fileName=données.csv inputColumns=[0,2] outputColumns=[] physicalModel=false inputNames=[X0,X2] outputNames=[]
+class=DataModel name=myDataModel importedDataset= fileName=données.csv inputColumns=[0,2] outputColumns=[] physicalModel=false inputNames=[X0,X2] outputNames=[] type=MC
 #!/usr/bin/env python
 
 import openturns as ot
@@ -19,6 +19,7 @@ outputNames = []
 inputColumns = [0, 2]
 outputColumns = []
 myDataModel = persalys.DataModel('myDataModel', 'données.csv', inputColumns, outputColumns, inputNames, outputNames)
+myDataModel.setType(persalys.DataModel.MC)
 myStudy.add(myDataModel)
 inputColumns = [0, 2]
 doeI = persalys.ImportedDesignOfExperiment('doeI', SM, 'données.csv', inputColumns)
@@ -48,6 +49,7 @@ outputNames = []
 inputColumns = [0, 2]
 outputColumns = []
 myDataModel = persalys.DataModel('myDataModel', 'données.csv', inputColumns, outputColumns, inputNames, outputNames)
+myDataModel.setType(persalys.DataModel.MC)
 myStudy.add(myDataModel)
 inputColumns = [0, 2]
 doeI = persalys.ImportedDesignOfExperiment('doeI', SM, 'données.csv', inputColumns)

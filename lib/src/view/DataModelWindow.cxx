@@ -36,6 +36,7 @@
 #include <QMessageBox>
 #include <QScrollBar>
 #include <QScrollArea>
+#include <QComboBox>
 
 using namespace OT;
 
@@ -49,7 +50,7 @@ DataModelWindow::DataModelWindow(DesignOfExperimentItem * item, QWidget * parent
   if (!dataModel_)
     throw InvalidArgumentException(HERE) << "DataModelWindow: the design of experiments must be a DataModel";
 
-  connect(item, SIGNAL(variablesChanged()), this, SLOT(updateTableView()));
+  connect(item, &DesignOfExperimentItem::variablesChanged, this, &DataModelWindow::updateTableView);
 
   buildInterface();
 }
@@ -98,17 +99,43 @@ void DataModelWindow::buildInterface()
   QToolButton * openFileButton = new QToolButton;
   openFileButton->setText("...");
   openFileButton->setToolTip(tr("Search file"));
-  connect(openFileButton, SIGNAL(clicked()), this, SLOT(openFileRequested()));
+  connect(openFileButton, &QToolButton::clicked, this, &DataModelWindow::openFileRequested);
   hboxLayout->addWidget(openFileButton);
 
   // reload button
   QToolButton * reloadButton = new QToolButton;
   reloadButton->setIcon(QIcon(":/images/view-refresh.png"));
   reloadButton->setToolTip(tr("Reload file"));
-  connect(reloadButton, SIGNAL(clicked()), this, SLOT(refreshTable()));
+  connect(reloadButton, &QToolButton::clicked, this, &DataModelWindow::refreshTable);
   hboxLayout->addWidget(reloadButton);
 
   mainGridLayout->addLayout(hboxLayout, ++row, 0);
+
+  // type selector row
+  QHBoxLayout * typeLayout = new QHBoxLayout;
+  QLabel * typeLabel = new QLabel(tr("Type"));
+  typeLayout->addWidget(typeLabel);
+
+  typeComboBox_ = new QComboBox;
+  typeComboBox_->addItem(tr("Monte-Carlo"), static_cast<int>(DataModel::MC));
+  typeComboBox_->addItem(tr("Quasi-Monte-Carlo"), static_cast<int>(DataModel::QMC));
+  typeComboBox_->addItem(tr("LHS"), static_cast<int>(DataModel::LHS));
+  typeComboBox_->addItem(tr("Grid"), static_cast<int>(DataModel::GRID));
+  typeComboBox_->addItem(tr("Morris"), static_cast<int>(DataModel::MORRIS));
+  const int currentTypeIndex = typeComboBox_->findData(static_cast<int>(dataModel_->getType()));
+  typeComboBox_->setCurrentIndex(currentTypeIndex >= 0 ? currentTypeIndex : 0);
+  typeLayout->addWidget(typeComboBox_, 1);
+  typeLayout->addStretch();
+  mainGridLayout->addLayout(typeLayout, ++row, 0);
+
+  connect(typeComboBox_, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [this](int index)
+  {
+    const QVariant cbType = typeComboBox_->itemData(index);
+    if (!cbType.isValid())
+      return;
+    const auto selectedType = static_cast<DataModel::Type>(cbType.toInt());
+    dataModel_->setType(selectedType);
+  });
 
   // error message
   errorWidget_ = new ErrorWidget;
@@ -232,34 +259,34 @@ void DataModelWindow::buildInterface()
   dataTableView1_->setPalette(p);
 
   // connections
-  connect(tableModel_, SIGNAL(sampleChanged(OT::Sample)), dataTableModel, SLOT(updateData(OT::Sample)));
-  connect(dataTableModel, &SampleTableModel::sampleChanged, [ = ]()
+  connect(tableModel_, &DataModelTableModel::sampleChanged, dataTableModel, &SampleTableModel::updateData);
+  connect(dataTableModel, &SampleTableModel::sampleChanged, [this, dataTableModel]()
   {
     dataModel_->setSample(dataTableModel->getSample());
     tableModel_->updateData();
     sampleSizeLabel_->setText(QString::number(dataModel_->getSample().getSize()));
     updateTableView();
   });
-  connect(tableModel_, SIGNAL(sampleDescriptionChanged(OT::Description)), dataTableModel, SLOT(updateHeaderData(OT::Description)));
-  connect(tableModel_, SIGNAL(errorMessageChanged(QString)), errorWidget_, SLOT(setFramelessErrorMessage(QString)));
-  connect(tableModel_, SIGNAL(temporaryErrorMessageChanged(QString)), errorWidget_, SLOT(setTemporaryFramelessErrorMessage(QString)));
+  connect(tableModel_, &DataModelTableModel::sampleDescriptionChanged, dataTableModel, &SampleTableModel::updateHeaderData);
+  connect(tableModel_, &DataModelTableModel::errorMessageChanged, errorWidget_, &ErrorWidget::setFramelessErrorMessage);
+  connect(tableModel_, &DataModelTableModel::temporaryErrorMessageChanged, errorWidget_, &ErrorWidget::setTemporaryFramelessErrorMessage);
 
-  connect(tableView_->horizontalHeader(), SIGNAL(sectionResized(int, int, int)), this, SLOT(resizeDataTableColumn(int, int, int)));
-  connect(tableView_->horizontalScrollBar(), SIGNAL(valueChanged(int)), dataTableView2_->horizontalScrollBar(), SLOT(setValue(int)));
+  connect(tableView_->horizontalHeader(), &QHeaderView::sectionResized, this, &DataModelWindow::resizeDataTableColumn);
+  connect(tableView_->horizontalScrollBar(), &QScrollBar::valueChanged, dataTableView2_->horizontalScrollBar(), &QScrollBar::setValue);
 
-  connect(dataTableView1_->horizontalHeader(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)), this, SLOT(sortSectionChanged(int, Qt::SortOrder)));
-  connect(dataTableView1_->verticalScrollBar(), SIGNAL(valueChanged(int)), dataTableView2_->verticalScrollBar(), SLOT(setValue(int)));
+  connect(dataTableView1_->horizontalHeader(), &QHeaderView::sortIndicatorChanged, this, &DataModelWindow::sortSectionChanged);
+  connect(dataTableView1_->verticalScrollBar(), &QScrollBar::valueChanged, dataTableView2_->verticalScrollBar(), &QScrollBar::setValue);
 
-  connect(dataTableView2_->horizontalScrollBar(), SIGNAL(valueChanged(int)), tableView_->horizontalScrollBar(), SLOT(setValue(int)));
-  connect(dataTableView2_->verticalScrollBar(), SIGNAL(valueChanged(int)), dataTableView1_->verticalScrollBar(), SLOT(setValue(int)));
-  connect(dataTableView2_->horizontalHeader(), SIGNAL(sectionResized(int, int, int)), this, SLOT(resizeVariablesTableColumn(int, int, int)));
-  connect(dataTableView2_->horizontalHeader(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)), this, SLOT(sortSectionChanged(int, Qt::SortOrder)));
-  connect(dataTableView2_, SIGNAL(cleanRequested()), this, SLOT(launchCleaningWizard()));
+  connect(dataTableView2_->horizontalScrollBar(), &QScrollBar::valueChanged, tableView_->horizontalScrollBar(), &QScrollBar::setValue);
+  connect(dataTableView2_->verticalScrollBar(), &QScrollBar::valueChanged, dataTableView1_->verticalScrollBar(), &QScrollBar::setValue);
+  connect(dataTableView2_->horizontalHeader(), &QHeaderView::sectionResized, this, &DataModelWindow::resizeVariablesTableColumn);
+  connect(dataTableView2_->horizontalHeader(), &QHeaderView::sortIndicatorChanged, this, &DataModelWindow::sortSectionChanged);
+  connect(dataTableView2_, &EditableExportableTableView::cleanRequested, this, &DataModelWindow::launchCleaningWizard);
 
-  connect(addRowButton, SIGNAL(clicked()), dataTableView2_, SLOT(addRow()));
-  connect(removeRowButton, SIGNAL(clicked()), dataTableView2_, SLOT(removeRows()));
-  connect(cleanButton, SIGNAL(clicked()), this, SLOT(launchCleaningWizard()));
-  connect(exportButton, SIGNAL(clicked()), dataTableView2_, SLOT(exportData()));
+  connect(addRowButton, &QToolButton::clicked, dataTableView2_, &EditableExportableTableView::addRow);
+  connect(removeRowButton, &QToolButton::clicked, dataTableView2_, &EditableExportableTableView::removeRows);
+  connect(cleanButton, &QToolButton::clicked, this, &DataModelWindow::launchCleaningWizard);
+  connect(exportButton, &QToolButton::clicked, dataTableView2_, &EditableExportableTableView::exportData);
 
 
   // fill tables
@@ -288,7 +315,7 @@ void DataModelWindow::resizeEvent(QResizeEvent* event)
 }
 
 
-void DataModelWindow::sortSectionChanged(int section, Qt::SortOrder order)
+void DataModelWindow::sortSectionChanged(int section, Qt::SortOrder order) const
 {
   if (section)
   {

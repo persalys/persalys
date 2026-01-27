@@ -31,6 +31,7 @@ class PERSALYS_BASE_API DesignOfExperiment : public OT::TypedInterfaceObject<Des
 
 public:
   using Implementation = OT::Pointer<DesignOfExperimentImplementation>;
+  using Type = DesignOfExperimentImplementation::Type;
 
   /** Default constructor */
   DesignOfExperiment();
@@ -74,6 +75,9 @@ public:
   OT::String getPythonScript() const;
 
   OT::Indices getEffectiveInputIndices() const;
+
+  void setType(Type type);
+  Type getType() const;
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;

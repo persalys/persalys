@@ -155,4 +155,14 @@ Indices DesignOfExperiment::getEffectiveInputIndices() const
   return getImplementation()->getEffectiveInputIndices();
 }
 
+void DesignOfExperiment::setType(Type type)
+{
+  getImplementation()->setType(type);
+}
+
+DesignOfExperiment::Type DesignOfExperiment::getType() const
+{
+  return getImplementation()->getType();
+}
+
 }

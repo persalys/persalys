@@ -30,6 +30,7 @@
 
 #include <QLineEdit>
 #include <QResizeEvent>
+#include <QComboBox>
 
 namespace PERSALYS
 {
@@ -42,9 +43,9 @@ class PERSALYS_VIEW_API DataModelWindow : public SubWindow
   Q_OBJECT
 
 public:
-  DataModelWindow(DesignOfExperimentItem * item, QWidget *parent = nullptr);
+  explicit DataModelWindow(DesignOfExperimentItem * item, QWidget *parent = nullptr);
 
-  virtual ~DataModelWindow();
+  ~DataModelWindow() override;
 
   void showEvent(QShowEvent*) override;
 
@@ -59,19 +60,20 @@ public slots:
   void updateTableView();
   void resizeDataTableColumn(int column, int oldWidth, int newWidth);
   void resizeVariablesTableColumn(int column, int oldWidth, int newWidth);
-  void sortSectionChanged(int, Qt::SortOrder);
+  void sortSectionChanged(int, Qt::SortOrder) const;
   void launchCleaningWizard();
 
 private:
-  DataModel * dataModel_;
-  ResizableHeaderlessTableView * tableView_;
-  DataModelTableModel * tableModel_;
-  EditableExportableTableView * dataTableView1_;
-  EditableExportableTableView * dataTableView2_ = nullptr;
-  QLineEdit * filePathLineEdit_ = nullptr;
-  QPalette defaultLineEditPalette_;
-  QLabel * sampleSizeLabel_ = nullptr;
-  ErrorWidget * errorWidget_ = nullptr;
+  DataModel                     * dataModel_;
+  ResizableHeaderlessTableView  * tableView_;
+  DataModelTableModel           * tableModel_;
+  EditableExportableTableView   * dataTableView1_;
+  EditableExportableTableView   * dataTableView2_           = nullptr;
+  QLineEdit                     * filePathLineEdit_         = nullptr;
+  QPalette                        defaultLineEditPalette_;
+  QLabel                        * sampleSizeLabel_          = nullptr;
+  ErrorWidget                   * errorWidget_              = nullptr;
+  QComboBox                     * typeComboBox_             = nullptr;
 };
 }
 #endif

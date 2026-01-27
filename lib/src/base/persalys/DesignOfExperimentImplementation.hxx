@@ -33,6 +33,8 @@ class PERSALYS_BASE_API DesignOfExperimentImplementation : public DataSample, pu
   CLASSNAME
 
 public:
+  enum Type {MC, QMC, LHS, GRID, MORRIS};
+
   /** Default constructor */
   DesignOfExperimentImplementation() = default;
 
@@ -54,6 +56,9 @@ public:
 
   OT::Indices getEffectiveInputIndices() const;
 
+  void setType(Type type);
+  Type getType() const;
+
   virtual OT::String getPythonScript() const;
 
   OT::String __repr__() const override;
@@ -65,7 +70,11 @@ public:
   void load(OT::Advocate & adv) override;
 
 protected:
+  static OT::String TypeToString(Type type);
+
+protected:
   std::optional<PhysicalModel> physicalModel_ = std::nullopt;
+  Type type_ = MC;
 };
 
 }

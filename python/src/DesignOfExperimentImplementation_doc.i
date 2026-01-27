@@ -142,3 +142,37 @@ indices : :py:class:`openturns.Indices`
 %enddef
 %feature("docstring") PERSALYS::DesignOfExperimentImplementation::getEffectiveInputIndices
 PERSALYS_DesignOfExperiment_getEffectiveInputIndices_doc
+
+// ---------------------------------------------------------------------
+
+%define PERSALYS_DesignOfExperiment_setType_doc
+"Type setter.
+
+Parameters
+----------
+type : int
+    possible values are persalys.DesignOfExperimentImplementation.MC,
+    persalys.DesignOfExperimentImplementation.QMC,
+    persalys.DesignOfExperimentImplementation.LHS,
+    persalys.DesignOfExperimentImplementation.GRID,
+    persalys.DesignOfExperimentImplementation.MORRIS"
+%enddef
+%feature("docstring") PERSALYS::DesignOfExperimentImplementation::setType
+PERSALYS_DesignOfExperiment_setType_doc
+
+// ---------------------------------------------------------------------
+
+%define PERSALYS_DesignOfExperiment_getType_doc
+"Type getter.
+
+Returns
+-------
+type : int
+    possible values are persalys.DesignOfExperimentImplementation.MC,
+    persalys.DesignOfExperimentImplementation.QMC,
+    persalys.DesignOfExperimentImplementation.LHS,
+    persalys.DesignOfExperimentImplementation.GRID,
+    persalys.DesignOfExperimentImplementation.MORRIS"
+%enddef
+%feature("docstring") PERSALYS::DesignOfExperimentImplementation::getType
+PERSALYS_DesignOfExperiment_getType_doc

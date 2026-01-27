@@ -20,3 +20,7 @@ PERSALYS_DesignOfExperiment_setOutputSample_doc
 PERSALYS_DesignOfExperiment_getSample_doc
 %feature("docstring") PERSALYS::DesignOfExperiment::getEffectiveInputIndices
 PERSALYS_DesignOfExperiment_getEffectiveInputIndices_doc
+%feature("docstring") PERSALYS::DesignOfExperiment::setType
+PERSALYS_DesignOfExperiment_setType_doc
+%feature("docstring") PERSALYS::DesignOfExperiment::getType
+PERSALYS_DesignOfExperiment_getType_doc
