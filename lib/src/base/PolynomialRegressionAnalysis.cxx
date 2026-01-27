@@ -20,7 +20,6 @@
  */
 #include "persalys/PolynomialRegressionAnalysis.hxx"
 
-#include "persalys/DesignOfExperimentEvaluation.hxx"
 #include "persalys/BaseTools.hxx"
 
 #include <openturns/LinearModelStepwiseAlgorithm.hxx>
@@ -35,14 +34,7 @@ namespace PERSALYS
 
 CLASSNAMEINIT(PolynomialRegressionAnalysis)
 
-static Factory<PolynomialRegressionAnalysis> Factory_PolynomialRegressionAnalysis;
-
-/* Default constructor */
-PolynomialRegressionAnalysis::PolynomialRegressionAnalysis()
-  : MetaModelAnalysis()
-{
-
-}
+const static Factory<PolynomialRegressionAnalysis> Factory_PolynomialRegressionAnalysis;
 
 
 /* Constructor with parameters */
@@ -162,17 +154,16 @@ Collection <LinearModelResult> PolynomialRegressionAnalysis::computeResults()
     algo.run();
     allResults.add(algo.getResult());
   }
-
   return allResults;
 }
 
 void PolynomialRegressionAnalysis::treatResults(const Collection<LinearModelResult> & allResults)
 {  
-  const Sample effectiveInputSample{getEffectiveInputSample()};
-  const Sample effectiveOutputSample{getEffectiveOutputSample()};
-  const Description inputVariables{effectiveInputSample.getDescription()};
-  const UnsignedInteger inputDimension  = effectiveInputSample.getDimension();
-  const UnsignedInteger effectiveDim    = allResults.getSize();
+  const Sample          effectiveInputSample  {getEffectiveInputSample()};
+  const Sample          effectiveOutputSample {getEffectiveOutputSample()};
+  const Description     inputVariables        {effectiveInputSample.getDescription()};
+  const UnsignedInteger inputDimension        = effectiveInputSample.getDimension();
+  const UnsignedInteger effectiveDim          = allResults.getSize();
 
   // set result_
   Function::FunctionCollection metaModelCollection(effectiveDim);

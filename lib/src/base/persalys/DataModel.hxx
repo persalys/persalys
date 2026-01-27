@@ -24,8 +24,6 @@
 #include "DesignOfExperiment.hxx"
 #include "ImportedDataset.hxx"
 
-#include <optional>
-
 namespace PERSALYS
 {
 class PERSALYS_BASE_API DataModel : public DesignOfExperimentImplementation

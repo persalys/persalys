@@ -79,16 +79,17 @@ DataAnalysisWindow::DataAnalysisWindow(Item * item, QWidget * parent)
   , levelConfidenceInterval_(0.)
   , showTable_(false)
   , titleLabel_(new TitleLabel)
-  , variablesGroupBox_(0)
-  , variablesListWidget_(0)
-  , tabWidget_(0)
 {
 }
 
 
 void DataAnalysisWindow::initializeVariablesNames()
 {
-  PhysicalModel model(designOfExperiment_.getPhysicalModel());
+  PhysicalModel model;
+  if (designOfExperiment_.hasPhysicalModel())
+    model = designOfExperiment_.getPhysicalModel();
+  else
+    LOGWARN("DataAnalysisWindow::initializeVariablesNames() - No physical model associated to the design of experiment " + designOfExperiment_.getName());
 
   // inputs
   if (designOfExperiment_.getInputSample().getSize())

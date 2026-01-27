@@ -65,31 +65,31 @@ signals:
   void stateChanged(int);
 
 protected:
-  DesignOfExperiment designOfExperiment_;
-  DataAnalysisResult result_;
-  bool hasMaximumCV_;
-  bool hasMaximumCILength_;
-  QString sampleSizeTitle_;
-  QString analysisStopCriteriaMessage_;
-  QString analysisErrorMessage_;
-  OT::Sample failedInputSample_;
-  OT::Description errorDescription_;
-  OT::Sample notEvaluatedInputSample_;
-  bool resultsSampleIsValid_;
-  QStringList inputNames_;
-  QStringList inAxisTitles_;
-  QStringList outputNames_;
-  QStringList outAxisTitles_;
-  bool isConfidenceIntervalRequired_;
-  double levelConfidenceInterval_;
-  bool showTable_;
-  TitleLabel * titleLabel_;
-  QGroupBox * variablesGroupBox_;
-  VariablesListWidget * variablesListWidget_;
-  QTabWidget * tabWidget_;
-  QTabWidget * tablesTabWidget_;
-  int summaryValuesListSampleSizeIndex_ = 0;
-  bool doMultivariate_  = true;               // can be set to false in DataAnalysisResultWindow
+  DesignOfExperiment    designOfExperiment_;
+  DataAnalysisResult    result_;
+  bool                  hasMaximumCV_;
+  bool                  hasMaximumCILength_;
+  QString               sampleSizeTitle_;
+  QString               analysisStopCriteriaMessage_;
+  QString               analysisErrorMessage_;
+  OT::Sample            failedInputSample_;
+  OT::Sample            notEvaluatedInputSample_;
+  bool                  resultsSampleIsValid_;
+  QStringList           inputNames_;
+  QStringList           inAxisTitles_;
+  QStringList           outputNames_;
+  QStringList           outAxisTitles_;
+  bool                  isConfidenceIntervalRequired_;
+  double                levelConfidenceInterval_;
+  bool                  showTable_;
+  TitleLabel          * titleLabel_                       = nullptr;
+  QGroupBox           * variablesGroupBox_                = nullptr;
+  VariablesListWidget * variablesListWidget_              = nullptr;
+  QTabWidget          * tabWidget_                        = nullptr;
+  OT::Description       errorDescription_;
+  QTabWidget          * tablesTabWidget_                  = nullptr;
+  int                   summaryValuesListSampleSizeIndex_ = 0;
+  bool                  doMultivariate_                   = true;     // can be set to false in DataAnalysisResultWindow
 
 private:
   WidgetBoundToDockWidget * boundPlotMatrixWidget_ = nullptr;

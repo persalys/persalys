@@ -32,26 +32,13 @@ namespace PERSALYS
 
 CLASSNAMEINIT(DesignOfExperimentImplementation)
 
-static Factory<DesignOfExperimentImplementation> Factory_DesignOfExperimentImplementation;
-
-/* Default constructor */
-DesignOfExperimentImplementation::DesignOfExperimentImplementation()
-  : DataSample()
-  , Observable()
-  , hasPhysicalModel_(false)
-  , physicalModel_()
-{
-}
-
+const static Factory<DesignOfExperimentImplementation> Factory_DesignOfExperimentImplementation;
 
 /* Constructor with parameters */
 DesignOfExperimentImplementation::DesignOfExperimentImplementation(const String& name, const PhysicalModel& physicalModel)
-  : DataSample()
-  , Observable()
-  , hasPhysicalModel_(true)
-  , physicalModel_(physicalModel)
+  : physicalModel_(physicalModel)
 {
-  setName(name);
+  DesignOfExperimentImplementation::setName(name);
 }
 
 
@@ -68,30 +55,17 @@ void DesignOfExperimentImplementation::setName(const String & name)
   notify("nameChanged");
 }
 
-
-Bool DesignOfExperimentImplementation::operator==(const DesignOfExperimentImplementation& other) const
-{
-  if (this == &other)
-    return true;
-  return false;
-}
-
-
-Bool DesignOfExperimentImplementation::operator!=(const DesignOfExperimentImplementation& other) const
-{
-  return !operator==(other);
-}
-
-
 bool DesignOfExperimentImplementation::hasPhysicalModel() const
 {
-  return hasPhysicalModel_;
+  return physicalModel_.has_value();
 }
 
 
 PhysicalModel DesignOfExperimentImplementation::getPhysicalModel() const
 {
-  return physicalModel_;
+  if (!physicalModel_)
+    throw InvalidValueException(HERE) << "No physical model is associated to the design of experiment " << getName();
+  return physicalModel_.value();
 }
 
 
@@ -109,7 +83,7 @@ void DesignOfExperimentImplementation::setInputSample(const Sample& sample)
     const Description sampleDescription = sample.getDescription();
     for (UnsignedInteger i = 0; i < sampleDescription.getSize(); ++i)
     {
-      if (!physicalModel_.getInputNames().contains(sampleDescription[i]))
+      if (!physicalModel_->getInputNames().contains(sampleDescription[i]))
         throw InvalidArgumentException(HERE) << "The physical model does not contain an input named " << sampleDescription[i];
     }
   }
@@ -124,7 +98,7 @@ void DesignOfExperimentImplementation::setOutputSample(const Sample& sample)
     const Description sampleDescription = sample.getDescription();
     for (UnsignedInteger i = 0; i < sampleDescription.getSize(); ++i)
     {
-      if (!physicalModel_.getOutputNames().contains(sampleDescription[i]))
+      if (!physicalModel_->getOutputNames().contains(sampleDescription[i]))
         throw InvalidArgumentException(HERE) << "The physical model does not contain an output named " << sampleDescription[i];
     }
   }
@@ -150,12 +124,36 @@ String DesignOfExperimentImplementation::getPythonScript() const
 {
   OSS oss;
 
-  oss << getName() << " = persalys.DesignOfExperimentImplementation('" << getName() << "', " << getPhysicalModel().getName() << ")\n";
+  if (physicalModel_)
+    oss << getName() << " = persalys." << getClassName() << "('" << getName() << "', " << physicalModel_->getName() << ")\n";
+  else
+  {
+    oss << getName() << " = persalys." << getClassName() << "()\n";
+    if (getName().size())
+      oss << getName() << ".setName('" << getName() << "')\n";
+  }
 
-  oss << "inputSample = " << Parameters::GetOTSampleStr(getInputSample());
-
+  oss << "inputSample = " << Parameters::GetOTSampleStr(getInputSample()) << "\n";
+  oss << "outputSample = " << Parameters::GetOTSampleStr(getOutputSample()) << "\n";
   oss << getName() << ".setInputSample(inputSample)\n";
+  oss << getName() << ".setOutputSample(outputSample)\n";
 
+  return oss;
+}
+
+String DesignOfExperimentImplementation::__repr__() const
+{
+  OSS oss;
+  oss << "class=" << GetClassName()
+      << " name=" << getName()
+      << " physicalModel=";
+  if (physicalModel_)
+    oss << getPhysicalModel().getName();
+  else
+    oss << "None";
+  
+  oss << " inputSample=" << getInputSample()
+      << " outputSample=" << getOutputSample();
   return oss;
 }
 
@@ -164,8 +162,15 @@ String DesignOfExperimentImplementation::getPythonScript() const
 void DesignOfExperimentImplementation::save(Advocate& adv) const
 {
   DataSample::save(adv);
-  adv.saveAttribute("hasPhysicalModel_", hasPhysicalModel_);
-  adv.saveAttribute("physicalModel_", physicalModel_);
+  if (physicalModel_)
+  {
+    adv.saveAttribute("hasPhysicalModel_", true);
+    adv.saveAttribute("physicalModel_", physicalModel_.value());
+  }
+  else
+  {
+    adv.saveAttribute("hasPhysicalModel_", false);
+  }
 }
 
 
@@ -173,8 +178,14 @@ void DesignOfExperimentImplementation::save(Advocate& adv) const
 void DesignOfExperimentImplementation::load(Advocate& adv)
 {
   DataSample::load(adv);
-  adv.loadAttribute("hasPhysicalModel_", hasPhysicalModel_);
-  adv.loadAttribute("physicalModel_", physicalModel_);
+  Bool hasPhysicalModel;
+  adv.loadAttribute("hasPhysicalModel_", hasPhysicalModel);
+  if (hasPhysicalModel)
+  {
+    PhysicalModel physicalModel;
+    adv.loadAttribute("physicalModel_", physicalModel);
+    physicalModel_ = physicalModel;
+  }
 }
 
 } // END namespace PERSALYS

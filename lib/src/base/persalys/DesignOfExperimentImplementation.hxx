@@ -24,6 +24,8 @@
 #include "PhysicalModel.hxx"
 #include "DataSample.hxx"
 
+#include <optional>
+
 namespace PERSALYS
 {
 class PERSALYS_BASE_API DesignOfExperimentImplementation : public DataSample, public Observable
@@ -32,7 +34,8 @@ class PERSALYS_BASE_API DesignOfExperimentImplementation : public DataSample, pu
 
 public:
   /** Default constructor */
-  DesignOfExperimentImplementation();
+  DesignOfExperimentImplementation() = default;
+
   /** Constructor with parameters */
   DesignOfExperimentImplementation(const OT::String & name, const PhysicalModel & physicalModel);
 
@@ -40,10 +43,6 @@ public:
   DesignOfExperimentImplementation * clone() const override;
 
   virtual void setName(const OT::String & name);
-
-  /** Comparison operators */
-  OT::Bool operator ==(const DesignOfExperimentImplementation & other) const;
-  OT::Bool operator !=(const DesignOfExperimentImplementation & other) const;
 
   bool hasPhysicalModel() const;
 
@@ -57,6 +56,8 @@ public:
 
   virtual OT::String getPythonScript() const;
 
+  OT::String __repr__() const override;
+
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const override;
 
@@ -64,9 +65,8 @@ public:
   void load(OT::Advocate & adv) override;
 
 protected:
-  bool hasPhysicalModel_ = false;
-  PhysicalModel physicalModel_;
-
+  std::optional<PhysicalModel> physicalModel_ = std::nullopt;
 };
+
 }
 #endif

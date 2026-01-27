@@ -38,7 +38,6 @@ DataModel::DataModel(const String& name)
   : DesignOfExperimentImplementation()
 {
   DesignOfExperimentImplementation::setName(name);
-  hasPhysicalModel_ = false;
 }
 
 
@@ -66,7 +65,6 @@ DataModel::DataModel( const String& name,
 : DesignOfExperimentImplementation()
 {
 DesignOfExperimentImplementation::setName(name);
-hasPhysicalModel_ = false;
 
 DataModel::setInputSample(inSample);
 DataModel::setOutputSample(outSample);
@@ -254,7 +252,7 @@ String DataModel::getPythonScript() const
     oss << "outputColumns = " << Parameters::GetOTIndicesStr(importedDataset_->getOutputColumns()) << "\n";
   }
 
-  if(hasPhysicalModel_)
+  if(physicalModel_)
   {
     oss << "importedDataset = ";
     if (importedDataset_)
@@ -293,8 +291,8 @@ String DataModel::__repr__() const
   else
     oss << " importedDataset=None";
   
-  if (hasPhysicalModel_)
-    oss << " physicalModel=" << physicalModel_.__repr__();
+  if (physicalModel_)
+    oss << " physicalModel=" << physicalModel_->__repr__();
   else
     oss << " physicalModel=" << false;
   

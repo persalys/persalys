@@ -30,7 +30,7 @@ class PERSALYS_BASE_API DesignOfExperiment : public OT::TypedInterfaceObject<Des
   CLASSNAME
 
 public:
-  typedef OT::Pointer<DesignOfExperimentImplementation>       Implementation;
+  using Implementation = OT::Pointer<DesignOfExperimentImplementation>;
 
   /** Default constructor */
   DesignOfExperiment();
@@ -39,14 +39,23 @@ public:
 
   /** Default constructor */
   DesignOfExperiment(const DesignOfExperimentImplementation & implementation);
+
   /** Constructor from implementation */
   DesignOfExperiment(const Implementation & p_implementation);
+
   /** Constructor from implementation pointer */
   DesignOfExperiment(DesignOfExperimentImplementation * p_implementation);
 
   /** Comparison operator */
-  OT::Bool operator ==(const DesignOfExperiment & other) const;
-  OT::Bool operator !=(const DesignOfExperiment & other) const;
+  friend OT::Bool operator ==(const DesignOfExperiment & lhs, const DesignOfExperiment & rhs)
+  {
+    return lhs.getImplementation().getImplementation() == rhs.getImplementation().getImplementation();
+  }
+
+  friend OT::Bool operator !=(const DesignOfExperiment & lhs, const DesignOfExperiment & rhs)
+  {
+    return !(lhs.getImplementation().getImplementation() == rhs.getImplementation().getImplementation());
+  }
 
   void addObserver(Observer * observer);
 

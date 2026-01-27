@@ -65,20 +65,6 @@ DesignOfExperiment::DesignOfExperiment(DesignOfExperimentImplementation* p_imple
   // At last, allocate memory space if needed, but go to destructor to free it
 }
 
-
-Bool DesignOfExperiment::operator==(const DesignOfExperiment& other) const
-{
-  if (this == &other) return true;
-  return *getImplementation() == *other.getImplementation();
-}
-
-
-Bool DesignOfExperiment::operator!=(const DesignOfExperiment& other) const
-{
-  return !operator==(other);
-}
-
-
 void DesignOfExperiment::addObserver(Observer* observer)
 {
   getImplementation()->addObserver(observer);

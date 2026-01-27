@@ -61,7 +61,7 @@ private slots:
     stackedWidget_ = mainWidget_->findChild<SubWindowsStackedWidget*>();
   }
 
-  void TestOpenStudy()
+  void TestOpenStudy() const
   {
     QVERIFY(stackedWidget_->count() == 1);
 
@@ -78,27 +78,27 @@ private slots:
       // check the result windows type
       for (int j = 0; j < stackedWidget_->count(); ++ j)
       {
-        SubWindow * subWindow = dynamic_cast<SubWindow*>(stackedWidget_->widget(j));
+        auto * subWindow = dynamic_cast<SubWindow*>(stackedWidget_->widget(j));
         if (subWindow)
         {
-          AnalysisItem * analysisItem = dynamic_cast<AnalysisItem*>(subWindow->getItem());
-          DesignOfExperimentDefinitionItem * doeItem = dynamic_cast<DesignOfExperimentDefinitionItem*>(subWindow->getItem());
+          auto * analysisItem = dynamic_cast<AnalysisItem*>(subWindow->getItem());
+          const auto * doeItem = dynamic_cast<DesignOfExperimentDefinitionItem*>(subWindow->getItem());
           if (analysisItem && !doeItem)
           {
             if (analysisItem->getAnalysis().hasValidResult())
             {
               std::cout << "Analysis= " << analysisItem->getAnalysis().getImplementation()->getClassName()
                         << " - Window= " << subWindow->metaObject()->className() << std::endl;
-              QVERIFY(dynamic_cast<ResultWindow*>(subWindow) != 0);
+              QVERIFY(dynamic_cast<ResultWindow*>(subWindow) != nullptr);
             }
             else
             {
-              QVERIFY(dynamic_cast<AnalysisWindow*>(subWindow) != 0);
+              QVERIFY(dynamic_cast<AnalysisWindow*>(subWindow) != nullptr);
             }
             QAction * modifyAction = findAction(analysisItem->getActions(), "Modify");
             if (modifyAction)
             {
-              QTimer::singleShot(150, [ = ]()
+              QTimer::singleShot(150, [analysisItem]()
               {
                 QWidget * widget = QApplication::activeModalWidget();
                 std::cout << "Analysis= " << analysisItem->getAnalysis().getImplementation()->getClassName()

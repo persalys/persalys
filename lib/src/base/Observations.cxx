@@ -67,7 +67,6 @@ Observations::Observations(const String &name,
   : DataModel(name, inSample, outSample)
 {
   physicalModel_ = physicalModel;
-  hasPhysicalModel_ = true;
 
   Indices outputColumns(outSample.getSize());
   checkColumnsAndNames(inSample.getDescription(), outputColumns, outSample.getDescription());
@@ -181,6 +180,9 @@ void Observations::orderSamples()
 
 String Observations::getPythonScript() const
 {
+  if (!physicalModel_)
+    return getName() + " = persalys." + getClassName() + "()\n";
+
   OSS oss;
 
   oss << "name=" << "'" << getName() << "'\n";
@@ -212,14 +214,17 @@ String Observations::__repr__() const
 {
   OSS oss;
   oss << "class=" << GetClassName()
-      << " name=" << getName()
-      << " physicalModel=" << getPhysicalModel().getName()
-      << " observedInputs=" << getInputNames()
+      << " name=" << getName();
+  if (physicalModel_)
+    oss << " physicalModel=" << getPhysicalModel().getName();
+  oss << " observedInputs=" << getInputNames()
       << " observedOutputs=" << getOutputNames();
   if (importedDataset_)
+  {
     oss << " fileName=" << importedDataset_->getFileName()
         << " inputColumns=" << importedDataset_->getInputColumns()
         << " outputColumns=" << importedDataset_->getOutputColumns();
+  }
         
   return oss;
 }
