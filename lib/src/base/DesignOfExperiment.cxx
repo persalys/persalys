@@ -27,30 +27,31 @@ namespace PERSALYS
 
 CLASSNAMEINIT(DesignOfExperiment)
 
-/* Default constructor */
-DesignOfExperiment::DesignOfExperiment()
-  : TypedInterfaceObject<DesignOfExperimentImplementation>(new DesignOfExperimentImplementation())
+DesignOfExperiment::DesignOfExperiment(const String &name, const std::optional<PhysicalModel> &physicalModel, const std::optional<ImportedDataset> &importedDataset, const Description &inputNames, const Description &outputNames)
+  : TypedInterfaceObject<DataModel>(new DataModel(name, physicalModel, importedDataset, inputNames, outputNames))
 {
 }
 
-
-/* Constructor with parameters */
-DesignOfExperiment::DesignOfExperiment(const String& name, const PhysicalModel& physicalModel)
-  : TypedInterfaceObject<DesignOfExperimentImplementation>(new DesignOfExperimentImplementation(name, physicalModel))
+DesignOfExperiment::DesignOfExperiment(const String &name, const String &filename, const Indices &inputColumns, const Indices &outputColumns, const Description &inputNames, const Description &outputNames)
+  : TypedInterfaceObject<DataModel>(new DataModel(name, filename, inputColumns, outputColumns, inputNames, outputNames))
 {
 }
 
+DesignOfExperiment::DesignOfExperiment(const String &name, const Sample &inSample, const Sample &outSample)
+  : TypedInterfaceObject<DataModel>(new DataModel(name, inSample, outSample))
+{
+}
 
 /* Default constructor */
-DesignOfExperiment::DesignOfExperiment(const DesignOfExperimentImplementation& implementation)
-  : TypedInterfaceObject<DesignOfExperimentImplementation>(implementation.clone())
+DesignOfExperiment::DesignOfExperiment(const DataModel& implementation)
+  : TypedInterfaceObject<DataModel>(implementation.clone())
 {
 }
 
 
 /* Constructor from implementation */
 DesignOfExperiment::DesignOfExperiment(const Implementation& p_implementation)
-  : TypedInterfaceObject<DesignOfExperimentImplementation>(p_implementation)
+  : TypedInterfaceObject<DataModel>(p_implementation)
 {
   // Initialize any other class members here
   // At last, allocate memory space if needed, but go to destructor to free it
@@ -58,8 +59,8 @@ DesignOfExperiment::DesignOfExperiment(const Implementation& p_implementation)
 
 
 /* Constructor from implementation pointer */
-DesignOfExperiment::DesignOfExperiment(DesignOfExperimentImplementation* p_implementation)
-  : TypedInterfaceObject<DesignOfExperimentImplementation>(p_implementation)
+DesignOfExperiment::DesignOfExperiment(DataModel* p_implementation)
+  : TypedInterfaceObject<DataModel>(p_implementation)
 {
   // Initialize any other class members here
   // At last, allocate memory space if needed, but go to destructor to free it
@@ -145,7 +146,7 @@ void DesignOfExperiment::load(Advocate& adv)
 
 void DesignOfExperiment::setImplementationAsPersistentObject(const ImplementationAsPersistentObject& obj)
 {
-  TypedInterfaceObject< DesignOfExperimentImplementation >::setImplementationAsPersistentObject(obj);
+  TypedInterfaceObject< DataModel >::setImplementationAsPersistentObject(obj);
   getImplementation()->notify("implementationModified");
 }
 

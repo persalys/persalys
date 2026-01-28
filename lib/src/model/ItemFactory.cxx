@@ -107,7 +107,7 @@ QString ItemFactory::getParentTitleType(const QString &objectName) const
 
 Item * ItemFactory::getTitleItem(const QString &objectName)
 {
-  Item * item = 0;
+  Item * item = nullptr;
 
   // models
   if (objectName.contains("Model") && !objectName.contains("ModelEvaluation"))

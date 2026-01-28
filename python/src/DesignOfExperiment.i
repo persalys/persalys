@@ -32,7 +32,7 @@ template <>
 
 %include DesignOfExperiment_doc.i
 
-PERSALYSTypedInterfaceObjectHelper(DesignOfExperiment)
+PERSALYSTypedInterfaceObjectImplementationHelper(DesignOfExperiment,DataModel)
 PERSALYSTypedCollectionInterfaceObjectHelper(DesignOfExperiment)
 
 %copyctor PERSALYS::DesignOfExperiment;

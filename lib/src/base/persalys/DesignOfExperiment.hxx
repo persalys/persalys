@@ -21,31 +21,49 @@
 #ifndef PERSALYS_DESIGNOFEXPERIMENT_HXX
 #define PERSALYS_DESIGNOFEXPERIMENT_HXX
 
-#include "persalys/DesignOfExperimentImplementation.hxx"
+#include "persalys/DataModel.hxx"
 
 namespace PERSALYS
 {
-class PERSALYS_BASE_API DesignOfExperiment : public OT::TypedInterfaceObject<DesignOfExperimentImplementation>
+class PERSALYS_BASE_API DesignOfExperiment : public OT::TypedInterfaceObject<DataModel>
 {
   CLASSNAME
 
 public:
-  using Implementation = OT::Pointer<DesignOfExperimentImplementation>;
-  using Type = DesignOfExperimentImplementation::Type;
+  using Implementation = OT::Pointer<DataModel>;
+  using Type = DataModel::Type;
 
-  /** Default constructor */
-  DesignOfExperiment();
   /** Constructor with parameters */
-  DesignOfExperiment(const OT::String & name, const PhysicalModel & physicalModel);
+  explicit DesignOfExperiment(
+    const OT::String & name = "Unnamed",
+    const std::optional<PhysicalModel> & physicalModel = std::nullopt,
+    const std::optional<ImportedDataset> & importedDataset = std::nullopt,
+    const OT::Description & inputNames = OT::Description(),
+    const OT::Description & outputNames = OT::Description());
+
+  /** Constructor with parameters */
+  DesignOfExperiment(
+    const OT::String & name,
+    const OT::String & fileName,
+    const OT::Indices & inputColumns,
+    const OT::Indices & outputColumns = OT::Indices(),
+    const OT::Description & inputNames = OT::Description(),
+    const OT::Description & outputNames = OT::Description());
+
+  /** Constructor with parameters */
+  DesignOfExperiment(
+    const OT::String & name,
+    const OT::Sample & inSample,
+    const OT::Sample & outSample);
 
   /** Default constructor */
-  DesignOfExperiment(const DesignOfExperimentImplementation & implementation);
+  DesignOfExperiment(const DataModel & implementation);
 
   /** Constructor from implementation */
   DesignOfExperiment(const Implementation & p_implementation);
 
   /** Constructor from implementation pointer */
-  DesignOfExperiment(DesignOfExperimentImplementation * p_implementation);
+  DesignOfExperiment(DataModel * p_implementation);
 
   /** Comparison operator */
   friend OT::Bool operator ==(const DesignOfExperiment & lhs, const DesignOfExperiment & rhs)

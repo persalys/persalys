@@ -58,6 +58,7 @@ ot_add_python_module (persalys persalys_module.i
                       Input.i Input_doc.i
                       Output.i Output_doc.i
                       DataSample.i DataSample_doc.i
+                      DataModel.i DataModel_doc.i
                       ImportedDataset.i ImportedDataset_doc.i
                       DataFieldModel.i DataFieldModel_doc.i
                       DataFieldModelImplementation.i DataFieldModelImplementation_doc.i
@@ -93,13 +94,11 @@ ot_add_python_module (persalys persalys_module.i
                       QuantileAnalysis.i QuantileAnalysis_doc.i
                       ModelEvaluation.i ModelEvaluation_doc.i
                       FieldModelEvaluation.i FieldModelEvaluation_doc.i
-                      DesignOfExperimentImplementation.i DesignOfExperimentImplementation_doc.i
                       DesignOfExperiment.i DesignOfExperiment_doc.i
                       FixedDesignOfExperiment.i FixedDesignOfExperiment_doc.i
                       GridDesignOfExperiment.i GridDesignOfExperiment_doc.i
                       ImportedDesignOfExperiment.i ImportedDesignOfExperiment_doc.i
                       ProbabilisticDesignOfExperiment.i ProbabilisticDesignOfExperiment_doc.i
-                      DataModel.i DataModel_doc.i
                       Observations.i Observations_doc.i
                       MonteCarloAnalysis.i MonteCarloAnalysis_doc.i
                       FieldMonteCarloResult.i FieldMonteCarloResult_doc.i

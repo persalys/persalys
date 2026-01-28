@@ -105,6 +105,7 @@ PERSALYSTypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Coll
 %include Output.i
 %include DataSample.i
 %include ImportedDataset.i
+%include DataModel.i
 %include MeshModelImplementation.i
 %include MeshModel.i
 %include GridMeshModel.i
@@ -125,9 +126,7 @@ PERSALYSTypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Coll
 %include PhysicalModelAnalysis.i
 %include Analysis.i
 %include WithStopCriteriaAnalysis.i
-%include DesignOfExperimentImplementation.i
 %include DesignOfExperiment.i
-%include DataModel.i
 %include DataFieldModelImplementation.i
 %include DataFieldModel.i
 %include Observations.i

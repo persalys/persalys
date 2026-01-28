@@ -46,7 +46,7 @@ namespace PERSALYS
 DataModelWindow::DataModelWindow(DesignOfExperimentItem * item, QWidget * parent)
   : SubWindow(item, parent)
 {
-  dataModel_ = dynamic_cast<DataModel*>(item->getDesignOfExperiment().getImplementation().get());
+  dataModel_ = item->getDesignOfExperiment().getImplementation().get();
   if (!dataModel_)
     throw InvalidArgumentException(HERE) << "DataModelWindow: the design of experiments must be a DataModel";
 

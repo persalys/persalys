@@ -12,7 +12,7 @@ set(BASE_SOURCEFILES PersalysResourceMap.cxx
                      ImportedDataset.cxx
                      DataFieldModel.cxx
                      DataFieldModelImplementation.cxx
-                     DataModel.cxx
+                     DataModel.cxx  DesignOfExperiment.cxx
                      MeshModel.cxx MeshModelImplementation.cxx
                      GridMeshModel.cxx
                      ImportedMeshModel.cxx
@@ -23,7 +23,6 @@ set(BASE_SOURCEFILES PersalysResourceMap.cxx
                      PythonScriptEvaluation.cxx
                      PythonScriptFieldFunction.cxx
                      PythonFieldModel.cxx
-                     DesignOfExperimentImplementation.cxx DesignOfExperiment.cxx
                      FixedDesignOfExperiment.cxx
                      GridDesignOfExperiment.cxx
                      ImportedDesignOfExperiment.cxx
@@ -124,7 +123,6 @@ ot_install_header_file ( PythonScriptEvaluation.hxx )
 ot_install_header_file ( PythonScriptFieldFunction.hxx )
 ot_install_header_file ( PythonFieldModel.hxx )
 ot_install_header_file ( MetaModel.hxx )
-ot_install_header_file ( DesignOfExperimentImplementation.hxx )
 ot_install_header_file ( DesignOfExperiment.hxx )
 ot_install_header_file ( FixedDesignOfExperiment.hxx )
 ot_install_header_file ( GridDesignOfExperiment.hxx )

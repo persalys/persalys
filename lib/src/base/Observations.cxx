@@ -154,7 +154,9 @@ void Observations::orderSamples()
         }
       }
     }
-    DesignOfExperimentImplementation::setInputSample(inS.getMarginal(orderedInd));
+    resetImportedDataset_ = false;
+    setInputSample(inS.getMarginal(orderedInd));
+    resetImportedDataset_ = true;
   }
   // order output sample
   Sample outS(getOutputSample());
@@ -174,7 +176,9 @@ void Observations::orderSamples()
         }
       }
     }
-    DesignOfExperimentImplementation::setOutputSample(outS.getMarginal(orderedInd));
+    resetImportedDataset_ = false;
+    setOutputSample(outS.getMarginal(orderedInd));
+    resetImportedDataset_ = true;
   }
 }
 

@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Class to define data model
+ *  @brief Class to define data models
  *
  *  Copyright 2015-2025 EDF-Phimeca
  *
@@ -23,6 +23,8 @@
 #include "persalys/BaseTools.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
+#include <openturns/SpecFunc.hxx>
+#include <openturns/Catalog.hxx>
 
 using namespace OT;
 
@@ -31,15 +33,29 @@ namespace PERSALYS
 
 CLASSNAMEINIT(DataModel)
 
-static const Factory<DataModel> Factory_DataModel;
+// TODO : change in OT 1.27
+const static Factory<DataModel> Factory_DesignOfExperimentImplementation = [] {
+  Factory<DataModel> factory;
+  const PersistentObjectFactory * poFactory = &Catalog::Get("DataModel");
+  Catalog::Add("DesignOfExperimentImplementation", poFactory);
+  return factory;
+}();
 
-/* Default constructor */
-DataModel::DataModel(const String& name)
-  : DesignOfExperimentImplementation()
+DataModel::DataModel(const String& name,
+  const std::optional<PhysicalModel> & physicalModel,
+  const std::optional<ImportedDataset> & importedDataset,
+  const Description& inputNames,
+  const Description& outputNames)
+: physicalModel_(physicalModel)
+, importedDataset_(importedDataset)
 {
-  DesignOfExperimentImplementation::setName(name);
-}
+PersistentObject::setName(name);
 
+if (inputNames.getSize() || outputNames.getSize())
+setNames(inputNames, outputNames);
+else if (importedDataset_)
+DataModel::update();
+}
 
 /* Constructor with parameters */
 DataModel::DataModel(const String& name,
@@ -48,10 +64,9 @@ DataModel::DataModel(const String& name,
                      const Indices& outputColumns,
                      const Description& inputNames,
                      const Description& outputNames)
-  : DesignOfExperimentImplementation()
-  , importedDataset_(ImportedDataset(fileName, inputColumns, outputColumns))
+  : importedDataset_(ImportedDataset(fileName, inputColumns, outputColumns))
 {
-  DesignOfExperimentImplementation::setName(name);
+  PersistentObject::setName(name);
   if (inputNames.getSize() || outputNames.getSize())
     setNames(inputNames, outputNames);
   else
@@ -62,26 +77,11 @@ DataModel::DataModel(const String& name,
 DataModel::DataModel( const String& name,
                       const Sample& inSample,
                       const Sample& outSample)
-: DesignOfExperimentImplementation()
 {
-DesignOfExperimentImplementation::setName(name);
+  PersistentObject::setName(name);
 
 DataModel::setInputSample(inSample);
 DataModel::setOutputSample(outSample);
-}
-
-DataModel::DataModel(const String& name,
-                     const PhysicalModel& physicalModel,
-                     const std::optional<ImportedDataset> & importedDataset,
-                     const Description& inputNames,
-                     const Description& outputNames)
-  : DesignOfExperimentImplementation(name, physicalModel)
-  , importedDataset_(importedDataset)
-{
-  if (inputNames.getSize() || outputNames.getSize())
-    setNames(inputNames, outputNames);
-  else if (importedDataset_)
-    DataModel::update();
 }
 
 /* Virtual constructor */
@@ -90,24 +90,90 @@ DataModel* DataModel::clone() const
   return new DataModel(*this);
 }
 
+bool DataModel::hasPhysicalModel() const
+{
+  return physicalModel_.has_value();
+}
+
+
+PhysicalModel DataModel::getPhysicalModel() const
+{
+  if (!physicalModel_)
+    throw InvalidValueException(HERE) << "No physical model is associated to the design of experiment " << getName();
+  return physicalModel_.value();
+}
+
+
+void DataModel::initialize()
+{
+  setInputSample(Sample());
+  setOutputSample(Sample());
+}
+
+
+void DataModel::setInputSample(const Sample& sample)
+{
+  if (sample.getSize() && hasPhysicalModel())
+  {
+    const Description sampleDescription = sample.getDescription();
+    for (UnsignedInteger i = 0; i < sampleDescription.getSize(); ++i)
+    {
+      if (!physicalModel_->getInputNames().contains(sampleDescription[i]))
+        throw InvalidArgumentException(HERE) << "The physical model does not contain an input named " << sampleDescription[i];
+    }
+  }
+  DataSample::setInputSample(sample);
+  if (resetImportedDataset_)
+    importedDataset_.reset();
+}
+
+
+void DataModel::setOutputSample(const Sample& sample)
+{
+  if (sample.getSize() && hasPhysicalModel())
+  {
+    const Description sampleDescription = sample.getDescription();
+    for (UnsignedInteger i = 0; i < sampleDescription.getSize(); ++i)
+    {
+      if (!physicalModel_->getOutputNames().contains(sampleDescription[i]))
+        throw InvalidArgumentException(HERE) << "The physical model does not contain an output named " << sampleDescription[i];
+    }
+  }
+  DataSample::setOutputSample(sample);
+  if (resetImportedDataset_)
+    importedDataset_.reset();
+}
+
+
+Indices DataModel::getEffectiveInputIndices() const
+{
+  Indices inputIndices;
+  if (getInputSample().getSize())
+  {
+    const Point xmin(getInputSample().getMin());
+    const Point xmax(getInputSample().getMax());
+    for (UnsignedInteger i = 0; i < xmin.getDimension(); ++i)
+      if (xmax[i] > xmin[i])
+        inputIndices.add(i);
+  }
+  return inputIndices;
+}
+
+void DataModel::setType(Type type)
+{
+    type_ = type;
+}
+
+DataModel::Type DataModel::getType() const
+{
+    return type_;
+}
 
 void DataModel::removeAllObservers()
 {
   notifyAndRemove("DataModelDefinitionItem");
   notifyAndRemove("DataModelDiagramItem");
   notifyAndRemove("Study");
-}
-
-void DataModel::setInputSample(const Sample& sample)
-{
-  DesignOfExperimentImplementation::setInputSample(sample);
-  importedDataset_.reset();
-}
-
-void DataModel::setOutputSample(const Sample& sample)
-{
-  DesignOfExperimentImplementation::setOutputSample(sample);
-  importedDataset_.reset();
 }
 
 /** @brief Update the DataSample samples based on the ImportedDataset*/
@@ -121,13 +187,17 @@ void DataModel::update()
   if (importedDataset_->getInputColumns().getSize())
     inS = importedDataset_->getSampleFromFile().getMarginal(importedDataset_->getInputColumns());
   
-  DesignOfExperimentImplementation::setInputSample(inS);
+  resetImportedDataset_ = false;
+  setInputSample(inS);
+  resetImportedDataset_ = true;
 
   auto outS = Sample(0, 0);
   if (importedDataset_->getOutputColumns().getSize())
     outS = importedDataset_->getSampleFromFile().getMarginal(importedDataset_->getOutputColumns());
   
-  DesignOfExperimentImplementation::setOutputSample(outS);
+  resetImportedDataset_ = false;
+  setOutputSample(outS);
+  resetImportedDataset_ = true;
 
   notify("variablesChanged");
 }
@@ -223,11 +293,10 @@ void DataModel::setNames(const Description &inputNames, const Description &outpu
                                             << inSample.getDimension() << "/" << outSample.getDimension() << ").";
     }
 
-    DesignOfExperimentImplementation::setInputSample(inSample);
-    DesignOfExperimentImplementation::setOutputSample(outSample);
+    DataModel::setInputSample(inSample);
+    DataModel::setOutputSample(outSample);
   }
 }
-
 
 Description DataModel::getInputNames() const
 {
@@ -238,6 +307,23 @@ Description DataModel::getInputNames() const
 Description DataModel::getOutputNames() const
 {
   return getOutputSample().getDescription();
+}
+
+String DataModel::TypeToString(Type type)
+{
+    switch(type)
+    {
+        case MC:
+            return "MC";
+        case QMC:
+            return "QMC";
+        case LHS:
+            return "LHS";
+        case GRID:
+            return "GRID";
+        default:
+            throw InvalidArgumentException(HERE) << "Invalid ImportedDesignOfExperiment type";
+    }
 }
 
 String DataModel::getPythonScript() const
@@ -281,7 +367,6 @@ String DataModel::getPythonScript() const
   return oss;
 }
 
-
 /* String converter */
 String DataModel::__repr__() const
 {
@@ -307,9 +392,19 @@ String DataModel::__repr__() const
 
 
 /* Method save() stores the object through the StorageManager */
-void DataModel::save(Advocate & adv) const
+void DataModel::save(Advocate& adv) const
 {
-  DesignOfExperimentImplementation::save(adv);
+  DataSample::save(adv);
+  if (physicalModel_)
+  {
+    adv.saveAttribute("hasPhysicalModel_", true);
+    adv.saveAttribute("physicalModel_", physicalModel_.value());
+  }
+  else
+  {
+    adv.saveAttribute("hasPhysicalModel_", false);
+  }
+  adv.saveAttribute("type_", static_cast<UnsignedInteger>(type_));
   if (importedDataset_)
   {
     ImportedDataset importedDataset = *importedDataset_;
@@ -319,9 +414,23 @@ void DataModel::save(Advocate & adv) const
 
 
 /* Method load() reloads the object from the StorageManager */
-void DataModel::load(Advocate & adv)
+void DataModel::load(Advocate& adv)
 {
-  DesignOfExperimentImplementation::load(adv);
+  DataSample::load(adv);
+  Bool hasPhysicalModel;
+  adv.loadAttribute("hasPhysicalModel_", hasPhysicalModel);
+  if (hasPhysicalModel)
+  {
+    PhysicalModel physicalModel;
+    adv.loadAttribute("physicalModel_", physicalModel);
+    physicalModel_ = physicalModel;
+  }
+  if (adv.hasAttribute("type_"))
+  {
+    UnsignedInteger typeInt;
+    adv.loadAttribute("type_", typeInt);
+    type_ = static_cast<Type>(typeInt);
+  }
   if (adv.hasAttribute("importedDataset_"))
   {
     ImportedDataset importedDataset;
@@ -329,46 +438,50 @@ void DataModel::load(Advocate & adv)
     importedDataset_ = importedDataset;
   }
   else if (adv.hasAttribute("fileName_"))
-  {
-    // for compatilibility with files generated before Persalys 20.0
-    String fileName;
-    adv.loadAttribute("fileName_", fileName);
-    Indices inputColumns;
-    adv.loadAttribute("inputColumns_", inputColumns);
-    Indices outputColumns;
-    adv.loadAttribute("outputColumns_", outputColumns);
-    try
-    {
-      importedDataset_ = ImportedDataset(fileName, inputColumns, outputColumns);
-    }
-    catch (const Exception &)
-    {
-      Sample sampleFromFile;
-      adv.loadAttribute("sampleFromFile_", sampleFromFile);
-      if (sampleFromFile.getSize())
-      {
-        importedDataset_ = ImportedDataset();
-        importedDataset_->setSampleFromFile(sampleFromFile);
-        try
-        {
-          importedDataset_->setColumns(inputColumns, outputColumns);
-        }
-        catch (const Exception &)
-        {
-          // do nothing
-        }
-      }
-      
-    }
+    loadDataModelAttributes(adv);
+}
 
-    if (adv.hasAttribute("inputNames_") && adv.hasAttribute("outputNames_"))
+void DataModel::loadDataModelAttributes(Advocate & adv)
+{
+  // load attributes corresponding to pre Persalys 20.0 DataModel class
+  String fileName;
+  adv.loadAttribute("fileName_", fileName);
+  Indices inputColumns;
+  adv.loadAttribute("inputColumns_", inputColumns);
+  Indices outputColumns;
+  adv.loadAttribute("outputColumns_", outputColumns);
+  try
+  {
+    importedDataset_ = ImportedDataset(fileName, inputColumns, outputColumns);
+  }
+  catch (const Exception &)
+  {
+    Sample sampleFromFile;
+    adv.loadAttribute("sampleFromFile_", sampleFromFile);
+    if (sampleFromFile.getSize())
     {
-      Description inputNames;
-      adv.loadAttribute("inputNames_", inputNames);
-      Description outputNames;
-      adv.loadAttribute("outputNames_", outputNames);
-      setNames(inputNames, outputNames);
+      importedDataset_ = ImportedDataset();
+      importedDataset_->setSampleFromFile(sampleFromFile);
+      try
+      {
+        importedDataset_->setColumns(inputColumns, outputColumns);
+      }
+      catch (const Exception &)
+      {
+        // do nothing
+      }
     }
+    
+  }
+
+  if (adv.hasAttribute("inputNames_") && adv.hasAttribute("outputNames_"))
+  {
+    Description inputNames;
+    adv.loadAttribute("inputNames_", inputNames);
+    Description outputNames;
+    adv.loadAttribute("outputNames_", outputNames);
+    setNames(inputNames, outputNames);
   }
 }
-}
+
+} // END namespace PERSALYS
