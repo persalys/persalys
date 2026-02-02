@@ -50,8 +50,10 @@ ImportedDesignOfExperiment::ImportedDesignOfExperiment(const String& name,
     const PhysicalModel& physicalModel,
     const String& fileName,
     const Indices& inputColumns,
-    const Indices& outputColumns)
+    const Indices& outputColumns,
+    Type type)
   : DesignOfExperimentEvaluation(name, physicalModel)
+  , type_(type)
   , importedDataset_(fileName, inputColumns, outputColumns)
 {
   setColumns(inputColumns, outputColumns);
@@ -71,6 +73,12 @@ Sample ImportedDesignOfExperiment::generateInputSample(const UnsignedInteger /*n
   Sample inS(importedDataset_.getSampleFromFile().getMarginal(importedDataset_.getInputColumns()));
   inS.setDescription(getPhysicalModel().getInputNames());
   return inS;
+}
+
+void ImportedDesignOfExperiment::launch()
+{
+  DesignOfExperimentEvaluation::launch();
+  result_.designOfExperiment_.setType(type_);
 }
 
 
@@ -129,17 +137,23 @@ Parameters ImportedDesignOfExperiment::getParameters() const
   
   switch(type_)
   {
-    case MC:
+    case Type::GENERIC:
+      param.add("Type", "Generic");
+      break;
+    case Type::MC:
       param.add("Type", "Monte Carlo");
       break;
-    case QMC:
+    case Type::QMC:
       param.add("Type", "Quasi Monte Carlo");
       break;
-    case LHS:
+    case Type::LHS:
       param.add("Type", "Latin Hypercube Sampling");
       break;
-    case GRID:
+    case Type::GRID:
       param.add("Type", "Grid");
+      break;
+    case Type::MORRIS:
+      param.add("Type", "Morris");
   }
 
   return param;
@@ -171,23 +185,6 @@ void ImportedDesignOfExperiment::setFileName(const String &fileName)
   saveImportedSampleToResult();
 }
 
-String ImportedDesignOfExperiment::TypeToString(Type type)
-{
-  switch(type)
-  {
-    case MC:
-        return "MC";
-    case QMC:
-        return "QMC";
-    case LHS:
-        return "LHS";
-    case GRID:
-        return "GRID";
-    default:
-        throw InvalidArgumentException(HERE) << "Invalid ImportedDesignOfExperiment type";
-  }
-}
-
 String ImportedDesignOfExperiment::getPythonScript() const
 {
   OSS oss;
@@ -200,11 +197,10 @@ String ImportedDesignOfExperiment::getPythonScript() const
   oss << getName() << ".setBlockSize(" << getBlockSize() << ")\n";
   oss << "interestVariables = " << Parameters::GetOTDescriptionStr(getInterestVariables()) << "\n";
   oss << getName() << ".setInterestVariables(interestVariables)\n";
-  oss << getName() << ".setType(persalys.ImportedDesignOfExperiment." << TypeToString(type_) << ")\n";
+  oss << getName() << ".setType(persalys.DataModel." << DataModel::TypeToString(type_) << ")\n";
 
   return oss;
 }
-
 
 /* String converter */
 String ImportedDesignOfExperiment::__repr__() const
@@ -216,7 +212,7 @@ String ImportedDesignOfExperiment::__repr__() const
       << " fileName=" << importedDataset_.getFileName()
       << " inputColumns=" << importedDataset_.getInputColumns()
       << " blockSize=" << getBlockSize()
-      << " type=" << TypeToString(type_);
+      << " type=" << DataModel::TypeToString(type_);
 
   return oss;
 }
@@ -244,7 +240,7 @@ void ImportedDesignOfExperiment::load(Advocate& adv)
   else
   {
     // for backward compatibility, if type_ attribute does not exist, set to MC
-    type_ = MC;
+    type_ = Type::MC;
   }
 
   if (adv.hasAttribute("importedDataset_"))

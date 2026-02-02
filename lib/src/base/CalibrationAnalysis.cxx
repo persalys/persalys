@@ -45,7 +45,7 @@ namespace PERSALYS
 
 CLASSNAMEINIT(CalibrationAnalysis)
 
-static Factory<CalibrationAnalysis> Factory_CalibrationAnalysis;
+const static Factory<CalibrationAnalysis> Factory_CalibrationAnalysis;
 
 /* Default constructor */
 CalibrationAnalysis::CalibrationAnalysis()

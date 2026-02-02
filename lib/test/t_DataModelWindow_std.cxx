@@ -39,7 +39,7 @@ private slots:
     Description outDesc(2);
     outDesc[0] = "out1";
     outDesc[1] = "out2";
-    model = new DataModel("model", "DataModelSample.csv", inCol, outCol, inDesc, outDesc);
+    model = new DataModel("model", "DataModelSample.csv", inCol, outCol, DataModel::Type::MC, inDesc, outDesc);
 
     Study aStudy;
     aStudy.add(model);

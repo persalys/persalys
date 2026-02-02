@@ -31,7 +31,7 @@ namespace PERSALYS
 
 CLASSNAMEINIT(FixedDesignOfExperiment)
 
-static Factory<FixedDesignOfExperiment> Factory_FixedDesignOfExperiment;
+const static Factory<FixedDesignOfExperiment> Factory_FixedDesignOfExperiment;
 
 /* Default constructor */
 FixedDesignOfExperiment::FixedDesignOfExperiment()
@@ -63,7 +63,7 @@ FixedDesignOfExperiment* FixedDesignOfExperiment::clone() const
 }
 
 
-void FixedDesignOfExperiment::setOriginalInputSample(const Sample& sample)
+void FixedDesignOfExperiment::setOriginalInputSample(const Sample& sample, Type type)
 {
   Sample newsample(sample);
   if (newsample.getSize())
@@ -76,12 +76,19 @@ void FixedDesignOfExperiment::setOriginalInputSample(const Sample& sample)
   }
   originalInputSample_ = newsample;
   initialize();
+  type_ = type;
 }
 
 
 Sample FixedDesignOfExperiment::generateInputSample(const UnsignedInteger /*nbSimu*/) const
 {
   return originalInputSample_;
+}
+
+void FixedDesignOfExperiment::launch()
+{
+  DesignOfExperimentEvaluation::launch();
+  result_.designOfExperiment_.setType(type_);
 }
 
 
@@ -95,6 +102,9 @@ String FixedDesignOfExperiment::getPythonScript() const
   oss << getName() << ".setBlockSize(" << getBlockSize() << ")\n";
   oss << "interestVariables = " << Parameters::GetOTDescriptionStr(getInterestVariables()) << "\n";
   oss << getName() << ".setInterestVariables(interestVariables)\n";
+
+  if (getResult().getDesignOfExperiment().getOutputSample().getSize())
+    oss << getName() << ".run()\n";
 
   return oss;
 }

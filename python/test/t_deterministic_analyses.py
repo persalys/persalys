@@ -126,7 +126,7 @@ myStudy.add(fixedDataModel)
 
 # imported DataModel ##
 importDataModel = persalys.DataModel(
-    "importDataModel", filename, [0, 2, 3], [1], ["x_0", "x_2", "x_3"], ["x_1"]
+    "importDataModel", filename, [0, 2, 3], [1], persalys.DataModel.MC, ["x_0", "x_2", "x_3"], ["x_1"]
 )
 myStudy.add(importDataModel)
 

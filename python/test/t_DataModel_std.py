@@ -13,7 +13,7 @@ ot.RandomGenerator.SetSeed(0)
 ot.Normal(3).getSample(10).exportToCSVFile(filename)
 inColumns = [0, 2]
 
-model = persalys.DataModel("myDataModel", filename, inColumns)
+model = persalys.DataModel("myDataModel", filename, inColumns, [], persalys.DataModel.MC)
 myStudy.add(model)
 print(model)
 
@@ -43,7 +43,7 @@ openturns.testing.assert_almost_equal(
 outColumns = [1]
 
 model2 = persalys.DataModel(
-    "myDataModel2", filename, inColumns, outColumns, ["var1", "var2"], ["var3"]
+    "myDataModel2", filename, inColumns, outColumns, persalys.DataModel.MC, ["var1", "var2"], ["var3"]
 )
 myStudy.add(model2)
 print(model2)
@@ -55,7 +55,7 @@ print("min=", model2.getListXMin())
 print("max=", model2.getListXMax())
 
 # Model 3
-model3 = persalys.DataModel("myDataModel3", filename, inColumns, outColumns)
+model3 = persalys.DataModel("myDataModel3", filename, inColumns, outColumns, persalys.DataModel.MC)
 myStudy.add(model3)
 print(model3)
 
@@ -75,7 +75,7 @@ ot.RandomGenerator.SetSeed(0)
 ot.Normal(3).getSample(500).exportToCSVFile(filename)
 inColumns = [0, 1, 2]
 
-model4 = persalys.DataModel("myDataModel4", filename, inColumns)
+model4 = persalys.DataModel("myDataModel4", filename, inColumns, [], persalys.DataModel.MC)
 myStudy.add(model4)
 print(model4)
 print("inputNames=", model4.getInputNames())

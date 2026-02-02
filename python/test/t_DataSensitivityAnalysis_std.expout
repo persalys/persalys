@@ -1,8 +1,8 @@
-class=DataModel name=model1 importedDataset= fileName=Housing-prices-Boston.csv inputColumns=[0,1,2,3,4,5,6,7,8,9,10,11,12] outputColumns=[13] physicalModel=false inputNames=[CRIM,ZN,INDUS,CHAS,NOX,RM,AGE,DIS,RAD,TAX,PTRATIO,B,LSTAT] outputNames=[MEDV] type=MC
+class=DataModel name=model1 importedDataset= fileName=Housing-prices-Boston.csv inputColumns=[0,1,2,3,4,5,6,7,8,9,10,11,12] outputColumns=[13] physicalModel=false inputNames=[CRIM,ZN,INDUS,CHAS,NOX,RM,AGE,DIS,RAD,TAX,PTRATIO,B,LSTAT] outputNames=[MEDV] type=GENERIC
 inputNames= [CRIM,ZN,INDUS,CHAS,NOX,RM,AGE,DIS,RAD,TAX,PTRATIO,B,LSTAT]#13
 outputNames= [MEDV]
 
-class=DataModel name=model2 importedDataset= fileName=DataSensitivityAnalysis_std.csv inputColumns=[0,1,2,3,4] outputColumns=[5,6,7] physicalModel=false inputNames=[X0,X1,X2,X3,X4] outputNames=[Y0,Y1,Y2] type=MC
+class=DataModel name=model2 importedDataset= fileName=DataSensitivityAnalysis_std.csv inputColumns=[0,1,2,3,4] outputColumns=[5,6,7] physicalModel=false inputNames=[X0,X1,X2,X3,X4] outputNames=[Y0,Y1,Y2] type=GENERIC
 Output Y0 first order indices:  [0.731891,-0.0296164,0.489005,0.0508961,-0.054944]
 Output Y0 first order indices intervals:  [0.695092, 0.755477]
 [-0.14747, 0.0727584]

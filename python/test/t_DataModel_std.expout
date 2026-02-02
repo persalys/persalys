@@ -832,28 +832,28 @@ inputNames = ['X0', 'X2']
 outputNames = []
 inputColumns = [0, 2]
 outputColumns = []
-myDataModel = persalys.DataModel('myDataModel', 'data.csv', inputColumns, outputColumns, inputNames, outputNames)
+myDataModel = persalys.DataModel('myDataModel', 'data.csv', inputColumns, outputColumns, persalys.DataModel.GENERIC, inputNames, outputNames)
 myDataModel.setType(persalys.DataModel.MC)
 myStudy.add(myDataModel)
 inputNames = ['var1', 'var2']
 outputNames = ['var3']
 inputColumns = [0, 2]
 outputColumns = [1]
-myDataModel2 = persalys.DataModel('myDataModel2', 'data.csv', inputColumns, outputColumns, inputNames, outputNames)
+myDataModel2 = persalys.DataModel('myDataModel2', 'data.csv', inputColumns, outputColumns, persalys.DataModel.GENERIC, inputNames, outputNames)
 myDataModel2.setType(persalys.DataModel.MC)
 myStudy.add(myDataModel2)
 inputNames = ['X0', 'X2']
 outputNames = ['X1']
 inputColumns = [0, 2]
 outputColumns = [1]
-myDataModel3 = persalys.DataModel('myDataModel3', 'data.csv', inputColumns, outputColumns, inputNames, outputNames)
+myDataModel3 = persalys.DataModel('myDataModel3', 'data.csv', inputColumns, outputColumns, persalys.DataModel.GENERIC, inputNames, outputNames)
 myDataModel3.setType(persalys.DataModel.MC)
 myStudy.add(myDataModel3)
 inputNames = ['X0', 'X1', 'X2']
 outputNames = []
 inputColumns = [0, 1, 2]
 outputColumns = []
-myDataModel4 = persalys.DataModel('myDataModel4', 'data_500.csv', inputColumns, outputColumns, inputNames, outputNames)
+myDataModel4 = persalys.DataModel('myDataModel4', 'data_500.csv', inputColumns, outputColumns, persalys.DataModel.GENERIC, inputNames, outputNames)
 myDataModel4.setType(persalys.DataModel.MC)
 myStudy.add(myDataModel4)
 aDataAnalysis = persalys.DataAnalysis('aDataAnalysis', myDataModel)

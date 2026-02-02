@@ -32,9 +32,12 @@ class PERSALYS_BASE_API EvaluationResult : public AnalysisResult
 
 public:
   friend class DesignOfExperimentEvaluation;
+  friend class GridDesignOfExperiment;
+  friend class ProbabilisticDesignOfExperiment;
+  friend class ImportedDesignOfExperiment;
+  friend class FixedDesignOfExperiment;
   friend class ModelEvaluation;
   friend class FieldModelEvaluation;
-  friend class ImportedDesignOfExperiment;
 
   /** Default constructor */
   EvaluationResult();

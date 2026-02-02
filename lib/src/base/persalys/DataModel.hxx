@@ -34,7 +34,7 @@ class PERSALYS_BASE_API DataModel : public DataSample, public Observable
   CLASSNAME
 
 public:
-  enum Type {MC, QMC, LHS, GRID, MORRIS};
+  enum Type {GENERIC, MC, QMC, LHS, GRID, MORRIS};
 
   /** Constructor with parameters */
   explicit DataModel(
@@ -50,6 +50,7 @@ public:
     const OT::String & fileName,
     const OT::Indices & inputColumns,
     const OT::Indices & outputColumns = OT::Indices(),
+    Type type = GENERIC,
     const OT::Description & inputNames = OT::Description(),
     const OT::Description & outputNames = OT::Description());
 
@@ -62,11 +63,13 @@ public:
   /** Virtual constructor */
   DataModel * clone() const override;
 
+  void setName(const OT::String & name);
+
   void removeAllObservers() override;
 
   bool hasPhysicalModel() const;
-
   PhysicalModel getPhysicalModel() const;
+  void setPhysicalModel(const std::optional<PhysicalModel> & physicalModel);
 
   void initialize();
   void setInputSample(const OT::Sample & sample) override;
@@ -94,6 +97,8 @@ public:
   OT::String getFileName() const;
   void setFileName(const OT::String & fileName);
 
+  static OT::String TypeToString(Type type);
+
   virtual OT::String getPythonScript() const;
 
   OT::String __repr__() const override;
@@ -105,7 +110,6 @@ public:
   void load(OT::Advocate & adv) override;
 
 protected:
-  static OT::String TypeToString(Type type);
   void setNames(const OT::Description &inputNames, const OT::Description &outputNames);
   virtual void update();
 
@@ -115,7 +119,7 @@ private:
 protected:
   std::optional<PhysicalModel>    physicalModel_    = std::nullopt;
   std::optional<ImportedDataset>  importedDataset_  = std::nullopt;
-  Type type_ = MC;
+  Type type_ = GENERIC;
   bool resetImportedDataset_ = true;
 };
 

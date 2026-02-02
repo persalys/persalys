@@ -117,6 +117,7 @@ void DataModelWindow::buildInterface()
   typeLayout->addWidget(typeLabel);
 
   typeComboBox_ = new QComboBox;
+  typeComboBox_->addItem(tr("Generic"), static_cast<int>(DataModel::GENERIC));
   typeComboBox_->addItem(tr("Monte-Carlo"), static_cast<int>(DataModel::MC));
   typeComboBox_->addItem(tr("Quasi-Monte-Carlo"), static_cast<int>(DataModel::QMC));
   typeComboBox_->addItem(tr("LHS"), static_cast<int>(DataModel::LHS));

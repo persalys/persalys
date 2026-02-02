@@ -222,6 +222,7 @@ void MorrisAnalysis::launch()
   result_.designOfExperiment_ = DesignOfExperiment("name", getPhysicalModel());
   result_.designOfExperiment_.setInputSample(effectiveInSample);
   result_.designOfExperiment_.setOutputSample(outSample);
+  result_.designOfExperiment_.setType(DesignOfExperiment::Type::MORRIS);
   result_.inputsSelection_ = PersistentCollection<Indices >(nbOutputs, Indices(nbInputs, 1));
   result_.noEffectBoundary_ = Point(nbOutputs);
   result_.elementaryEffectsMean_ = Sample(nbOutputs, nbInputs);

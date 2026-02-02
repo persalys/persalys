@@ -1,4 +1,4 @@
-class=DataModel name=myDataModel importedDataset= fileName=data2.csv inputColumns=[0,2,3] outputColumns=[] physicalModel=false inputNames=[X0,X2,X3] outputNames=[] type=MC
+class=DataModel name=myDataModel importedDataset= fileName=data2.csv inputColumns=[0,2,3] outputColumns=[] physicalModel=false inputNames=[X0,X2,X3] outputNames=[] type=GENERIC
 class=CopulaInferenceAnalysis name=analysis designOfExperiment=myDataModel interestVariables=[] setOfVariables [X0,X3] distributionFactories=[ClaytonCopulaFactory,FrankCopulaFactory,GumbelCopulaFactory,NormalCopulaFactory,StudentCopulaFactory]
 [-1.1243,-1.51731,-1.52743,-1.68148,-1.66472]
 #!/usr/bin/env python
@@ -12,8 +12,8 @@ inputNames = ['X0', 'X2', 'X3']
 outputNames = []
 inputColumns = [0, 2, 3]
 outputColumns = []
-myDataModel = persalys.DataModel('myDataModel', 'data2.csv', inputColumns, outputColumns, inputNames, outputNames)
-myDataModel.setType(persalys.DataModel.MC)
+myDataModel = persalys.DataModel('myDataModel', 'data2.csv', inputColumns, outputColumns, persalys.DataModel.GENERIC, inputNames, outputNames)
+myDataModel.setType(persalys.DataModel.GENERIC)
 myStudy.add(myDataModel)
 analysis = persalys.CopulaInferenceAnalysis('analysis', myDataModel)
 variablesSet = ['X0', 'X3']

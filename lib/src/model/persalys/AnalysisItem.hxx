@@ -57,7 +57,6 @@ public slots:
   void appendDataModelItem();
   virtual void removeAnalysis();
   void extractData();
-  void exportDoE();
 
 signals:
   void analysisRemoved(QStandardItem*);
@@ -82,7 +81,6 @@ protected:
 
 private:
   QAction * extractDataAction_ = nullptr;
-  QAction * exportDoEAction_ = nullptr;
   QAction * convertPythonAction_ = nullptr;
 };
 }

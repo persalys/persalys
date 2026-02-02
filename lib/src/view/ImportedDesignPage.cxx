@@ -57,10 +57,12 @@ void ImportedDesignPage::buildInterface()
   auto * typeLabel  = new QLabel(tr("Design type:"));
   typeCombo_        = new QComboBox;
 
-  typeCombo_->addItem(tr("Monte-Carlo"), static_cast<int>(ImportedDesignOfExperiment::MC));
-  typeCombo_->addItem(tr("Quasi-Monte-Carlo"), static_cast<int>(ImportedDesignOfExperiment::QMC));
-  typeCombo_->addItem(tr("LHS"), static_cast<int>(ImportedDesignOfExperiment::LHS));
-  typeCombo_->addItem(tr("Grid"), static_cast<int>(ImportedDesignOfExperiment::GRID));
+  typeCombo_->addItem(tr("Generic"), static_cast<int>(ImportedDesignOfExperiment::Type::GENERIC));
+  typeCombo_->addItem(tr("Monte-Carlo"), static_cast<int>(ImportedDesignOfExperiment::Type::MC));
+  typeCombo_->addItem(tr("Quasi-Monte-Carlo"), static_cast<int>(ImportedDesignOfExperiment::Type::QMC));
+  typeCombo_->addItem(tr("LHS"), static_cast<int>(ImportedDesignOfExperiment::Type::LHS));
+  typeCombo_->addItem(tr("Grid"), static_cast<int>(ImportedDesignOfExperiment::Type::GRID));
+  typeCombo_->addItem((tr("Morris")), static_cast<int>(ImportedDesignOfExperiment::Type::MORRIS));
 
   connect(typeCombo_, qOverload<int>(&QComboBox::currentIndexChanged), this, [this](int index) {
     if (index < 0) return;

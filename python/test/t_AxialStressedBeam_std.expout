@@ -28,6 +28,7 @@ design = persalys.GridDesignOfExperiment('design', myPhysicalModel, values)
 design.setBlockSize(1)
 interestVariables = ['G']
 design.setInterestVariables(interestVariables)
+design.run()
 myStudy.add(design)
 myTaylorExpansionMoments = persalys.TaylorExpansionMomentsAnalysis('myTaylorExpansionMoments', myPhysicalModel)
 myStudy.add(myTaylorExpansionMoments)

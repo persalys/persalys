@@ -32,8 +32,8 @@ class PERSALYS_BASE_API DataAnalysisResult : public EvaluationResult
   CLASSNAME
 
 public:
-  typedef OT::Collection<OT::Point> PointCollection;
-  typedef OT::PersistentCollection<OT::Distribution> DistributionCollection;
+  using PointCollection = OT::Collection<OT::Point>;
+  using DistributionCollection = OT::PersistentCollection<OT::Distribution>;
 
   friend class DataAnalysis;
   friend class MonteCarloAnalysis;

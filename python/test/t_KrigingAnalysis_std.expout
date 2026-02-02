@@ -38,6 +38,7 @@ design.setOriginalInputSample(inputSample)
 design.setBlockSize(1)
 interestVariables = ['y0', 'y1']
 design.setInterestVariables(interestVariables)
+design.run()
 myStudy.add(design)
 kriging_0 = persalys.KrigingAnalysis('kriging_0', design)
 interestVariables = ['y0']

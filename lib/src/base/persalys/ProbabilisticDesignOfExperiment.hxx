@@ -77,6 +77,7 @@ public:
 
 protected:
   OT::Sample generateInputSample(const OT::UnsignedInteger nbSimu) const override;
+  void launch() override;
 
   static OT::Description DesignNames_;
   static OT::Description SpaceFillings_;

@@ -91,6 +91,10 @@ void PhysicalModel::blockNotification(const String & blockedObserverType)
   getImplementation()->blockNotification(blockedObserverType);
 }
 
+void PhysicalModel::setName(const String & name)
+{
+  getImplementation()->setName(name);
+}
 
 UnsignedInteger PhysicalModel::getInputDimension() const
 {

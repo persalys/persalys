@@ -31,18 +31,19 @@ class PERSALYS_BASE_API ImportedDesignOfExperiment : public DesignOfExperimentEv
   CLASSNAME
 
 public:
-  enum Type {MC, QMC, LHS, GRID};
+  using Type = DesignOfExperiment::Type;
 
   /** Default constructor */
   ImportedDesignOfExperiment();
   /** Constructor with parameters */
   ImportedDesignOfExperiment(const OT::String& name, const PhysicalModel& physicalModel);
   /** Constructor with parameters */
-  ImportedDesignOfExperiment(const OT::String& name,
-                             const PhysicalModel& physicalModel,
-                             const OT::String& fileName,
-                             const OT::Indices& inputColumns,
-                             const OT::Indices& outputColumns = OT::Indices());
+  ImportedDesignOfExperiment( const OT::String& name,
+                              const PhysicalModel& physicalModel,
+                              const OT::String& fileName,
+                              const OT::Indices& inputColumns,
+                              const OT::Indices& outputColumns = OT::Indices(),
+                              Type type = Type::GENERIC);
 
   /** Virtual constructor */
   ImportedDesignOfExperiment * clone() const override;
@@ -73,14 +74,14 @@ public:
 
 protected:
   OT::Sample generateInputSample(const OT::UnsignedInteger nbSimu) const override;
+  void launch() override;
   void saveImportedSampleToResult();
-  static OT::String TypeToString(Type type);
 
 private:
   void loadOldFormat(OT::Advocate& adv);
 
 private:
-    Type type_ = MC;
+    Type type_ = Type::GENERIC;
     ImportedDataset importedDataset_;
 };
 }

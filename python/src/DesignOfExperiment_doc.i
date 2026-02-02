@@ -42,15 +42,21 @@ Examples
 >>> fileName = 'sample.csv'
 >>> sample = ot.Normal(3).getSample(30)
 >>> sample.exportToCSVFile(fileName)
->>> model = persalys.DataModel('dataModel', fileName, [0, 2], [1], ['var1', 'var2'], ['var3'])"
+>>> model = persalys.DataModel('dataModel', fileName, [0, 2], [1], persalys.DataModel.MC, ['var1', 'var2'], ['var3'])"
 
 // ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::DesignOfExperiment::setName
+PERSALYS_DesignOfExperiment_setName_doc
 
 %feature("docstring") PERSALYS::DesignOfExperiment::hasPhysicalModel
 PERSALYS_DesignOfExperiment_hasPhysicalModel_doc
 
 %feature("docstring") PERSALYS::DesignOfExperiment::getPhysicalModel
 PERSALYS_DesignOfExperiment_getPhysicalModel_doc
+
+%feature("docstring") PERSALYS::DesignOfExperiment::setPhysicalModel
+PERSALYS_DesignOfExperiment_setPhysicalModel_doc
 
 %feature("docstring") PERSALYS::DesignOfExperiment::getInputSample
 PERSALYS_DesignOfExperiment_getInputSample_doc

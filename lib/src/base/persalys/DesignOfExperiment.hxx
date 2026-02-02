@@ -47,6 +47,7 @@ public:
     const OT::String & fileName,
     const OT::Indices & inputColumns,
     const OT::Indices & outputColumns = OT::Indices(),
+    Type type = DataModel::GENERIC,
     const OT::Description & inputNames = OT::Description(),
     const OT::Description & outputNames = OT::Description());
 
@@ -78,9 +79,11 @@ public:
 
   void addObserver(Observer * observer);
 
-  bool hasPhysicalModel() const;
+  void setName(const OT::String & name) override;
 
+  bool hasPhysicalModel() const;
   PhysicalModel getPhysicalModel() const;
+  void setPhysicalModel(const std::optional<PhysicalModel> & physicalModel);
 
   OT::Sample getInputSample() const;
   OT::Sample getOutputSample() const;

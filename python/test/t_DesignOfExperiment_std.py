@@ -24,7 +24,7 @@ print("outs=", aDesign.getResult().getDesignOfExperiment().getOutputSample())
 # Design of Experiment ##
 filename = "normal.csv"
 ot.Normal(3).getSample(10).exportToCSVFile(filename)
-aDesign2 = persalys.ImportedDesignOfExperiment("aDesign_2", model, filename, [0, 2])
+aDesign2 = persalys.ImportedDesignOfExperiment("aDesign_2", model, filename, [0, 2], [], persalys.DataModel.MC)
 anOTStudy.add(aDesign2)
 
 aDesign2.run()
@@ -32,7 +32,7 @@ print("outs=", aDesign2.getResult().getDesignOfExperiment().getOutputSample())
 
 # Design of Experiment - imported - already evaluated##
 aDesign2_1 = persalys.ImportedDesignOfExperiment(
-    "aDesign_2_1", model, filename, [0, 2], [1]
+    "aDesign_2_1", model, filename, [0, 2], [1], persalys.DataModel.MC
 )
 anOTStudy.add(aDesign2_1)
 
@@ -53,7 +53,7 @@ print("outs=", aDesign3.getResult().getDesignOfExperiment().getOutputSample())
 aDesign4 = persalys.FixedDesignOfExperiment("aDesign_4", model)
 inputSample = ot.LHSExperiment(model.getDistribution(), 10).generate()
 # inputSample.stack(ot.Sample(10, [0.5, 1.3]))
-aDesign4.setOriginalInputSample(inputSample)
+aDesign4.setOriginalInputSample(inputSample, persalys.DataModel.LHS)
 anOTStudy.add(aDesign4)
 
 aDesign4.run()

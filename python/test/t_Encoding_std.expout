@@ -18,7 +18,7 @@ inputNames = ['X0', 'X2']
 outputNames = []
 inputColumns = [0, 2]
 outputColumns = []
-myDataModel = persalys.DataModel('myDataModel', 'données.csv', inputColumns, outputColumns, inputNames, outputNames)
+myDataModel = persalys.DataModel('myDataModel', 'données.csv', inputColumns, outputColumns, persalys.DataModel.GENERIC, inputNames, outputNames)
 myDataModel.setType(persalys.DataModel.MC)
 myStudy.add(myDataModel)
 inputColumns = [0, 2]
@@ -26,7 +26,7 @@ doeI = persalys.ImportedDesignOfExperiment('doeI', SM, 'données.csv', inputColu
 doeI.setBlockSize(1)
 interestVariables = ['S']
 doeI.setInterestVariables(interestVariables)
-doeI.setType(persalys.ImportedDesignOfExperiment.MC)
+doeI.setType(persalys.DataModel.MC)
 myStudy.add(doeI)
 
 #!/usr/bin/env python
@@ -48,7 +48,7 @@ inputNames = ['X0', 'X2']
 outputNames = []
 inputColumns = [0, 2]
 outputColumns = []
-myDataModel = persalys.DataModel('myDataModel', 'données.csv', inputColumns, outputColumns, inputNames, outputNames)
+myDataModel = persalys.DataModel('myDataModel', 'données.csv', inputColumns, outputColumns, persalys.DataModel.GENERIC, inputNames, outputNames)
 myDataModel.setType(persalys.DataModel.MC)
 myStudy.add(myDataModel)
 inputColumns = [0, 2]
@@ -56,6 +56,6 @@ doeI = persalys.ImportedDesignOfExperiment('doeI', SM, 'données.csv', inputColu
 doeI.setBlockSize(1)
 interestVariables = ['S']
 doeI.setInterestVariables(interestVariables)
-doeI.setType(persalys.ImportedDesignOfExperiment.MC)
+doeI.setType(persalys.DataModel.MC)
 myStudy.add(doeI)
 

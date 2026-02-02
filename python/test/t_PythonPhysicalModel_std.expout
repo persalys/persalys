@@ -27,9 +27,11 @@ inputs = [R, F]
 outputs = [G]
 code = r'''
 from math import pi
-
+import time
 def _exec(R, F):
-    G = 2*R-F/(pi*100.0)/0.
+    if R == 300.:
+      time.sleep(0.5)
+    G = 2*R-F/(pi*100.0)
     return G
 '''
 myPhysicalModel = persalys.PythonPhysicalModel('myPhysicalModel', inputs, outputs, code)
@@ -42,5 +44,6 @@ plan_0.setOriginalInputSample(inputSample)
 plan_0.setBlockSize(2)
 interestVariables = ['G']
 plan_0.setInterestVariables(interestVariables)
+plan_0.run()
 myStudy.add(plan_0)
 

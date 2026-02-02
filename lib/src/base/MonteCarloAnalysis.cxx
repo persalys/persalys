@@ -236,6 +236,8 @@ void MonteCarloAnalysis::launch()
   result_ = dataAnalysis.getResult();
   timeCriteria.incrementElapsedTime();
   result_.elapsedTime_ = timeCriteria.getElapsedTime();
+  result_.designOfExperiment_.setType(DataModel::MC);
+  result_.designOfExperiment_.setPhysicalModel(getPhysicalModel());
 }
 
 

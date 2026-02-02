@@ -232,6 +232,7 @@ void DesignOfExperimentEvaluation::launch()
 
   // set result
   result_ = dataAnalysis.getResult();
+  result_.designOfExperiment_.setPhysicalModel(getPhysicalModel());
   timeCriteria.incrementElapsedTime();
   result_.elapsedTime_ = timeCriteria.getElapsedTime();
 }

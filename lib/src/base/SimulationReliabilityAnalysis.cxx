@@ -198,6 +198,7 @@ void SimulationReliabilityAnalysis::launch()
                                         graph.getDrawables()[2].getData(),
                                         inSample);
 
+  result_.designOfExperiment_.setPhysicalModel(getPhysicalModel());
   result_.elapsedTime_ = algo.getResult().getTimeDuration();
 
   function.disableHistory();

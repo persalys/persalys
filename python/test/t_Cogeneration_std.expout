@@ -24,6 +24,7 @@ aDesign_0 = persalys.GridDesignOfExperiment('aDesign_0', myPhysicalModel, values
 aDesign_0.setBlockSize(1)
 interestVariables = ['Ep']
 aDesign_0.setInterestVariables(interestVariables)
+aDesign_0.run()
 myStudy.add(aDesign_0)
 myTaylorExpansionMoments = persalys.TaylorExpansionMomentsAnalysis('myTaylorExpansionMoments', myPhysicalModel)
 myStudy.add(myTaylorExpansionMoments)
@@ -54,6 +55,7 @@ aDesign_1 = persalys.GridDesignOfExperiment('aDesign_1', myPhysicalModel, values
 aDesign_1.setBlockSize(1)
 interestVariables = ['Ep']
 aDesign_1.setInterestVariables(interestVariables)
+aDesign_1.run()
 myStudy.add(aDesign_1)
 chaos_0 = persalys.FunctionalChaosAnalysis('chaos_0', aDesign_1)
 chaos_0.setChaosDegree(2)

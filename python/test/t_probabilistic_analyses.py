@@ -43,7 +43,7 @@ cDist = ot.JointDistribution(
 sample = cDist.getSample(200)
 sample.exportToCSVFile(filename, " ")
 model3 = persalys.DataModel(
-    "model3", filename, [0, 2, 3], [1], ["x_0", "x_2", "x_3"], ["x_1"]
+    "model3", filename, [0, 2, 3], [1], persalys.DataModel.MC, ["x_0", "x_2", "x_3"], ["x_1"]
 )
 myStudy.add(model3)
 

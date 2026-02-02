@@ -33,7 +33,7 @@ namespace PERSALYS
 
 CLASSNAMEINIT(DataAnalysis)
 
-static Factory<DataAnalysis> Factory_DataAnalysis;
+const static Factory<DataAnalysis> Factory_DataAnalysis;
 
 /* Default constructor */
 DataAnalysis::DataAnalysis()

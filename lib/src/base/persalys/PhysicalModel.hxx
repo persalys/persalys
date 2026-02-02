@@ -51,6 +51,8 @@ public:
   void addObserver(Observer * observer);
   void blockNotification(const OT::String & blockedObserverType = "");
 
+  void setName(const OT::String & name) override;
+
   OT::UnsignedInteger getInputDimension() const;
   InputCollection getInputs() const;
   Input & getInputByName(const OT::String & inputName);

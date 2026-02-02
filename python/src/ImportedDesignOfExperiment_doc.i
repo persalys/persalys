@@ -3,7 +3,7 @@
 
 Available constructors:
     ImportedDesignOfExperiment(*name, physicalModel*)
-    ImportedDesignOfExperiment(*name, physicalModel, fileName, inputColumns, outputColumns*)
+    ImportedDesignOfExperiment(*name, physicalModel, fileName, inputColumns, outputColumns, type*)
 
 Parameters
 ----------
@@ -17,6 +17,8 @@ inputColumns : sequence of int
     Columns of the input variables
 outputColumns : sequence of int
     Columns of the output variables (optional)
+type : int
+    Type of the imported design of experiments (optional, default is GENERIC)
 
 Examples
 --------

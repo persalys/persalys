@@ -32,8 +32,8 @@ DesignOfExperiment::DesignOfExperiment(const String &name, const std::optional<P
 {
 }
 
-DesignOfExperiment::DesignOfExperiment(const String &name, const String &filename, const Indices &inputColumns, const Indices &outputColumns, const Description &inputNames, const Description &outputNames)
-  : TypedInterfaceObject<DataModel>(new DataModel(name, filename, inputColumns, outputColumns, inputNames, outputNames))
+DesignOfExperiment::DesignOfExperiment(const String &name, const String &filename, const Indices &inputColumns, const Indices &outputColumns, Type type, const Description &inputNames, const Description &outputNames)
+  : TypedInterfaceObject<DataModel>(new DataModel(name, filename, inputColumns, outputColumns, type, inputNames, outputNames))
 {
 }
 
@@ -71,6 +71,10 @@ void DesignOfExperiment::addObserver(Observer* observer)
   getImplementation()->addObserver(observer);
 }
 
+void DesignOfExperiment::setName(const OT::String & name)
+{
+  getImplementation()->setName(name);
+}
 
 bool DesignOfExperiment::hasPhysicalModel() const
 {
@@ -81,6 +85,11 @@ bool DesignOfExperiment::hasPhysicalModel() const
 PhysicalModel DesignOfExperiment::getPhysicalModel() const
 {
   return getImplementation()->getPhysicalModel();
+}
+
+void DesignOfExperiment::setPhysicalModel(const std::optional<PhysicalModel> & physicalModel)
+{
+  getImplementation()->setPhysicalModel(physicalModel);
 }
 
 

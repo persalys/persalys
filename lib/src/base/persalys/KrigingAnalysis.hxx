@@ -74,7 +74,7 @@ private:
   OT::GaussianProcessRegression buildGPRAlgorithm(const OT::Sample& inputSample,
       const OT::Sample& outputSample,
       const bool optimizeParameters = true,
-      const bool useOptimalCovModel = false);
+      const bool useOptimalCovModel = false) const;
 
 protected:
   void initialize() override;

@@ -52,9 +52,9 @@ DataModel::DataModel(const String& name,
 PersistentObject::setName(name);
 
 if (inputNames.getSize() || outputNames.getSize())
-setNames(inputNames, outputNames);
+  setNames(inputNames, outputNames);
 else if (importedDataset_)
-DataModel::update();
+  DataModel::update();
 }
 
 /* Constructor with parameters */
@@ -62,9 +62,11 @@ DataModel::DataModel(const String& name,
                      const String& fileName,
                      const Indices& inputColumns,
                      const Indices& outputColumns,
+                     Type type,
                      const Description& inputNames,
                      const Description& outputNames)
   : importedDataset_(ImportedDataset(fileName, inputColumns, outputColumns))
+  , type_(type)
 {
   PersistentObject::setName(name);
   if (inputNames.getSize() || outputNames.getSize())
@@ -90,6 +92,12 @@ DataModel* DataModel::clone() const
   return new DataModel(*this);
 }
 
+void DataModel::setName(const String & name)
+{
+  PersistentObject::setName(name);
+  notify("nameChanged");
+}
+
 bool DataModel::hasPhysicalModel() const
 {
   return physicalModel_.has_value();
@@ -101,6 +109,11 @@ PhysicalModel DataModel::getPhysicalModel() const
   if (!physicalModel_)
     throw InvalidValueException(HERE) << "No physical model is associated to the design of experiment " << getName();
   return physicalModel_.value();
+}
+
+void DataModel::setPhysicalModel(const std::optional<PhysicalModel> & physicalModel)
+{
+  physicalModel_ = physicalModel;
 }
 
 
@@ -311,19 +324,23 @@ Description DataModel::getOutputNames() const
 
 String DataModel::TypeToString(Type type)
 {
-    switch(type)
-    {
-        case MC:
-            return "MC";
-        case QMC:
-            return "QMC";
-        case LHS:
-            return "LHS";
-        case GRID:
-            return "GRID";
-        default:
-            throw InvalidArgumentException(HERE) << "Invalid ImportedDesignOfExperiment type";
-    }
+  switch(type)
+  {
+    case Type::GENERIC:
+        return "GENERIC";
+    case Type::MC:
+        return "MC";
+    case Type::QMC:
+        return "QMC";
+    case Type::LHS:
+        return "LHS";
+    case Type::GRID:
+        return "GRID";
+    case Type::MORRIS:
+        return "MORRIS";
+    default:
+        throw InvalidArgumentException(HERE) << "Invalid ImportedDesignOfExperiment type";
+  }
 }
 
 String DataModel::getPythonScript() const
@@ -349,7 +366,7 @@ String DataModel::getPythonScript() const
   }
   else if (importedDataset_)
   {
-    oss << getName() << " = persalys." << getClassName() << "('" << getName() << "', '" << importedDataset_->getFileName() << "', inputColumns, outputColumns, inputNames, outputNames)\n";
+    oss << getName() << " = persalys." << getClassName() << "('" << getName() << "', '" << importedDataset_->getFileName() << "', inputColumns, outputColumns, persalys.DataModel.GENERIC, inputNames, outputNames)\n";
   }
   else
   {

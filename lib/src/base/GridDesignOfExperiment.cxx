@@ -206,6 +206,11 @@ Parameters GridDesignOfExperiment::getParameters() const
   return param;
 }
 
+void GridDesignOfExperiment::launch()
+{
+  DesignOfExperimentEvaluation::launch();
+  result_.designOfExperiment_.setType(DesignOfExperiment::Type::GRID);
+}
 
 String GridDesignOfExperiment::getPythonScript() const
 {
@@ -217,6 +222,9 @@ String GridDesignOfExperiment::getPythonScript() const
   oss << getName() << ".setBlockSize(" << getBlockSize() << ")\n";
   oss << "interestVariables = " << Parameters::GetOTDescriptionStr(getInterestVariables()) << "\n";
   oss << getName() << ".setInterestVariables(interestVariables)\n";
+
+  if (getResult().getDesignOfExperiment().getOutputSample().getSize())
+    oss << getName() << ".run()\n";
 
   return oss;
 }
