@@ -91,7 +91,7 @@ void DataAnalysis::launch()
       break;
 
     progressValue_ = (int) (i * 100 / dim);
-    notify("progressValueChanged");
+    notifyProgress();
 
     Sample marginalNoNaN = designOfExperiment_.getMarginalWithoutNaN(i);
 

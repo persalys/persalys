@@ -84,7 +84,7 @@ void SimulationReliabilityAnalysis::UpdateProgressValue(double percent, void * d
   if (analysisStruct->analysis_->getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
   {
     analysisStruct->analysis_->progressValue_ = (int) percent;
-    analysisStruct->analysis_->notify("progressValueChanged");
+    analysisStruct->analysis_->notifyProgress();
   }
 
   // set information message
@@ -93,7 +93,7 @@ void SimulationReliabilityAnalysis::UpdateProgressValue(double percent, void * d
   oss << "Coefficient of variation = " << analysisStruct->simulation_.getResult().getCoefficientOfVariation() << "\n";
   oss << "Elapsed time = " << analysisStruct->simulation_.getResult().getTimeDuration() << " s\n";
   analysisStruct->analysis_->informationMessage_ = oss;
-  analysisStruct->analysis_->notify("informationMessageUpdated");
+  analysisStruct->analysis_->notifyMessageUpdated(20);
 }
 
 

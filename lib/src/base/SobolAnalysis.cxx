@@ -163,7 +163,7 @@ void SobolAnalysis::UpdateProgressValue(double percent, void * data)
   if (analysisStruct->analysis_->getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
   {
     analysisStruct->analysis_->progressValue_ = (int) percent;
-    analysisStruct->analysis_->notify("progressValueChanged");
+    analysisStruct->analysis_->notifyProgress();
     oss << "Number of evaluations = " << (int)((int)percent * analysisStruct->analysis_->getMaximumCalls() * 0.01) << "\n";
   }
   else
@@ -174,7 +174,7 @@ void SobolAnalysis::UpdateProgressValue(double percent, void * data)
   // set information message
   oss << "Elapsed time = " << analysisStruct->simulation_->getResult().getTimeDuration() << " s\n";
   analysisStruct->analysis_->informationMessage_ = oss;
-  analysisStruct->analysis_->notify("informationMessageUpdated");
+  analysisStruct->analysis_->notifyMessageUpdated(20);
 }
 
 
@@ -270,7 +270,7 @@ void SobolAnalysis::launch()
     for (UnsignedInteger i = 0; i < nbOutputs; ++i)
     {
       informationMessage_ = OSS() << "Indices computation in progress for the output " << getInterestVariables()[i];
-      notify("informationMessageUpdated");
+      notifyMessageUpdated();
 
       // initialization
       RandomGenerator::SetSeed(getSeed());

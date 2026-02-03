@@ -267,7 +267,7 @@ void FunctionalChaosAnalysis::computeAnalyticalValidation(MetaModelAnalysisResul
     return;
 
   informationMessage_ = "The analytical validation is running.";
-  notify("informationMessageUpdated");
+  notifyMessageUpdated();
 
   // retrieve chaos result
   FunctionalChaosAnalysisResult chaosResult(*dynamic_cast<FunctionalChaosAnalysisResult*>(&result));

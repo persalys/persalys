@@ -267,7 +267,7 @@ void AnalysisImplementation::UpdateProgressValue(double percent, void * data)
 
   // set progress value
   analysis->progressValue_ = static_cast<int>(percent);
-  analysis->notify("progressValueChanged");
+  analysis->notifyProgress();
 }
 
 

@@ -147,7 +147,7 @@ void MonteCarloAnalysis::launch()
     if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
     {
       progressValue_ = (int) (outerSampling * 100 / maximumOuterSampling);
-      notify("progressValueChanged");
+      notifyProgress();
     }
     // information message
     OSS oss;
@@ -156,7 +156,7 @@ void MonteCarloAnalysis::launch()
     oss << "Confidence interval length = " << confidenceInterval << "\n";
     oss << "Elapsed time = " << timeCriteria.getElapsedTime() << " s\n";
     informationMessage_ = oss;
-    notify("informationMessageUpdated");
+    notifyMessageUpdated(20);
 
     // the last block can be smaller
     const UnsignedInteger effectiveBlockSize = outerSampling < (maximumOuterSampling - 1) ? getBlockSize() : lastBlockSize;

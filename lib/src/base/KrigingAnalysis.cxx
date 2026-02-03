@@ -184,7 +184,7 @@ void KrigingAnalysis::launch()
       break;
 
     informationMessage_ = "Creation of a meta model for the variable " + outputVariables[i] + " in progress.\n";
-    notify("informationMessageUpdated");
+    notifyMessageUpdated();
 
     // build algo
     GaussianProcessRegression gpr(buildGPRAlgorithm(effectiveInputSample, effectiveOutputSample.getMarginal(i), optimizeParameters_));
@@ -353,7 +353,7 @@ void KrigingAnalysis::computeAnalyticalValidation(MetaModelAnalysisResult& resul
     return;
 
   informationMessage_ = "The analytical validation is running.";
-  notify("informationMessageUpdated");
+  notifyMessageUpdated();
 
   // retrieve kriging result
   const GaussianProcessRegressionResult gprResult(dynamic_cast<KrigingAnalysisResult*>(&result)->getGPRResultCollection()[0]);

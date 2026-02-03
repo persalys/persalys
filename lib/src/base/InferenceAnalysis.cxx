@@ -220,7 +220,7 @@ FittingTestResult InferenceAnalysis::runInferenceOnVariable(const OT::Sample &sa
   for (UnsignedInteger j = 0 ; j < nbDist ; j++)
   {
     progressValue_ = distCounter*100/nTotalDist;
-    notify("progressValueChanged");
+    notifyProgress();
 
     const DistributionFactory distFactory{distFactoriesColl.at(j)};
     const String cname = distFactory.getImplementation()->getClassName();

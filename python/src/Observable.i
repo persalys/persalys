@@ -10,6 +10,8 @@
 %ignore PERSALYS::Observable::getObserver;
 %ignore PERSALYS::Observable::getObservers;
 %ignore PERSALYS::Observable::notify;
+%ignore PERSALYS::Observable::notifyProgress;
+%ignore PERSALYS::Observable::notifyMessageUpdated;
 %ignore PERSALYS::Observable::notifyAndRemove;
 %ignore PERSALYS::Observable::removeAllObservers;
 %ignore PERSALYS::Observable::removeObserver;

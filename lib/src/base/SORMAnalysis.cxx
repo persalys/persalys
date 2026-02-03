@@ -63,7 +63,7 @@ void SORMAnalysis::initialize()
   // clear result
   AnalysisImplementation::initialize();
   result_ = SORMAnalysisResult();
-  notify("progressValueChanged");
+  notifyProgress();
 }
 
 
