@@ -47,7 +47,6 @@ import openturns as ot
 import persalys
 
 myStudy = persalys.Study('myStudy')
-persalys.Study.Add(myStudy)
 dist_R = ot.LogNormal(20.4355, 0.0146659, 0)
 R = persalys.Input('R', 700000000, dist_R, 'Parameter R')
 dist_C = ot.Normal(2.75e+09, 2.5e+08)
@@ -322,4 +321,5 @@ optimizationAlgo.setMaximumResidualError(1e-05)
 optimizationAlgo.setMaximumConstraintError(1e-05)
 myAnalysis4.setOptimizationAlgorithm(optimizationAlgo)
 myStudy.add(myAnalysis4)
+persalys.Study.Add(myStudy)
 

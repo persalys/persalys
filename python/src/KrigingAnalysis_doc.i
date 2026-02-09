@@ -31,10 +31,11 @@ Create the design of experiments:
 
 >>> aDesign = persalys.ProbabilisticDesignOfExperiment('aDesign', myPhysicalModel, 100, 'LHS')
 >>> aDesign.run()
+>>> aDoE = persalys.DesignOfExperiment(aDesign)
 
 Create the Kriging Analysis:
 
->>> kriging = persalys.KrigingAnalysis('kriging', aDesign)
+>>> kriging = persalys.KrigingAnalysis('kriging', aDoE)
 >>> kriging.setBasis(ot.LinearBasisFactory(3).build())
 >>> kriging.setCovarianceModel(ot.GeneralizedExponential(3))
 >>> kriging.setLeaveOneOutValidation(False)

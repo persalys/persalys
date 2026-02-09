@@ -38,7 +38,6 @@ public:
   FunctionalChaosAnalysis();
   /** Constructor with parameters */
   FunctionalChaosAnalysis(const OT::String& name, const DesignOfExperiment& designOfExperiment);
-  FunctionalChaosAnalysis(const OT::String& name, const Analysis& analysis);
 
   /** Virtual constructor */
   FunctionalChaosAnalysis * clone() const override;

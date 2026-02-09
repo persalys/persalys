@@ -7,12 +7,10 @@ import openturns as ot
 import persalys
 
 myStudy = persalys.Study('myStudy')
-persalys.Study.Add(myStudy)
 inputNames = ['X0', 'X2', 'X3']
 outputNames = []
-inputColumns = [0, 2, 3]
-outputColumns = []
-myDataModel = persalys.DataModel('myDataModel', 'data2.csv', inputColumns, outputColumns, persalys.DataModel.GENERIC, inputNames, outputNames)
+myDataModelImportedDataset = persalys.ImportedDataset('data2.csv', [0,2,3], [])
+myDataModel = persalys.DataModel('myDataModel', myDataModelImportedDataset, inputNames, outputNames)
 myDataModel.setType(persalys.DataModel.GENERIC)
 myStudy.add(myDataModel)
 analysis = persalys.CopulaInferenceAnalysis('analysis', myDataModel)
@@ -20,4 +18,5 @@ variablesSet = ['X0', 'X3']
 factories = [ot.ClaytonCopulaFactory(), ot.FrankCopulaFactory(), ot.GumbelCopulaFactory(), ot.NormalCopulaFactory(), ot.StudentCopulaFactory()]
 analysis.setDistributionsFactories(variablesSet, factories)
 myStudy.add(analysis)
+persalys.Study.Add(myStudy)
 

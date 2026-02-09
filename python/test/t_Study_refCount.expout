@@ -4,7 +4,6 @@ import openturns as ot
 import persalys
 
 Study_0 = persalys.Study('Study_0')
-persalys.Study.Add(Study_0)
 X0 = persalys.Input('X0', 0, '')
 Y0 = persalys.Output('Y0', '')
 inputs = [X0]
@@ -15,4 +14,5 @@ def _exec(X0):
     return Y0'''
 PhysicalModel_0 = persalys.PythonPhysicalModel('PhysicalModel_0', inputs, outputs, code)
 Study_0.add(PhysicalModel_0)
+persalys.Study.Add(Study_0)
 

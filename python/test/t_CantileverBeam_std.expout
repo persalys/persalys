@@ -5,7 +5,6 @@ import openturns as ot
 import persalys
 
 myStudy = persalys.Study('myStudy')
-persalys.Study.Add(myStudy)
 dist_E = ot.Beta(0.93, 3.2, 2.8e+07, 4.8e+07)
 E = persalys.Input('E', 30000000, dist_E, 'Young\'s modulus (Pa)')
 dist_F = ot.LogNormal(9.46206, 0.554513, 15000)
@@ -65,4 +64,5 @@ myMonteCarloSimu.setMaximumElapsedTime(60)
 myMonteCarloSimu.setBlockSize(10)
 myMonteCarloSimu.setSeed(0)
 myStudy.add(myMonteCarloSimu)
+persalys.Study.Add(myStudy)
 

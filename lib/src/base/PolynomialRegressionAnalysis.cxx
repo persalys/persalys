@@ -43,14 +43,6 @@ PolynomialRegressionAnalysis::PolynomialRegressionAnalysis(const String& name, c
 {
 }
 
-
-/* Constructor with parameters */
-PolynomialRegressionAnalysis::PolynomialRegressionAnalysis(const String& name, const Analysis& analysis)
-  : MetaModelAnalysis(name, analysis)
-{
-}
-
-
 /* Virtual constructor */
 PolynomialRegressionAnalysis* PolynomialRegressionAnalysis::clone() const
 {

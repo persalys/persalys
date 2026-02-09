@@ -134,7 +134,6 @@ import openturns as ot
 import persalys
 
 Study_0 = persalys.Study('Study_0')
-persalys.Study.Add(Study_0)
 t = persalys.Variable('t', 0, '')
 meshModel = persalys.GridMeshModel([t], ot.Interval([0], [12]), [20])
 z0 = persalys.Input('z0', 100, '')
@@ -160,4 +159,5 @@ outputs = [z, z2]
 formulas = ['max(0, z0 - (m * 9.81 / c) * t + (m / c) * (v0 + (m * 9.81 / c)) * (1 - exp(-t * c / m)))', 'max(0, z0 - (m * 9.81 / c) * t + (m / c) * (v0 + (m * 9.81 / c)) * (1 - exp(-t * c / m)))']
 model2 = persalys.SymbolicFieldModel('model2', meshModel, inputs, outputs, formulas)
 Study_0.add(model2)
+persalys.Study.Add(Study_0)
 

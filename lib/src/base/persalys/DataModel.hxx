@@ -37,20 +37,15 @@ public:
   enum Type {GENERIC, MC, QMC, LHS, GRID, MORRIS};
 
   /** Constructor with parameters */
-  explicit DataModel(
-    const OT::String & name = "Unnamed",
-    const std::optional<PhysicalModel> & physicalModel = std::nullopt,
-    const std::optional<ImportedDataset> & importedDataset = std::nullopt,
-    const OT::Description & inputNames = OT::Description(),
-    const OT::Description & outputNames = OT::Description());
+  explicit DataModel(const OT::String & name = "");
+
+  /** Constructor with parameters */
+  DataModel(const OT::String & name, const PhysicalModel & physicalModel);
 
   /** Constructor with parameters */
   DataModel(
     const OT::String & name,
-    const OT::String & fileName,
-    const OT::Indices & inputColumns,
-    const OT::Indices & outputColumns = OT::Indices(),
-    Type type = GENERIC,
+    const ImportedDataset & importedDataset,
     const OT::Description & inputNames = OT::Description(),
     const OT::Description & outputNames = OT::Description());
 
@@ -62,6 +57,16 @@ public:
   
   /** Virtual constructor */
   DataModel * clone() const override;
+  
+protected:
+  DataModel(
+    const OT::String & name,
+    const std::optional<PhysicalModel> & physicalModel,
+    const std::optional<ImportedDataset> & importedDataset,
+    const OT::Description & inputNames,
+    const OT::Description & outputNames);
+  
+public:
 
   void setName(const OT::String & name);
 

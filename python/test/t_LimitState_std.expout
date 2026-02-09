@@ -9,7 +9,6 @@ import openturns as ot
 import persalys
 
 myStudy = persalys.Study('myStudy')
-persalys.Study.Add(myStudy)
 dist_X0 = ot.Normal(1, 1)
 X0 = persalys.Input('X0', 0, dist_X0, '')
 dist_X1 = ot.Normal(1, 1)
@@ -25,4 +24,5 @@ aLimitState = persalys.LimitState('aLimitState', aModelPhys, 'Y0', ot.Less(), 10
 myStudy.add(aLimitState)
 aLimitState2 = persalys.LimitState('aLimitState2', aModelPhys, 'Y1', ot.Less(), 15)
 myStudy.add(aLimitState2)
+persalys.Study.Add(myStudy)
 

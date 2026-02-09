@@ -31,7 +31,6 @@
 #include "persalys/DesignOfExperimentEvaluation.hxx"
 #include "persalys/SimulationReliabilityAnalysis.hxx"
 #include "persalys/SobolAnalysis.hxx"
-#include "persalys/SRCAnalysis.hxx"
 #include "persalys/MultiObjectiveOptimizationAnalysis.hxx"
 #include "persalys/CalibrationAnalysis.hxx"
 #include "persalys/PythonPhysicalModel.hxx"
@@ -302,7 +301,10 @@ void AnalysisItem::appendDataModelItem()
   const auto * mooAnalysis          = dynamic_cast<const MultiObjectiveOptimizationAnalysis*>(implementation);  
 
   if (doeEval)
-    result = doeEval->getResult();
+  {
+    study.addDoEAsDataSet(*doeEval);
+    return;
+  }
   else if (MCAnalysis)
     result = MCAnalysis->getResult();
   else if (morrisAnalysis)

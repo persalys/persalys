@@ -47,12 +47,9 @@ namespace PERSALYS
 
 PhysicalModelDiagramItem::PhysicalModelDiagramItem(const PhysicalModel & physicalModel)
   : PhysicalModelItem(physicalModel, "PhysicalModelDiagramItem")
-  , limitStateCounter_(0)
-  , observationsCounter_(0)
-  , metamodelCounter_(0)
-  , doeCounter_(Indices(2))
+  , doeCounter_(2, 0)
 {
-  setData(QString::fromUtf8(physicalModel.getName().c_str()), Qt::DisplayRole);
+  PhysicalModelDiagramItem::setData(QString::fromUtf8(physicalModel.getName().c_str()), Qt::DisplayRole);
 
   buildActions();
 }
@@ -111,7 +108,7 @@ void PhysicalModelDiagramItem::buildActions()
   appendAction(removeAction_);
 
   // Physical model properties action (Python PM only)
-  PythonPhysicalModel * model = dynamic_cast<PythonPhysicalModel*>(getPhysicalModel().getImplementation().get());
+  const auto * model = dynamic_cast<PythonPhysicalModel*>(getPhysicalModel().getImplementation().get());
   if (model)
   {
     propertiesAction_ = new QAction(QIcon(":/images/run-build.png"), tr("Properties"), this);
@@ -201,9 +198,6 @@ void PhysicalModelDiagramItem::updateDiagramBoxesValidity()
   validity = physicalModel_.isValid() && physicalModel_.getInputDimension() > 1 && observationsCounter_ > 0;
   qErrorMessage = tr("Define observations of the model");
   emit observationsNumberValidityChanged(validity, qErrorMessage);
-  validity = physicalModel_.isValid() && metamodelCounter_ > 0;
-  qErrorMessage = tr("Metamodel must first be created");
-  emit metamodelNumberValidityChanged(validity, qErrorMessage);
 }
 
 
@@ -255,37 +249,10 @@ void PhysicalModelDiagramItem::requestDesignOfExperimentEvaluation()
   emit showErrorMessageRequested(tr("We have not found a design of experiments.\n"));
 }
 
-
-void PhysicalModelDiagramItem::requestMetaModelCreation()
-{
-  // find a DesignOfExperimentEvaluation with results
-  Study study(getParentStudyItem()->getStudy());
-  for (UnsignedInteger i = 0; i < study.getAnalyses().getSize(); ++i)
-  {
-    DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation *>(study.getAnalyses()[i].getImplementation().get());
-    ModelEvaluation * modelEval = dynamic_cast<ModelEvaluation *>(study.getAnalyses()[i].getImplementation().get());
-    if (doeEval && !modelEval && doeEval->getPhysicalModel() == getPhysicalModel() && doeEval->hasValidResult())
-    {
-      newAnalysis("Metamodel", study.getAnalyses()[i], true);
-      return;
-    }
-  }
-  // emit error message
-  emit showErrorMessageRequested(tr("We have not found a design of experiments with an output sample.\n"));
-}
-
-void PhysicalModelDiagramItem::requestMetaModelExport()
-{
-  const Study study{getParentStudyItem()->getStudy()};
-  // we can pass any analysis as it is just used by the wizard to get the Study observer
-  // declared in ItemFactory, connected to StudyManager
-  emit mmExportWizardRequested(getParentStudyItem(), study.getAnalyses()[0], true);
-}
-
 void PhysicalModelDiagramItem::requestOpenProperties()
 {
   // Only if it is a PythonPhysicalModel
-  PythonPhysicalModel * model = dynamic_cast<PythonPhysicalModel*>(physicalModel_.getImplementation().get());
+  const auto * model = dynamic_cast<PythonPhysicalModel*>(physicalModel_.getImplementation().get());
   if (model)
   {
     emit openPropertiesRequested();
@@ -439,7 +406,7 @@ void PhysicalModelDiagramItem::appendItem(const Analysis& analysis)
     // append item
     // search title, parent item of the new item
     Item * titleItem = getTitleItemNamed(analysisName);
-    Q_ASSERT(titleItem != 0);
+    Q_ASSERT(titleItem != nullptr);
     titleItem->appendRow(newItem);
 
     // emit signal to StudyManager to create a window
@@ -461,14 +428,7 @@ void PhysicalModelDiagramItem::appendItem(const Analysis& analysis)
            analysisName == "KrigingAnalysis" ||
            analysisName == "PolynomialRegressionAnalysis")
   {
-    const auto * newItem = dynamic_cast<AnalysisItem*>(analysis.getImplementation().get()->getObserver("AnalysisItem"));
-    // connections
-    connect(newItem, SIGNAL(numberMetamodelChanged(int)), this, SLOT(updateMetamodelCounter(int)));
-
-    if(newItem->getAnalysis().hasValidResult())
-      ++metamodelCounter_;
-    emit metamodelNumberValidityChanged(physicalModel_.isValid() && metamodelCounter_ > 0, tr("Metamodel must first be created"));
-
+    // do nothing
   }
   else
   {
@@ -535,7 +495,6 @@ void PhysicalModelDiagramItem::requestObservationsRemoval()
   emit observationsNumberValidityChanged(physicalModel_.isValid() && observationsCounter_ > 0, tr("Define observations of the model"));
 }
 
-
 void PhysicalModelDiagramItem::updateDesignEvaluationCounter(bool increment)
 {
   // signal for diagram window : update diagram
@@ -544,14 +503,6 @@ void PhysicalModelDiagramItem::updateDesignEvaluationCounter(bool increment)
   else
     --doeCounter_[1];
   emit doeEvaluationNumberValidityChanged(physicalModel_.isValid() && doeCounter_[1] > 0, tr("Define at least one design of experiments which contains output values"));
-}
-
-void PhysicalModelDiagramItem::updateMetamodelCounter(int increment)
-{
-  metamodelCounter_ += increment;
-  if (metamodelCounter_ < 0)
-    metamodelCounter_ = 0;
-  emit metamodelNumberValidityChanged(physicalModel_.isValid() && metamodelCounter_ > 0, tr("Metamodel must first be created"));
 }
 
 void PhysicalModelDiagramItem::requestDesignOfExperimentRemoval(bool isValid)
@@ -564,4 +515,11 @@ void PhysicalModelDiagramItem::requestDesignOfExperimentRemoval(bool isValid)
   emit doeNumberValidityChanged(physicalModel_.isValid() && doeCounter_[0] > 0, tr("Create at least one design of experiments and define output variables in the model"));
   emit doeEvaluationNumberValidityChanged(physicalModel_.isValid() && doeCounter_[1] > 0, tr("Define at least one design of experiments which contains output values"));
 }
+
+void PhysicalModelDiagramItem::requestDesignOfExperimentExport()
+{
+  // declared in ItemFactory, connected to StudyManager
+  emit doeExportWizardRequested(getParentStudyItem());
+}
+
 }

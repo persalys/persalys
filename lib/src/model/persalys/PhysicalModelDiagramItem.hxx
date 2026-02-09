@@ -51,20 +51,18 @@ public slots:
   void appendPhysicalModelItem();
   void appendProbabilisticModelItem();
   void requestDesignOfExperimentEvaluation();
-  void requestMetaModelCreation();
-  void requestMetaModelExport();
   void requestReliabilityCreation();
   void requestLimitStateRemoval();
   void requestDesignOfExperimentRemoval(bool);
   void requestObservationsRemoval();
   void requestCalibrationCreation();
   void updateDesignEvaluationCounter(bool);
-  void updateMetamodelCounter(int);
   void duplicatePhysicalModel();
   void removePhysicalModel();
   void newLimitState();
   void newObservations();
   void requestOpenProperties();
+  void requestDesignOfExperimentExport();
 
 signals:
   // signal for diagram
@@ -77,20 +75,18 @@ signals:
   void limitStateNumberValidityChanged(bool, QString);
   void doeNumberValidityChanged(bool, QString);
   void doeEvaluationNumberValidityChanged(bool, QString);
-  void metamodelNumberValidityChanged(bool, QString);
   void observationsNumberValidityChanged(bool, QString);
 
 protected:
   void buildActions();
 
 private:
-  QAction * defineAction_ = nullptr;
-  QAction * duplicateAction_ = nullptr;
-  QAction * removeAction_ = nullptr;
-  QAction * propertiesAction_ = nullptr;
-  int limitStateCounter_ = 0;
-  int observationsCounter_ = 0;
-  int metamodelCounter_ = 0;
+  QAction   * defineAction_         = nullptr;
+  QAction   * duplicateAction_      = nullptr;
+  QAction   * removeAction_         = nullptr;
+  QAction   * propertiesAction_     = nullptr;
+  int         limitStateCounter_    = 0;
+  int         observationsCounter_  = 0;
   OT::Indices doeCounter_;
 };
 }

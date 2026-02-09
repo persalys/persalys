@@ -29,9 +29,6 @@ namespace PERSALYS
 
 SensitivityAnalysisWizard::SensitivityAnalysisWizard(const Analysis& analysis, QWidget* parent)
   : AnalysisWizard(analysis, parent)
-  , introPage_(0)
-  , sobolPage_(0)
-  , srcPage_(0)
 {
   buildInterface();
 }
@@ -52,28 +49,13 @@ void SensitivityAnalysisWizard::buildInterface()
   sobolPage_->initialize(analysis_);
   setPage(Page_Sobol, sobolPage_);
 
-  // Second Page: src page
-  srcPage_ = new SRCPage(this);
-  srcPage_->initialize(analysis_);
-  setPage(Page_SRC, srcPage_);
-
   setStartId(Page_Intro);
 }
 
 
 int SensitivityAnalysisWizard::nextId() const
 {
-  switch (currentId())
-  {
-    case Page_Intro:
-      return introPage_->nextId();
-    case Page_Sobol:
-      return sobolPage_->nextId();
-    case Page_SRC:
-      return srcPage_->nextId();
-    default:
-      return -1;
-  }
+ return currentId() == Page_Intro ? Page_Sobol : -1;
 }
 
 
@@ -82,17 +64,8 @@ Analysis SensitivityAnalysisWizard::getAnalysis() const
   // get the physical model
   PhysicalModel model = dynamic_cast<const PhysicalModelAnalysis*>(analysis_.getImplementation().get())->getPhysicalModel();
 
-  if (introPage_->getMethodId() == SensitivityIntroPage::Sobol)
-  {
-    Analysis analysis = sobolPage_->getAnalysis(analysis_.getName(), model);
-    analysis.getImplementation()->setInterestVariables(introPage_->getInterestVariables());
-    return analysis;
-  }
-  else
-  {
-    Analysis analysis = srcPage_->getAnalysis(analysis_.getName(), model);
-    analysis.getImplementation()->setInterestVariables(introPage_->getInterestVariables());
-    return analysis;
-  }
+  Analysis analysis = sobolPage_->getAnalysis(analysis_.getName(), model);
+  analysis.getImplementation()->setInterestVariables(introPage_->getInterestVariables());
+  return analysis;
 }
 }

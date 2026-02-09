@@ -33,7 +33,7 @@ namespace PERSALYS
 {
 CLASSNAMEINIT(DataSensitivityAnalysis)
 
-static Factory<DataSensitivityAnalysis> Factory_DataSensitivityAnalysis;
+const static Factory<DataSensitivityAnalysis> Factory_DataSensitivityAnalysis;
 
 DataSensitivityAnalysis::DataSensitivityAnalysis()
   : DesignOfExperimentAnalysis()

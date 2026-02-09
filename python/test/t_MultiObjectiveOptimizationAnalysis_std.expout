@@ -105,7 +105,6 @@ import openturns as ot
 import persalys
 
 myStudy = persalys.Study('myStudy')
-persalys.Study.Add(myStudy)
 X0 = persalys.Input('X0', 0, '')
 X2 = persalys.Input('X2', 0, '')
 X1 = persalys.Input('X1', 0, '')
@@ -130,4 +129,5 @@ optim.setBlockSize(1)
 optim.setVariableInputs(['X0', 'X1'])
 optim.setVariablesType([0, 0, 2])
 myStudy.add(optim)
+persalys.Study.Add(myStudy)
 

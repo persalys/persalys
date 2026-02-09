@@ -34,9 +34,6 @@ namespace PERSALYS
 
 SensitivityIntroPage::SensitivityIntroPage(QWidget* parent)
   : QWizardPage(parent)
-  , outputsSelectionGroupBox_(0)
-  , methodGroup_(0)
-  , errorWidget_(0)
 {
   setTitle(tr("Sensitivity methods"));
 
@@ -45,25 +42,6 @@ SensitivityIntroPage::SensitivityIntroPage(QWidget* parent)
   // output selection
   outputsSelectionGroupBox_ = new OutputsSelectionGroupBox(this);
   pageLayout->addWidget(outputsSelectionGroupBox_);
-
-  // choose the method
-  QGroupBox * methodBox = new QGroupBox(tr("Method"));
-  QVBoxLayout * methodLayout = new QVBoxLayout(methodBox);
-
-  methodGroup_ = new QButtonGroup(this);
-
-  // Sobol
-  QRadioButton * buttonToChooseMethodSobol = new QRadioButton(tr("Sobol"));
-  buttonToChooseMethodSobol->setChecked(true);
-  methodGroup_->addButton(buttonToChooseMethodSobol, SensitivityIntroPage::Sobol);
-  methodLayout->addWidget(buttonToChooseMethodSobol);
-
-  // SRC
-  QRadioButton * buttonToChooseMethodSRC = new QRadioButton(tr("Standard Regression Coefficient (SRC)"));
-  methodGroup_->addButton(buttonToChooseMethodSRC, SensitivityIntroPage::SRC);
-  methodLayout->addWidget(buttonToChooseMethodSRC);
-
-  pageLayout->addWidget(methodBox);
 
   // error message
   errorWidget_ = new ErrorWidget;
@@ -79,14 +57,6 @@ void SensitivityIntroPage::initialize(const Analysis& analysis)
   if (!dynamic_cast<const PhysicalModelAnalysis*>(analysis.getImplementation().get()))
     return;
 
-  // method
-  const String analysisName = analysis.getImplementation()->getClassName();
-
-  if (analysisName == "SobolAnalysis")
-    methodGroup_->button(SensitivityIntroPage::Sobol)->click();
-  else if (analysisName == "SRCAnalysis")
-    methodGroup_->button(SensitivityIntroPage::SRC)->click();
-
   // update outputs list
   PhysicalModel model = dynamic_cast<const PhysicalModelAnalysis*>(analysis.getImplementation().get())->getPhysicalModel();
   outputsSelectionGroupBox_->updateComboBoxModel(model.getSelectedOutputsNames(), analysis.getImplementation()->getInterestVariables());
@@ -95,12 +65,7 @@ void SensitivityIntroPage::initialize(const Analysis& analysis)
 
 int SensitivityIntroPage::nextId() const
 {
-  if (methodGroup_->checkedId() == SensitivityIntroPage::Sobol)
-    return SensitivityAnalysisWizard::Page_Sobol;
-  else if (methodGroup_->checkedId() == SensitivityIntroPage::SRC)
-    return SensitivityAnalysisWizard::Page_SRC;
-
-  return -1;
+  return SensitivityAnalysisWizard::Page_Sobol;
 }
 
 
@@ -108,13 +73,6 @@ Description SensitivityIntroPage::getInterestVariables() const
 {
   return QtOT::StringListToDescription(outputsSelectionGroupBox_->getSelectedOutputsNames());
 }
-
-
-int SensitivityIntroPage::getMethodId() const
-{
-  return methodGroup_->checkedId();
-}
-
 
 bool SensitivityIntroPage::validatePage()
 {

@@ -484,8 +484,7 @@ void StudyImplementation::add(const Analysis& analysis)
   if (analyses_.contains(analysis))
     throw InvalidArgumentException(HERE) << "The study already contains this analysis ";
 
-  const PhysicalModelAnalysis * pm_analysis_ptr = dynamic_cast<const PhysicalModelAnalysis*>(analysis.getImplementation().get());
-  if (pm_analysis_ptr)
+  if (const auto * pm_analysis_ptr = dynamic_cast<const PhysicalModelAnalysis*>(analysis.getImplementation().get()); pm_analysis_ptr)
   {
     if (!physicalModels_.contains(pm_analysis_ptr->getPhysicalModel()))
       throw InvalidArgumentException(HERE) << "The analysis has been created with a physical model not belonging to the study.";
@@ -493,25 +492,24 @@ void StudyImplementation::add(const Analysis& analysis)
         !limitStates_.contains(dynamic_cast<const ReliabilityAnalysis*>(pm_analysis_ptr)->getLimitState()))
       throw InvalidArgumentException(HERE) << "The analysis has been created with a limit state not belonging to the study.";
   }
-
-  const DesignOfExperimentAnalysis * dm_analysis_ptr = dynamic_cast<const DesignOfExperimentAnalysis*>(analysis.getImplementation().get());
-  if (dm_analysis_ptr)
+  
+  if (const auto * dm_analysis_ptr = dynamic_cast<const DesignOfExperimentAnalysis*>(analysis.getImplementation().get()); dm_analysis_ptr)
   {
     if (dm_analysis_ptr->getDesignOfExperiment().hasPhysicalModel())
     {
       bool doeFound = false;
-      for (UnsignedInteger i = 0; i < analyses_.getSize(); ++i)
+      for (UnsignedInteger i = 0; !doeFound && i < dataModels_.getSize(); ++i)
       {
-        DesignOfExperimentEvaluation * doe_ptr = dynamic_cast<DesignOfExperimentEvaluation*>(analyses_[i].getImplementation().get());
-        if (doe_ptr)
-        {
-          if (doe_ptr->getResult().getDesignOfExperiment() == dm_analysis_ptr->getDesignOfExperiment())
-          {
-            doeFound = true;
-            break;
-          }
-        }
+        if (dataModels_[i] == dm_analysis_ptr->getDesignOfExperiment())
+          doeFound = true;
       }
+      for (UnsignedInteger i = 0; !doeFound && i < analyses_.getSize(); ++i)
+      {
+        const auto * doe_ptr = dynamic_cast<const DesignOfExperimentEvaluation*>(analyses_[i].getImplementation().get());
+        if (doe_ptr && doe_ptr->getResult().getDesignOfExperiment() == dm_analysis_ptr->getDesignOfExperiment())
+          doeFound = true;
+      }
+
       if (!doeFound)
         throw InvalidArgumentException(HERE) << "The analysis has been created with a design of experiments not belonging to the study.";
     }
@@ -663,7 +661,6 @@ String StudyImplementation::getPythonScript()
   result += "#!/usr/bin/env python\n\nimport openturns as ot\nimport persalys\n\n";
 
   result += getName() + " = persalys.Study('" + getName() + "')\n";
-  result += "persalys.Study.Add(" + getName() + ")\n";
 
   for (Collection<PhysicalModel>::iterator it = physicalModels_.begin(); it != physicalModels_.end(); ++it)
   {
@@ -693,6 +690,9 @@ String StudyImplementation::getPythonScript()
     result += (*it).getPythonScript();
     result += getName() + ".add(" + (*it).getName() + ")\n";
   }
+
+  result += "persalys.Study.Add(" + getName() + ")\n";
+
   return result;
 }
 

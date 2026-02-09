@@ -25,6 +25,8 @@
 
 namespace PERSALYS
 {
+class DesignOfExperimentEvaluation;
+
 class PERSALYS_BASE_API DesignOfExperiment : public OT::TypedInterfaceObject<DataModel>
 {
   CLASSNAME
@@ -34,20 +36,15 @@ public:
   using Type = DataModel::Type;
 
   /** Constructor with parameters */
-  explicit DesignOfExperiment(
-    const OT::String & name = "Unnamed",
-    const std::optional<PhysicalModel> & physicalModel = std::nullopt,
-    const std::optional<ImportedDataset> & importedDataset = std::nullopt,
-    const OT::Description & inputNames = OT::Description(),
-    const OT::Description & outputNames = OT::Description());
+  explicit DesignOfExperiment(const OT::String & name = "");
+
+  /** Constructor with parameters */
+  DesignOfExperiment(const OT::String & name, const PhysicalModel & physicalModel);
 
   /** Constructor with parameters */
   DesignOfExperiment(
     const OT::String & name,
-    const OT::String & fileName,
-    const OT::Indices & inputColumns,
-    const OT::Indices & outputColumns = OT::Indices(),
-    Type type = DataModel::GENERIC,
+    const ImportedDataset & importedDataset,
     const OT::Description & inputNames = OT::Description(),
     const OT::Description & outputNames = OT::Description());
 
@@ -65,6 +62,8 @@ public:
 
   /** Constructor from implementation pointer */
   DesignOfExperiment(DataModel * p_implementation);
+
+  explicit DesignOfExperiment(const DesignOfExperimentEvaluation & eval);
 
   /** Comparison operator */
   friend OT::Bool operator ==(const DesignOfExperiment & lhs, const DesignOfExperiment & rhs)

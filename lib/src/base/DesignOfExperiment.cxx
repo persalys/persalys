@@ -19,6 +19,7 @@
  *
  */
 #include "persalys/DesignOfExperiment.hxx"
+#include "persalys/DesignOfExperimentEvaluation.hxx"
 
 using namespace OT;
 
@@ -27,13 +28,18 @@ namespace PERSALYS
 
 CLASSNAMEINIT(DesignOfExperiment)
 
-DesignOfExperiment::DesignOfExperiment(const String &name, const std::optional<PhysicalModel> &physicalModel, const std::optional<ImportedDataset> &importedDataset, const Description &inputNames, const Description &outputNames)
-  : TypedInterfaceObject<DataModel>(new DataModel(name, physicalModel, importedDataset, inputNames, outputNames))
+DesignOfExperiment::DesignOfExperiment(const String & name)
+: TypedInterfaceObject<DataModel>(new DataModel(name))
 {
 }
 
-DesignOfExperiment::DesignOfExperiment(const String &name, const String &filename, const Indices &inputColumns, const Indices &outputColumns, Type type, const Description &inputNames, const Description &outputNames)
-  : TypedInterfaceObject<DataModel>(new DataModel(name, filename, inputColumns, outputColumns, type, inputNames, outputNames))
+DesignOfExperiment::DesignOfExperiment(const String & name, const PhysicalModel & physicalModel)
+: TypedInterfaceObject<DataModel>(new DataModel(name, physicalModel))
+{
+}
+
+DesignOfExperiment::DesignOfExperiment(const String & name, const ImportedDataset & importedDataset, const Description & inputNames, const Description & outputNames)
+: TypedInterfaceObject<DataModel>(new DataModel(name, importedDataset, inputNames, outputNames))
 {
 }
 
@@ -64,6 +70,11 @@ DesignOfExperiment::DesignOfExperiment(DataModel* p_implementation)
 {
   // Initialize any other class members here
   // At last, allocate memory space if needed, but go to destructor to free it
+}
+
+DesignOfExperiment::DesignOfExperiment(const DesignOfExperimentEvaluation & eval)
+  : DesignOfExperiment(eval.getResult().getDesignOfExperiment().getImplementation()->clone())
+{
 }
 
 void DesignOfExperiment::addObserver(Observer* observer)

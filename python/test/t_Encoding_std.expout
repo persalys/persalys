@@ -5,7 +5,6 @@ import openturns as ot
 import persalys
 
 myStudy = persalys.Study('myStudy')
-persalys.Study.Add(myStudy)
 A = persalys.Input('A', 0, '')
 B = persalys.Input('B', 0, '')
 S = persalys.Output('S', '')
@@ -16,9 +15,8 @@ SM = persalys.SymbolicPhysicalModel('SM', inputs, outputs, formulas)
 myStudy.add(SM)
 inputNames = ['X0', 'X2']
 outputNames = []
-inputColumns = [0, 2]
-outputColumns = []
-myDataModel = persalys.DataModel('myDataModel', 'données.csv', inputColumns, outputColumns, persalys.DataModel.GENERIC, inputNames, outputNames)
+myDataModelImportedDataset = persalys.ImportedDataset('données.csv', [0,2], [])
+myDataModel = persalys.DataModel('myDataModel', myDataModelImportedDataset, inputNames, outputNames)
 myDataModel.setType(persalys.DataModel.MC)
 myStudy.add(myDataModel)
 inputColumns = [0, 2]
@@ -28,6 +26,7 @@ interestVariables = ['S']
 doeI.setInterestVariables(interestVariables)
 doeI.setType(persalys.DataModel.MC)
 myStudy.add(doeI)
+persalys.Study.Add(myStudy)
 
 #!/usr/bin/env python
 
@@ -35,7 +34,6 @@ import openturns as ot
 import persalys
 
 myStudy = persalys.Study('myStudy')
-persalys.Study.Add(myStudy)
 A = persalys.Input('A', 0, '')
 B = persalys.Input('B', 0, '')
 S = persalys.Output('S', '')
@@ -46,9 +44,8 @@ SM = persalys.SymbolicPhysicalModel('SM', inputs, outputs, formulas)
 myStudy.add(SM)
 inputNames = ['X0', 'X2']
 outputNames = []
-inputColumns = [0, 2]
-outputColumns = []
-myDataModel = persalys.DataModel('myDataModel', 'données.csv', inputColumns, outputColumns, persalys.DataModel.GENERIC, inputNames, outputNames)
+myDataModelImportedDataset = persalys.ImportedDataset('données.csv', [0,2], [])
+myDataModel = persalys.DataModel('myDataModel', myDataModelImportedDataset, inputNames, outputNames)
 myDataModel.setType(persalys.DataModel.MC)
 myStudy.add(myDataModel)
 inputColumns = [0, 2]
@@ -58,4 +55,5 @@ interestVariables = ['S']
 doeI.setInterestVariables(interestVariables)
 doeI.setType(persalys.DataModel.MC)
 myStudy.add(doeI)
+persalys.Study.Add(myStudy)
 

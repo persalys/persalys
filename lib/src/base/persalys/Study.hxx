@@ -25,6 +25,8 @@
 
 namespace PERSALYS
 {
+class DesignOfExperimentEvaluation;
+
 class PERSALYS_BASE_API Study : public OT::TypedInterfaceObject<StudyImplementation>
 {
   CLASSNAME
@@ -62,6 +64,8 @@ public:
   void addObserver(Observer * observer);
 
   OT::String getFileName() const;
+
+  DesignOfExperiment addDoEAsDataSet(const DesignOfExperimentEvaluation & designOfExperimentEvaluation);
 
   OT::Collection<DesignOfExperiment> getDataModels() const;
   DesignOfExperiment& getDataModelByName(const OT::String& dataModelName);

@@ -32,8 +32,10 @@ myStudy.add(aDesign)
 
 aDesign.run()
 
+aDoe = myStudy.addDoEAsDataSet(aDesign)
+
 # Kriging ##
-analysis = persalys.KrigingAnalysis("kriging_0", aDesign)
+analysis = persalys.KrigingAnalysis("kriging_0", aDoe)
 analysis.setBasis(ot.LinearBasisFactory(2).build())
 analysis.setCovarianceModel(ot.MaternModel(2))
 myStudy.add(analysis)
@@ -54,8 +56,10 @@ model.setFormula("y1", formula_y0 + " + xi3")
 aDesign.setInterestVariables(["y0", "y1"])
 aDesign.run()
 
+aDoe2 = myStudy.addDoEAsDataSet(aDesign)
+
 # Kriging ##
-analysis2 = persalys.KrigingAnalysis("kriging_1", aDesign)
+analysis2 = persalys.KrigingAnalysis("kriging_1", aDoe2)
 analysis2.setAnalyticalValidation(True)
 analysis2.setInterestVariables(["y1", "y0"])
 myStudy.add(analysis2)
@@ -76,7 +80,7 @@ openturns.testing.assert_almost_equal(
 )
 
 # Kriging ##
-analysis3 = persalys.KrigingAnalysis("kriging_2", aDesign)
+analysis3 = persalys.KrigingAnalysis("kriging_2", aDoe2)
 analysis3.setOptimizeParameters(False)
 analysis3.setInterestVariables(["y0"])
 myStudy.add(analysis3)
@@ -98,4 +102,6 @@ openturns.testing.assert_almost_equal(
 # script
 script = myStudy.getPythonScript()
 print(script)
+import sys
+print(script, file=sys.stderr)
 exec(script)

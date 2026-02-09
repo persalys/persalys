@@ -26,7 +26,8 @@ Create the csv:
 
 Create the model:
 
->>> model = persalys.DataModel('myDataModel', 'data.csv', [0, 1, 2], [3])
+>>> importedDataset = persalys.ImportedDataset('data.csv', [0, 1, 2], [3])
+>>> model = persalys.DataModel('myDataModel', importedDataset)
 
 Create and run the analysis: 
 

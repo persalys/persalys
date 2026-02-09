@@ -21,6 +21,7 @@
 #include "persalys/Study.hxx"
 
 #include "persalys/BaseTools.hxx"
+#include "persalys/DesignOfExperimentEvaluation.hxx"
 
 #include <openturns/Study.hxx>
 #include <openturns/XMLH5StorageManager.hxx>
@@ -56,7 +57,7 @@ class Weibull : public WeibullMin
   CLASSNAME
 };
 CLASSNAMEINIT(Weibull)
-static Factory<Weibull> Factory_Weibull;
+const static Factory<Weibull> Factory_Weibull;
 
 
 // -- renamed EventRandomVector class
@@ -66,7 +67,7 @@ class EventRandomVector : public ThresholdEventImplementation
   CLASSNAME
 };
 CLASSNAMEINIT(EventRandomVector)
-static Factory<EventRandomVector> Factory_EventRandomVector;
+const static Factory<EventRandomVector> Factory_EventRandomVector;
 
 } // namespace OT
 
@@ -77,7 +78,7 @@ namespace PERSALYS
 CLASSNAMEINIT(Study)
 
 PersistentCollection<Study > Study::studies_;
-Observer * Study::studyObserver_ = 0;
+Observer * Study::studyObserver_ = nullptr;
 
 
 Collection<PERSALYS::Study> Study::GetInstances()
@@ -263,6 +264,15 @@ String Study::getFileName() const
   return getImplementation()->getFileName();
 }
 
+DesignOfExperiment Study::addDoEAsDataSet(const DesignOfExperimentEvaluation & designOfExperimentEvaluation)
+{
+  const String newName{getAvailableDataModelName(String(designOfExperimentEvaluation.getName().c_str()) + "_")};
+  DesignOfExperiment doe{designOfExperimentEvaluation};
+  doe.setName(newName);
+  getImplementation()->add(doe);
+
+  return doe;
+}
 
 // ----- DATA MODEL -----
 Collection< DesignOfExperiment > Study::getDataModels() const

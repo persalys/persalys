@@ -779,10 +779,10 @@ inputNames= [var1,var2]
 outputNames= [var3]
 min= [0 : [ 1.20548  0.350042 ]]
 max= [0 : [ -0.355007  0.810668 ]]
-class=DataModel name=myDataModel3 importedDataset= fileName=data.csv inputColumns=[0,2] outputColumns=[1] physicalModel=false inputNames=[X0,X2] outputNames=[X1] type=MC
-inputNames= [X0,X2]
-outputNames= [X1]
-inputSample=     [ X0         X2         ]
+class=DataModel name=myDataModel3 importedDataset= fileName=data.csv inputColumns=[0,2] outputColumns=[1] physicalModel=false inputNames=[var1,var2] outputNames=[var3] type=MC
+inputNames= [var1,var2]
+outputNames= [var3]
+inputSample=     [ var1       var2       ]
 0 : [  0.608202  -0.438266  ]
 1 : [  1.20548    0.350042  ]
 2 : [ -0.355007   0.810668  ]
@@ -793,7 +793,7 @@ inputSample=     [ X0         X2         ]
 7 : [  0.445785  -0.856712  ]
 8 : [  0.473617   0.351418  ]
 9 : [  1.78236   -0.781366  ]
-outputSample=     [ X1         ]
+outputSample=     [ var3       ]
 0 : [ -1.26617   ]
 1 : [ -2.18139   ]
 2 : [  1.43725   ]
@@ -827,33 +827,28 @@ import openturns as ot
 import persalys
 
 myStudy = persalys.Study('myStudy')
-persalys.Study.Add(myStudy)
 inputNames = ['X0', 'X2']
 outputNames = []
-inputColumns = [0, 2]
-outputColumns = []
-myDataModel = persalys.DataModel('myDataModel', 'data.csv', inputColumns, outputColumns, persalys.DataModel.GENERIC, inputNames, outputNames)
+myDataModelImportedDataset = persalys.ImportedDataset('data.csv', [0,2], [])
+myDataModel = persalys.DataModel('myDataModel', myDataModelImportedDataset, inputNames, outputNames)
 myDataModel.setType(persalys.DataModel.MC)
 myStudy.add(myDataModel)
 inputNames = ['var1', 'var2']
 outputNames = ['var3']
-inputColumns = [0, 2]
-outputColumns = [1]
-myDataModel2 = persalys.DataModel('myDataModel2', 'data.csv', inputColumns, outputColumns, persalys.DataModel.GENERIC, inputNames, outputNames)
+myDataModel2ImportedDataset = persalys.ImportedDataset('data.csv', [0,2], [1])
+myDataModel2 = persalys.DataModel('myDataModel2', myDataModel2ImportedDataset, inputNames, outputNames)
 myDataModel2.setType(persalys.DataModel.MC)
 myStudy.add(myDataModel2)
-inputNames = ['X0', 'X2']
-outputNames = ['X1']
-inputColumns = [0, 2]
-outputColumns = [1]
-myDataModel3 = persalys.DataModel('myDataModel3', 'data.csv', inputColumns, outputColumns, persalys.DataModel.GENERIC, inputNames, outputNames)
+inputNames = ['var1', 'var2']
+outputNames = ['var3']
+myDataModel3ImportedDataset = persalys.ImportedDataset('data.csv', [0,2], [1])
+myDataModel3 = persalys.DataModel('myDataModel3', myDataModel3ImportedDataset, inputNames, outputNames)
 myDataModel3.setType(persalys.DataModel.MC)
 myStudy.add(myDataModel3)
 inputNames = ['X0', 'X1', 'X2']
 outputNames = []
-inputColumns = [0, 1, 2]
-outputColumns = []
-myDataModel4 = persalys.DataModel('myDataModel4', 'data_500.csv', inputColumns, outputColumns, persalys.DataModel.GENERIC, inputNames, outputNames)
+myDataModel4ImportedDataset = persalys.ImportedDataset('data_500.csv', [0,1,2], [])
+myDataModel4 = persalys.DataModel('myDataModel4', myDataModel4ImportedDataset, inputNames, outputNames)
 myDataModel4.setType(persalys.DataModel.MC)
 myStudy.add(myDataModel4)
 aDataAnalysis = persalys.DataAnalysis('aDataAnalysis', myDataModel)
@@ -868,4 +863,5 @@ aQuantileAnalysis.setThreshold([
 [1.3, 1.3]]
 )
 myStudy.add(aQuantileAnalysis)
+persalys.Study.Add(myStudy)
 

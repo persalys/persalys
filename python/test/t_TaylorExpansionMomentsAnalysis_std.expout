@@ -18,7 +18,6 @@ import openturns as ot
 import persalys
 
 myStudy = persalys.Study('myStudy')
-persalys.Study.Add(myStudy)
 dist_X0 = ot.Normal(1, 1)
 X0 = persalys.Input('X0', 0, dist_X0, '')
 dist_X1 = ot.Normal(1, 1)
@@ -69,4 +68,5 @@ aTaylor4 = persalys.TaylorExpansionMomentsAnalysis('aTaylor4', myPhysicalModel)
 interestVariables = ['Y0']
 aTaylor4.setInterestVariables(interestVariables)
 myStudy.add(aTaylor4)
+persalys.Study.Add(myStudy)
 

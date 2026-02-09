@@ -43,39 +43,13 @@ const static Factory<KrigingAnalysis> Factory_KrigingAnalysis;
 /* Default constructor */
 KrigingAnalysis::KrigingAnalysis()
   : MetaModelAnalysis()
-  , basis_()
-  , covarianceModel_()
-  , result_()
-  , optimizeParameters_(true)
 {
-
 }
 
 
 /* Constructor with parameters */
 KrigingAnalysis::KrigingAnalysis(const String& name, const DesignOfExperiment& designOfExperiment)
   : MetaModelAnalysis(name, designOfExperiment)
-  , basis_()
-  , covarianceModel_()
-  , result_()
-  , optimizeParameters_(true)
-{
-  const UnsignedInteger inputDimension = getEffectiveInputSample().getDimension();
-
-  // basis
-  setBasis(ConstantBasisFactory(inputDimension).build());
-  // cov model
-  setCovarianceModel(SquaredExponential(inputDimension));
-}
-
-
-/* Constructor with parameters */
-KrigingAnalysis::KrigingAnalysis(const String& name, const Analysis& analysis)
-  : MetaModelAnalysis(name, analysis)
-  , basis_()
-  , covarianceModel_()
-  , result_()
-  , optimizeParameters_(true)
 {
   const UnsignedInteger inputDimension = getEffectiveInputSample().getDimension();
 

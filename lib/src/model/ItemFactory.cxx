@@ -185,8 +185,7 @@ Item * ItemFactory::getTitleItem(const QString &objectName)
     item->setData(QIcon(":/images/centralTendency.png"), Qt::DecorationRole);
     item->appendAction(newCentralTendency_);
   }
-  else if (objectName == "SobolAnalysis" ||
-           objectName == "SRCAnalysis")
+  else if (objectName == "SobolAnalysis")
   {
     item = new Item(tr("Sensitivity"), "SensitivityTitle");
     item->setData(QIcon(":/images/sensitivity.png"), Qt::DecorationRole);
@@ -218,16 +217,6 @@ Analysis ItemFactory::createAnalysis(const QString &analysisName, const DesignOf
   qDebug() << "Error: In createAnalysis: analysisName " << analysisName << " not recognized.\n";
   return nullptr;
 }
-
-
-Analysis ItemFactory::createAnalysis(const QString &analysisName, const Analysis &inAnalysis) const
-{
-  if (analysisName == "Metamodel")
-    return new PolynomialRegressionAnalysis(availableAnalysisName(tr("metaModel_")), inAnalysis);
-  qDebug() << "Error: In createAnalysis: analysisName " << analysisName << " not recognized.\n";
-  return nullptr;
-}
-
 
 Analysis ItemFactory::createAnalysis(const QString &analysisName, const LimitState &limitState) const
 {
@@ -461,24 +450,6 @@ QAction * ItemFactory::createAction(const QString &analysisName, const DataField
   qDebug() << "Error: In createAction: analysisName " << analysisName << " not recognized.\n";
   return nullptr;
 }
-
-
-QAction * ItemFactory::createAction(const QString &analysisName, const Analysis &analysis)
-{
-  if (analysisName == "Metamodel")
-  {
-    QAction * action = new QAction(tr("Metamodel"), this);
-    action->setStatusTip(tr("Create a new metamodel"));
-    connect(action, &QAction::triggered, [this, analysis]()
-    {
-      newAnalysis("Metamodel", analysis);
-    });
-    return action;
-  }
-  qDebug() << "Error: In createAction: analysisName " << analysisName << " not recognized.\n";
-  return nullptr;
-}
-
 
 String ItemFactory::availableAnalysisName(const QString &baseName) const
 {

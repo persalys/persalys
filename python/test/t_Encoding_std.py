@@ -14,7 +14,8 @@ ot.Normal(3).getSample(10).exportToCSVFile(filename)
 inColumns = [0, 2]
 
 # Model 1
-model = persalys.DataModel("myDataModel", filename, inColumns)
+importedDataset = persalys.ImportedDataset(filename, inColumns)
+model = persalys.DataModel("myDataModel", importedDataset)
 model.setType(persalys.DataModel.MC)
 myStudy.add(model)
 print(model)

@@ -152,8 +152,9 @@ values = [
 design_1 = persalys.GridDesignOfExperiment("aDesign_1", model, values)
 design_1.run()
 myStudy.add(design_1)
+doe1 = myStudy.addDoEAsDataSet(design_1)
 
-chaos = persalys.FunctionalChaosAnalysis("chaos_0", design_1)
+chaos = persalys.FunctionalChaosAnalysis("chaos_0", doe1)
 chaos.setChaosDegree(2)
 chaos.setSparseChaos(False)
 myStudy.add(chaos)

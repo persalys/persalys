@@ -1,6 +1,8 @@
 %feature("docstring") PERSALYS::SRCAnalysis
 "Run a SRC sensitivity analysis.
 
+This class is deprecated. Use :class:`~persalys.DataSensitivityAnalysis` instead.
+
 Parameters
 ----------
 name : str

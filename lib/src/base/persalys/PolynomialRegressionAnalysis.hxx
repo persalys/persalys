@@ -78,7 +78,6 @@ public:
 
   /** Constructor with parameters */
   PolynomialRegressionAnalysis(const OT::String& name, const DesignOfExperiment& designOfExperiment);
-  PolynomialRegressionAnalysis(const OT::String& name, const Analysis& designOfExperimentAnalysis);
 
   /** Virtual constructor */
   PolynomialRegressionAnalysis * clone() const override;

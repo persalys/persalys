@@ -105,7 +105,6 @@ PERSALYSTypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Coll
 %include Output.i
 %include DataSample.i
 %include ImportedDataset.i
-%include DataModel.i
 %include MeshModelImplementation.i
 %include MeshModel.i
 %include GridMeshModel.i
@@ -115,6 +114,8 @@ PERSALYSTypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Coll
 %include PythonPhysicalModel.i
 %include MetaModel.i
 %include PhysicalModel.i
+%include DataModel.i
+%include DesignOfExperiment.i
 %include FMUInfo.i
 %include FMIPhysicalModel.i
 %include SymbolicFieldModel.i
@@ -126,7 +127,6 @@ PERSALYSTypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Coll
 %include PhysicalModelAnalysis.i
 %include Analysis.i
 %include WithStopCriteriaAnalysis.i
-%include DesignOfExperiment.i
 %include DataFieldModelImplementation.i
 %include DataFieldModel.i
 %include Observations.i

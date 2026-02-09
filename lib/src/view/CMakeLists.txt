@@ -73,7 +73,6 @@ ot_add_source_file ( SobolResultWindow.cxx )
 ot_add_source_file ( SRCResultWindow.cxx )
 ot_add_source_file ( SensitivityIntroPage.cxx )
 ot_add_source_file ( SobolPage.cxx )
-ot_add_source_file ( SRCPage.cxx )
 ot_add_source_file ( SensitivityAnalysisWizard.cxx )
 ot_add_source_file ( LimitStateWindow.cxx )
 ot_add_source_file ( ReliabilityIntroPage.cxx )
@@ -131,6 +130,7 @@ ot_add_source_file ( AnsysWizard.cxx )
 ot_add_source_file (DataSensitivityAnalysisResultWindow.cxx )
 ot_add_source_file ( ImportEvaluationsWizard.cxx )
 ot_add_source_file ( ImportMeshWidget.cxx )
+ot_add_source_file ( DesignOfExperimentExportWizard.cxx )
 if (OTMORRIS_FOUND)
   ot_add_source_file ( ScreeningIntroPage.cxx )
   ot_add_source_file ( MorrisPage.cxx )
@@ -179,7 +179,6 @@ ot_install_header_file ( CentralTendencyWizard.hxx )
 ot_install_header_file ( QuantileAnalysisWizard.hxx )
 ot_install_header_file ( SensitivityIntroPage.hxx )
 ot_install_header_file ( SobolPage.hxx )
-ot_install_header_file ( SRCPage.hxx )
 ot_install_header_file ( SensitivityAnalysisWizard.hxx )
 ot_install_header_file ( LimitStateWindow.hxx )
 ot_install_header_file ( ReliabilityIntroPage.hxx )
@@ -264,6 +263,7 @@ ot_install_header_file ( AnsysWizard.hxx )
 ot_install_header_file ( DataSensitivityAnalysisResultWindow.hxx )
 ot_install_header_file ( ImportEvaluationsWizard.hxx )
 ot_install_header_file ( ImportMeshWidget.hxx)
+ot_install_header_file ( DesignOfExperimentExportWizard.hxx )
 if (OTMORRIS_FOUND)
   ot_install_header_file ( ScreeningIntroPage.hxx )
   ot_install_header_file ( MorrisPage.hxx )
@@ -332,7 +332,6 @@ qt_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MainWindow.hxx
                                   persalys/SRCResultWindow.hxx
                                   persalys/SensitivityIntroPage.hxx
                                   persalys/SobolPage.hxx
-                                  persalys/SRCPage.hxx
                                   persalys/SensitivityAnalysisWizard.hxx
                                   persalys/LimitStateWindow.hxx
                                   persalys/ReliabilityIntroPage.hxx
@@ -393,6 +392,7 @@ qt_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MainWindow.hxx
                                   persalys/DataSensitivityAnalysisResultWindow.hxx
                                   persalys/ImportEvaluationsWizard.hxx
                                   persalys/ImportMeshWidget.hxx
+                                  persalys/DesignOfExperimentExportWizard.hxx
                                   )
 
 

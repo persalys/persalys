@@ -5,7 +5,6 @@ import openturns as ot
 import persalys
 
 myStudy = persalys.Study('myStudy')
-persalys.Study.Add(myStudy)
 dist_R = ot.LogNormal(5.69881, 0.0997513, 0)
 R = persalys.Input('R', 300, dist_R, 'Yield stress (Pa)')
 dist_F = ot.Normal(75000, 5000)
@@ -52,4 +51,5 @@ mySRC = persalys.SRCAnalysis('mySRC', myPhysicalModel, 1000)
 mySRC.setBlockSize(1)
 mySRC.setSeed(0)
 myStudy.add(mySRC)
+persalys.Study.Add(myStudy)
 

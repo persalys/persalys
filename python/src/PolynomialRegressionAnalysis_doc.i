@@ -36,10 +36,11 @@ Create the design of experiments:
 
 >>> aDesign = persalys.ProbabilisticDesignOfExperiment('aDesign', myPhysicalModel, 100, 'LHS')
 >>> aDesign.run()
+>>> aDoE = persalys.DesignOfExperiment(aDesign)
 
 Create the linear regression analysis:
 
->>> lm = persalys.PolynomialRegressionAnalysis('lm', aDesign)
+>>> lm = persalys.PolynomialRegressionAnalysis('lm', aDoE)
 >>> lm.setDegree(1)
 >>> lm.setInteraction(False)
 >>> lm.setStepwise(True)

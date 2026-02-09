@@ -36,16 +36,19 @@ public:
     // create the design of experiment
     doe = ProbabilisticDesignOfExperiment("analysis", model, 100);
     doe.run();
+
+    dataModel = doe.getResult().getDesignOfExperiment();
   }
 
 private:
   ProbabilisticDesignOfExperiment doe;
+  DesignOfExperiment dataModel;
 
 private slots:
   void TestOutputsSelection()
   {
     // create the analysis
-    FunctionalChaosAnalysis analysis("analysis", doe);
+    FunctionalChaosAnalysis analysis("analysis", dataModel);
 
     // create the wizard
     MetaModelAnalysisWizard wizard(analysis);
@@ -54,10 +57,10 @@ private slots:
     // checks
 
     // - first page
-    OutputsSelectionGroupBox * outputsSelectionGroupBox = wizard.introPage_->findChild<OutputsSelectionGroupBox*>();
-    ErrorWidget * errorMessageLabel = wizard.introPage_->findChild<ErrorWidget*>();
-    TitledComboBox * comboBox = outputsSelectionGroupBox->findChild<TitledComboBox*>();
-    ListWidgetWithCheckBox * listWidget = outputsSelectionGroupBox->findChild<ListWidgetWithCheckBox*>();
+    const auto * outputsSelectionGroupBox = wizard.introPage_->findChild<OutputsSelectionGroupBox*>();
+    const auto * errorMessageLabel = wizard.introPage_->findChild<ErrorWidget*>();
+    auto * comboBox = outputsSelectionGroupBox->findChild<TitledComboBox*>();
+    const auto * listWidget = outputsSelectionGroupBox->findChild<ListWidgetWithCheckBox*>();
 
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
     QVERIFY2(errorMessageLabel->toPlainText().isEmpty(), "Label must be empty");
@@ -79,7 +82,7 @@ private slots:
   void TestFunctionalChaos()
   {
     // create the analysis
-    FunctionalChaosAnalysis analysis("analysis", doe);
+    FunctionalChaosAnalysis analysis("analysis", dataModel);
 
     // create the wizard
     MetaModelAnalysisWizard wizard(analysis);
@@ -113,7 +116,7 @@ private slots:
   void TestKriging()
   {
     // create the analysis
-    KrigingAnalysis analysis("analysis", doe);
+    KrigingAnalysis analysis("analysis", dataModel);
 
     // create the wizard
     MetaModelAnalysisWizard wizard(analysis);
@@ -145,7 +148,7 @@ private slots:
   void TestAnalysisModification()
   {
     // create the analysis
-    FunctionalChaosAnalysis analysis("analysis", doe);
+    FunctionalChaosAnalysis analysis("analysis", dataModel);
 
     // create the wizard
     MetaModelAnalysisWizard wizard(analysis);
@@ -159,7 +162,7 @@ private slots:
 
     QVERIFY2(wizard.nextId() == 2, "Next page ID must be 2");
 
-    bool analysisEquality = wizard.getAnalysis().getParameters() == KrigingAnalysis("analysis", doe).getParameters();
+    bool analysisEquality = wizard.getAnalysis().getParameters() == KrigingAnalysis("analysis", dataModel).getParameters();
     QVERIFY2(analysisEquality, "The two KrigingAnalysis must be equal");
   }
 
@@ -180,7 +183,7 @@ private slots:
     aStudy.add(analysis2);
 
     // create an analysis
-    FunctionalChaosAnalysis analysis3("analysis3", analysis1);
+    FunctionalChaosAnalysis analysis3("analysis3", analysis1.getResult().getDesignOfExperiment());
     aStudy.add(analysis3);
 
     // create the wizard
@@ -188,8 +191,8 @@ private slots:
     wizard.show();
 
     // checks
-    QComboBox * comboBox = wizard.introPage_->findChild<QComboBox*>();
-    QLabel * label = wizard.introPage_->findChild<QLabel*>("doeLabel_");
+    auto * comboBox = wizard.introPage_->findChild<QComboBox*>();
+    const auto * label = wizard.introPage_->findChild<QLabel*>("doeLabel_");
     QVERIFY2(comboBox->count() == 2, "The combobox must have two items");
     QVERIFY2(label->text().contains(QString::number(analysis1.getSize())), "Wrong label");
     QVERIFY2(wizard.introPage_->getDesignOfExperiment().getName() == "analysis1", "The doe must be named : analysis1");

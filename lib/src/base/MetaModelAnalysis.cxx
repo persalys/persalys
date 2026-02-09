@@ -43,7 +43,6 @@ MetaModelAnalysis::MetaModelAnalysis()
 {
 }
 
-
 /* Constructor with parameters */
 MetaModelAnalysis::MetaModelAnalysis(const String& name, const DesignOfExperiment& designOfExperiment)
   : DesignOfExperimentAnalysis(name, designOfExperiment)
@@ -52,23 +51,6 @@ MetaModelAnalysis::MetaModelAnalysis(const String& name, const DesignOfExperimen
 {
   if (designOfExperiment_.getOutputSample().getSize())
     setInterestVariables(designOfExperiment_.getOutputSample().getDescription());
-}
-
-
-/* Constructor with parameters */
-MetaModelAnalysis::MetaModelAnalysis(const String& name, const Analysis& analysis)
-  : DesignOfExperimentAnalysis(name)
-  , seedTestSample_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
-  , seedKFold_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
-{
-  const auto * analysis_ptr = dynamic_cast<DesignOfExperimentEvaluation*>(analysis.getImplementation().get());
-
-  if (!analysis_ptr)
-  {
-    throw InvalidArgumentException(HERE) << "The given analysis does not contain any design of experiments";
-  }
-  designOfExperiment_ = analysis_ptr->getResult().getDesignOfExperiment();
-  setInterestVariables(analysis_ptr->getInterestVariables());
 }
 
 PythonPhysicalModel MetaModelAnalysis::asPythonPhysicalModel(const Study &study) const

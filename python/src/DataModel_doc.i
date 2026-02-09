@@ -3,9 +3,9 @@
 
 The interface allows the user to load data samples and analyse them. They are considered as data models.
 
-    DataModel(*name, physicalModel, importedDataset, inputNames, outputNames*)
+    DataModel(*name, physicalModel*)
 
-    DataModel(*name, fileName, inputColumns, outputColumns, type, inputNames, outputNames*)
+    DataModel(*name, importedDataset, inputNames, outputNames*)
 
     DataModel(*name, inSample, outSample*)
 
@@ -21,15 +21,6 @@ inputNames : sequence of str
     Names of the input variables (optional)
 outputNames : sequence of str
     Names of the output variables (optional)
-fileName : str
-    Name of a data file (.txt ot .csv) to load
-inputColumns : sequence of int
-    Indices of columns of the input variables in file to consider
-outputColumns : sequence of int (optional)
-    Indices of columns of the output variables in file to consider (optional)
-type : int
-    Type of design of experiment. Default = peresalys.DataModel.GENERIC.
-    See possible values below.
 inSample : :py:class:`openturns.Sample`
     Input sample (its description must be a list of input variable names)
 outSample : :py:class:`openturns.Sample`
@@ -43,7 +34,9 @@ Examples
 >>> fileName = 'sample.csv'
 >>> sample = ot.Normal(3).getSample(30)
 >>> sample.exportToCSVFile(fileName)
->>> model = persalys.DataModel('dataModel', fileName, [0, 2], [1], persalys.DataModel.MC, ['var1', 'var2'], ['var3'])"
+>>> importedDataset = persalys.ImportedDataset(fileName, [0, 2], [1])
+>>> model = persalys.DataModel('dataModel', importedDataset, ['var1', 'var2'], ['var3'])
+>>> model.setType(persalys.DataModel.MC)"
 
 // ---------------------------------------------------------------------
 

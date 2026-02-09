@@ -9,7 +9,6 @@ import openturns as ot
 import persalys
 
 myStudy = persalys.Study('myStudy')
-persalys.Study.Add(myStudy)
 dist_x1 = ot.Uniform(0, 1)
 x1 = persalys.Input('x1', 0, dist_x1, '')
 dist_x2 = ot.Uniform(0, 1)
@@ -137,4 +136,5 @@ aMorris.setBounds(ot.Interval([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 aMorris.setLevel(4)
 aMorris.setSeed(2)
 myStudy.add(aMorris)
+persalys.Study.Add(myStudy)
 

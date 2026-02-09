@@ -10,7 +10,6 @@ import openturns as ot
 import persalys
 
 myStudy = persalys.Study('myStudy')
-persalys.Study.Add(myStudy)
 dist_X0 = ot.Normal(1, 1)
 X0 = persalys.Input('X0', 0, dist_X0, '')
 dist_X1 = ot.Normal(1, 1)
@@ -54,4 +53,5 @@ optimizationAlgo.setMaximumResidualError(1e-05)
 optimizationAlgo.setMaximumConstraintError(1e-05)
 myFORM3.setOptimizationAlgorithm(optimizationAlgo)
 myStudy.add(myFORM3)
+persalys.Study.Add(myStudy)
 

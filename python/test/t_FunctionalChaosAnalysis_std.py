@@ -32,8 +32,10 @@ myStudy.add(aDesign)
 
 aDesign.run()
 
+aDoe = myStudy.addDoEAsDataSet(aDesign)
+
 # Chaos 1 ##
-analysis = persalys.FunctionalChaosAnalysis("chaos_0", aDesign)
+analysis = persalys.FunctionalChaosAnalysis("chaos_0", aDoe)
 analysis.setChaosDegree(4)
 analysis.setSparseChaos(True)
 myStudy.add(analysis)
@@ -65,7 +67,9 @@ design2 = persalys.ProbabilisticDesignOfExperiment("design2", model, 200, "MONTE
 myStudy.add(design2)
 design2.run()
 
-analysis2 = persalys.FunctionalChaosAnalysis("chaos_1", design2)
+doe2 = myStudy.addDoEAsDataSet(design2)
+
+analysis2 = persalys.FunctionalChaosAnalysis("chaos_1", doe2)
 analysis2.setChaosDegree(4)
 analysis2.setAnalyticalValidation(True)
 analysis2.setTestSampleValidation(True)

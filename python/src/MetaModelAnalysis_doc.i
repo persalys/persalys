@@ -5,7 +5,8 @@ Notes
 -----
 Can only be used through its derived classes.
 See :class:`~persalys.FunctionalChaosAnalysis`,
-:class:`~persalys.KrigingAnalysis`"
+:class:`~persalys.KrigingAnalysis`,
+:class:`~persalys.PolynomialRegressionAnalysis`."
 
 // --------------------------------------------------------------------
 

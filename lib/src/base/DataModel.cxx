@@ -41,6 +41,7 @@ const static Factory<DataModel> Factory_DesignOfExperimentImplementation = [] {
   return factory;
 }();
 
+
 DataModel::DataModel(const String& name,
   const std::optional<PhysicalModel> & physicalModel,
   const std::optional<ImportedDataset> & importedDataset,
@@ -57,22 +58,22 @@ else if (importedDataset_)
   DataModel::update();
 }
 
-/* Constructor with parameters */
-DataModel::DataModel(const String& name,
-                     const String& fileName,
-                     const Indices& inputColumns,
-                     const Indices& outputColumns,
-                     Type type,
-                     const Description& inputNames,
-                     const Description& outputNames)
-  : importedDataset_(ImportedDataset(fileName, inputColumns, outputColumns))
-  , type_(type)
+DataModel::DataModel(const String &name)
+: DataModel(name, std::nullopt, std::nullopt, Description(), Description())
 {
-  PersistentObject::setName(name);
-  if (inputNames.getSize() || outputNames.getSize())
-    setNames(inputNames, outputNames);
-  else
-    DataModel::update();
+}
+
+DataModel::DataModel(const String &name, const PhysicalModel &physicalModel)
+: DataModel(name, physicalModel, std::nullopt, Description(), Description())
+{
+}
+
+DataModel::DataModel(const String &name,
+                     const ImportedDataset &importedDataset,
+                     const Description &inputNames,
+                     const Description &outputNames)
+  : DataModel(name, std::nullopt, importedDataset, inputNames, outputNames)
+{
 }
 
 /* Constructor with parameters */
@@ -347,36 +348,33 @@ String DataModel::getPythonScript() const
 {
   OSS oss;
 
-  oss << "inputNames = " << Parameters::GetOTDescriptionStr(getInputNames()) << "\n";
-  oss << "outputNames = " << Parameters::GetOTDescriptionStr(getOutputNames()) << "\n";
   if (importedDataset_)
   {
-    oss << "inputColumns = " << Parameters::GetOTIndicesStr(importedDataset_->getInputColumns()) << "\n";
-    oss << "outputColumns = " << Parameters::GetOTIndicesStr(importedDataset_->getOutputColumns()) << "\n";
-  }
+    oss << "inputNames = " << Parameters::GetOTDescriptionStr(getInputNames()) << "\n";
+    oss << "outputNames = " << Parameters::GetOTDescriptionStr(getOutputNames()) << "\n";
 
-  if(physicalModel_)
-  {
-    oss << "importedDataset = ";
-    if (importedDataset_)
-      oss << "persalys.ImportedDataset('" << importedDataset_->getFileName() << "', inputColumns, outputColumns)\n";
-    else
-      oss << "None\n";
-    oss << getName() << " = persalys." << getClassName() << "('" << getName() << "', " << getPhysicalModel().getName() << ", importedDataset, inputNames, outputNames)\n";
-  }
-  else if (importedDataset_)
-  {
-    oss << getName() << " = persalys." << getClassName() << "('" << getName() << "', '" << importedDataset_->getFileName() << "', inputColumns, outputColumns, persalys.DataModel.GENERIC, inputNames, outputNames)\n";
+    oss << getName() << "ImportedDataset = persalys.ImportedDataset('" << importedDataset_->getFileName() << "', " << importedDataset_->getInputColumns() << ", " << importedDataset_->getOutputColumns() << ")\n";
+    oss << getName() << " = persalys.DataModel('" << getName() << "', " << getName() << "ImportedDataset, inputNames, outputNames)\n";
+
+    if (physicalModel_)
+      oss << getName() << ".setPhysicalModel(" << physicalModel_->getName() << ")\n";
   }
   else
   {
-    oss << getName() << " = persalys." << getClassName() << "('" << getName() << ")\n";
-    oss << "inputSample = ot.Sample(" << Parameters::GetOTSampleStr(getInputSample()) << ")\n";
-    oss << "inputSample.setDescription(" << Parameters::GetOTDescriptionStr(getInputNames()) << ")\n";
-    oss << "outputSample = ot.Sample(" << Parameters::GetOTSampleStr(getOutputSample()) << ")\n";
-    oss << "outputSample.setDescription(" << Parameters::GetOTDescriptionStr(getOutputNames()) << ")\n";
-    oss << getName() << ".setInputSample(inputSample)\n";
-    oss << getName() << ".setOutputSample(outputSample)\n";
+    if (physicalModel_)
+      oss << getName() << " = persalys.DataModel('" << getName() << "', " << physicalModel_->getName() << ")\n";
+    else
+      oss << getName() << " = persalys.DataModel('" << getName() << "')\n";
+    
+    if (getInputSample().getSize() || getOutputSample().getSize())
+    {
+      oss << "inputSample = ot.Sample(" << Parameters::GetOTSampleStr(getInputSample()) << ")\n";
+      oss << "inputSample.setDescription(" << Parameters::GetOTDescriptionStr(getInputNames()) << ")\n";
+      oss << "outputSample = ot.Sample(" << Parameters::GetOTSampleStr(getOutputSample()) << ")\n";
+      oss << "outputSample.setDescription(" << Parameters::GetOTDescriptionStr(getOutputNames()) << ")\n";
+      oss << getName() << ".setInputSample(inputSample)\n";
+      oss << getName() << ".setOutputSample(outputSample)\n";
+    }
   }
 
   oss << getName() << ".setType(persalys.DataModel." << TypeToString(type_) << ")\n";

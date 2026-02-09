@@ -119,7 +119,6 @@ import openturns as ot
 import persalys
 
 anOTStudy = persalys.Study('anOTStudy')
-persalys.Study.Add(anOTStudy)
 dist_X0 = ot.Normal(0, 1)
 X0 = persalys.Input('X0', 1, dist_X0, '')
 dist_X1 = ot.Normal(0, 1)
@@ -208,6 +207,7 @@ interestVariables = ['Y0']
 aDesign_12.setInterestVariables(interestVariables)
 aDesign_12.run()
 anOTStudy.add(aDesign_12)
+persalys.Study.Add(anOTStudy)
 
 #!/usr/bin/env python
 
@@ -215,7 +215,6 @@ import openturns as ot
 import persalys
 
 anOTStudy2 = persalys.Study('anOTStudy2')
-persalys.Study.Add(anOTStudy2)
 dist_X0 = ot.Normal(0, 1)
 X0 = persalys.Input('X0', 1, dist_X0, '')
 dist_X1 = ot.Normal(0, 1)
@@ -263,4 +262,5 @@ interestVariables = ['Y0']
 aDesign_10.setInterestVariables(interestVariables)
 aDesign_10.run()
 anOTStudy2.add(aDesign_10)
+persalys.Study.Add(anOTStudy2)
 

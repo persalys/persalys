@@ -8,7 +8,6 @@ import openturns as ot
 import persalys
 
 anOTStudy = persalys.Study('anOTStudy')
-persalys.Study.Add(anOTStudy)
 dist_X0 = ot.Normal(0, 1)
 X0 = persalys.Input('X0', 1, dist_X0, '')
 X1 = persalys.Input('X1', 2, '')
@@ -61,4 +60,5 @@ outSample = ot.Sample([
 outSample.setDescription(['Y1', 'Y2'])
 obs2 = persalys.Observations(name, physicalModel, inSample, outSample)
 anOTStudy.add(obs2)
+persalys.Study.Add(anOTStudy)
 
