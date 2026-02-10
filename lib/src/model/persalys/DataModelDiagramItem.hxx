@@ -44,6 +44,9 @@ public:
 protected:
   void buildActions();
 
+private:
+  void checkValidity();
+
 public slots:
   void appendDataModelItem();
   void removeDesignOfExperiment();
@@ -58,6 +61,7 @@ signals:
   void metaModelValidityChanged(bool, QString);
   void dataSensitivityValidityChanged(bool, QString);
   void metamodelNumberValidityChanged(bool, QString);
+  void inferenceValidityChanged(bool, QString);
 
 private:
   QAction * defineAction_               = nullptr;

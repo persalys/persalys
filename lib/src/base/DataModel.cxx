@@ -176,6 +176,7 @@ Indices DataModel::getEffectiveInputIndices() const
 void DataModel::setType(Type type)
 {
     type_ = type;
+    notify("variablesChanged");
 }
 
 DataModel::Type DataModel::getType() const

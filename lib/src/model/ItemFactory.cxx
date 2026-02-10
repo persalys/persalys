@@ -341,15 +341,18 @@ QAction * ItemFactory::createAction(const QString &analysisName, const PhysicalM
 
 QAction * ItemFactory::createAction(const QString &analysisName, const DesignOfExperiment &doe)
 {
-  QAction * action = 0;
+  QAction * action = nullptr;
 
   if (analysisName == "DataAnalysis")
   {
     action = new QAction(tr("Data analysis"), this);
     action->setStatusTip(tr("Analyse the data sample"));
-    connect(action, &QAction::triggered, [ = ]()
+    connect(action, &QAction::triggered, [this, doe]()
     {
-      emit analysisRequested(getParentStudyItem(), DataAnalysis(availableAnalysisName(tr("dataAnalysis_")), doe));
+      DataAnalysis analysis(availableAnalysisName(tr("dataAnalysis_")), doe);
+      if (doe.getType() != DataModel::MC)
+        analysis.setIsConfidenceIntervalRequired(false);
+      emit analysisRequested(getParentStudyItem(), analysis);
     });
   }
   else if (analysisName == "DataSensitivityAnalysis")

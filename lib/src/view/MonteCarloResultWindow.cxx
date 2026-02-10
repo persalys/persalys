@@ -44,7 +44,7 @@ MonteCarloResultWindow::MonteCarloResultWindow(AnalysisItem * item, QWidget * pa
 }
 
 
-void MonteCarloResultWindow::initialize(AnalysisItem* item)
+void MonteCarloResultWindow::initialize(const AnalysisItem* item)
 {
   MonteCarloAnalysis analysis(*dynamic_cast<MonteCarloAnalysis*>(item->getAnalysis().getImplementation().get()));
 

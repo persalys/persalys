@@ -22,6 +22,8 @@
 #include "persalys/CopulaInferenceAnalysis.hxx"
 #include "persalys/MetaModelAnalysis.hxx"
 #include "persalys/DataAnalysis.hxx"
+#include "persalys/InferenceAnalysis.hxx"
+#include "persalys/QuantileAnalysis.hxx"
 
 #include "persalys/DataModelDiagramItem.hxx"
 #include "persalys/StudyItem.hxx"
@@ -76,24 +78,7 @@ void DataModelDiagramItem::update(Observable* /*source*/, const String& message)
       fill();
       return;
     }
-    // emit signals to DataModelDiagramWindow
-    // to update the diagram (arrow color and button availability)
-    String errorMessage;
-    bool validity;
-    // CanBeLaunched need to be called before emit otherwise errorMessage might be sent before being modified
-    validity = DataAnalysis::CanBeLaunched(errorMessage, designOfExperiment_); 
-    emit dataSizeValidityChanged(validity, QString(errorMessage.c_str()));
-    validity = DesignOfExperimentAnalysis::CanBeLaunched(errorMessage, designOfExperiment_);
-    emit dataModelValidityChanged(validity, QString(errorMessage.c_str()));
-    validity = DataSensitivityAnalysis::CanBeLaunched(errorMessage, designOfExperiment_);
-    emit dataSensitivityValidityChanged(validity, QString(errorMessage.c_str()));
-    validity = CopulaInferenceAnalysis::CanBeLaunched(errorMessage, designOfExperiment_);
-    emit dependenciesValidityChanged(validity, QString(errorMessage.c_str()));
-    validity = MetaModelAnalysis::CanBeLaunched(errorMessage, designOfExperiment_);
-    emit metaModelValidityChanged(validity, QString(errorMessage.c_str()));
-    validity = DesignOfExperimentAnalysis::CanBeLaunched(errorMessage, designOfExperiment_) && metamodelCounter_ > 0;
-    QString mmNumberMessage = errorMessage.empty() ? tr("Metamodel must first be created") : QString{errorMessage.c_str()};
-    emit metamodelNumberValidityChanged(validity, mmNumberMessage);
+    checkValidity();
   }
   else if (message == "analysisLaunched")
   {
@@ -118,15 +103,23 @@ void DataModelDiagramItem::fill()
   if (designOfExperiment_.getSample().getSize())
     appendDataModelItem();
 
-  // update diagram (arrow color and button availability)
+  checkValidity();
+}
+
+void DataModelDiagramItem::checkValidity()
+{
+  // emit signals to DataModelDiagramWindow
+  // to update the diagram (arrow color and button availability)
   String errorMessage;
   bool validity;
   validity = DataAnalysis::CanBeLaunched(errorMessage, designOfExperiment_); 
   emit dataSizeValidityChanged(validity, QString(errorMessage.c_str()));
-  validity = DesignOfExperimentAnalysis::CanBeLaunched(errorMessage, designOfExperiment_);
-  emit dataModelValidityChanged(validity, QString(errorMessage.c_str()));
   validity = DataSensitivityAnalysis::CanBeLaunched(errorMessage, designOfExperiment_);
   emit dataSensitivityValidityChanged(validity, QString(errorMessage.c_str()));
+  validity = QuantileAnalysis::CanBeLaunched(errorMessage, designOfExperiment_);
+  emit dataModelValidityChanged(validity, QString(errorMessage.c_str()));
+  validity = InferenceAnalysis::CanBeLaunched(errorMessage, designOfExperiment_); 
+  emit inferenceValidityChanged(validity, QString(errorMessage.c_str()));
   validity = CopulaInferenceAnalysis::CanBeLaunched(errorMessage, designOfExperiment_);
   emit dependenciesValidityChanged(validity, QString(errorMessage.c_str()));
   validity = MetaModelAnalysis::CanBeLaunched(errorMessage, designOfExperiment_);

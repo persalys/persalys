@@ -81,6 +81,8 @@ namespace PERSALYS
 
     QuantileAnalysisResult getResult() const;
 
+    bool canBeLaunched(OT::String &errorMessage) const override;
+
     /** String converter */
     OT::String __repr__() const override;
 
@@ -94,6 +96,8 @@ namespace PERSALYS
     OT::Graph plotGPD(int iMarg, int iTail, OT::Scalar minProba);
 
     OT::Indices computeSampleSizeValidity(const OT::Point & probaValue, const OT::UnsignedInteger & sampleSize, const QuantileAnalysisResult::TailType & tail) const;
+
+    static bool CanBeLaunched(OT::String &errorMessage, const DesignOfExperiment &doe);
 
   protected:
     void initialize() override;

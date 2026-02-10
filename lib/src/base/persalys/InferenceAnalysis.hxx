@@ -97,6 +97,7 @@ public:
   int getLillieforsMaximumSamplingSize() const;
   void setLillieforsMaximumSamplingSize(const int lillieforsMaximumSamplingSize);
 
+  static bool CanBeLaunched(OT::String &errorMessage, const DesignOfExperiment & designOfExperiment);
 
   /** String converter */
   OT::String __repr__() const override;

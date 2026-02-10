@@ -421,6 +421,8 @@ bool CopulaInferenceAnalysis::CanBeLaunched(String &errorMessage, const DesignOf
     return false;
   if (doe.getSample().getDimension() < 2)
     errorMessage = "The model must contain at least two variables.";
+  if (doe.getType() != DataModel::MC)
+    errorMessage =  "Variables must be i.i.d.";
   return errorMessage.empty();
 }
 
