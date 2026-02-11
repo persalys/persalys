@@ -161,18 +161,18 @@ void DesignOfExperimentEvaluation::launch()
 
     // progress
     progressValue_ = (int) (i * 100 / nbIter);
-    notify("progressValueChanged");
+    notifyProgress();
 
     // information message
-    informationMessage_ = OSS() << "Elapsed time = " << timeCriteria.getElapsedTime() << " s\n";
-    notify("informationMessageUpdated");
+    informationMessage_ = OSS().setPrecision(1) << "Elapsed time = " << timeCriteria.getElapsedTime() << " s\n";
+    notifyMessageUpdated();
 
     // the last block can be smaller
     const UnsignedInteger effectiveBlockSize = i < (nbIter - 1) ? maxBlockSize : lastBlockSize;
 
     // get input sample of size effectiveBlockSize
     const UnsignedInteger blockFirstIndex =  i * maxBlockSize;
-    Sample blockInputSample(Sample(getOriginalInputSample(), blockFirstIndex, blockFirstIndex + effectiveBlockSize));
+    Sample blockInputSample(getOriginalInputSample(), blockFirstIndex, blockFirstIndex + effectiveBlockSize);
 
     // Perform a block of simulations
     Sample blockOutputSample;

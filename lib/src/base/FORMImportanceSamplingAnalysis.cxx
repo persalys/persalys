@@ -63,7 +63,7 @@ void FORMImportanceSamplingAnalysis::initialize()
   ImportanceSamplingAnalysis::initialize();
   result_ = SimulationReliabilityResult();
   FORMResult_ = FORMResult();
-  notify("progressValueChanged");
+  notifyProgress();
 }
 
 
@@ -77,8 +77,8 @@ void FORMImportanceSamplingAnalysis::launch()
   formAnalysis.setPhysicalStartingPoint(getPhysicalStartingPoint());
 
   // information message
-  informationMessage_ = OSS() << "The FORM analysis is running";
-  notify("informationMessageUpdated");
+  informationMessage_ = "The FORM analysis is running";
+  notifyMessageUpdated();
 
   // launch FORM analysis
   try

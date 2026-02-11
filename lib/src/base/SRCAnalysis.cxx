@@ -76,7 +76,7 @@ void SRCAnalysis::initialize()
 {
   SimulationAnalysis::initialize();
   result_ = SRCResult();
-  notify("progressValueChanged");
+  notifyProgress();
 }
 
 
@@ -112,11 +112,11 @@ void SRCAnalysis::launch()
       break;
 
     // information message
-    informationMessage_ = OSS() << "Elapsed time = " << timeCriteria.getElapsedTime() << " s\n";
-    notify("informationMessageUpdated");
+    informationMessage_ = OSS().setPrecision(1) << "Elapsed time = " << timeCriteria.getElapsedTime() << " s\n";
+    notifyMessageUpdated();
 
     progressValue_ = (int) (i * 100 / nbIter);
-    notify("progressValueChanged");
+    notifyProgress();
 
     // the last block can be smaller
     const UnsignedInteger effectiveBlockSize = i < (nbIter - 1) ? getBlockSize() : lastBlockSize;
@@ -162,8 +162,8 @@ void SRCAnalysis::launch()
 
   // information message
   timeCriteria.incrementElapsedTime();
-  informationMessage_ = OSS() << "Computation of the confidence intervals\n" << "Elapsed time = " << timeCriteria.getElapsedTime() << " s\n";
-  notify("informationMessageUpdated");
+  informationMessage_ = OSS().setPrecision(1) << "Computation of the confidence intervals\n" << "Elapsed time = " << timeCriteria.getElapsedTime() << " s\n";
+  notifyMessageUpdated();
 
   // Compute bootstrap confidence intervals
   const UnsignedInteger bootstrapSize = ResourceMap::GetAsUnsignedInteger("SobolIndicesAlgorithm-DefaultBootstrapSize");
@@ -180,8 +180,8 @@ void SRCAnalysis::launch()
   Collection<Sample> unscaledSRCBootstrap(nbOutputs, Sample(0, nbInputs));
   for (UnsignedInteger i = 0; i < bootstrapSize; ++i)
   {
-    informationMessage_ = OSS() << "Computation of the confidence intervals\n" << "Elapsed time = " << timeCriteria.getElapsedTime() << " s\n";
-    notify("informationMessageUpdated");
+    informationMessage_ = OSS().setPrecision(1) << "Computation of the confidence intervals\n" << "Elapsed time = " << timeCriteria.getElapsedTime() << " s\n";
+    notifyMessageUpdated();
     const Sample bootstrapSample(bootstrapExp.generate());
     for (UnsignedInteger j = 0; j < nbOutputs; ++j)
     {

@@ -178,7 +178,7 @@ void MultiObjectiveOptimizationAnalysis::updateParameters()
 void MultiObjectiveOptimizationAnalysis::initialize()
 {
   PhysicalModelAnalysis::initialize();
-  notify("progressValueChanged");
+  notifyProgress();
 }
 
 void MultiObjectiveOptimizationAnalysis::launch()

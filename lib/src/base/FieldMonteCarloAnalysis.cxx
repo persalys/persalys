@@ -102,14 +102,15 @@ void FieldMonteCarloAnalysis::launch()
     if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
     {
       progressValue_ = (int) (outerSampling * 100 / maximumOuterSampling);
-      notify("progressValueChanged");
+      notifyProgress();
     }
     // information message
     OSS oss;
+    oss.setPrecision(1);
     oss << "Number of iterations = " << processSample.getSize() << "\n";
     oss << "Elapsed time = " << elapsedTime << " s\n";
     informationMessage_ = oss;
-    notify("informationMessageUpdated");
+    notifyMessageUpdated();
 
     // the last block can be smaller
     const UnsignedInteger effectiveBlockSize = outerSampling < (maximumOuterSampling - 1) ? getBlockSize() : lastBlockSize;
@@ -158,7 +159,7 @@ void FieldMonteCarloAnalysis::launch()
   karhunenLoeveAnalysis_.result_.designOfExperiment_.setInputSample(effectiveInputSample);
 
   informationMessage_ = "Post processing in progress";
-  notify("informationMessageUpdated");
+  notifyMessageUpdated();
 
   // Compute mean/quantiles process sample
   karhunenLoeveAnalysis_.result_.meanSample_ = processSample.computeMean().getValues();

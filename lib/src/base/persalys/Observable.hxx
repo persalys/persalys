@@ -25,6 +25,7 @@
 #include "AppliException.hxx"
 
 #include <vector>
+#include <chrono>
 
 namespace PERSALYS
 {
@@ -36,7 +37,7 @@ public:
   /** Copy constructor */
   Observable(const Observable & other);
 
-  virtual ~Observable();
+  virtual ~Observable() = default;
 
   Observable & operator=(const Observable & rhs);
 
@@ -44,6 +45,8 @@ public:
   void removeObserver(Observer * observer);
   void removeObserver(const OT::String & observerType);
   void notify(const OT::String & message);
+  void notifyProgress(int minimumElapsedTime = 200);
+  void notifyMessageUpdated(int minimumElapsedTime = 200);
   void notifyAndRemove(const OT::String & type);
   void blockNotification(const OT::String & blockedObserverType = "");
   std::vector<Observer *> getObservers() const;
@@ -53,6 +56,8 @@ public:
 private:
   std::vector<Observer *> observers_;
   OT::String blockedObserverType_;
+  std::chrono::steady_clock::time_point lastProgressNotificationTime_;
+  std::chrono::steady_clock::time_point lastMessageNotificationTime_;
 };
 }
 #endif

@@ -248,7 +248,7 @@ namespace PERSALYS
         break;
       PersistentCollection<Sample> quantilesMarg;
       progressValue_ = (int) (iMarg * 100 / sample.getDimension());
-      notify("progressValueChanged");
+      notifyProgress();
 
       const Distribution dist = KernelSmoothing(Normal()).build(sample.getMarginal(iMarg));
       Sample probaValues(0, targetProbas_[iMarg].getDimension());
@@ -297,7 +297,7 @@ namespace PERSALYS
       if (stopRequested_)
         break;
       progressValue_ = (int) (iMarg * 100 / sample.getDimension());
-      notify("progressValueChanged");
+      notifyProgress();
 
       RandomGenerator::SetSeed(getSeed());
 

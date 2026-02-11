@@ -199,11 +199,11 @@ void MorrisAnalysis::launch()
       break;
 
     progressValue_ = (int) (i * 100 / nbIter);
-    notify("progressValueChanged");
+    notifyProgress();
 
     // information message
-    informationMessage_ = OSS() << "Elapsed time = " << timeCriteria.getElapsedTime() << " s\n";
-    notify("informationMessageUpdated");
+    informationMessage_ = OSS().setPrecision(1) << "Elapsed time = " << timeCriteria.getElapsedTime() << " s\n";
+    notifyMessageUpdated();
 
     const Sample blockInputSample(inSample, i * getBlockSize(), std::min((i + 1) * getBlockSize(), inSample.getSize()));
 

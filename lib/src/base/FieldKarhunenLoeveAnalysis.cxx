@@ -156,7 +156,7 @@ namespace PERSALYS
 
     // Compute the KL decomposition of the output and correlation
     informationMessage_ = "Karhunen-Loeve algorithm in progress";
-    notify("informationMessageUpdated");
+    notifyMessageUpdated();
     // get mesh info
     const Point vertices(mesh.getVertices().asPoint());
     try

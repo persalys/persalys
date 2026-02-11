@@ -43,11 +43,6 @@ Observable::Observable(const Observable & /*other*/)
 }
 
 
-Observable::~Observable()
-{
-}
-
-
 /* Assingment operator */
 Observable & Observable::operator=(const Observable & rhs)
 {
@@ -99,6 +94,27 @@ void Observable::notify(const String & message)
   }
 }
 
+void Observable::notifyProgress(int minimumElapsedTime)
+{
+  auto now = std::chrono::steady_clock::now();
+  auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastProgressNotificationTime_).count();
+  if (elapsed >= minimumElapsedTime)
+  {
+      notify("progressValueChanged");
+      lastProgressNotificationTime_ = now;
+  }
+}
+
+void Observable::notifyMessageUpdated(int minimumElapsedTime)
+{
+  auto now = std::chrono::steady_clock::now();
+  auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastMessageNotificationTime_).count();
+  if (elapsed >= minimumElapsedTime)
+  {
+      notify("informationMessageUpdated");
+      lastMessageNotificationTime_ = now;
+  }
+}
 
 void Observable::notifyAndRemove(const String & type)
 {

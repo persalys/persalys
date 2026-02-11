@@ -63,7 +63,7 @@ void FORMAnalysis::initialize()
   // clear result
   AnalysisImplementation::initialize();
   result_ = FORMAnalysisResult();
-  notify("progressValueChanged");
+  notifyProgress();
 }
 
 

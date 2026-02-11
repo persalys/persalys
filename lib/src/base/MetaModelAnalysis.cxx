@@ -459,7 +459,7 @@ void MetaModelAnalysis::computeTestSampleValidation(MetaModelAnalysisResult& res
     return;
   }
   informationMessage_ = "The Test sample validation is running.";
-  notify("informationMessageUpdated");
+  notifyMessageUpdated();
 
   // dimensions
   const UnsignedInteger nbPoints = result.outputSample_.getSize();
@@ -511,7 +511,7 @@ void MetaModelAnalysis::computeKFoldValidation(MetaModelAnalysisResult& result, 
     return;
   }
   informationMessage_ = "The K-Fold validation is running.";
-  notify("informationMessageUpdated");
+  notifyMessageUpdated();
 
   // dimensions
   const UnsignedInteger nbPoints = inputSample.getSize();
@@ -544,7 +544,7 @@ void MetaModelAnalysis::computeKFoldValidation(MetaModelAnalysisResult& result, 
 
     const int progressValue = (int) (i * 100 / nbFolds_);
     informationMessage_ = "The K-Fold validation is running.\nProgression: " + (OSS() << progressValue).str() + "%";
-    notify("informationMessageUpdated");
+    notifyMessageUpdated();
 
     // get bounds of the fold_i
     const UnsignedInteger beginIndex = nbPoints / nbFolds_ * i;
@@ -592,7 +592,7 @@ void MetaModelAnalysis::computeKFoldValidation(MetaModelAnalysisResult& result, 
 void MetaModelAnalysis::computeLOOValidation(MetaModelAnalysisResult& result, const Sample& inputSample)
 {
   informationMessage_ = "The Leave-one-out validation is running.";
-  notify("informationMessageUpdated");
+  notifyMessageUpdated();
 
   // initialize result
   Sample metaModelSample(inputSample.getSize(), result.outputSample_.getDimension());
@@ -607,7 +607,7 @@ void MetaModelAnalysis::computeLOOValidation(MetaModelAnalysisResult& result, co
 
     const int progressValue = (int) (i * 100 / inputSample.getSize());
     informationMessage_ = "The Leave-one-out validation is running.\nProgression: " + (OSS() << progressValue).str() + "%";
-    notify("informationMessageUpdated");
+    notifyMessageUpdated();
 
     // learning samples : remove input_i
     Sample learningInSample(inputSample);

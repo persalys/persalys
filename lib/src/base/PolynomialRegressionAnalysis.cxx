@@ -156,7 +156,7 @@ Collection <LinearModelResult> PolynomialRegressionAnalysis::computeResults()
       break;
 
     informationMessage_ = "Creation of a meta model for the variable " + effectiveOutputSample.getDescription()[i] + " in progress.\n";
-    notify("informationMessageUpdated");
+    notifyMessageUpdated();
 
     Algorithm algo{buildAlgo(effectiveInputSample, effectiveOutputSample.getMarginal(i))};
     algo.run();
@@ -310,7 +310,7 @@ void PolynomialRegressionAnalysis::computeAnalyticalValidation(MetaModelAnalysis
     return;
 
   informationMessage_ = "The analytical validation is running.";
-  notify("informationMessageUpdated");
+  notifyMessageUpdated();
 
   // retrieve chaos result
   PolynomialRegressionAnalysisResult lmResult(*dynamic_cast<PolynomialRegressionAnalysisResult*>(&result));

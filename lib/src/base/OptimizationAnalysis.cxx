@@ -248,7 +248,7 @@ void OptimizationAnalysis::initialize()
 {
   PhysicalModelAnalysis::initialize();
   result_ = OptimizationResult();
-  notify("progressValueChanged");
+  notifyProgress();
 }
 
 
