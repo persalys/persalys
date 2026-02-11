@@ -35,6 +35,8 @@ class PERSALYS_VIEW_API DesignOfExperimentExportWizard : public Wizard
 {
   Q_OBJECT
 
+  friend class TestDesignOfExperimentExportWizard;
+
 public:
  explicit DesignOfExperimentExportWizard(const StudyItem * item, QWidget * parent = nullptr);
 
