@@ -45,7 +45,7 @@ montecarlo.run()
 montecarloResult = montecarlo.getResult()
 
 meanCI = montecarloResult.getMeanConfidenceInterval()
-stdCi = montecarloResult.getStdConfidenceInterval()
+#stdCi = montecarloResult.getStdConfidenceInterval()
 
 # Sobol ##
 sobol = persalys.SobolAnalysis("mySobol", model)

@@ -36,7 +36,7 @@ namespace PERSALYS
 
 CLASSNAMEINIT(MonteCarloAnalysis)
 
-static Factory<MonteCarloAnalysis> Factory_MonteCarloAnalysis;
+const static Factory<MonteCarloAnalysis> Factory_MonteCarloAnalysis;
 
 /* Default constructor */
 MonteCarloAnalysis::MonteCarloAnalysis()

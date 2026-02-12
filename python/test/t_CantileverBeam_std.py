@@ -74,7 +74,7 @@ montecarlo.run()
 montecarloResult = montecarlo.getResult()
 
 meanCI = montecarloResult.getMeanConfidenceInterval()
-stdCi = montecarloResult.getStdConfidenceInterval()
+#stdCi = montecarloResult.getStdConfidenceInterval()
 
 # limit state ##
 limitState = persalys.LimitState("limitState1", model, "y", ot.Greater(), 30.0)

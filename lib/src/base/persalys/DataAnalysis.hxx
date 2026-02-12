@@ -32,7 +32,7 @@ class PERSALYS_BASE_API DataAnalysis : public DesignOfExperimentAnalysis
 
 public:
   /** Default constructor */
-  DataAnalysis();
+  DataAnalysis() = default;
 
   /** Constructor with parameters */
   DataAnalysis(const OT::String & name, const DesignOfExperiment & designOfExperiment);
@@ -68,8 +68,8 @@ protected:
   void launch() override;
 
 private:
-  bool isConfidenceIntervalRequired_;
-  double levelConfidenceInterval_;
+  bool isConfidenceIntervalRequired_ = false;
+  double levelConfidenceInterval_ = 0.95;
   DataAnalysisResult result_;
 };
 }

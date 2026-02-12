@@ -127,18 +127,18 @@ result : :py:class:`openturns.Interval`
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::DataAnalysisResult::getStdConfidenceInterval
-"Confidence interval standard deviation accessor.
+//%feature("docstring") PERSALYS::DataAnalysisResult::getStdConfidenceInterval
+//"Confidence interval standard deviation accessor.
 
-Parameters
-----------
-level : float
-    Confidence level
+//Parameters
+//----------
+//level : float
+//    Confidence level
 
-Returns
--------
-result : :py:class:`openturns.Interval`
-    Confidence interval standard deviation"
+//Returns
+//-------
+//result : :py:class:`openturns.Interval`
+//    Confidence interval standard deviation"
 
 // ---------------------------------------------------------------------
 
