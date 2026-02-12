@@ -42,7 +42,7 @@ class PERSALYS_VIEW_API DesignOfExperimentEvaluationWizard : public Wizard
   friend class TestDesignOfExperimentEvaluationWizard;
 
 public:
-  DesignOfExperimentEvaluationWizard(const Analysis& analysis, bool isGeneralWizard = false, QWidget* parent = 0);
+  explicit DesignOfExperimentEvaluationWizard(const Analysis& analysis, bool isGeneralWizard = false, QWidget* parent = nullptr);
 
   Analysis getAnalysis() const;
   bool validateCurrentPage() override;
@@ -57,7 +57,7 @@ private:
   QLabel                    * doeLabel_                 = nullptr;
   OutputsSelectionGroupBox  * outputsSelectionGroupBox_ = nullptr;
   BlockSizeGroupBox         * blockSizeGroupBox_        = nullptr;
-  ErrorWidget               * errorWidget_        = nullptr;
+  ErrorWidget               * errorWidget_              = nullptr;
 };
 }
 #endif

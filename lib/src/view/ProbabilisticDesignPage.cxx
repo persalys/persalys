@@ -67,7 +67,6 @@ void ProbabilisticDesignPage::buildInterface()
   // LHS Warning
   lhsWarningLabel_ = new ErrorWidget;
   lhsWarningLabel_->setMessage(tr("Warning: LHS is designed for independent variables. With dependent inputs, the sample may not preserve LHS properties and results can be less reliable."), ErrorWidget::Warning);
-  //lhsWarningLabel_->setHeight(85);
   lhsWarningLabel_->setVisible(false);
   designGroupBoxLayout->addWidget(lhsWarningLabel_, 2, 0);
 
@@ -112,7 +111,7 @@ void ProbabilisticDesignPage::buildInterface()
 
     if (auto * view = qobject_cast<QListView *>(spaceFillingComboBox_->view()))
       view->setRowHidden(1, isSA);
-    if (auto * model = qobject_cast<QStandardItemModel*>(spaceFillingComboBox_->model())) {
+    if (const auto * model = qobject_cast<QStandardItemModel*>(spaceFillingComboBox_->model())) {
       if (auto * item = model->item(1)) {
         if (isSA)
           item->setFlags(item->flags() & ~Qt::ItemIsEnabled);
@@ -132,6 +131,12 @@ void ProbabilisticDesignPage::buildInterface()
   auto * qmcButton = new QRadioButton(tr("Quasi-Monte Carlo"));
   designButtonsGroup_->addButton(qmcButton, ProbabilisticDesignPage::QuasiMonteCarlo);
   designGroupBoxLayout->addWidget(qmcButton, 3, 0);
+
+  // QMC button
+  qmcWarningLabel_ = new ErrorWidget;
+  qmcWarningLabel_->setMessage(tr("Warning: Quasi-Monte Carlo is designed for independent variables. With dependent inputs, the sample may not preserve QMC properties and results can be less reliable."), ErrorWidget::Warning);
+  qmcWarningLabel_->setVisible(false);
+  designGroupBoxLayout->addWidget(qmcWarningLabel_, 4, 0);
 
   mainLayout->addWidget(designGroupBox);
 
@@ -195,6 +200,7 @@ void ProbabilisticDesignPage::initialize(const Analysis& analysis)
   // check copula independance
   const bool independentCopula = doe->getPhysicalModel().getCopula().hasIndependentCopula();
   lhsWarningLabel_->setVisible(!independentCopula);
+  qmcWarningLabel_->setVisible(!independentCopula);
 
   // initialize widgets if the analysis is already a ProbabilisticDesignOfExperiment
   const auto * probaDOE = dynamic_cast<const ProbabilisticDesignOfExperiment *>(doe);
