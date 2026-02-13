@@ -127,7 +127,7 @@ void DataModel::initialize()
 
 void DataModel::setInputSample(const Sample& sample)
 {
-  if (sample.getSize() && hasPhysicalModel())
+  if (sample.getSize() && physicalModel_.has_value())
   {
     const Description sampleDescription = sample.getDescription();
     for (UnsignedInteger i = 0; i < sampleDescription.getSize(); ++i)
@@ -144,7 +144,7 @@ void DataModel::setInputSample(const Sample& sample)
 
 void DataModel::setOutputSample(const Sample& sample)
 {
-  if (sample.getSize() && hasPhysicalModel())
+  if (sample.getSize() && physicalModel_.has_value())
   {
     const Description sampleDescription = sample.getDescription();
     for (UnsignedInteger i = 0; i < sampleDescription.getSize(); ++i)
@@ -232,14 +232,30 @@ void DataModel::setColumns(const Indices &inputColumns,
   update();
 }
 
-/** @brief Set the modifies the sample of the ImportedDataset */
 void DataModel::setSample(const Sample & sample)
 {
-  if (!importedDataset_)
+  if (importedDataset_)
+  {
+    importedDataset_->setSampleFromFile(sample);
+    update();
+  }
+  else if (getInputSample().getSize() || getOutputSample().getSize())
+  {
+    const UnsignedInteger inputDim = getInputSample().getDimension();
+    Indices inputIndices(inputDim);
+    inputIndices.fill();
+    Indices outputIndices(getOutputSample().getDimension());
+    outputIndices.fill(inputDim);
+
+    const Sample inputSample = sample.getMarginal(inputIndices);
+    const Sample outputSample = sample.getMarginal(outputIndices);
+    setInputSample(inputSample);
+    setOutputSample(outputSample);
+  }
+  else
+  {
     throw InternalException(HERE) << "No ImportedDataset defined in the DataModel.";
-  
-  importedDataset_->setSampleFromFile(sample);
-  update();
+  }
 }
 
 Sample DataModel::getSampleFromFile() const

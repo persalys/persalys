@@ -117,7 +117,7 @@ public:
 protected:
   void setNames(const OT::Description &inputNames, const OT::Description &outputNames);
   virtual void update();
-
+  
 private:
     void loadDataModelAttributes(OT::Advocate & adv);
 

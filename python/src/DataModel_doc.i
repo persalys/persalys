@@ -205,8 +205,19 @@ PERSALYS_DesignOfExperiment_setColumns_doc
 
 // ---------------------------------------------------------------------
 
+%define PERSALYS_DesignOfExperiment_setSample_doc
+"Changes the sample contained inside the data model.
+
+Parameters
+----------
+sample : :py:class:`openturns.Sample`
+    Sample to set inside the data model"
+%enddef
+
+// ---------------------------------------------------------------------
+
 %define PERSALYS_DesignOfExperiment_getSampleFromFile_doc
-" Returns the sample contained inside the imported dataset.
+"Returns the sample contained inside the imported dataset.
 
 Returns
 -------
