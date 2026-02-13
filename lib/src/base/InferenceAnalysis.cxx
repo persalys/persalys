@@ -400,8 +400,8 @@ bool InferenceAnalysis::canBeLaunched(String &errorMessage) const
 bool InferenceAnalysis::CanBeLaunched(String &errorMessage, const DesignOfExperiment & designOfExperiment)
 {
   DataAnalysis::CanBeLaunched(errorMessage, designOfExperiment);
-  if (designOfExperiment.getType() != DataModel::MC)
-    errorMessage =  "Variables must be i.i.d.";
+  //if (designOfExperiment.getType() != DataModel::MC)
+  //  errorMessage =  "Variables must be i.i.d.";
   
   return errorMessage.empty();
 }
