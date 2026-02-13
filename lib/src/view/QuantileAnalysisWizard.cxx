@@ -55,7 +55,7 @@ namespace PERSALYS
     methodGroup_ = new QButtonGroup(this);
 
     // MC
-    QRadioButton * buttonMC = new QRadioButton(tr("Monte Carlo"));
+    QRadioButton * buttonMC = new QRadioButton(tr("asymptotic law"));
     buttonMC->setChecked(true);
     methodGroup_->addButton(buttonMC, QuantileAnalysisResult::MonteCarlo);
     methodLayout->addWidget(buttonMC);
