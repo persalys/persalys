@@ -616,7 +616,7 @@ The results window gathers the following tabs:
 The results window gathers, for a selected output (left column):
 mean (corresponding to the first and second order expansions), standard deviation and variance.
 
-5- Sensitivity analysis
+5- Sobol sensitivity
 =======================
 
 To create a new sensitivity analysis, 3 different ways are possible:
@@ -641,10 +641,7 @@ The input variables must be independent to perform a sensitivity analysis.
 
 When an analysis is required, a window appears, in order to set up:
   - the outputs of interest (**Select outputs** - default: all outputs are analyzed)
-  - the method: `Sobol <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/sensitivity_sobol.html>`_ (default), SRC (= `Standardised Regression Coefficient <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/ranking_src.html>`_)
-
-.. image:: /user_manual/graphical_interface/probabilistic_analysis/sensitivityAnalysisMethods.png
-    :align: center
+  - the method: `Sobol <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/sensitivity_sobol.html>`_. Note that the SRC method is available for data sets and that you can export an evaluated design of experiments as a data set.
 
 5-1-1 Sobol indices
 ~~~~~~~~~~~~~~~~~~~
@@ -673,20 +670,6 @@ The **Sobol parameters** window allows one to define:
     :align: center
 
 See the :ref:`Sensitivity <SobolExample>` section in the example guide.
-
-5-1-2 SRC indices
-~~~~~~~~~~~~~~~~~
-
-The **SRC parameters** window allows one to define:
-  - **Evaluation parameters**:
-     - the sample size (default=10000)
-     - the block size (default=1): defines the maximum number of samples queued for evaluation by the physical model,
-       see :ref:`deterministic design of experiment evaluation <doeevalwizard>` for more details
-  - **Advanced Parameters** (default: hidden): the seed of the random generator
-    (default: 0, positive integer expected)
-
-.. image:: /user_manual/graphical_interface/probabilistic_analysis/sensitivityAnalysisDefineSRC.png
-    :align: center
 
 5-2 Launch
 ''''''''''
@@ -751,33 +734,3 @@ The window presents the following tabs:
 
 - The **Model** tab shows the model content used to perform the analysis.
 
-.. _srcresult:
-
-5-3-2 SRC indices
-~~~~~~~~~~~~~~~~~
-
-.. image:: /user_manual/graphical_interface/probabilistic_analysis/sensitivityAnalysisSRC.png
-    :align: center
-
-The results window gathers these tabs:
-
-- The **Indices** tab includes, for a selected output (left column):
-
-  - the graph of the input variables SRC indices.
-    Use the :ref:`Graph settings <secondgraphsettings>` window to set up graphical parameters.
-  - the table of the input variables SRC indices.
-
-      - Table interactivity:
-          - Select cells and Press Ctrl+C to copy values in the clipboard
-          - Left-click on column header to sort values in ascending or descending order.
-            Sorting the table will automatically sort the indices on the graph.
-
-  If input variables are correlated in the physical model of the analysis, a message will appear at the
-  bottom of the window to warn the user the result can be false.
-
-- The **Parameters** tab reminds the user of all the parameters values to perform the analysis.
-
-  .. image:: /user_manual/graphical_interface/probabilistic_analysis/sensitivityAnalysisSRC_tab_parameters.png
-      :align: center
-
-- The **Model** tab shows the model content used to perform the analysis.

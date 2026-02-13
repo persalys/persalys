@@ -179,11 +179,13 @@ It proposes to create models:
      - **Python model**: Physical model defined with a Python script
      - **Python model on cluster**: Physical model defined with a Python script intended to run on a cluster (optional)
      - **FMI model**: Physical model defined with a FMU file (optional)
+     - **Coupling model**: Physical model evaluated by one or several external programs
   - Models defined with a field function:
      - **Symbolic Field model**: Physical model defined with analytical formulas and a mesh
      - **Python Field model**: Physical model defined with a Python script and a mesh
   - Models defined with a data sample:
-     - **Data model**: Physical model defined with a sample
+     - **Data set**: Data model defined with a data sample (experimental or numerical)
+     - **Field data set**: Data model defined with a data sample and a mesh
 
 The context menu also allows the following actions:
   - **Rename**: Rename the study

@@ -2215,7 +2215,7 @@ Physical model
     - a wizard appears, click on Cancel
 
 - In the model window: add a second input
-    - the 'Screening' and 'Observations' buttons of the diagram is enabled
+    - the 'Morris' and 'Observations' buttons of the diagram is enabled
 
 - In the model window: add a second output
     - the 'Multi-objective optimization' button is enabled
@@ -2223,7 +2223,7 @@ Physical model
 - click on the 'Multi-objective optimization' button of the diagram
     - a wizard appears, click on Cancel
 
-- click on the 'Screening' button of the diagram
+- click on the 'Morris' button of the diagram
     - a wizard appears, click on Cancel
 
 - click on the 'Optimization' button of the diagram
@@ -2249,20 +2249,6 @@ Physical model
     - a wizard appears, there are 2 items in the combo box in Design of experiments group box, click on Finish, an item 'Evaluation' appears, click on it
     - click on the 'Run' button
     - the 'MetaModel creation' button of the diagram is enabled
-
-- click on the 'MetaModel creation' button of the diagram
-    - a wizard appears, click on Continue button several times then on Finish button, an item 'metaModel_0' appears, click on it
-    - click on the 'Run' button
-    - the 'Export as model' buttons is enabled
-
-- redo the previous action
-
-- click on the 'Export as model' button of the diagram
-    - a wizard appears, there are 2 items in the combo box
-    - right click then 'Remove' on 'metaModel_0' item
-    - right click then 'Modify' on 'metaModel_1' item
-    - go through all the wizard pages then finish
-    - do not run the MetaModel analysis, check that the 'Export as model' diagram button is greyed out
 
 - click on the 'Probabilistic model definition' button of the diagram
     - a window appears, select X0

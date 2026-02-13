@@ -2,7 +2,7 @@
 User manual - Define a data model
 =================================
 
-The interface allows the user to load data samples and analyze them. They are considered as data models.
+The interface allows the user to load data samples and analyze them.
 
 1- Creation
 ===========
@@ -13,12 +13,12 @@ A data model can be created through:
     .. image:: /user_manual/graphical_interface/getting_started/studyItemContextMenu.png
         :align: center
 
-  - the **Data model** button of the study window
+  - the **Data set** button of the study window
 
     .. image:: /user_manual/graphical_interface/physical_model/studyWindowButtons.png
         :align: center
 
-The creation of a data model adds a new element in the study tree, below the **Data models** section.
+The creation of a data model adds a new element in the study tree, below the **Data sets** section.
 
 Different actions are available through the context menu of the model (by right click):
   - **Rename**: Rename the model
@@ -106,13 +106,12 @@ popup menu:
 .. _datafieldmodel:
 
 =======================================
-User manual - Define a data field model
+User manual - Define a field data model
 =======================================
 
 The interface allows the user to load field data (e.g. time series or
-more generally 1-D trajectories) and analyze them. They are considered
-as data field models. As opposed to symbolic and Python field models
-they are not associated to a field function and input vector.
+more generally 1-D trajectories) and analyze them. Unlike symbolic and Python field models
+they are not associated with a field function or input vector.
 
 1- Creation
 ===========
