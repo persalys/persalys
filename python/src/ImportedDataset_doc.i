@@ -1,5 +1,18 @@
 %feature("docstring") PERSALYS::ImportedDataset
-"Class to import file data."
+"Class to import file data.
+
+    ImportedDataset()
+    
+    ImportedDataset(*fileName, inputColumns, outputColumns*)
+   
+Parameters
+----------
+fileName : str
+    Path to the file to import data from
+inputColumns : sequence of int
+    Columns of the input variables
+outputColumns : sequence of int, optional
+    Columns of the output variables"
 
 // ---------------------------------------------------------------------
 

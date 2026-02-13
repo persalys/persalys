@@ -58,10 +58,6 @@ public:
   void setColumns(const OT::Indices & inputColumns, const OT::Indices & outputColumns);
   void setNames(const OT::Description & inputNames, const OT::Description & outputNames);
 
-  void check();
-
-  void setDefaultColumns();
-
   /** String converter */
   OT::String __repr__() const override;
 
@@ -70,6 +66,10 @@ public:
 
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv) override;
+
+private:
+  void check();
+  void setDefaultColumns();
 
 private:
   OT::String fileName_;
