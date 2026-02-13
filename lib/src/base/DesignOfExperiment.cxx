@@ -98,11 +98,15 @@ PhysicalModel DesignOfExperiment::getPhysicalModel() const
   return getImplementation()->getPhysicalModel();
 }
 
-void DesignOfExperiment::setPhysicalModel(const std::optional<PhysicalModel> & physicalModel)
+void DesignOfExperiment::setPhysicalModel(const PhysicalModel & physicalModel)
 {
   getImplementation()->setPhysicalModel(physicalModel);
 }
 
+void DesignOfExperiment::removePhysicalModel()
+{
+  getImplementation()->removePhysicalModel();
+}
 
 Sample DesignOfExperiment::getInputSample() const
 {

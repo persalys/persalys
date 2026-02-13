@@ -112,11 +112,15 @@ PhysicalModel DataModel::getPhysicalModel() const
   return physicalModel_.value();
 }
 
-void DataModel::setPhysicalModel(const std::optional<PhysicalModel> & physicalModel)
+void DataModel::setPhysicalModel(const PhysicalModel & physicalModel)
 {
   physicalModel_ = physicalModel;
 }
 
+void DataModel::removePhysicalModel()
+{
+  physicalModel_.reset();
+}
 
 void DataModel::initialize()
 {

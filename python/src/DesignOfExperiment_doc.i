@@ -59,6 +59,9 @@ PERSALYS_DesignOfExperiment_getPhysicalModel_doc
 %feature("docstring") PERSALYS::DesignOfExperiment::setPhysicalModel
 PERSALYS_DesignOfExperiment_setPhysicalModel_doc
 
+%feature("docstring") PERSALYS::DesignOfExperiment::removePhysicalModel
+PERSALYS_DesignOfExperiment_removePhysicalModel_doc
+
 %feature("docstring") PERSALYS::DesignOfExperiment::getInputSample
 PERSALYS_DesignOfExperiment_getInputSample_doc
 

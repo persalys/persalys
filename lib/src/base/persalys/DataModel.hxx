@@ -74,7 +74,8 @@ public:
 
   bool hasPhysicalModel() const;
   PhysicalModel getPhysicalModel() const;
-  void setPhysicalModel(const std::optional<PhysicalModel> & physicalModel);
+  void setPhysicalModel(const PhysicalModel & physicalModel);
+  void removePhysicalModel();
 
   void initialize();
   void setInputSample(const OT::Sample & sample) override;

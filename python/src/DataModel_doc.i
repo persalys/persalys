@@ -87,12 +87,18 @@ PERSALYS_DesignOfExperiment_getPhysicalModel_doc
 
 Parameters
 ----------
-model : :class:`~persalys.PhysicalModel` | None
+model : :class:`~persalys.PhysicalModel`
     Physical model to set"
 %enddef
 
 %feature("docstring") PERSALYS::DataModel::setPhysicalModel
 PERSALYS_DesignOfExperiment_setPhysicalModel_doc
+
+// ---------------------------------------------------------------------
+
+%define PERSALYS_DesignOfExperiment_removePhysicalModel_doc
+"Remove the physical model from the design of experiment."
+%enddef
 
 // ---------------------------------------------------------------------
 
