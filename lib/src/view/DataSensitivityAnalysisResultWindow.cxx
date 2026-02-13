@@ -55,19 +55,35 @@ void DataSensitivityAnalysisResultWindow::initialize(const AnalysisItem* item)
 
 void DataSensitivityAnalysisResultWindow::initializeVariablesNames()
 {
-  PhysicalModel model(designOfExperiment_.getPhysicalModel());
+  const bool hasPhysicalModel = designOfExperiment_.hasPhysicalModel();
 
   // inputs
   if (designOfExperiment_.getInputSample().getSize())
   {
     inputNames_ = QtOT::DescriptionToStringList(designOfExperiment_.getInputSample().getDescription());
-    inAxisTitles_ = QtOT::GetVariableAxisLabels(model, designOfExperiment_.getInputSample().getDescription());
+    if (hasPhysicalModel)
+    {
+      const PhysicalModel & model = designOfExperiment_.getPhysicalModel();
+      inAxisTitles_ = QtOT::GetVariableAxisLabels(model, designOfExperiment_.getInputSample().getDescription());
+    }
+    else
+    {
+      inAxisTitles_ = inputNames_;
+    }
   }
   // outputs
   if (designOfExperiment_.getOutputSample().getSize())
   {
     outputNames_ = QtOT::DescriptionToStringList(designOfExperiment_.getOutputSample().getDescription());
-    outAxisTitles_ = QtOT::GetVariableAxisLabels(model, designOfExperiment_.getOutputSample().getDescription());
+    if (hasPhysicalModel)
+    {
+      const PhysicalModel & model = designOfExperiment_.getPhysicalModel();
+      outAxisTitles_ = QtOT::GetVariableAxisLabels(model, designOfExperiment_.getOutputSample().getDescription());
+    }
+    else
+    {
+      outAxisTitles_ = outputNames_;
+    }
   }
 }
 
