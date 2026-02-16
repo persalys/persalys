@@ -53,7 +53,7 @@ print("outs=", aDesign3.getResult().getDesignOfExperiment().getOutputSample())
 aDesign4 = persalys.FixedDesignOfExperiment("aDesign_4", model)
 inputSample = ot.LHSExperiment(model.getDistribution(), 10).generate()
 # inputSample.stack(ot.Sample(10, [0.5, 1.3]))
-aDesign4.setOriginalInputSample(inputSample, persalys.DataModel.LHS)
+aDesign4.setOriginalInputSample(inputSample, persalys.DataModel.RLHS)
 anOTStudy.add(aDesign4)
 
 aDesign4.run()

@@ -12,7 +12,7 @@ loadedStudy = persalys.Study.Open("DataModel_load.xml")
 loadedDataModel = loadedStudy.getDataModelByName("HousingPricesBoston")
 
 ott.assert_almost_equal(myDataModel.getSample(), loadedDataModel.getSample())
-assert loadedDataModel.getType() == persalys.DataModel.GENERIC
+assert loadedDataModel.getType() == persalys.DataModel.UK
 
 model = loadedStudy.getPhysicalModels()[0]
 observations = loadedStudy.getDataModelByName("observations_0")

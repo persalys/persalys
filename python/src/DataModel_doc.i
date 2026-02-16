@@ -130,10 +130,11 @@ Parameters
 ----------
 type : int
     possible values are 
-        persalys.DataModel.GENERIC,
+        persalys.DataModel.UK,
         persalys.DataModel.MC,
         persalys.DataModel.QMC,
-        persalys.DataModel.LHS,
+        persalys.DataModel.RLHS,
+        persalys.DataModel.OLHS,
         persalys.DataModel.GRID,
         persalys.DataModel.MORRIS"
 %enddef
@@ -150,10 +151,11 @@ Returns
 -------
 type : int
     possible values are 
-        persalys.DataModel.GENERIC,
+        persalys.DataModel.UK,
         persalys.DataModel.MC,
         persalys.DataModel.QMC,
-        persalys.DataModel.LHS,
+        persalys.DataModel.RLHS,
+        persalys.DataModel.OLHS,
         persalys.DataModel.GRID,
         persalys.DataModel.MORRIS"
 %enddef

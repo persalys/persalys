@@ -234,9 +234,13 @@ Sample ProbabilisticDesignOfExperiment::generateInputSample(const UnsignedIntege
 void ProbabilisticDesignOfExperiment::launch()
 {
   DesignOfExperimentEvaluation::launch();
-  if (designName_ == "LHS" || designName_ == "SALHS" || designName_ == "MCLHS")
+  if (designName_ == "LHS")
   {
-    result_.designOfExperiment_.setType(DesignOfExperiment::Type::LHS);
+    result_.designOfExperiment_.setType(DesignOfExperiment::Type::RLHS);
+  }
+  else if (designName_ == "SALHS" || designName_ == "MCLHS")
+  {
+    result_.designOfExperiment_.setType(DesignOfExperiment::Type::OLHS);
   }
   else if (designName_ == "QUASI_MONTE_CARLO")
   {

@@ -50,7 +50,7 @@ outputSample = ot.Sample([
 outputSample.setDescription(['y0'])
 design_0.setInputSample(inputSample)
 design_0.setOutputSample(outputSample)
-design_0.setType(persalys.DataModel.GENERIC)
+design_0.setType(persalys.DataModel.UK)
 myStudy.add(design_0)
 design_1 = persalys.DataModel('design_1', model)
 inputSample = ot.Sample([
@@ -81,7 +81,7 @@ outputSample = ot.Sample([
 outputSample.setDescription(['y0', 'y1'])
 design_1.setInputSample(inputSample)
 design_1.setOutputSample(outputSample)
-design_1.setType(persalys.DataModel.GENERIC)
+design_1.setType(persalys.DataModel.UK)
 myStudy.add(design_1)
 design = persalys.FixedDesignOfExperiment('design', model)
 inputSample = [

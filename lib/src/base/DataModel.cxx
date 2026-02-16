@@ -348,14 +348,16 @@ String DataModel::TypeToString(Type type)
 {
   switch(type)
   {
-    case Type::GENERIC:
-        return "GENERIC";
+    case Type::UK:
+        return "UK";
     case Type::MC:
         return "MC";
     case Type::QMC:
         return "QMC";
-    case Type::LHS:
-        return "LHS";
+    case Type::RLHS:
+      return "RLHS";
+    case Type::OLHS:
+        return "OLHS";
     case Type::GRID:
         return "GRID";
     case Type::MORRIS:

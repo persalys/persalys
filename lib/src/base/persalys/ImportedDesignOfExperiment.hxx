@@ -43,7 +43,7 @@ public:
                               const OT::String& fileName,
                               const OT::Indices& inputColumns,
                               const OT::Indices& outputColumns = OT::Indices(),
-                              Type type = Type::GENERIC);
+                              Type type = Type::UK);
 
   /** Virtual constructor */
   ImportedDesignOfExperiment * clone() const override;
@@ -81,7 +81,7 @@ private:
   void loadOldFormat(OT::Advocate& adv);
 
 private:
-    Type type_ = Type::GENERIC;
+    Type type_ = Type::UK;
     ImportedDataset importedDataset_;
 };
 }

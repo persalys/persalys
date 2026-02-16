@@ -137,7 +137,7 @@ Parameters ImportedDesignOfExperiment::getParameters() const
   
   switch(type_)
   {
-    case Type::GENERIC:
+    case Type::UK:
       param.add("Type", "Generic");
       break;
     case Type::MC:
@@ -146,8 +146,11 @@ Parameters ImportedDesignOfExperiment::getParameters() const
     case Type::QMC:
       param.add("Type", "Quasi Monte Carlo");
       break;
-    case Type::LHS:
+    case Type::RLHS:
       param.add("Type", "Latin Hypercube Sampling");
+      break;
+    case Type::OLHS:
+      param.add("Type", "Optimized LHS");
       break;
     case Type::GRID:
       param.add("Type", "Grid");

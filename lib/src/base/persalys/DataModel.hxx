@@ -34,7 +34,7 @@ class PERSALYS_BASE_API DataModel : public DataSample, public Observable
   CLASSNAME
 
 public:
-  enum Type {GENERIC, MC, QMC, LHS, GRID, MORRIS};
+  enum Type {UK, MC, QMC, RLHS, OLHS, GRID, MORRIS};
 
   /** Constructor with parameters */
   explicit DataModel(const OT::String & name = "");
@@ -125,7 +125,7 @@ private:
 protected:
   std::optional<PhysicalModel>    physicalModel_    = std::nullopt;
   std::optional<ImportedDataset>  importedDataset_  = std::nullopt;
-  Type type_ = GENERIC;
+  Type type_ = UK;
   bool resetImportedDataset_ = true;
 };
 

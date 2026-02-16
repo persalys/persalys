@@ -44,7 +44,7 @@ public:
   /** Virtual constructor */
   FixedDesignOfExperiment * clone() const override;
 
-  void setOriginalInputSample(const OT::Sample & sample, Type type = DataModel::GENERIC);
+  void setOriginalInputSample(const OT::Sample & sample, Type type = DataModel::UK);
 
   OT::String getPythonScript() const override;
 
@@ -56,7 +56,7 @@ protected:
   void launch() override;
 
 private:
-    Type type_ = DataModel::GENERIC;
+    Type type_ = DataModel::UK;
 };
 }
 #endif
