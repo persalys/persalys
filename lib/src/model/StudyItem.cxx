@@ -271,7 +271,7 @@ bool StudyItem::save(const QString& filename)
   {
     study_.save(QDir::toNativeSeparators(fileName).toUtf8().constData());
   }
-  catch (...)     // TODO: Update exception handling for OTv1.22
+  catch (const FileOpenException &)
   {
     emit showErrorMessageRequested(tr("Cannot save file %1:\n%2").arg(fileName).arg(file.errorString()));
     QApplication::restoreOverrideCursor();

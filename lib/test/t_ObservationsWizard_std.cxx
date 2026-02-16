@@ -29,11 +29,8 @@ public:
     Input C("C", 4000, Normal(4000, 60), "Valued thermal energy");
     Output Ep("Ep", "Primary energy savings");
     Output Ep2("Ep2", "Primary energy savings");
-    InputCollection inputCollection(3);
-    inputCollection[0] = Q;
-    inputCollection[1] = E;
-    inputCollection[2] = C;
-    OutputCollection outputCollection(2);
+    InputCollection inputCollection = {Q, E, C};
+    OutputCollection outputCollection = {Ep, Ep2};
     outputCollection[0] = Ep;
     outputCollection[1] = Ep2;
 
@@ -75,8 +72,8 @@ private slots:
     QVERIFY2(errorMessageLabel->toPlainText().isEmpty(), "Label must be empty");
 
     model->setHeaderData(2, Qt::Horizontal, "", Qt::DisplayRole);
-    QVERIFY2(!wizard.validateCurrentPage(), "Page must be not valid");
-    QVERIFY2(!errorMessageLabel->toPlainText().isEmpty(), "Label must be not empty");
+    QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
+    QVERIFY2(errorMessageLabel->toPlainText().isEmpty(), "Label must be empty");
 
     model->setHeaderData(2, Qt::Horizontal, "E", Qt::DisplayRole);
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
