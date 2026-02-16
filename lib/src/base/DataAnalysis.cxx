@@ -150,43 +150,6 @@ void DataAnalysis::launch()
         result_.meanConfidenceInterval_.setFiniteLowerBound(meanFiniteLowerBounds);
         result_.meanConfidenceInterval_.setFiniteUpperBound(meanFiniteUpperBounds);
       }
-
-      //// std Confidence Interval
-      //Point stdLowerBounds(result_.stdConfidenceInterval_.getLowerBound());
-      //Point stdUpperBounds(result_.stdConfidenceInterval_.getUpperBound());
-      //stdLowerBounds.add(0.);
-      //stdUpperBounds.add(1.);
-
-      //Interval::BoolCollection stdFiniteLowerBounds(result_.stdConfidenceInterval_.getFiniteLowerBound());
-      //Interval::BoolCollection stdFiniteUpperBounds(result_.stdConfidenceInterval_.getFiniteUpperBound());
-      //stdFiniteLowerBounds.add(false);
-      //stdFiniteUpperBounds.add(false);
-
-      //result_.stdConfidenceInterval_ = Interval(result_.min_.getSize());
-
-      //if (result_.variance_[i].getDimension() && marginalNoNaN.getSize() > 1)
-      //{
-      //  // TODO : use Normal Distribution?
-      //  const UnsignedInteger nbSimu = marginalNoNaN.getSize();
-      //  const ChiSquare X(nbSimu - 1);
-      //  // low
-      //  const double f1 = X.computeQuantile((1 - levelConfidenceInterval_) / 2, true)[0];
-      //  // up
-      //  const double f2 = X.computeQuantile((1 - levelConfidenceInterval_) / 2, false)[0];
-
-      //  //low
-      //  stdLowerBounds[i] = sqrt((nbSimu - 1) * result_.variance_[i][0] / f1);
-      //  //up
-      //  stdUpperBounds[i] = sqrt((nbSimu - 1) * result_.variance_[i][0] / f2);
-
-      //  result_.stdConfidenceInterval_.setLowerBound(stdLowerBounds);
-      //  result_.stdConfidenceInterval_.setUpperBound(stdUpperBounds);
-
-      //  stdFiniteLowerBounds[i] = true;
-      //  stdFiniteUpperBounds[i] = true;
-      //  result_.stdConfidenceInterval_.setFiniteLowerBound(stdFiniteLowerBounds);
-      //  result_.stdConfidenceInterval_.setFiniteUpperBound(stdFiniteUpperBounds);
-      //}
     }
 
     // outliers
