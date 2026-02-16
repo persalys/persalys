@@ -79,8 +79,6 @@ Observations::Observations(const String &name,
   // check dimension
   if (!outSample.getSize())
     throw InvalidArgumentException(HERE) << "Set at least an output to calibrate";
-  if (!inSample.getSize()) // TODO next OT : can have only observed output
-    throw InvalidArgumentException(HERE) << "Set at least an input to calibrate";
   // check if names of physical model
   for (UnsignedInteger i = 0; i < inSample.getDescription().getSize(); ++i)
     if (!getPhysicalModel().getInputNames().contains(inSample.getDescription()[i]))
@@ -169,9 +167,6 @@ void Observations::setColumns(const Indices &inputColumns,
   // check at least there at least one output and one input
   if (!outputColumns.getSize())
     throw InvalidArgumentException(HERE) << "Define observations for at least an output.";
-  // TODO : remove this check with new version of OT (possible to have no input observations in the future)
-  if (!inputColumns.getSize())
-    throw InvalidArgumentException(HERE) << "Define observations for at least an input.";
   // check if names of physical model
   for (UnsignedInteger i = 0; i < inputNames.getSize(); ++i)
     if (!getPhysicalModel().getInputNames().contains(inputNames[i]))
@@ -238,12 +233,9 @@ void Observations::orderSamples()
 
 Sample Observations::importSample(const String &fileName, const Tools::DataOrder)
 {
-  Sample sampleFromFile(DataImport::importSample(fileName));
-
-  // check sampleFromFile dimension TODO: rm with OT1.14
-  if (sampleFromFile.getDimension() < 2)
-    throw InvalidArgumentException(HERE) << "The file must contain at least two columns to define observations for at least an input and an output.";
-
+  const Sample sampleFromFile(DataImport::importSample(fileName));
+  if (sampleFromFile.getDimension() < 1)
+    throw InvalidArgumentException(HERE) << "The file must contain at least two columns to define observations for at least an output.";
   return sampleFromFile;
 }
 

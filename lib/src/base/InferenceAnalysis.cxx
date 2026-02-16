@@ -416,8 +416,6 @@ void InferenceAnalysis::save(Advocate& adv) const
 {
   DesignOfExperimentAnalysis::save(adv);
 
-// TODO with new version of OT (where DistributionFactory can be saved)
-//   DistributionFactoryCollectionCollection collection;
   PersistentCollection<Description> collection;
   for (UnsignedInteger i = 0; i < getInterestVariables().getSize(); ++i)
   {
