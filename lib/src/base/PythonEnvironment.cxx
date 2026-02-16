@@ -48,7 +48,7 @@ void PythonEnvironment::runString(const std::string & cmd)
   PyObject * module = PyImport_AddModule("__main__");// Borrowed reference.
   PyObject * dict = PyModule_GetDict(module);// Borrowed reference.
   PyRun_String(cmd.c_str(), Py_file_input, dict, dict);
-  handleExceptionTraceback();
+  handleException();
 }
 
 
@@ -59,69 +59,4 @@ PythonEnvironment::~PythonEnvironment()
 }
 
 
-void handleExceptionTraceback()
-{
-  PyObject * exception = PyErr_Occurred();
-
-  if (exception)
-  {
-    PyObject *ptype = NULL, *pvalue = NULL, *ptraceback = NULL;
-    PyErr_Fetch(&ptype, &pvalue, &ptraceback);
-    PyErr_NormalizeException(&ptype, &pvalue, &ptraceback);
-
-    String exceptionMessage;
-
-    if (ptraceback)
-    {
-      // See if we can get a full traceback
-      ScopedPyObjectPointer pyth_module(PyImport_ImportModule("traceback"));
-
-      ScopedPyObjectPointer pyth_func(PyObject_GetAttrString(pyth_module.get(), "format_exception"));
-      if (pyth_func.get() && PyCallable_Check(pyth_func.get()))
-      {
-        ScopedPyObjectPointer pyth_val(PyObject_CallFunctionObjArgs(pyth_func.get(), ptype, pvalue, ptraceback, NULL));
-
-        if (pyth_val.get())
-        {
-          // The return value of format_exception() is a list of strings
-          const Description desc = checkAndConvert< _PySequence_, Description >(pyth_val.get());
-          exceptionMessage += "Python exception:\n";
-          for (UnsignedInteger i = 0; i < desc.getSize(); i++)
-          {
-            exceptionMessage += desc[i];
-          }
-        }
-      }
-    }
-    if (!ptraceback || exceptionMessage.empty())
-    {
-      exceptionMessage = "Python exception";
-      // get the name of the exception
-      if (ptype)
-      {
-        ScopedPyObjectPointer nameObj(PyObject_GetAttrString(ptype, "__name__"));
-        if (nameObj.get())
-        {
-          String typeString = checkAndConvert< _PyString_, String >(nameObj.get());
-          exceptionMessage += ": " + typeString;
-        }
-      }
-
-      // try to get error msg, value and traceback can be NULL
-      if (pvalue)
-      {
-        ScopedPyObjectPointer valueObj(PyObject_Str(pvalue));
-        if (valueObj.get())
-        {
-          String valueString = checkAndConvert< _PyString_, String >(valueObj.get());
-          exceptionMessage += ": " + valueString;
-        }
-      }
-    }
-
-    PyErr_Restore(ptype, pvalue, ptraceback);
-    PyErr_Print();
-    throw InternalException(HERE) << exceptionMessage;
-  }
-}
 }

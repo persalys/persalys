@@ -7,7 +7,7 @@ ENV ARCH=x86_64 PYMAJMIN=314
 ENV MINGW_PREFIX=/usr/${ARCH}-w64-mingw32
 
 # openturns
-RUN git clone -b v1.26.1 --depth 1 https://github.com/openturns/openturns.git /tmp/openturns && cd /tmp/openturns \
+RUN git clone -b v1.27 --depth 1 https://github.com/openturns/openturns.git /tmp/openturns && cd /tmp/openturns \
   && ${ARCH}-w64-mingw32-cmake \
   -DCMAKE_LINKER_TYPE=LLD \
   -DBLA_VENDOR=Generic \

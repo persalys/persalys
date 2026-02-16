@@ -6,7 +6,7 @@ class=SobolAnalysis name=aSobol2 physicalModel=aModel interestVariables=[y0] max
 result= class=SobolResult name=Unnamed outputNames=[y0] firstOrderIndices=class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=1 dimension=2 description=[x0,x1] data=[[0.892832,0.153005]] totalIndices=class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=1 dimension=2 data=[[0.870144,0.107257]] firstOrderIndicesInterval=[[0.878084, 0.907581]
 [0.0832421, 0.222768]] totalIndicesInterval=[[0.801019, 0.939269]
 [0.0924361, 0.122078]] callsNumber=4000 confidenceIntervalLength=0.102617
-class=SobolAnalysis name=aSobol3 physicalModel=aModel interestVariables=[y1] maximumCalls=1000 maximumCoefficientOfVariation=0.01 maximumElapsedTime=60 seed=2 maximum confidence interval length=0.01 blockSize=4 replicationSize=200 confidenceLevel=0.95
+class=SobolAnalysis name=aSobol3 physicalModel=aModel interestVariables=[y1] maximumCalls=1000 maximumCoefficientOfVariation=0.01 maximumElapsedTime=60 seed=2 maximum confidence interval length=0.1 blockSize=4 replicationSize=200 confidenceLevel=0.95
 result= class=SobolResult name=Unnamed outputNames=[y1] firstOrderIndices=class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=1 dimension=2 description=[x0,x1] data=[[0.90921,0.115756]] totalIndices=class=Sample name=Unnamed implementation=class=SampleImplementation name=Unnamed size=1 dimension=2 data=[[0.92307,0.0973193]] firstOrderIndicesInterval=[[0.886406, 0.932014]
 [-0.00958092, 0.241092]] totalIndicesInterval=[[0.78735, 1.05879]
 [0.0753105, 0.119328]] callsNumber=1600 confidenceIntervalLength=0.199635
@@ -55,7 +55,7 @@ aSobol3 = persalys.SobolAnalysis('aSobol3', aModel)
 interestVariables = ['y1']
 aSobol3.setInterestVariables(interestVariables)
 aSobol3.setMaximumCalls(1000)
-aSobol3.setMaximumConfidenceIntervalLength(0.01)
+aSobol3.setMaximumConfidenceIntervalLength(0.1)
 aSobol3.setMaximumElapsedTime(60)
 aSobol3.setBlockSize(4)
 aSobol3.setReplicationSize(200)

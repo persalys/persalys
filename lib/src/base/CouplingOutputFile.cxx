@@ -152,14 +152,14 @@ String CouplingOutputFile::checkOutputFile(const String &fname, const String &en
   PyObject * const dict = PyModule_GetDict(module); // Borrowed reference
 
   ScopedPyObjectPointer retValue(PyRun_String(code.str().c_str(), Py_file_input, dict, dict));
-  handleExceptionTraceback();
+  handleException();
 
   PyObject * const script = PyDict_GetItemString(dict, "_check_file");
   if (script == NULL)
     throw InternalException(HERE) << "no _check_file function";
 
   ScopedPyObjectPointer result(PyObject_CallObject(script, NULL));
-  handleExceptionTraceback();
+  handleException();
 
   // result est un tuple (varnames, values)
   if (!PyTuple_Check(result.get()) || PyTuple_Size(result.get()) != 2)

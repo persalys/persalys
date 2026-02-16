@@ -7,12 +7,12 @@ Dependencies
 Several dependencies are needed in order to build the GUI:
 
 - CMake >=3.15
-- OpenTURNS >=1.26
+- OpenTURNS >=1.27
 - `otfmi <https://github.com/openturns/otfmi>`_ >=0.14 (optional, for FMI support)
 - `otmorris <https://github.com/openturns/otmorris>`_ >=0.18 (optional, for Morris support)
 - Qt >=5.15
 - Qwt >=6
-- Python >=3.6
+- Python >=3.8
 - SWIG >=4
 - Boost.regex library
 - Boost.program_options (optional, for win32 launcher)
@@ -21,7 +21,7 @@ Several dependencies are needed in order to build the GUI:
 - Sphinx >=1.8 (optional, for doc)
 - Numpydoc >=0.9 (optional, for doc)
 - ParaView >=5.11 (optional, for visualization)
-- Paramiko >= 2.12.0 (optional, for ssh coupling models)
+- Paramiko >=2.12.0 (optional, for ssh coupling models)
 
 Environment variables
 ---------------------

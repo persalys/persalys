@@ -1166,9 +1166,8 @@ void PhysicalModelImplementation::load(Advocate & adv)
   adv.loadAttribute("outputs_", outputs_);
   if (adv.hasAttribute("composedCopula_"))
   {
-    ComposedCopula copula;
-    adv.loadAttribute("composedCopula_", copula);
-    blockIndependentCopula_ = BlockIndependentCopula(copula.getCopulaCollection());
+    // ComposedCopula factory catalog entry maps to BlockIndependentCopula from OT>=1.27
+    adv.loadAttribute("composedCopula_", blockIndependentCopula_);
   }
   else
     adv.loadAttribute("blockIndependentCopula_", blockIndependentCopula_);

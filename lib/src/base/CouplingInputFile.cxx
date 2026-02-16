@@ -150,7 +150,7 @@ void CouplingInputFile::simulateInput(const VariableCollection & varColl) const
   PyObject * module = PyImport_AddModule("__main__"); // Borrowed reference.
   PyObject * dict   = PyModule_GetDict(module);       // Borrowed reference.
   ScopedPyObjectPointer retValue(PyRun_String(code.str().c_str(), Py_file_input, dict, dict));
-  handleExceptionTraceback();
+  handleException();
 }
 
 /* String converter */

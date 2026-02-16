@@ -28,6 +28,7 @@
 
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/PythonWrappingFunctions.hxx>
+#include <openturns/BatchFailedException.hxx>
 
 #include <filesystem>
 
@@ -139,7 +140,7 @@ Point PythonScriptEvaluation::operator() (const Point & inP) const
   if (LastCodeHash_ != codeHash_)
   {
     ScopedPyObjectPointer retValue(PyRun_String(code_.c_str(), Py_file_input, dict, dict));
-    handleExceptionTraceback();
+    handleException();
     LastCodeHash_ = codeHash_;
   }
   callsNumber_.increment();
@@ -149,7 +150,7 @@ Point PythonScriptEvaluation::operator() (const Point & inP) const
 
   ScopedPyObjectPointer inputTuple(convert< Point, _PySequence_ >(inP));
   ScopedPyObjectPointer outputList(PyObject_Call(script, inputTuple.get(), NULL));
-  handleExceptionTraceback();
+  handleException();
 
   if (getOutputDimension() > 1)
   {
@@ -249,7 +250,7 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
 
   ScopedPyObjectPointer retValue(PyRun_String(oss.str().c_str(), Py_file_input, dict, dict));
   std::filesystem::remove_all(tempDir);
-  handleExceptionTraceback();
+  handleException();
 
   // build output sample
   PyObject * sampleResult = PyDict_GetItemString(dict, "Y");

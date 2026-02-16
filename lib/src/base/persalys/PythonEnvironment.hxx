@@ -39,6 +39,5 @@ public:
   void runString(const std::string & cmd);
 };
 
-void handleExceptionTraceback();
 }
 #endif

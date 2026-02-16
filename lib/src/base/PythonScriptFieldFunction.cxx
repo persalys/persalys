@@ -128,7 +128,7 @@ Sample PythonScriptFieldFunction::operator() (const Point & inP) const
 
   ScopedPyObjectPointer inputTuple(convert< Point, _PySequence_ >(inP));
   ScopedPyObjectPointer outputList(PyObject_Call(script, inputTuple.get(), NULL));
-  handleExceptionTraceback();
+  handleException();
 
   Sample outS(getOutputMesh().getVerticesNumber(), outputModelDimension_);
   if (outputModelDimension_ > 1)
@@ -210,7 +210,7 @@ ProcessSample PythonScriptFieldFunction::operator() (const Sample & inS) const
   oss << "    return Y\n";
 
   ScopedPyObjectPointer retValue(PyRun_String(oss.str().c_str(), Py_file_input, dict, dict));
-  handleExceptionTraceback();
+  handleException();
 
   PyObject * script = PyDict_GetItemString(dict, "_exec_sample");
   if (script == NULL)
@@ -218,7 +218,7 @@ ProcessSample PythonScriptFieldFunction::operator() (const Sample & inS) const
 
   // run _exec_sample
   ScopedPyObjectPointer sampleResult(PyObject_CallObject(script, NULL));
-  handleExceptionTraceback();
+  handleException();
 
   // build output sample
   Pointer< Collection< Sample > > ptr;

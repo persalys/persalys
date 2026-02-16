@@ -24,6 +24,7 @@
 #include "persalys/BaseTools.hxx"
 
 #include <openturns/GaussianProcessFitter.hxx>
+#include <openturns/GaussianProcessRegressionCrossValidation.hxx>
 #include <openturns/ConstantBasisFactory.hxx>
 #include <openturns/SquaredExponential.hxx>
 #include <openturns/AggregatedFunction.hxx>
@@ -332,45 +333,11 @@ void KrigingAnalysis::computeAnalyticalValidation(MetaModelAnalysisResult& resul
   // retrieve kriging result
   const GaussianProcessRegressionResult gprResult(dynamic_cast<KrigingAnalysisResult*>(&result)->getGPRResultCollection()[0]);
   const UnsignedInteger size = inputSample.getSize();
-
-  // correlation matrix
-  CovarianceMatrix R(gprResult.getCovarianceModel().discretize(inputSample));
-  const TriangularMatrix C(R.computeCholesky());
-  const SquareMatrix K(C * C.transpose());
-
-  // F
-  const Basis basis = gprResult.getBasis();
-  const UnsignedInteger basisDim = basis.getSize();
-  Sample F(size, 0);
-  for (UnsignedInteger i = 0; i < basisDim; ++i)
-    F.stack(basis[i](inputSample));
-
-  // S
-  SquareMatrix S(size + basisDim);
-  for (UnsignedInteger i = 0; i < size; ++i)
-  {
-    for (UnsignedInteger j = 0; j < size; ++j)
-      S(i, j) = K(i, j);
-
-    for (UnsignedInteger j = 0; j < basisDim; ++j)
-    {
-      S(size + j, i) = F(i, j);
-      S(i, size + j) = F(i, j);
-    }
-  }
-
-  // S^{-1}
-  const SquareMatrix S_inv(S.solveLinearSystem(IdentityMatrix(size + basisDim)).getImplementation());
-
-  // metamodel values
-  result.analyticalValidation_.metaModelSample_ = Sample(size, 1);
-  for (UnsignedInteger i = 0; i < size; ++i)
-    for (UnsignedInteger j = 0; j < size; ++j)
-      if (i != j)
-        result.analyticalValidation_.metaModelSample_(i, 0) -= S_inv(i, j) / S_inv(i, i) * result.outputSample_(j, 0);
-
-  // Compute Q2
-  computeError(result.analyticalValidation_.metaModelSample_, result.outputSample_, result.analyticalValidation_.mse_, result.analyticalValidation_.q2_);
+  LeaveOneOutSplitter splitter(size);
+  const GaussianProcessRegressionCrossValidation validation(gprResult);
+  result.analyticalValidation_.metaModelSample_ = validation.getMetamodelPredictions();
+  result.analyticalValidation_.mse_ = validation.computeMeanSquaredError();
+  result.analyticalValidation_.q2_ = validation.computeR2Score();
 }
 
 PhysicalModel KrigingAnalysis::getMetaModel() const
