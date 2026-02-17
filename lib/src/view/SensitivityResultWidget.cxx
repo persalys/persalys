@@ -117,19 +117,19 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
   CustomStandardItemModel * indicesTableModel = new CustomStandardItemModel(inputNames.getSize(), 0, tableView);
   indicesTableModel->setHorizontalHeaderLabels(tableTitles);
 
-  for (int col = 0; col < tableTitles.size(); ++col)
+  // Assign column roles dynamically based on actual columns present
   {
-    QVariant roleValue;
-    switch (col)
+    int col = 0;
+    indicesTableModel->setHeaderData(col++, Qt::Horizontal, QVariant::fromValue(InputColumn), Qt::UserRole + 10);
+    indicesTableModel->setHeaderData(col++, Qt::Horizontal, QVariant::fromValue(FirstOrderIndexColumn), Qt::UserRole + 10);
+    if (firstIndicesIntervals.getDimension() == firstIndices.getSize())
+      indicesTableModel->setHeaderData(col++, Qt::Horizontal, QVariant::fromValue(FirstOrderIntervalColumn), Qt::UserRole + 10);
+    if (!totalIndices.isEmpty())
     {
-      case 0: roleValue = QVariant::fromValue(InputColumn); break;
-      case 1: roleValue = QVariant::fromValue(FirstOrderIndexColumn); break;
-      case 2: roleValue = QVariant::fromValue(FirstOrderIntervalColumn); break;
-      case 3: roleValue = QVariant::fromValue(TotalIndexColumn); break;
-      case 4: roleValue = QVariant::fromValue(TotalIntervalColumn); break;
-      default: roleValue = QVariant(); break;
+      indicesTableModel->setHeaderData(col++, Qt::Horizontal, QVariant::fromValue(TotalIndexColumn), Qt::UserRole + 10);
+      if (totalIndicesIntervals.getDimension() == totalIndices.getSize())
+        indicesTableModel->setHeaderData(col++, Qt::Horizontal, QVariant::fromValue(TotalIntervalColumn), Qt::UserRole + 10);
     }
-    indicesTableModel->setHeaderData(col, Qt::Horizontal, roleValue, Qt::UserRole + 10);
   }
 
   // fill table
@@ -195,7 +195,7 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
   tableView->horizontalHeader()->setSectionResizeMode(proxyModel_->columnCount() - 1, QHeaderView::Stretch);
 
   // if the table is sorted : we sort the points in the graph too
-  connect(tableView->horizontalHeader(), SIGNAL(sortIndicatorChanged(int, Qt::SortOrder)), this, SLOT(updateIndicesPlot(int, Qt::SortOrder)));
+  connect(tableView->horizontalHeader(), &QHeaderView::sortIndicatorChanged, this, &SensitivityResultWidget::updateIndicesPlot);
 
   // Interactions widgets
   if (totalIndices.getSize() && type != SensitivityResultWidget::SRC)
@@ -241,7 +241,7 @@ void SensitivityResultWidget::updateIndicesPlot(int, Qt::SortOrder)
     {
       QVariant colRoleVar = proxyModel_->headerData(col, Qt::Horizontal, Qt::UserRole + 10);
       if (!colRoleVar.isValid()) continue;
-      ColumnRole colRole = static_cast<ColumnRole>(colRoleVar.toInt());
+      auto colRole = static_cast<ColumnRole>(colRoleVar.toInt());
 
       switch (colRole)
       {
