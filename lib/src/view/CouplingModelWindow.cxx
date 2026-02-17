@@ -270,9 +270,8 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
   // - error message label
   errorMessageWidget_ = buttons->getErrorMessageWidget();
 
-  connect(buttons, &CheckModelButtonGroup::evaluateOutputsRequested, [ = ] ()
+  connect(buttons, &CheckModelButtonGroup::evaluateOutputsRequested, [this, timeInfo, mainTabWidget] ()
   {
-    errorMessageWidget_->repaint();
     timeInfo->clear();
     evaluateOutputs();
     mainTabWidget->setCurrentIndex(2);
@@ -281,9 +280,8 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
                         + QtOT::FormatDuration(model_->getEvalTime()));
   });
 
-  connect(buttons, &CheckModelButtonGroup::evaluateGradientRequested, [ = ] ()
+  connect(buttons, &CheckModelButtonGroup::evaluateGradientRequested, [this, gradientTableModel, mainTabWidget] ()
   {
-    errorMessageWidget_->repaint();
     gradientTableModel->evaluateGradient();
     mainTabWidget->setCurrentIndex(1);
     if (!gradientTableModel->getErrorMessage().isEmpty())
@@ -1620,8 +1618,6 @@ void CouplingStepWidget::updateInputFileWidgets(PhysicalModelItem *item)
 CouplingSummaryWidget::CouplingSummaryWidget(PhysicalModelItem * item)
   : QTabWidget()
   , model_(item->getPhysicalModel())
-  , inputTableView_(0)
-  , outputTableView_(0)
 {
   QVBoxLayout * vbox = new QVBoxLayout;
   QSplitter * verticalSplitter = new QSplitter(Qt::Vertical);

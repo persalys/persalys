@@ -42,7 +42,7 @@ CheckModelButtonGroup::CheckModelButtonGroup(QWidget * parent, bool isDifferenti
   // button Evaluate outputs -------------------------------------------
   auto * evaluateOutputsButton = new QPushButton(QIcon(":/images/system-run.png"), tr("Evaluate model"));
   evaluateOutputsButton->setToolTip(tr("Evaluate the outputs"));
-  connect(evaluateOutputsButton, SIGNAL(clicked()), this, SIGNAL(evaluateOutputsRequested()));
+  connect(evaluateOutputsButton, &QPushButton::clicked, this, &CheckModelButtonGroup::evaluateOutputsRequested);
   buttonLayout->addWidget(evaluateOutputsButton);
 
   // button Evaluate gradient -------------------------------------------
@@ -50,13 +50,13 @@ CheckModelButtonGroup::CheckModelButtonGroup(QWidget * parent, bool isDifferenti
   {
     auto * evaluateGradientButton = new QPushButton(QIcon(":/images/system-run.png"), tr("Evaluate gradient"));
     evaluateGradientButton->setToolTip(tr("Evaluate the gradient"));
-    connect(evaluateGradientButton, SIGNAL(clicked()), this, SIGNAL(evaluateGradientRequested()));
+    connect(evaluateGradientButton, &QPushButton::clicked, this, &CheckModelButtonGroup::evaluateGradientRequested);
     buttonLayout->addWidget(evaluateGradientButton);
 
-    connect(this, SIGNAL(evaluateGradientRequested()), errorMessageWidget_, SLOT(reset()));
+    connect(this, &CheckModelButtonGroup::evaluateGradientRequested, errorMessageWidget_, &ErrorWidget::reset);
   }
 
-  connect(this, SIGNAL(evaluateOutputsRequested()), errorMessageWidget_, SLOT(reset()));
+  connect(this, &CheckModelButtonGroup::evaluateOutputsRequested, errorMessageWidget_, &ErrorWidget::reset);
 }
 
 }
