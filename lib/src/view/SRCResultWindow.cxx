@@ -120,6 +120,7 @@ void SRCResultWindow::buildInterface()
         result_.getInputNames(),
         result_.getOutputNames()[i],
         SensitivityResultWidget::SRC,
+        DesignOfExperiment::Type::MC,
         this);
     indicesLayout->addWidget(indicesResultWidget);
     stackedWidget->addWidget(indicesWidget);

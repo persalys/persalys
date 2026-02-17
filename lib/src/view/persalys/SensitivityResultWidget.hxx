@@ -21,6 +21,8 @@
 #ifndef PERSALYS_SENSITIVITYRESULTWIDGET_HXX
 #define PERSALYS_SENSITIVITYRESULTWIDGET_HXX
 
+#include "persalys/DesignOfExperiment.hxx"
+
 #include "persalys/CustomStandardItemModel.hxx"
 #include "persalys/SensitivityIndicesPlot.hxx"
 
@@ -70,6 +72,7 @@ public:
                           const OT::Description& inputNames,
                           const OT::String& outputName,
                           const Type type,
+                          const DesignOfExperiment::Type doeType = DesignOfExperiment::Type::MC,
                           QWidget *parent = nullptr);
 
 public slots:

@@ -45,9 +45,12 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
     const Description& inputNames,
     const String& outputName,
     const Type type,
+    const DesignOfExperiment::Type doeType,
     QWidget * parent)
   : QWidget(parent)
 {
+  const bool isMCDoE = doeType == DesignOfExperiment::Type::MC;
+
   qRegisterMetaType<ColumnRole>("ColumnRole");
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
 
@@ -84,12 +87,12 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
     defaultFileName = tr("sensitivitySRC");
     legendNames << tr("Squared SRC") << tr("SRC");
     tableTitles << tr("Squared SRC");
-    if (firstIndicesIntervals.getDimension() == firstIndices.getSize())
+    if (firstIndicesIntervals.getDimension() == firstIndices.getSize() && isMCDoE)
       tableTitles << tr("Squared SRC\nconfidence interval");
     if (totalIndices.getSize())
     {
       tableTitles << tr("SRC");
-      if (totalIndicesIntervals.getDimension() == totalIndices.getSize())
+      if (totalIndicesIntervals.getDimension() == totalIndices.getSize() && isMCDoE)
         tableTitles << tr("SRC\nconfidence interval");
     }
   }
@@ -147,7 +150,7 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
     indicesTableModel->setData(indicesTableModel->index(j, col), firstIndices[j], Qt::UserRole + 1);
 
     // confidence interval
-    if (firstIndicesIntervals.getDimension() == inputNames.getSize())
+    if (firstIndicesIntervals.getDimension() == inputNames.getSize() && isMCDoE)
     {
       const Interval foInterval(firstIndicesIntervals.getLowerBound()[j], firstIndicesIntervals.getUpperBound()[j]);
       indicesTableModel->setNotEditableItem(j, ++col, foInterval.__str__().c_str());
@@ -170,7 +173,7 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
       }
 
       // confidence interval
-      if (totalIndicesIntervals.getDimension() == inputNames.getSize())
+      if (totalIndicesIntervals.getDimension() == inputNames.getSize() && isMCDoE)
       {
         const Interval toInterval(totalIndicesIntervals.getLowerBound()[j], totalIndicesIntervals.getUpperBound()[j]);
         indicesTableModel->setNotEditableItem(j, ++col, toInterval.__str__().c_str());

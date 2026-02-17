@@ -158,6 +158,7 @@ void DataSensitivityAnalysisResultWindow::addSobolTab(QTabWidget * tabWidget)
         QtOT::StringListToDescription(inputNames_),
         outputNames_[i].toStdString(),
         SensitivityResultWidget::Sobol,
+        designOfExperiment_.getType(),
         this);
     stackedWidget->addWidget(indicesResultWidget);
   }
@@ -220,6 +221,7 @@ void DataSensitivityAnalysisResultWindow::addSRCTab(QTabWidget * tabWidget)
         QtOT::StringListToDescription(inputNames_),
         outputNames_[i].toStdString(),
         SensitivityResultWidget::SRC,
+        designOfExperiment_.getType(),
         this);
     indicesLayout->addWidget(indicesResultWidget);
     stackedWidget->addWidget(indicesWidget);
