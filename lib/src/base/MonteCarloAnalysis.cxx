@@ -151,10 +151,11 @@ void MonteCarloAnalysis::launch()
     }
     // information message
     OSS oss;
-    oss << "Number of iterations = " << outputSample.getSize() << "\n";
-    oss << "Coefficient of variation = " << coefficientOfVariation << "\n";
-    oss << "Confidence interval length = " << confidenceInterval << "\n";
-    oss << "Elapsed time = " << timeCriteria.getElapsedTime() << " s\n";
+    oss << "Number of iterations = " << outerSampling << "\n"
+        << "Number of evaluations = " << outputSample.getSize() << "\n"
+        << "Coefficient of variation = " << coefficientOfVariation << "\n"
+        << "Confidence interval length = " << confidenceInterval << "\n"
+        << "Elapsed time = " << timeCriteria.getElapsedTime() << " s\n";
     informationMessage_ = oss;
     notifyMessageUpdated(20);
 
