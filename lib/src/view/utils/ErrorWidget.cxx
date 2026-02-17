@@ -52,8 +52,11 @@ void ErrorWidget::forceVisible(bool on)
 
 void ErrorWidget::reset()
 {
+  if (!userFixedHeight_)
+    setFixedHeight(0);
   if (!forcedVisible_)
     setVisible(false);
+  applyStyle(Information, false);
   clear();
 }
 
