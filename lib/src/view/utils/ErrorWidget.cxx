@@ -32,9 +32,11 @@ ErrorWidget::ErrorWidget(QWidget *parent)
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
   setReadOnly(true);
   applyStyle(Information, false);
-  setWordWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);  
+  setWordWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
   QWidget::setVisible(false);
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  document()->setDocumentMargin(2);
 }
 
 ErrorWidget::~ErrorWidget()
@@ -76,7 +78,17 @@ void ErrorWidget::setMessage(const QString& message, MessageType type, bool temp
     setPlainText(message.chopped(1));
   else
     setPlainText(message);
-  
+
+  // Center text horizontally after setPlainText (which resets formatting)
+  QTextCursor cursor = textCursor();
+  cursor.select(QTextCursor::Document);
+  QTextBlockFormat fmt;
+  fmt.setAlignment(Qt::AlignHCenter);
+  cursor.mergeBlockFormat(fmt);
+  setTextCursor(cursor);
+  cursor.clearSelection();
+  setTextCursor(cursor);
+
   if (!userFixedHeight_)
     setFixedHeight(computeHeight());
 
@@ -131,29 +143,22 @@ int ErrorWidget::computeHeight() const
   int docLines = document()->lineCount();
   int contentHeight = docLines * lineHeight;
 
+  // Account for document margin (top + bottom)
+  int docMargin = static_cast<int>(std::ceil(document()->documentMargin()));
+
   // Add margins
   int h = contentHeight
+          + 2 * docMargin
           + contentsMargins().top()
           + contentsMargins().bottom()
-          + 2 * frameWidth()
-          + 8; // extra padding
+          + 2 * frameWidth();
 
   return h;
 }
 
 void ErrorWidget::usePadding(bool on)
 {
-  if (on)
-  {
-    QPlainTextEdit dummy;
-    document()->setDocumentMargin(dummy.document()->documentMargin());
-    usePadding_ = true;
-  }
-  else
-  {
-    document()->setDocumentMargin(0);
-    usePadding_ = false;
-  }
+  usePadding_ = on;
 }
 
 void ErrorWidget::applyStyle(MessageType type, bool useFrame)
@@ -171,8 +176,7 @@ void ErrorWidget::applyStyle(MessageType type, bool useFrame)
   if (useFrame)
     styleSheet += " border: 1px solid " + color + ";";
   
-  if (!usePadding_)
-    styleSheet += " padding: 0px;";
+  styleSheet += " padding: " + QString::number(usePadding_ ? 5 : 0) + "px;";
   
   styleSheet += " }";
 
