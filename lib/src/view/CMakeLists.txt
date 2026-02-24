@@ -18,6 +18,7 @@ ot_add_source_file ( DiagramWindow.cxx )
 ot_add_source_file ( Wizard.cxx )
 ot_add_source_file ( SubWindowsStackedWidget.cxx )
 ot_add_source_file ( StudyManager.cxx )
+ot_add_source_file ( InstallPackageDialog.cxx )
 ot_add_source_file ( WindowFactory.cxx )
 ot_add_source_file ( Controller.cxx )
 ot_add_source_file ( PhysicalModelDiagramWindow.cxx )
@@ -153,6 +154,7 @@ ot_install_header_file ( WindowFactory.hxx )
 ot_install_header_file ( AnalysisWizard.hxx )
 ot_install_header_file ( WelcomeWindow.hxx )
 ot_install_header_file ( StudyWindow.hxx )
+ot_install_header_file ( InstallPackageDialog.hxx )
 ot_install_header_file ( MeshWindow.hxx )
 ot_install_header_file ( PhysicalModelDiagramWindow.hxx )
 ot_install_header_file ( FieldModelDiagramWindow.hxx )
@@ -288,6 +290,7 @@ qt_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MainWindow.hxx
                                   persalys/PhysicalModelDiagramWindow.hxx
                                   persalys/FieldModelDiagramWindow.hxx
                                   persalys/DataModelDiagramWindow.hxx
+                                  persalys/InstallPackageDialog.hxx
                                   persalys/DataFieldModelDiagramWindow.hxx
                                   persalys/ResultWindow.hxx
                                   persalys/AnalysisWindow.hxx

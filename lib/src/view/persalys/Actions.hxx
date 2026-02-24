@@ -40,6 +40,7 @@ public:
   QAction * importPyAction() const;
   QAction * closeAction() const;
   QAction * exitAction() const;
+  QAction * installPackageAction() const;
 
 private:
   QAction * new_;
@@ -49,6 +50,7 @@ private:
   QAction * importPy_;
   QAction * close_;
   QAction * exit_;
+  QAction * installPackage_;
 };
 }
 #endif

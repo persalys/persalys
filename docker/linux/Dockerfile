@@ -99,7 +99,7 @@ RUN curl -fSsL https://www.python.org/ftp/python/3.13.7/Python-3.13.7.tgz | tar 
  && python3 -V && python3 -c "import ssl; import ctypes" && cd - && rm -r Python*
 
 # pip
-RUN pip3 install "numpy<2.4" "scipy<1.17" matplotlib ipython sphinx numpydoc dill meson flake8 doc8 openpyxl nopip cython setuptools paramiko --upgrade --quiet
+RUN pip3 install "numpy<2.4" "scipy<1.17" matplotlib ipython sphinx numpydoc dill meson flake8 doc8 openpyxl cython setuptools paramiko --upgrade --quiet
 
 # superlu
 RUN git clone -b v4.0.1 --depth 1 https://github.com/xiaoyeli/superlu_mt.git && cd superlu_mt \

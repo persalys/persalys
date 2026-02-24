@@ -32,6 +32,7 @@ Actions::Actions(QObject * parent)
   , importPy_(0)
   , close_(0)
   , exit_(0)
+  , installPackage_(0)
 {
   new_ = new QAction(QIcon(":/images/document-new.png"), tr("&New"), parent);
   new_->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_N));
@@ -60,6 +61,9 @@ Actions::Actions(QObject * parent)
   exit_ = new QAction(QIcon(":/images/window-close.png"), tr("E&xit"), parent);
   exit_->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Q));
   exit_->setShortcutContext(Qt::ApplicationShortcut);
+
+  installPackage_ = new QAction(QIcon(":/images/document-import.png"), tr("Install a package..."), parent);
+  installPackage_->setStatusTip(tr("Install a Python package into the Persalys environment"));
 }
 
 
@@ -102,5 +106,11 @@ QAction * Actions::closeAction() const
 QAction * Actions::exitAction() const
 {
   return exit_;
+}
+
+
+QAction * Actions::installPackageAction() const
+{
+  return installPackage_;
 }
 }

@@ -289,28 +289,20 @@ Python Console
 - close the console
 
   - console hidden
-
-- check nopip is working properly on Linux
-
+- check that Tools>Install package is working properly on Linux
   - remove the directory ~/.persalys_base
-  - type the following in the Python console
+  - click Menu->Tools->Install a package
+  - enter a package name (e.g. coolprop) and click Install
+  - import the package in the Python console and check it is working properly
+  - check that it was indeed installed in ~/.persalys_base
 
-  .. code-block:: python
-
-      from nopip import install
-      install.modules(["coolprop", "--user"], verbose=True)
-      import CoolProp
-
-- check nopip is working properly on Windows
+- check that Tools>Install package is working properly on Windows
 
   - remove the directory %LOCALAPPDATA%\\Roaming\\Persalys
-  - type the following in the Python console
-
-  .. code-block:: python
-
-      from nopip import install
-      install.modules(["coolprop", "--user"], verbose=True)
-      import CoolProp
+  - click Menu->Tools->Install a package
+  - enter a package name (e.g. coolprop) and click Install
+  - import the package in the Python console and check it is working properly
+  - check that it was indeed installed in <USER_DIR>\AppData\Roaming\Persalys\Lib\site-packages
 
 Open documentation
 ``````````````````

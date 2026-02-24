@@ -88,6 +88,10 @@ void MenuBar::buildActions(const Actions* actions)
   pythonConsoleDisplayAction_ = new QAction(tr("Python Console"), this);
   pythonConsoleDisplayAction_->setCheckable(true);
   toolsMenu->addAction(pythonConsoleDisplayAction_);
+  #if defined(PERSALYS_APPIMAGE) || defined(PERSALYS_NSIS)
+  toolsMenu->addSeparator();
+  toolsMenu->addAction(actions->installPackageAction());
+  #endif
 
   addMenu(toolsMenu);
 
