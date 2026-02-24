@@ -90,16 +90,29 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
   auto * hostnameLineEdit = new QLineEdit(QString::fromStdString(model_->getSSHHostname()));
   hostnameLineEdit->setValidator(new QRegularExpressionValidator(QRegularExpression("([^\r\n]*)"), hostnameLineEdit));
   sshLayout->addWidget(hostnameLabel);
-  sshLayout->addWidget(hostnameLineEdit);
-  sshLayout->addStretch();
+  sshLayout->addWidget(hostnameLineEdit, 20);
+
+  sshLayout->addStretch(1);
+  
+  auto * sshWarningWidget = new ErrorWidget;
+  sshWarningWidget->setWordWrap(true);
+  sshWarningWidget->usePadding(false);
+  sshWarningWidget->setMessage(
+    tr("All absolute file paths in the command must point to paths on the remote server, not on the local host."),
+    ErrorWidget::Warning
+  );
+  sshLayout->addWidget(sshWarningWidget, 20);
+  sshLayout->addStretch(2);
 
   const bool runViaSsh = !model_->getSSHHostname().empty();
   runViaSshCheckBox->setChecked(runViaSsh);
+  sshWarningWidget->setVisible(runViaSsh);
   hostnameLabel->setVisible(runViaSsh);
   hostnameLineEdit->setVisible(runViaSsh);
 
-  connect(runViaSshCheckBox, &QCheckBox::toggled, [this, hostnameLabel, hostnameLineEdit](bool toggled)
+  connect(runViaSshCheckBox, &QCheckBox::toggled, [this, sshWarningWidget, hostnameLabel, hostnameLineEdit](bool toggled)
   {
+    sshWarningWidget->setVisible(toggled);
     hostnameLabel->setVisible(toggled);
     hostnameLineEdit->setVisible(toggled);
     model_->blockNotification("PhysicalModelDefinitionItem");
