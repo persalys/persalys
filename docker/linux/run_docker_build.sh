@@ -10,8 +10,8 @@ cd /tmp
 
 cmake \
   -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 \
-  -DCMAKE_CXX_FLAGS="-g -Wall -Wextra -Wpedantic -Wshadow -Wsuggest-override -Werror" \
-  -DCMAKE_SWIG_FLAGS="-Werror" -DSWIG_COMPILE_FLAGS="-Wno-unused-parameter -Wno-shadow -Wno-suggest-override" \
+  -DCMAKE_CXX_FLAGS="-g -Wall -Wextra -Wpedantic -Wshadow -Wsuggest-override -Werror -D_GLIBCXX_ASSERTIONS" \
+  -DCMAKE_SWIG_FLAGS="-Werror" -DSWIG_COMPILE_FLAGS="-O1 -Wno-unused-parameter -Wno-shadow -Wno-suggest-override" \
   -DPython_EXECUTABLE=/usr/local/bin/python3 \
   -DUSE_SPHINX=ON -DSPHINX_FLAGS="-W -T -j8" \
   -DUSE_STACKTRACE=ON \
