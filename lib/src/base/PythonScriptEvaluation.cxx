@@ -188,7 +188,7 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
     if (nokIdx.getSize())
       throw BatchFailedException(HERE, nokIdx, errorDesc,
                                  nokIdx.complement(inS.getSize()), outS)
-          << "Batch evaluation " << nokIdx.getSize() << "/" << size << " failed: " << errorDesc[nokIdx[0]];
+          << "Batch evaluation " << nokIdx.getSize() << "/" << size << " failed: " << errorDesc[0];
     return outS;
   }
 
@@ -282,7 +282,7 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
   // if any failed indices, throw
   if (nokIdx.getSize())
     throw BatchFailedException(HERE, nokIdx, errorDesc, okIdx, outputSample)
-        << "Batch evaluation " << nokIdx.getSize() << "/" << size << " failed: " << errorDesc[nokIdx[0]];
+        << "Batch evaluation " << nokIdx.getSize() << "/" << size << " failed: " << errorDesc[0];
 
   // check
   if (outputSample.getSize() != size)

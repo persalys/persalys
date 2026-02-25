@@ -36,33 +36,30 @@ int main(int, char *[])
   {
     PythonEnvironment pyEnv;
     String code = "from math import sqrt\ndef _exec(X0):\n    Y0 = sqrt(X0)\n    return Y0";
-    PythonScriptEvaluation eval(Description(1, "X0"), Description(1, "Y0"),  code);
-    eval.setParallel(true);
+    for (UnsignedInteger parallel = 0; parallel < 2; ++ parallel)
+    {
+      PythonScriptEvaluation eval(Description({"X0"}), Description({"Y0"}), code);
+      eval.setParallel(parallel);
 
-    // test Batch exception
-    const Function g3(eval);
-    const MemoizeFunction f3(g3);
-    Sample X(Normal(1).getSample(10));
-    X.add(X.select(Indices({0, 1, 3, 8, 9})));
-    std::cout << X << std::endl;
-    try
-    {
-      f3(X);
-    }
-    catch (const BatchFailedException & exc)
-    {
-      std::cout << "i_fail=" << exc.getFailedIndices() << std::endl;
-      std::cout << "X_fail=" << X.select(exc.getFailedIndices()) << std::endl;
-      for (UnsignedInteger i = 0; i < exc.getFailedIndices().getSize(); ++ i)
-        std::cout << "i_fail=" << exc.getFailedIndices()[i] << std::endl;
-      std::cout << "i_ok=" << exc.getSucceededIndices() << std::endl;
-      std::cout << "X_ok=" << X.select(exc.getSucceededIndices()) << std::endl;
-      std::cout << "Y_ok=" << exc.getOutputSample() << std::endl;
-      std::cout << "f(X_ok)=" << f3(X.select(exc.getSucceededIndices())) << std::endl;
-      const String msg(exc.what());
-      std::cerr << "what=" << msg << std::endl;
-      if (msg.substr(0, 28) != "Batch evaluation 4/10 failed")
-        throw InvalidArgumentException(HERE) << "wrong exception";
+      // test Batch exception
+      const Function f3(eval);
+      Sample X(Normal(10.0, 1.0).getSample(8));
+      X.add(Normal(-10.0, 1.0).getSample(2));
+      std::cout << X << std::endl;
+      try
+      {
+        f3(X);
+      }
+      catch (const BatchFailedException & exc)
+      {
+        assert_equal(exc.getFailedIndices(), Indices({8, 9}));
+        assert_equal(exc.getSucceededIndices(), Indices({8, 9}).complement((X.getSize())));
+
+        const String msg(exc.what());
+        std::cerr << "what=" << msg << std::endl;
+        if (msg.substr(0, 28) != "Batch evaluation 2/10 failed")
+          throw InvalidArgumentException(HERE) << "wrong exception";
+      }
     }
   }
   catch (const TestFailed & ex)
