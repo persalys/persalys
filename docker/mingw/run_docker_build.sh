@@ -23,6 +23,7 @@ ${ARCH}-w64-mingw32-strip --strip-unneeded ${MOD_PREFIX}/Lib/site-packages/persa
 make tests
 cp ${MOD_PREFIX}/bin/*.dll ${MOD_PREFIX}/Lib/site-packages/persalys/
 cp ${MINGW_PREFIX}/bin/*.dll ${MOD_PREFIX}/bin
+rm ${MOD_PREFIX}/bin/python*.dll && cp ${MINGW_PREFIX}/bin/python${PYMAJMIN}.dll ${MOD_PREFIX}/bin
 OPENTURNS_NUM_THREADS=2 WINEPATH="${MINGW_PREFIX}/bin;${MOD_PREFIX}/bin" xvfb-run -s "-screen 0 1024x768x24" ctest --output-on-failure --timeout 200 ${MAKEFLAGS}
 
 cp -r ${MINGW_PREFIX}/lib/qt/plugins/{platforms,imageformats} ${MOD_PREFIX}/lib
