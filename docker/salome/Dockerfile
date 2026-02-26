@@ -18,7 +18,7 @@ RUN curl -L https://downloads.sourceforge.net/omniorb/omniORB-4.2.5.tar.bz2|tar 
 RUN curl -L https://downloads.sourceforge.net/omniorb/omniORBpy/omniORBpy-4.2.5/omniORBpy-4.2.5.tar.bz2|tar xj && cd omniORBpy-4.2.5 && ./configure && make > /dev/null 2>&1 && make install && cd - && rm -r omniORBpy*
 
 # opencascade
-RUN curl -L "https://git.dev.opencascade.org/gitweb/?p=occt.git;a=snapshot;h=refs/tags/SALOME_9_13_V7_8_0;sf=tgz" | tar xz && cd occt* && cmake -DBUILD_DOC_Overview=OFF . && make install > /dev/null 2>&1 && cd - && rm -r occt*
+RUN curl -L https://github.com/Open-Cascade-SAS/OCCT/archive/refs/tags/V7_8_0.tar.gz | tar xz && cd OCCT* && cmake -DBUILD_DOC_Overview=OFF . && make install > /dev/null 2>&1 && cd - && rm -r OCCT*
 
 # openturns
 RUN git clone -b v1.26 --depth 1 https://github.com/openturns/openturns.git && cd openturns \
