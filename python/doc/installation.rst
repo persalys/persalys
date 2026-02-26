@@ -40,12 +40,6 @@ Note that documentation links from the GUI cannot be opened in a snap-sandboxed 
 Additional Python packages
 --------------------------
 
-The Python environment can be amended with additional packages using the included nopip module
-by typing the following in the :ref:`Python console <pythonconsole>`::
-
-     from nopip import install
-     install.modules(["<module_name>", "--user"], verbose=True)
-
-where ``<module_name>`` is the PyPI module name of the desired package.
+The Python environment can be amended with additional packages using Tools > Install a package
 
 Modules are then installed in ``~/.persalys_base`` on Linux and in ``<USER_DIR>\AppData\Roaming\Persalys\`` on Windows.

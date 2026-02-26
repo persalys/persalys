@@ -26,6 +26,7 @@
 #include "persalys/ToolBar.hxx"
 #include "persalys/StatusBar.hxx"
 #include "persalys/QtTools.hxx"
+#include "persalys/InstallPackageDialog.hxx"
 
 #include <QSplitter>
 #include <QSettings>
@@ -108,6 +109,7 @@ void MainWindow::buildInterface()
   // get actions
   Actions * actions = mainWidget->getActions();
   connect(actions->exitAction(), SIGNAL(triggered()), this, SLOT(close()));
+  connect(actions->installPackageAction(), SIGNAL(triggered()), this, SLOT(installPackage()));
 
   // menu bar
   MenuBar * menuBar = new MenuBar(actions);
@@ -136,6 +138,16 @@ void MainWindow::executePythonCommand(const QString& command)
   QApplication::setOverrideCursor(Qt::WaitCursor);
   pythonConsole_->execAndWait(command);
   QApplication::restoreOverrideCursor();
+}
+
+
+void MainWindow::installPackage()
+{
+  InstallPackageDialog dialog(this);
+  if (dialog.exec() == QDialog::Accepted)
+  {
+    executePythonCommand(dialog.getInstallCommand());
+  }
 }
 
 

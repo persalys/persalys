@@ -62,6 +62,7 @@ protected:
 
 private slots:
   void executePythonCommand(const QString&);
+  void installPackage();
   void closeEvent(QCloseEvent * event) override;
 
 private:
