@@ -1,0 +1,4 @@
+<resources>
+<machine iprotocol="srun" type="cluster" canLaunchBatchJobs="true" canRunContainers="false" appliPath="/software/rd/salome/logiciels/salome/V9_15_0/salome" batch="slurm" hostname="cronos.hpc.edf.fr" workingDirectory="/scratch/users/@USER@/workingdir" protocol="ssh" mpi="no mpi" name="cronos"/>
+<machine nbOfNodes="16" hostname="localhost" name="localhost"/>
+</resources>

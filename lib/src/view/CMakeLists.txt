@@ -437,7 +437,6 @@ target_link_libraries (persalysview persalysmodel)
 target_link_libraries (persalysview persalyspyconsole)
 target_link_libraries (persalysview persalysplot)
 if (SalomeYACS_FOUND)
-  target_link_libraries (persalysview py2yacsguilib )
   target_link_libraries (persalysview ydefxgui)
 endif ()
 

@@ -12,7 +12,6 @@ cmake \
   -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 \
   -DUSE_SALOME=ON \
   -DSalomeKERNEL_DIR=/home/devel/local/salome_adm/cmake_files \
-  -DSalomeGUI_DIR=/home/devel/local/adm_local/cmake_files/ \
   -DSalomeYACS_DIR=/home/devel/local/adm/cmake/ \
   -Dydefx_DIR=/home/devel/local/salome_adm/cmake_files/ \
   -DPy2cpp_DIR=/home/devel/local/lib/cmake/py2cpp \
@@ -44,12 +43,13 @@ export QT_QPA_FONTDIR=/usr/share/fonts/truetype
 export OPENTURNS_CONFIG_PATH=${HERE}/etc/openturns
 
 export KERNEL_ROOT_DIR=${HERE}/usr/salome
-export GUI_ROOT_DIR=${HERE}/usr/salome
 export YDEFX_ROOT_DIR=${HERE}/usr/salome
+export USER_CATALOG_RESOURCES_FILE=/tmp/CatalogResources.xml
 
 # salome virtual app
-cp ${HERE}/salome_context.cfg ${HERE}/config_appli.xml /tmp
+cp ${HERE}/salome_context.cfg ${HERE}/config_appli.xml ${HERE}/CatalogResources.xml /tmp
 sed -i "s|/home/devel/local|${HERE}/usr/salome|g" /tmp/salome_context.cfg /tmp/config_appli.xml
+sed -i "s|@USER@|${USER}|g" /tmp/CatalogResources.xml
 rm -rf /tmp/appli
 python3 ${HERE}/usr/salome/bin/salome/appli_gen.py --prefix=/tmp/appli --config=/tmp/config_appli.xml
 
@@ -71,7 +71,7 @@ EOF
 cp -v /io/images/Ps-icon-32.png persalys.AppDir/persalys.png
 
 # system libs
-for libname in tbb fontconfig freetype sz gfortran quadmath pcre16 graphite2 swresample va va-drm va-x11 vdpau zvbi xvidcore webpmux wavpack vpx vorbisenc vorbis twolame ffi tasn1 nettle hogweed lz4 krb5 k5crypto krb5support xml2 cminpack event-2.1 harfbuzz re2 asound opus webp webpdemux xslt snappy minizip proxy aec double-conversion theoraenc theoradec speex shine openjp2 mp3lame gsm ssh-gcrypt openmpt gme bluray chromaprint soxr numa ogg cairo p11-kit
+for libname in fontconfig freetype sz gfortran quadmath graphite2 krb5 k5crypto krb5support xml2 cminpack harfbuzz aec double-conversion p11-kit
 do
   cp -v /usr/lib/x86_64-linux-gnu/lib${libname}.so.[0-9] persalys.AppDir/usr/lib
 done
@@ -79,10 +79,7 @@ cp -v /usr/lib/x86_64-linux-gnu/libQt5*.so.[0-9] persalys.AppDir/usr/lib
 cp -v /usr/lib/libqwt-qt5.so.6 persalys.AppDir/usr/lib
 cp -v /usr/lib/x86_64-linux-gnu/libboost* persalys.AppDir/usr/lib
 cp -v /usr/lib/x86_64-linux-gnu/libhdf5_*.so.103 /usr/lib/x86_64-linux-gnu/libgmp.so.10 persalys.AppDir/usr/lib
-cp -v /usr/lib/x86_64-linux-gnu/libav*.so.58 /usr/lib/x86_64-linux-gnu/libavutil.so.56 persalys.AppDir/usr/lib
-
 cp -v /usr/lib/x86_64-linux-gnu/libgnutls.so.30 /usr/lib/x86_64-linux-gnu/libpng16.so.16 /usr/lib/x86_64-linux-gnu/libjpeg.so.62 persalys.AppDir/usr/lib
-cp -v /usr/lib/x86_64-linux-gnu/libaom.so.0 persalys.AppDir/usr/lib
 cp -v /usr/local/lib/lib*.so persalys.AppDir/usr/lib
 cp -v /usr/local/lib/lib*.so.[0-9] persalys.AppDir/usr/lib
 cp -v /usr/local/lib/libOT.so.0.27 persalys.AppDir/usr/lib
@@ -114,7 +111,7 @@ cp -r /home/devel/local/lib/python3.9/site-packages/* persalys.AppDir/usr/lib/py
 # salome
 cp -v /usr/local/bin/omni* persalys.AppDir/usr/bin
 cp -rv /home/devel/local persalys.AppDir/usr/salome
-cp -v /tmp/salome_context.cfg /tmp/config_appli.xml persalys.AppDir/
+cp -v /tmp/salome_context.cfg /tmp/config_appli.xml /tmp/CatalogResources.xml persalys.AppDir/
 
 cp -rv /usr/local/etc/ persalys.AppDir/etc
 
@@ -123,7 +120,7 @@ cp /usr/lib/x86_64-linux-gnu/libQt5XcbQpa.so.5 persalys.AppDir/usr/lib
 
 LD_LIBRARY_PATH=$PWD/persalys.AppDir/usr/lib:$PWD/persalys.AppDir/usr/salome:$PWD/persalys.AppDir/usr/salome/lib ldd persalys.AppDir/usr/bin/persalys
 
-APPIMAGE_FILE=persalys-salome-`cat /io/VERSION`-`uname -p`.AppImage
+APPIMAGE_FILE=persalys-salome-`cat /io/VERSION`-`uname -m`.AppImage
 appimagetool -v persalys.AppDir ${APPIMAGE_FILE}
 
 # copy to host with same permission
