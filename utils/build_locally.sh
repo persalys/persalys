@@ -33,7 +33,7 @@ esac
 if test "$#" -lt 2
 then
   img="persalys/${variant}"
-  docker build docker/${variant} -t ${img}
+  docker build docker/${variant} -t ${img} --progress=plain
 else
   img="persalys/${variant}:$2"
   docker pull ${img}

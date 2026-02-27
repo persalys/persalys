@@ -66,6 +66,6 @@ makensis -DMODULE_PREFIX=${MOD_PREFIX} -DMODULE_VERSION=${VERSION} -DPYTHON_PREF
 # copy to host with same permission
 if test -n "${UID_GID}"
 then
-  sudo cp persalys-${VERSION}-*.exe /io
-  sudo chown ${UID_GID} /io/persalys-${VERSION}-*.exe
+  sudo chown ${UID_GID} persalys-${VERSION}-*.exe
+  sudo cp -p persalys-${VERSION}-*.exe /io
 fi
