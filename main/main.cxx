@@ -152,12 +152,6 @@ int main(int argc, char *argv[])
     if (pyConsoleTranslator.load("PyConsole_msg_" + QLocale::system().name(), ":/translations"))
       app.installTranslator(&pyConsoleTranslator);
 
-    // set number of parallel processes
-    if (!QSettings().contains("PythonPhysicalModel-DefaultProcessNumber"))
-      QSettings().setValue("PythonPhysicalModel-DefaultProcessNumber", QVariant((uint)(OT::ResourceMap::GetAsUnsignedInteger("PythonPhysicalModel-DefaultProcessNumber"))));
-    else
-      OT::ResourceMap::SetAsUnsignedInteger("PythonPhysicalModel-DefaultProcessNumber", QSettings().value("PythonPhysicalModel-DefaultProcessNumber").toUInt());
-
     // main window
     MainWindow window;
     window.resize(1024, 768);
