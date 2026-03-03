@@ -77,6 +77,16 @@ DesignOfExperiment::DesignOfExperiment(const DesignOfExperimentEvaluation & eval
 {
 }
 
+Bool DesignOfExperiment::operator ==(const DesignOfExperiment & other) const
+{
+  return getImplementation().getImplementation() == other.getImplementation().getImplementation();
+}
+
+Bool DesignOfExperiment::operator !=(const DesignOfExperiment & other) const
+{
+  return !(getImplementation().getImplementation() == other.getImplementation().getImplementation());
+}
+
 void DesignOfExperiment::addObserver(Observer* observer)
 {
   getImplementation()->addObserver(observer);

@@ -66,15 +66,8 @@ public:
   explicit DesignOfExperiment(const DesignOfExperimentEvaluation & eval);
 
   /** Comparison operator */
-  friend OT::Bool operator ==(const DesignOfExperiment & lhs, const DesignOfExperiment & rhs)
-  {
-    return lhs.getImplementation().getImplementation() == rhs.getImplementation().getImplementation();
-  }
-
-  friend OT::Bool operator !=(const DesignOfExperiment & lhs, const DesignOfExperiment & rhs)
-  {
-    return !(lhs.getImplementation().getImplementation() == rhs.getImplementation().getImplementation());
-  }
+  OT::Bool operator ==(const DesignOfExperiment & other) const;
+  OT::Bool operator !=(const DesignOfExperiment & other) const;
 
   void addObserver(Observer * observer);
 
