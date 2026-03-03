@@ -1,3 +1,5 @@
+.. _deterministic_analyses:
+
 ====================================
 User manual - Deterministic analyses
 ====================================

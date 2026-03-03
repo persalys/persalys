@@ -1,3 +1,5 @@
+.. _probabilistic_analyses:
+
 ====================================
 User manual - Probabilistic analyses
 ====================================

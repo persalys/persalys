@@ -26,7 +26,7 @@ namespace PERSALYS
 DataModelDiagramWindow::DataModelDiagramWindow(DataModelDiagramItem * dataModelDiagramItem, QWidget * parent)
   : DiagramWindow(dataModelDiagramItem, parent)
 {
-  titleLabel_->setDocLink("user_manual/graphical_interface/data_model/user_manual_data_model.html#datamodeldiagram");
+  titleLabel_->setDocLink("user_manual/graphical_interface/data_model/user_manual_data_set.html#datamodeldiagram");
 
   int row = 0;
 
