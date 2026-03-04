@@ -26,6 +26,9 @@
 #include <openturns/HypothesisTest.hxx>
 #include <openturns/CorrelationAnalysis.hxx>
 #include <openturns/BootstrapExperiment.hxx>
+#include <openturns/HSICEstimatorGlobalSensitivity.hxx>
+#include <openturns/HSICUStat.hxx>
+#include <openturns/HSICVStat.hxx>
 
 using namespace OT;
 
@@ -35,19 +38,31 @@ CLASSNAMEINIT(DataSensitivityAnalysis)
 
 const static Factory<DataSensitivityAnalysis> Factory_DataSensitivityAnalysis;
 
-DataSensitivityAnalysis::DataSensitivityAnalysis()
-  : DesignOfExperimentAnalysis()
-{
-}
-
-DataSensitivityAnalysis::DataSensitivityAnalysis(const String &name, const DesignOfExperiment & design)
+DataSensitivityAnalysis::DataSensitivityAnalysis(const String &name, 
+  const DesignOfExperiment & design, 
+  const unsigned char analysisType,
+  const OT::Collection<OT::CovarianceModel> &covarianceModels,
+  bool computeCovModelParameters)
   : DesignOfExperimentAnalysis(name, design)
+  , type_(std::byte{analysisType})
+  , covarianceModels_(covarianceModels)
+  , computeCovModelParameters_(computeCovModelParameters)
 {
+  UnsignedInteger variablesNumber = design.getInputSample().getDimension() + design.getOutputSample().getDimension();
+  if (type_.computeGlobalHSIC() && covarianceModels_.getSize() != variablesNumber)
+    throw InvalidArgumentException(HERE) << "The number of covariance models (" << covarianceModels_.getSize() << ") must be equal to the total number of input and output variables (" << variablesNumber << ") when HSIC indices are computed.";
 }
 
 DataSensitivityAnalysis * DataSensitivityAnalysis::clone() const
 {
   return new DataSensitivityAnalysis(*this);
+}
+
+void DataSensitivityAnalysis::setHSICParameters(bool computeAsymptoticPValues, bool computePermutationPValues, bool useUStatistic)
+{
+  computeAsymptoticPValues_   = computeAsymptoticPValues;
+  computePermutationPValues_  = computePermutationPValues;
+  useUStatistic_              = useUStatistic;
 }
 
 bool DataSensitivityAnalysis::canBeLaunched(String &errorMessage) const
@@ -57,7 +72,34 @@ bool DataSensitivityAnalysis::canBeLaunched(String &errorMessage) const
 
 bool DataSensitivityAnalysis::hasValidResult() const
 {
-  return !result_.getFirstOrderSobolIndices().isEmpty() && result_.getFirstOrderSobolIndicesInterval().getSize() == result_.getFirstOrderSobolIndices().getSize();
+  bool isMC = designOfExperiment_.getType() == DesignOfExperiment::Type::MC;
+  bool hasValidResult = true;
+  if (type_.computeRankSobol())
+  {
+    hasValidResult = hasValidResult && !result_.firstOrderSobolIndices_.isEmpty();
+    if (isMC)
+      hasValidResult = hasValidResult && !result_.firstOrderSobolIndicesInterval_.isEmpty();
+  }
+  if (type_.computeSRC())
+  {
+    hasValidResult = hasValidResult && result_.SRCIndices_.getSize();
+    hasValidResult = hasValidResult && result_.signedSRCIndices_.getSize();
+    if (isMC)    {
+      hasValidResult = hasValidResult && !result_.SRCIndicesInterval_.isEmpty();
+      hasValidResult = hasValidResult && !result_.signedSRCIndicesInterval_.isEmpty();
+    }
+  }
+  if (type_.computeGlobalHSIC())
+  {
+    hasValidResult = hasValidResult && !result_.globalHSICIndices_.isEmpty();
+    hasValidResult = hasValidResult && !result_.globalR2HSICIndices_.isEmpty();
+    if (computeAsymptoticPValues_)
+      hasValidResult = hasValidResult && !result_.globalPValuesAsymptotic_.isEmpty();
+    if (computePermutationPValues_)
+      hasValidResult = hasValidResult && !result_.globalPValuesPermutation_.isEmpty();
+  }
+  
+  return hasValidResult;
 }
 
 const DataSensitivityAnalysisResult & DataSensitivityAnalysis::getResult() const
@@ -70,12 +112,22 @@ void DataSensitivityAnalysis::initialize()
   AnalysisImplementation::initialize();
   result_ = DataSensitivityAnalysisResult(designOfExperiment_);
 
+  result_.analysisType_               = type_;
+  result_.covarianceModels_           = covarianceModels_;
+  result_.computeAsymptoticPValues_   = computeAsymptoticPValues_;
+  result_.computePermutationPValues_  = computePermutationPValues_;
+  result_.useUStatistic_              = useUStatistic_;
 }
 
 void DataSensitivityAnalysis::launch()
 {
-  computeSobolIndices();
-  computeSRCIndices();
+  if (result_.analysisType_.computeRankSobol())
+    computeSobolIndices();
+  if (result_.analysisType_.computeSRC())
+    computeSRCIndices();
+  if (result_.analysisType_.computeGlobalHSIC())
+    computeGlobalHSICIndices();
+
   checkIndependance();
 }
 
@@ -85,11 +137,13 @@ void DataSensitivityAnalysis::computeSobolIndices()
   Sample marginalOutSample;
   const Sample inSample{designOfExperiment_.getInputSample()};
   const auto nbOutputs = outSample.getDimension();
+  const UnsignedInteger n = inSample.getSize();
+  RankSobolSensitivityAlgorithm algo;
 
   for(UnsignedInteger i = 0 ; i < nbOutputs; ++i)
   {
     marginalOutSample = outSample.getMarginal(i);
-    auto algo = RankSobolSensitivityAlgorithm(inSample, marginalOutSample);  // change to setDesign when OT has been fixed (OT > 1.25)
+    algo.setDesign(inSample, marginalOutSample, n);
     result_.firstOrderSobolIndices_.add(algo.getFirstOrderIndices());
     result_.firstOrderSobolIndicesInterval_.add(algo.getFirstOrderIndicesInterval());
   }
@@ -172,6 +226,60 @@ void DataSensitivityAnalysis::computeSRCIndices()
   result_.signedSRCIndicesInterval_ = signedSRCInterval;
 }
 
+void DataSensitivityAnalysis::computeGlobalHSICIndices()
+{
+
+  const Sample sample{designOfExperiment_.getSample()};
+  if (computeCovModelParameters_)
+  {
+    for(UnsignedInteger i = 0; i < covarianceModels_.getSize(); ++i)
+    {
+      covarianceModels_[i].setScale(sample.getMarginal(i).computeStandardDeviation());
+    }
+  }
+
+  HSICStat stat;
+  if (result_.useUStatistic_)
+    stat = HSICUStat();
+  else
+    stat = HSICVStat();
+
+  const Sample inSample{designOfExperiment_.getInputSample()};
+  const Sample outSample{designOfExperiment_.getOutputSample()};
+  const UnsignedInteger nbOutputs = outSample.getDimension();
+
+  result_.globalHSICIndices_ = PersistentCollection<Point>(nbOutputs);
+  result_.globalR2HSICIndices_ = PersistentCollection<Point>(nbOutputs);
+  if (result_.computeAsymptoticPValues_)
+    result_.globalPValuesAsymptotic_ = PersistentCollection<Point>(nbOutputs);
+  if (result_.computePermutationPValues_)
+    result_.globalPValuesPermutation_ = PersistentCollection<Point>(nbOutputs);
+  
+  Indices covarianceModelIndices(inSample.getDimension() + 1u);
+  covarianceModelIndices.fill();
+
+  for (UnsignedInteger i = 0 ; i < nbOutputs ; ++i)
+  {
+    
+    covarianceModelIndices[inSample.getDimension()] = inSample.getDimension() + i; // the last covariance model is for the output variable
+
+    auto estimator = HSICEstimatorGlobalSensitivity(
+      result_.covarianceModels_.select(covarianceModelIndices), 
+      inSample, 
+      outSample.getMarginal(i), 
+      stat
+    );
+
+    result_.globalHSICIndices_[i] = estimator.getHSICIndices();
+    result_.globalR2HSICIndices_[i] = estimator.getR2HSICIndices();
+    if (result_.computeAsymptoticPValues_)
+      result_.globalPValuesAsymptotic_[i] = estimator.getPValuesAsymptotic();
+    if (result_.computePermutationPValues_)
+      result_.globalPValuesPermutation_.add(estimator.getPValuesPermutation());
+  }
+  
+}
+
 void DataSensitivityAnalysis::checkIndependance()
 {
   const Sample inSample{designOfExperiment_.getInputSample()};
@@ -211,12 +319,27 @@ void DataSensitivityAnalysis::save(OT::Advocate & adv) const
 {
   DesignOfExperimentAnalysis::save(adv);
   adv.saveAttribute("result_", result_);
+  adv.saveAttribute("type_", static_cast<UnsignedInteger>(type_.getType()));
+  adv.saveAttribute("covarianceModels_", covarianceModels_);
+  adv.saveAttribute("computeAsymptoticPValues_", computeAsymptoticPValues_);
+  adv.saveAttribute("computePermutationPValues_", computePermutationPValues_);
+  adv.saveAttribute("useUStatistic_", useUStatistic_);
 }
 
 void DataSensitivityAnalysis::load(OT::Advocate & adv)
 {
   DesignOfExperimentAnalysis::load(adv);
-  adv.loadAttribute("result_", result_); 
+  adv.loadAttribute("result_", result_);
+  if (adv.hasAttribute("type_"))
+  {
+    UnsignedInteger typeInt;
+    adv.loadAttribute("type_", typeInt);
+    type_ = DataSensitivityAnalysisResult::AnalysisType(std::byte{static_cast<unsigned char>(typeInt)});
+    adv.loadAttribute("covarianceModels_", covarianceModels_);
+    adv.loadAttribute("computeAsymptoticPValues_", computeAsymptoticPValues_);
+    adv.loadAttribute("computePermutationPValues_", computePermutationPValues_);
+    adv.loadAttribute("useUStatistic_", useUStatistic_);
+  }
 }
 
 bool DataSensitivityAnalysis::CanBeLaunched(String &errorMessage, const DesignOfExperiment &doe)

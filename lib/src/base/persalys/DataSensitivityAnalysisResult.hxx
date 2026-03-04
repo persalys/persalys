@@ -24,6 +24,8 @@
 
 #include "EvaluationResult.hxx"
 
+#include <openturns/CovarianceModel.hxx>
+#include <cstddef>
 
 namespace PERSALYS
 {
@@ -34,6 +36,38 @@ class PERSALYS_BASE_API DataSensitivityAnalysisResult : public EvaluationResult
 public:
 
   friend class DataSensitivityAnalysis;
+
+  enum Type : unsigned char
+  {
+    RankSobol   = 0b00000001,
+    SRC         = 0b00000010,
+    GlobalHSIC  = 0b00000100
+  };
+
+private:
+  /**
+   * @brief This struct is used to determine which indices should be computed in the analysis launch() method.
+   * 
+   * The type is encoded in a byte, where each bit corresponds to an index type:
+   * - bit 0 (0b0001): compute Rank Sobol indices
+   * - bit 1 (0b0010): compute SRC indices
+   * - bit 2 (0b0100): compute global HSIC indices
+   */
+  struct AnalysisType
+  {
+    AnalysisType(std::byte type) : type_(type) {}
+
+    bool computeRankSobol()   const {return (type_ & std::byte{RankSobol})  != std::byte{0};}
+    bool computeSRC()         const {return (type_ & std::byte{SRC})        != std::byte{0};}
+    bool computeGlobalHSIC()  const {return (type_ & std::byte{GlobalHSIC}) != std::byte{0};}
+
+    std::byte getType() const { return type_; }
+
+    private:
+      std::byte type_;
+  };
+
+public:
 
   /** Default constructor */
   DataSensitivityAnalysisResult();
@@ -54,6 +88,18 @@ public:
   const OT::Collection<OT::Interval>& getSignedSRCIndicesInterval() const;
   const OT::Point& getR2() const;
 
+  const OT::Collection<OT::Point>& getGlobalHSICIndices() const;
+  const OT::Collection<OT::Point>& getGlobalR2HSICIndices() const;
+  const OT::Collection<OT::Point>& getGlobalPValuesAsymptotic() const;
+  const OT::Collection<OT::Point>& getGlobalPValuesPermutation() const;
+
+  bool computeHSICPValuesAsymptotic() const;
+  bool computeHSICPValuesPermutation() const;
+
+#ifndef SWIG
+  const AnalysisType& getAnalysisType() const;
+#endif
+
   bool isIndependent() const;
   const OT::String& getIndependenceWarningMessage() const;
 
@@ -67,6 +113,8 @@ public:
   void load(OT::Advocate & adv) override;
 
 private:
+  AnalysisType analysisType_ = AnalysisType(std::byte{0});
+
   OT::PersistentCollection<OT::Point> firstOrderSobolIndices_;
   OT::PersistentCollection<OT::Interval> firstOrderSobolIndicesInterval_;
 
@@ -75,6 +123,17 @@ private:
   OT::Point r2_;
   OT::PersistentCollection<OT::Interval> SRCIndicesInterval_;
   OT::PersistentCollection<OT::Interval> signedSRCIndicesInterval_;
+
+  OT::PersistentCollection<OT::Point> globalHSICIndices_;
+  OT::PersistentCollection<OT::Point> globalR2HSICIndices_;
+  OT::PersistentCollection<OT::Point> globalPValuesAsymptotic_;
+  OT::PersistentCollection<OT::Point> globalPValuesPermutation_;
+
+  OT::PersistentCollection<OT::CovarianceModel> covarianceModels_; // covariance models used for the computation of global HSIC indices
+  bool computeAsymptoticPValues_  = false;  // whether to compute asymptotic p-values for global HSIC indices
+  bool computePermutationPValues_ = false;  // whether to compute permutation p-values for global HSIC indices  
+  bool useUStatistic_             = false;  // wether to use U-Statistic or V-statistic for the computation of global HSIC indices 
+                                            // (the default is V-statistic, which is faster to compute but can be biased for small samples)
 
   bool isIndependent_ = true;
   OT::String independenceWarningMessage_; // used to store the warning message if the variables are not independent

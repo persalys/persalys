@@ -28,7 +28,7 @@ namespace PERSALYS
 {
 
 CLASSNAMEINIT(DataSensitivityAnalysisResult)
-static Factory<DataSensitivityAnalysisResult> Factory_DataSensitivityAnalysisResult;
+const static Factory<DataSensitivityAnalysisResult> Factory_DataSensitivityAnalysisResult;
 
 DataSensitivityAnalysisResult::DataSensitivityAnalysisResult()
   : EvaluationResult()
@@ -80,6 +80,43 @@ const Point& DataSensitivityAnalysisResult::getR2() const
   return r2_;
 }
 
+const Collection<Point>& DataSensitivityAnalysisResult::getGlobalHSICIndices() const
+{
+  return globalHSICIndices_;
+}
+
+const Collection<Point>& DataSensitivityAnalysisResult::getGlobalR2HSICIndices() const
+{
+  return globalR2HSICIndices_;
+}
+
+const Collection<Point>& DataSensitivityAnalysisResult::getGlobalPValuesAsymptotic() const
+{
+  return globalPValuesAsymptotic_;
+}
+
+const Collection<Point>& DataSensitivityAnalysisResult::getGlobalPValuesPermutation() const
+{
+  return globalPValuesPermutation_;
+}
+
+bool DataSensitivityAnalysisResult::computeHSICPValuesAsymptotic() const
+{
+  return computeAsymptoticPValues_;
+}
+
+bool DataSensitivityAnalysisResult::computeHSICPValuesPermutation() const
+{
+  return computePermutationPValues_;
+}
+
+#ifndef SWIG
+const DataSensitivityAnalysisResult::AnalysisType& DataSensitivityAnalysisResult::getAnalysisType() const
+{
+  return analysisType_;
+}
+#endif
+
 bool DataSensitivityAnalysisResult::isIndependent() const
 {
   return isIndependent_;
@@ -104,6 +141,7 @@ String DataSensitivityAnalysisResult::__repr__() const
 void DataSensitivityAnalysisResult::save(OT::Advocate & adv) const
 {
   EvaluationResult::save(adv);
+  adv.saveAttribute("analysisType_", static_cast<UnsignedInteger>(analysisType_.getType()));
   adv.saveAttribute("firstOrderSobolIndices_", firstOrderSobolIndices_);
   adv.saveAttribute("firstOrderSobolIndicesInterval_", firstOrderSobolIndicesInterval_);
   adv.saveAttribute("SRCIndices_", SRCIndices_);
@@ -113,12 +151,24 @@ void DataSensitivityAnalysisResult::save(OT::Advocate & adv) const
   adv.saveAttribute("r2_", r2_);
   adv.saveAttribute("isIndependent_", isIndependent_);
   adv.saveAttribute("independenceWarningMessage_", independenceWarningMessage_);
+  adv.saveAttribute("globalHSICIndices_", globalHSICIndices_);
+  adv.saveAttribute("globalR2HSICIndices_", globalR2HSICIndices_);
+  adv.saveAttribute("globalPValuesAsymptotic_", globalPValuesAsymptotic_);
+  adv.saveAttribute("globalPValuesPermutation_", globalPValuesPermutation_);
 }
 
 /* Method load() reloads the object from the StorageManager */
 void DataSensitivityAnalysisResult::load(OT::Advocate & adv)
 {
   EvaluationResult::load(adv);
+  if (adv.hasAttribute("analysisType_"))
+  {
+    UnsignedInteger analysisTypeInt;
+    adv.loadAttribute("analysisType_", analysisTypeInt);
+    analysisType_ = AnalysisType(std::byte{static_cast<unsigned char>(analysisTypeInt)});
+  }
+  else
+    analysisType_ = AnalysisType(std::byte{Type::RankSobol | Type::SRC}); // default value for backward compatibility
   adv.loadAttribute("firstOrderSobolIndices_", firstOrderSobolIndices_);
   adv.loadAttribute("firstOrderSobolIndicesInterval_", firstOrderSobolIndicesInterval_);
   adv.loadAttribute("SRCIndices_", SRCIndices_);
@@ -128,6 +178,13 @@ void DataSensitivityAnalysisResult::load(OT::Advocate & adv)
   adv.loadAttribute("r2_", r2_);
   adv.loadAttribute("isIndependent_", isIndependent_);
   adv.loadAttribute("independenceWarningMessage_", independenceWarningMessage_);
+  if (analysisType_.computeGlobalHSIC())
+  {
+    adv.loadAttribute("globalHSICIndices_", globalHSICIndices_);
+    adv.loadAttribute("globalR2HSICIndices_", globalR2HSICIndices_);
+    adv.loadAttribute("globalPValuesAsymptotic_", globalPValuesAsymptotic_);
+    adv.loadAttribute("globalPValuesPermutation_", globalPValuesPermutation_);
+  }
 }
 
 } // namespace PERSALYS

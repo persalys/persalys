@@ -75,6 +75,46 @@ r2_values : sequence of float
 
 // ---------------------------------------------------------------------
 
+%feature("docstring") PERSALYS::DataSensitivityAnalysisResult::getGlobalHSICIndices
+"Get the global HSIC indices.
+
+Returns
+-------
+indices : sequence of float
+    Global HSIC indices for each output."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::DataSensitivityAnalysisResult::getGlobalR2HSICIndices
+"Get the global R2-HSIC indices.
+
+Returns
+-------
+indices : sequence of float
+    Global R2-HSIC indices for each output."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::DataSensitivityAnalysisResult::getGlobalPValuesAsymptotic
+"Get the asymptotic p-values for the global HSIC indices.
+
+Returns
+-------
+p_values : sequence of float
+    Asymptotic p-values for the global HSIC indices."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::DataSensitivityAnalysisResult::getGlobalPValuesPermutation
+"Get the permutation p-values for the global HSIC indices.
+
+Returns
+-------
+p_values : sequence of float
+    Permutation p-values for the global HSIC indices."
+
+// ---------------------------------------------------------------------
+
 %feature("docstring") PERSALYS::DataSensitivityAnalysisResult::isIndependent
 "Performs Spearman test to check if the input variables are independent.
 

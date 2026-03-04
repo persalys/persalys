@@ -22,6 +22,8 @@
 #include "DesignOfExperimentAnalysis.hxx"
 #include "DataSensitivityAnalysisResult.hxx"
 
+#include <openturns/CovarianceModel.hxx>
+
 #ifndef PERSALYS_DATASENSITIVITYANALYSIS_HXX
 #define PERSALYS_DATASENSITIVITYANALYSIS_HXX
 
@@ -30,15 +32,26 @@
 class PERSALYS_BASE_API DataSensitivityAnalysis : public DesignOfExperimentAnalysis
 {
   CLASSNAME
+
 public:
+  using Type = DataSensitivityAnalysisResult::Type;
+
   /** constructors */
-  DataSensitivityAnalysis();
+  DataSensitivityAnalysis() = default;
 
   /** Constructor with parameters */
-  explicit DataSensitivityAnalysis(const OT::String &name, const DesignOfExperiment& design);
+  DataSensitivityAnalysis(
+    const OT::String &name, 
+    const DesignOfExperiment& design, 
+    const unsigned char analysisType = Type::RankSobol | Type::SRC,
+    const OT::Collection<OT::CovarianceModel> &covarianceModels = OT::Collection<OT::CovarianceModel>(),
+    bool computeCovModelParameters = true
+  );
 
   /** Virtual constructor */
   DataSensitivityAnalysis * clone() const override;
+
+  void setHSICParameters(bool computeAsymptoticPValues, bool computePermutationPValues, bool useUStatistic);
 
   bool canBeLaunched(OT::String &errorMessage) const override;
   bool hasValidResult() const override;
@@ -63,10 +76,18 @@ protected:
 private:
   void computeSobolIndices();
   void computeSRCIndices();
+  void computeGlobalHSICIndices();
+  
   void checkIndependance();
 
 private:
   DataSensitivityAnalysisResult result_;
+  DataSensitivityAnalysisResult::AnalysisType type_ = std::byte{0b0011};
+  OT::PersistentCollection<OT::CovarianceModel> covarianceModels_;
+  OT::Bool computeAsymptoticPValues_ = false;
+  OT::Bool computePermutationPValues_ = false;
+  OT::Bool useUStatistic_ = false;
+  OT::Bool computeCovModelParameters_ = true;
 };
 
 } // namespace PERSALYS
