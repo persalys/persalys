@@ -76,9 +76,6 @@ openturns.testing.assert_almost_equal(
 meanCI = montecarloResult.getMeanConfidenceInterval()
 openturns.testing.assert_almost_equal(0.0590036320343, meanCI.getLowerBound()[3], 1e-13)
 openturns.testing.assert_almost_equal(0.0604183606379, meanCI.getUpperBound()[3], 1e-13)
-#stdCi = montecarloResult.getStdConfidenceInterval()
-#openturns.testing.assert_almost_equal(0.0109336748621, stdCi.getLowerBound()[3], 1e-13)
-#openturns.testing.assert_almost_equal(0.0119363302339, stdCi.getUpperBound()[3], 1e-13)
 
 # Sobol ##
 sobol = persalys.SobolAnalysis("mySobol", model)

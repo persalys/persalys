@@ -102,6 +102,4 @@ openturns.testing.assert_almost_equal(
 # script
 script = myStudy.getPythonScript()
 print(script)
-import sys
-print(script, file=sys.stderr)
 exec(script)
