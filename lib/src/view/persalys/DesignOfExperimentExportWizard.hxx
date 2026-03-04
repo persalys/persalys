@@ -1,6 +1,5 @@
-//                                               -*- C++ -*-
 /**
- *  @brief QWizardPage to define src analysis
+ *  @brief QWizard to export a design of experimetns as a data model
  *
  *  Copyright 2015-2025 EDF-Phimeca
  *
@@ -18,39 +17,43 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef PERSALYS_SRCPAGE_HXX
-#define PERSALYS_SRCPAGE_HXX
 
+#ifndef PERSALYS_DESIGNOFEXPERIMENTEXPORTWIZARD_HXX
+#define PERSALYS_DESIGNOFEXPERIMENTEXPORTWIZARD_HXX
+
+#include "persalys/Wizard.hxx"
 #include "persalys/Analysis.hxx"
-#include "persalys/LogSpinBox.hxx"
-#include "persalys/UIntSpinBox.hxx"
-#include "persalys/ErrorWidget.hxx"
+#include "persalys/StudyItem.hxx"
 
-#include <QWizardPage>
+#include <QComboBox>
+#include <QStandardItemModel>
+#include <QVBoxLayout>
 
 namespace PERSALYS
 {
-class PERSALYS_VIEW_API SRCPage : public QWizardPage
+class PERSALYS_VIEW_API DesignOfExperimentExportWizard : public Wizard
 {
   Q_OBJECT
 
+  friend class TestDesignOfExperimentExportWizard;
+
 public:
-  explicit SRCPage(QWidget* parent = nullptr);
+ explicit DesignOfExperimentExportWizard(const StudyItem * item, QWidget * parent = nullptr);
 
-  void initialize(const Analysis& analysis);
-  Analysis getAnalysis(const OT::String& name, const PhysicalModel& physicalModel) const;
-
-  int nextId() const override;
-  bool validatePage() override;
+  Analysis getAnalysis() const;
 
 protected:
   void buildInterface();
+protected slots:
+  void updateWidgets();
 
 private:
-  LogSpinBox  * sampleSizeSpinbox_  = nullptr;
-  UIntSpinBox * blockSizeSpinbox_   = nullptr;
-  QSpinBox    * seedSpinbox_        = nullptr;
-  ErrorWidget * errorWidget_        = nullptr;
+  QComboBox           * doeComboBox_      = nullptr;
+  QStandardItemModel  * doeComboBoxModel_ = nullptr;
+  QVBoxLayout         * parametersLayout_ = nullptr;
+
 };
-}
-#endif
+
+} // namespace PERSALYS
+
+#endif // PERSALYS_DESIGNOFEXPERIMENTEXPORTWIZARD_HXX

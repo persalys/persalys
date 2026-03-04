@@ -36,13 +36,10 @@ class PERSALYS_VIEW_API SensitivityIntroPage : public QWizardPage
   Q_OBJECT
 
 public:
-  enum Method {Sobol, SRC};
-
-  SensitivityIntroPage(QWidget* parent = 0);
+  explicit SensitivityIntroPage(QWidget* parent = nullptr);
 
   void initialize(const Analysis& analysis);
   OT::Description getInterestVariables() const;
-  int getMethodId() const;
 
   int nextId() const override;
   bool validatePage() override;

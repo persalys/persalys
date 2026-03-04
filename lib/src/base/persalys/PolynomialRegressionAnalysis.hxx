@@ -38,7 +38,7 @@ private:
   class Algorithm
   {
     public:
-      Algorithm() {}
+      Algorithm() = default;
 
       Algorithm(const OT::LinearModelAlgorithm &algo)
       : stepwise_(false)
@@ -74,11 +74,10 @@ public:
   enum PenaltyCriteria {AIC, BIC};
 
   /** Default constructor */
-  PolynomialRegressionAnalysis();
+  PolynomialRegressionAnalysis() = default;
 
   /** Constructor with parameters */
   PolynomialRegressionAnalysis(const OT::String& name, const DesignOfExperiment& designOfExperiment);
-  PolynomialRegressionAnalysis(const OT::String& name, const Analysis& designOfExperimentAnalysis);
 
   /** Virtual constructor */
   PolynomialRegressionAnalysis * clone() const override;

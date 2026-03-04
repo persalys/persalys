@@ -38,7 +38,6 @@ public:
   MetaModelAnalysis();
   /** Constructor with parameters */
   MetaModelAnalysis(const OT::String& name, const DesignOfExperiment& designOfExperiment);
-  MetaModelAnalysis(const OT::String& name, const Analysis& analysis);
 
   PythonPhysicalModel asPythonPhysicalModel(const Study &study) const; 
 

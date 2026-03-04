@@ -3,6 +3,23 @@
 
 // ---------------------------------------------------------------------
 
+%feature("docstring") PERSALYS::Study::addDoEAsDataSet
+"Add a design of experiment evaluation as a data set in the study.
+The data set contains an independant copy of the data and is added to
+the study with a unique name.
+
+Parameters
+----------
+designOfExperimentEvaluation : :class:`~persalys.GridDesignOfExperiment`, :class:`~persalys.ProbabilisticDesignOfExperiment`, :class:`~persalys.ImportedDesignOfExperiment`
+    The design of experiment evaluation to add as a data set
+
+Returns
+-------
+doe : :class:`~persalys.DesignOfExperiment`
+    The design of experiment added as a data set in the study"
+
+// ---------------------------------------------------------------------
+
 %feature("docstring") PERSALYS::Study::Add
 "Add a study in the tree view.
 

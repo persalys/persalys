@@ -6,7 +6,6 @@ import openturns as ot
 import persalys
 
 study1 = persalys.Study('study1')
-persalys.Study.Add(study1)
 dist_Q = ot.Normal(10200, 100)
 Q = persalys.Input('Q', 0, dist_Q, 'Primary energy')
 dist_E = ot.Normal(3000, 15)
@@ -34,4 +33,5 @@ def _exec(Q, E, C):
     return Ep'''
 pythonModel1 = persalys.PythonPhysicalModel('pythonModel1', inputs, outputs, code)
 study1.add(pythonModel1)
+persalys.Study.Add(study1)
 

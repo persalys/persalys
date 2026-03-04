@@ -408,50 +408,6 @@ a table.
 .. image:: sobol_results_window_summary.png
     :align: center
 
-5-2 SRC indices
-'''''''''''''''
-
-For more details on the computation of the SRC indices (
-`Standard Regression Coefficients <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/ranking_src.html>`_),
-you can consult the OpenTURNS documentation.
-
-5-2-1 Definition
-****************
-
-To perform a sensitivity analysis with the SRC method, the input variables must
-be independent (In the **Dependence** :ref:`tab <dependenceTab>` of the probabilistic model window replace
--0.2 by 0), then choose **Sensitivity** in the
-context menu of the probabilistic model item in the study tree.
-
-    .. image:: /user_manual/graphical_interface/probabilistic_analysis/probabilisticModelContextMenu.png
-        :align: center
-
-Check the radio button **SRC** in the wizard which appears.
-
-.. image:: sensibilityAnalysis_defaultWizard.png
-    :align: center
-
-Click on **Continue** button. On the new page, you can parametrize the SRC
-method. To access advanced parameters, expand the **Advanced parameters** group.
-
-.. image:: SRC_parameters.png
-    :align: center
-
-Set the block size to 300. In that case the algorithm will generate a sample
-with 34 iterations (33 iterations with a size of 300 and the last iteration with
-a size of 100).
-
-Click on **Finish** button. A new item with a default name appears in the study
-tree and a results window is created.
-
-5-2-2 Results
-*************
-
-The result window contains a table with the SRC indices values
-for each variable. These values are plotted in a graph.
-
-.. image:: SRC_results_window.png
-    :align: center
 
 6- Threshold exceedance
 ```````````````````````
@@ -640,38 +596,143 @@ the sampling is centered on the threshold of the event failure with the Importan
 .. image:: FORM-IS_HitogramResult.png
     :align: center
 
-7- Construction of response surfaces
-````````````````````````````````````
 
-A response surface is built from samples. So we first create a design
-of experiments.
+7- Data analysis
+````````````````
 
-7-1 Design of experiments
-'''''''''''''''''''''''''
+To perform the following analyses use again a Gaussian copula
+(In the **Dependence** :ref:`tab <dependenceTab>`
+of the probabilistic model window replace 0 by -0.2).
 
-Create a design of experiments by choosing **New design of experiments** in the
-context menu of the **Designs of experiments** item.
+7-1 Data
+''''''''
 
-.. image:: DOE_proba_wizard.png
-    :align: center
+We first create a sample for our example:
 
-Select **Probabilistic** and click on **Continue** button.
+- Create a design of experiments by choosing **New design of experiments** in the
+  context menu of the **Designs of experiments** item.
+
+  .. image:: DOE_proba_wizard.png
+      :align: center
+
+.. _probaExperimentExample:
+
+- Select **Probabilistic** and click on **Continue** button.
+  Note the probabilistic experiment uses the distribution of the model to generate the sample (marginals and copula).
 
 .. image:: DOE_probaParamPage.png
     :align: center
 
-The methods LHS and Quasi-Monte Carlo are not available because the model
-contains dependent stochastic input variables.
+- Set the sample size to 1000. Click on **Finish** button.
 
-Keep the default values. Click on **Finish** button.
+7-2 Export as data model
+''''''''''''''''''''''''
+To perform analyses on the design of experiments you just created, you need to export it as a data set.
+To do so, click on the **Design of experiments export** in the diagram window, select the design of experiments
+you want to export and hit Finish.
 
-Choose **Evaluate** in the context menu of the new design of experiments item.
-Launch the evaluation by clicking on the **Run** button of the window which
-appears.
+.. image:: DOE_export.png
+    :align: center
+
+Once that is done, a new data set item appears in the study tree. Click on it to see all the availaible analyses in the diagram window.
+
+.. image:: dataModel_diagram.png
+    :align: center
+
+7-3 Analysis
+''''''''''''
+
+Choose **Data analysis** in the context menu of the sub-item **Definition** of the model.
+
+Launch the analysis.
+
+The following window appears.
+
+.. image:: dataAnalysisResult.png
+    :align: center
+
+.. _correlationEstimate:
+
+In the **dependence** tab, we can see that the variables L and I are correlated:
+this is in agreement with the :ref:`distribution <probaModelExample>` used to
+:ref:`generate <probaExperimentExample>` this variable.
+
+.. image:: dataAnalysisResult_dependence.png
+    :align: center
 
 
-7-2 Functional chaos
-''''''''''''''''''''
+8- Inference
+````````````
+
+8-1 Definition
+''''''''''''''
+
+Choose **Inference** in the context menu of the sub-item **Definition** of the model.
+
+A window appears:
+  - In the current example, we choose to select 3 variables (E,F,I): uncheck L.
+  - Add all the distributions for the other variables by choosing the **All** item in the combo box **Add**.
+  - Click on the **Finish** button.
+
+.. image:: inferenceWizard.png
+    :align: center
+
+Launch the analysis.
+
+8-2 Results
+'''''''''''
+
+.. image:: inferenceResultWindow.png
+    :align: center
+
+The inference analysis recognized a Beta distribution for the variable E:
+this is in agreement with the :ref:`distribution <probaModelExample>` used to
+:ref:`generate <probaExperimentExample>` this variable.
+
+
+9- Dependence inference
+````````````````````````
+
+To explore dependence between variables, the user can use dependence inference analysis.
+
+9-1 Definition
+'''''''''''''''
+
+Choose **Dependence inference** in the context menu of the sub-item **Definition** of the model.
+
+The window which appears, may have default defined groups.
+There are detected from the Spearman's matrix estimate. In the current example,
+the variables **L** and **I** are :ref:`dependent <correlationEstimate>`.
+
+By default, the Normal copula is tested.
+Add all the copulas by choosing the **All** item in the combo box **Add**.
+
+.. image:: dependenceWizard.png
+    :align: center
+
+Launch the analysis.
+
+9-2 Results
+''''''''''''
+
+The dependence inference analysis recognized a Normal copula for the group [L, I]:
+this is in agreement with the :ref:`distribution <probaModelExample>` used to
+:ref:`generate <probaExperimentExample>` this variable.
+The Spearman coefficient is not exactly equal to -0.2 because the sample is not
+large enough.
+
+.. image:: dep_inferenceResultWindow.png
+    :align: center
+
+
+.. image:: dep_inferenceParamResult.png
+    :align: center
+
+10- Construction of response surfaces
+`````````````````````````````````````
+
+10-1 Functional chaos
+'''''''''''''''''''''
 
 For more details on the computation of a metamodel by the method of
 `Functional chaos <http://openturns.github.io/openturns/latest/theory/meta_modeling/functional_chaos.html>`_,
@@ -681,8 +742,8 @@ The functional chaos allows one to compute the Sobol indices. Beware that these 
 cannot be used for correlated stochastic variables. In order to use these indices,
 replace the value -0.2 by 0 in the **Dependence** :ref:`tab <dependenceTab>` of the probabilistic model window.
 
-7-2-1 Definition
-****************
+10-1-1 Definition
+*****************
 
 Choose **Metamodel** in the context menu of the sub-item **Evaluation** of the
 design of experiments item.
@@ -700,8 +761,8 @@ in the next page.
 
 Launch the analysis.
 
-7-2-2 Results
-*************
+10-1-2 Results
+**************
 
 The first tab of the result window displays the metamodel.
 The relative error expresses the quality of the metamodel.
@@ -736,14 +797,14 @@ The analysis computes a surrogate model which can be retrieved and checked:
       .. image:: metamodel_definition.png
           :align: center
 
-7-3 Gaussian Process
-''''''''''''''''''''
+10-2 Gaussian Process
+'''''''''''''''''''''
 
 For more details on the computation of a metamodel by Gaussian Process, see the OpenTURNS documentation of
 `Gaussian Process Regression <https://openturns.github.io/openturns/latest/theory/meta_modeling/gaussian_process_regression.html>`_.
 
-7-3-1 Definition
-****************
+10-2-1 Definition
+*****************
 
 Choose **Metamodel** in the context menu of the sub-item **Evaluation** of the
 design of experiments item.
@@ -769,8 +830,8 @@ Click on **Finish** button.
 
 Launch the analysis.
 
-7-3-2 Results
-*************
+10-2-2 Results
+**************
 
 
 The window contains a **Validation** tab, which presents:
@@ -790,147 +851,4 @@ the trend coefficients.
 
 .. image:: kriging_result.png
     :align: center
-
-
-8- Data analysis
-````````````````
-
-To perform the following analyses use again a Gaussian copula
-(In the **Dependence** :ref:`tab <dependenceTab>`
-of the probabilistic model window replace 0 by -0.2).
-
-8-1 Data
-''''''''
-
-We first create a sample for our example:
-
-- Create a design of experiments by choosing **New design of experiments** in the
-  context menu of the **Designs of experiments** item.
-
-  .. image:: DOE_proba_wizard.png
-      :align: center
-
-.. _probaExperimentExample:
-
-- Select **Probabilistic** and click on **Continue** button.
-  Note the probabilistic experiment uses the distribution of the model to generate the sample (marginals and copula).
-
-.. image:: DOE_probaParamPage.png
-    :align: center
-
-- Set the sample size to 1000. Click on **Finish** button.
-
-- In the **Table** tab of the window click on **Export** button.
-- Save the sample in a file.
-
-
-8-2 Data model
-''''''''''''''
-
-On the study window click on **Data model**.
-
-A new item and a new window appear:
-
-.. image:: dataModel_diagram.png
-    :align: center
-
-Click on the **Model definition** box of the diagram.
-
-A window is created to define the model. Click on the **...** button and load
-the file created in the previous part. Define the last variable as an input by finding the right item
-in the combo box on the line **Type**.
-
-.. image:: dataModel_definition.png
-    :align: center
-
-8-3 Analysis
-''''''''''''
-
-Choose **Data analysis** in the context menu of the sub-item **Definition** of the model.
-
-Launch the analysis.
-
-The following window appears.
-
-.. image:: dataAnalysisResult.png
-    :align: center
-
-.. _correlationEstimate:
-
-In the **dependence** tab, we can see that the variables L and I are correlated:
-this is in agreement with the :ref:`distribution <probaModelExample>` used to
-:ref:`generate <probaExperimentExample>` this variable.
-
-.. image:: dataAnalysisResult_dependence.png
-    :align: center
-
-
-9- Inference
-````````````
-
-9-1 Definition
-''''''''''''''
-
-Choose **Inference** in the context menu of the sub-item **Definition** of the model.
-
-A window appears:
-  - In the current example, we choose to select 3 variables (E,F,I): uncheck L.
-  - Add all the distributions for the other variables by choosing the **All** item in the combo box **Add**.
-  - Click on the **Finish** button.
-
-.. image:: inferenceWizard.png
-    :align: center
-
-Launch the analysis.
-
-9-2 Results
-'''''''''''
-
-.. image:: inferenceResultWindow.png
-    :align: center
-
-The inference analysis recognized a Beta distribution for the variable E:
-this is in agreement with the :ref:`distribution <probaModelExample>` used to
-:ref:`generate <probaExperimentExample>` this variable.
-
-
-10- Dependence inference
-````````````````````````
-
-To explore dependence between variables, the user can use dependence inference analysis.
-
-10-1 Definition
-'''''''''''''''
-
-Choose **Dependence inference** in the context menu of the sub-item **Definition** of the model.
-
-The window which appears, may have default defined groups.
-There are detected from the Spearman's matrix estimate. In the current example,
-the variables **L** and **I** are :ref:`dependent <correlationEstimate>`.
-
-By default, the Normal copula is tested.
-Add all the copulas by choosing the **All** item in the combo box **Add**.
-
-.. image:: dependenceWizard.png
-    :align: center
-
-Launch the analysis.
-
-10-2 Results
-''''''''''''
-
-The dependence inference analysis recognized a Normal copula for the group [L, I]:
-this is in agreement with the :ref:`distribution <probaModelExample>` used to
-:ref:`generate <probaExperimentExample>` this variable.
-The Spearman coefficient is not exactly equal to -0.2 because the sample is not
-large enough.
-
-.. image:: dep_inferenceResultWindow.png
-    :align: center
-
-
-.. image:: dep_inferenceParamResult.png
-    :align: center
-
-
 

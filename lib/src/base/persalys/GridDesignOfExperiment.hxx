@@ -65,6 +65,7 @@ public:
 protected:
   void initializeParameters();
   OT::Sample generateInputSample(const OT::UnsignedInteger nbSimu) const override;
+  void launch() override;
 
 protected:
   OT::Description inputNames_;

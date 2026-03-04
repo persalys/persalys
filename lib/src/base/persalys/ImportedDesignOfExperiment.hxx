@@ -22,34 +22,46 @@
 #define PERSALYS_IMPORTEDDESIGNOFEXPERIMENT_HXX
 
 #include "DesignOfExperimentEvaluation.hxx"
-#include "DataImport.hxx"
+#include "ImportedDataset.hxx"
 
 namespace PERSALYS
 {
-class PERSALYS_BASE_API ImportedDesignOfExperiment : public DesignOfExperimentEvaluation, public DataImport
+class PERSALYS_BASE_API ImportedDesignOfExperiment : public DesignOfExperimentEvaluation
 {
   CLASSNAME
 
 public:
+  using Type = DesignOfExperiment::Type;
+
   /** Default constructor */
   ImportedDesignOfExperiment();
   /** Constructor with parameters */
   ImportedDesignOfExperiment(const OT::String& name, const PhysicalModel& physicalModel);
   /** Constructor with parameters */
-  ImportedDesignOfExperiment(const OT::String& name,
-                             const PhysicalModel& physicalModel,
-                             const OT::String& fileName,
-                             const OT::Indices& inputColumns,
-                             const OT::Indices& outputColumns = OT::Indices());
+  ImportedDesignOfExperiment( const OT::String& name,
+                              const PhysicalModel& physicalModel,
+                              const OT::String& fileName,
+                              const OT::Indices& inputColumns,
+                              const OT::Indices& outputColumns = OT::Indices(),
+                              Type type = Type::UK);
 
   /** Virtual constructor */
   ImportedDesignOfExperiment * clone() const override;
 
   void setColumns(const OT::Indices &inputColumns,
-                  const OT::Indices &outputColumns = OT::Indices()) override;
+                  const OT::Indices &outputColumns = OT::Indices());
 
   Parameters getParameters() const override;
   OT::String getPythonScript() const override;
+
+  void setType(Type type);
+  Type getType() const;
+
+  const ImportedDataset& getImportedDataset() const;
+
+  void setEvaluations(OT::Sample&) override;
+
+  void setFileName(const OT::String &fileName);
 
   /** String converter */
   OT::String __repr__() const override;
@@ -61,9 +73,16 @@ public:
   void load(OT::Advocate& adv) override;
 
 protected:
-  void check() override;
   OT::Sample generateInputSample(const OT::UnsignedInteger nbSimu) const override;
-  void setDefaultColumns() override;
+  void launch() override;
+  void saveImportedSampleToResult();
+
+private:
+  void loadOldFormat(OT::Advocate& adv);
+
+private:
+    Type type_ = Type::UK;
+    ImportedDataset importedDataset_;
 };
 }
 #endif

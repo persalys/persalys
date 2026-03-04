@@ -38,7 +38,6 @@ public:
   KrigingAnalysis();
   /** Constructor with parameters */
   KrigingAnalysis(const OT::String& name, const DesignOfExperiment& designOfExperiment);
-  KrigingAnalysis(const OT::String& name, const Analysis& designOfExperimentAnalysis);
 
   /** Virtual constructor */
   KrigingAnalysis * clone() const override;
@@ -74,7 +73,7 @@ private:
   OT::GaussianProcessRegression buildGPRAlgorithm(const OT::Sample& inputSample,
       const OT::Sample& outputSample,
       const bool optimizeParameters = true,
-      const bool useOptimalCovModel = false);
+      const bool useOptimalCovModel = false) const;
 
 protected:
   void initialize() override;
@@ -87,7 +86,7 @@ private:
   OT::CovarianceModel covarianceModel_;
   KrigingAnalysisResult result_;
   OT::CovarianceModel optimalCovarianceModel_;
-  bool optimizeParameters_;
+  bool optimizeParameters_ = true;
 };
 }
 #endif

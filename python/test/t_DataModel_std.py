@@ -12,8 +12,9 @@ filename = "data.csv"
 ot.RandomGenerator.SetSeed(0)
 ot.Normal(3).getSample(10).exportToCSVFile(filename)
 inColumns = [0, 2]
-
-model = persalys.DataModel("myDataModel", filename, inColumns)
+importedDataset = persalys.ImportedDataset(filename, inColumns)
+model = persalys.DataModel("myDataModel", importedDataset)
+model.setType(persalys.DataModel.MC)
 myStudy.add(model)
 print(model)
 
@@ -41,10 +42,11 @@ openturns.testing.assert_almost_equal(
 
 # Model 2
 outColumns = [1]
-
+importedDataset2 = persalys.ImportedDataset(filename, inColumns, outColumns)
 model2 = persalys.DataModel(
-    "myDataModel2", filename, inColumns, outColumns, ["var1", "var2"], ["var3"]
+    "myDataModel2", importedDataset2, ["var1", "var2"], ["var3"]
 )
+model2.setType(persalys.DataModel.MC)
 myStudy.add(model2)
 print(model2)
 
@@ -55,7 +57,9 @@ print("min=", model2.getListXMin())
 print("max=", model2.getListXMax())
 
 # Model 3
-model3 = persalys.DataModel("myDataModel3", filename, inColumns, outColumns)
+importedDataset3 = persalys.ImportedDataset(filename, inColumns, outColumns)
+model3 = persalys.DataModel("myDataModel3", importedDataset3, ["var1", "var2"], ["var3"])
+model3.setType(persalys.DataModel.MC)
 myStudy.add(model3)
 print(model3)
 
@@ -74,8 +78,9 @@ filename = "data_500.csv"
 ot.RandomGenerator.SetSeed(0)
 ot.Normal(3).getSample(500).exportToCSVFile(filename)
 inColumns = [0, 1, 2]
-
-model4 = persalys.DataModel("myDataModel4", filename, inColumns)
+importedDataset4 = persalys.ImportedDataset(filename, inColumns)
+model4 = persalys.DataModel("myDataModel4", importedDataset4)
+model4.setType(persalys.DataModel.MC)
 myStudy.add(model4)
 print(model4)
 print("inputNames=", model4.getInputNames())
@@ -213,7 +218,8 @@ for col_sep in [";", ",", " "]:
                     if j < len(p) - 1:
                         csv.write(col_sep)
                 csv.write("\n")
-        model = persalys.DataModel("myDataModel2", filename, inColumns)
+        importedDataset = persalys.ImportedDataset(filename, inColumns)
+        model = persalys.DataModel("myDataModel2", importedDataset)
         assert model.getSampleFromFile().getDimension() == 2, (
             "wrong dimension sep=" + col_sep
         )

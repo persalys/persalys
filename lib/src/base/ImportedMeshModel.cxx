@@ -31,11 +31,10 @@ namespace PERSALYS
 
 CLASSNAMEINIT(ImportedMeshModel)
 
-static Factory<ImportedMeshModel> Factory_ImportedMeshModel;
+const static Factory<ImportedMeshModel> Factory_ImportedMeshModel;
 
 ImportedMeshModel::ImportedMeshModel()
   : MeshModelImplementation()
-  , DataImport()
 {
 }
 
@@ -43,10 +42,9 @@ ImportedMeshModel::ImportedMeshModel(const String &filename,
   const VariableCollection &parameters, const Indices &columns, 
   const Tools::DataOrder order)
   : MeshModelImplementation()
-  , DataImport()
   , order_ (order)
 {
-  setFileName(filename, order);
+  importedDataset_.setFileName(filename, order);
   setIndexParameters(parameters);
   setParameterColumns(columns);
 }
@@ -60,19 +58,15 @@ ImportedMeshModel* ImportedMeshModel::clone() const
 Sample ImportedMeshModel::importSample(const String& fileName,
                                        const Tools::DataOrder order)
 {
-  Sample sampleFromFile{DataImport::importSample(fileName, order)};
+  Sample sampleFromFile = order == Tools::DataOrder::Unknown ?
+    Tools::ImportMesh(fileName) :
+    Tools::ImportSample(fileName, order);
 
   // check sampleFromFile size
   if (sampleFromFile.getSize() < 2)
     throw InvalidArgumentException(HERE) << "The mesh must contain at least two nodes";
 
   return sampleFromFile;
-}
-
-
-void ImportedMeshModel::setDefaultColumns()
-{
-  setColumns(Indices(1, 0), Indices());
 }
 
 void ImportedMeshModel::setParameterColumns(const Indices& inputColumns)
@@ -84,10 +78,10 @@ void ImportedMeshModel::setParameterColumns(const Indices& inputColumns)
     << "The dimension of the list of the column numbers has to be equal to the dimension of the mesh " 
     << indexParameters.getSize();
 
-  DataImport::setColumns(inputColumns, Indices());
+  importedDataset_.setColumns(inputColumns, Indices());
 
   // build mesh
-  Sample sample(getSampleFromFile().getMarginal(inputColumns_));
+  Sample sample(importedDataset_.getSampleFromFile().getMarginal(importedDataset_.getInputColumns()));
   sample.setDescription(Description(1, indexParameters[0].getName()));
 
   Collection simplices(sample.getSize() - 1, Indices(2));
@@ -112,12 +106,42 @@ Indices ImportedMeshModel::getNumberOfNodes() const
   return  Indices(1, mesh_.getVertices().getSize());
 }
 
+void ImportedMeshModel::setMeshFilename(const String &filename)
+{
+
+  String currentFilename = importedDataset_.getFileName();
+  if (filename == currentFilename)
+  {
+    // reload
+    const Sample currentSample = importedDataset_.getSampleFromFile();
+    importedDataset_.setFileName(filename, Tools::DataOrder::Unknown);
+    if (importedDataset_.getSampleFromFile().getSize() < 2)
+    {
+      importedDataset_.setSampleFromFile(currentSample);
+      throw InvalidArgumentException(HERE) << "The mesh must contain at least two nodes";
+    }
+  }
+  else
+  {
+    importedDataset_.setFileName(filename, Tools::DataOrder::Unknown);
+    if (importedDataset_.getSampleFromFile().getSize() < 2)
+    {
+      importedDataset_.setFileName(currentFilename, Tools::DataOrder::Unknown);
+      throw InvalidArgumentException(HERE) << "The mesh must contain at least two nodes";
+    }
+  }
+}
+
+const ImportedDataset& ImportedMeshModel::getImportedDataset() const
+{
+  return importedDataset_;
+}
 
 String ImportedMeshModel::getHTMLDescription() const
 {
   OSS oss;
   oss << MeshModelImplementation::getHTMLDescription();
-  oss << "<p>File path : " << fileName_ << "</p>";
+  oss << "<p>File path : " << importedDataset_.getFileName() << "</p>";
 
   return oss;
 }
@@ -134,7 +158,7 @@ String ImportedMeshModel::getPythonScript() const
     paramNames.add(getIndexParameters()[i].getName());
   }
 
-  oss << getName() << " = persalys.ImportedMeshModel('" << fileName_ << "', " << Parameters::GetOTDescriptionStr(paramNames, false) << ", " << inputColumns_.__str__();
+  oss << getName() << " = persalys.ImportedMeshModel('" << importedDataset_.getFileName() << "', " << Parameters::GetOTDescriptionStr(paramNames, false) << ", " << importedDataset_.getInputColumns().__str__();
 
   switch (order_)
   {
@@ -162,8 +186,8 @@ String ImportedMeshModel::__repr__() const
   OSS oss;
   oss << "class=" << GetClassName()
       << " name=" << getName()
-      << " file name=" << getFileName()
-      << " columns=" << getInputColumns()
+      << " file name=" << importedDataset_.getFileName()
+      << " columns=" << importedDataset_.getInputColumns()
       << " index parameters=" << getIndexParameters()
       << " mesh=" << getMesh();
   return oss;
@@ -174,8 +198,8 @@ String ImportedMeshModel::__repr__() const
 void ImportedMeshModel::save(Advocate & adv) const
 {
   MeshModelImplementation::save(adv);
-  DataImport::save(adv);
   adv.saveAttribute("order_", static_cast<UnsignedInteger>(order_));
+  adv.saveAttribute("importedDataset_", importedDataset_);
 }
 
 
@@ -183,9 +207,50 @@ void ImportedMeshModel::save(Advocate & adv) const
 void ImportedMeshModel::load(Advocate & adv)
 {
   MeshModelImplementation::load(adv);
-  DataImport::load(adv);
   UnsignedInteger order;
   adv.loadAttribute("order_", order);
   order_ = static_cast<Tools::DataOrder>(order);
+  if (adv.hasAttribute("importedDataset_"))
+    adv.loadAttribute("importedDataset_", importedDataset_);
+  else
+    loadOldFormat(adv);
 }
+
+void ImportedMeshModel::loadOldFormat(Advocate & adv)
+{
+  String fileName;
+  adv.loadAttribute("fileName_", fileName);
+  Indices inputColumns;
+  adv.loadAttribute("inputColumns_", inputColumns);
+  Indices outputColumns;
+  adv.loadAttribute("outputColumns_", outputColumns);
+  try
+  {
+    importedDataset_ = ImportedDataset(fileName, inputColumns, outputColumns);
+  }
+  catch (const Exception &)
+  {
+    importedDataset_ = ImportedDataset();
+    Sample sampleFromFile;
+    adv.loadAttribute("sampleFromFile_", sampleFromFile);
+    if (sampleFromFile.getSize())
+    {
+      importedDataset_.setSampleFromFile(sampleFromFile);
+      importedDataset_.setColumns(inputColumns, outputColumns);
+    }
+    else
+    {
+      UnsignedInteger maxColumn = 0;
+      for (UnsignedInteger i = 0; i < inputColumns.getSize(); ++i)
+        if (inputColumns[i] > maxColumn)
+          maxColumn = inputColumns[i];
+      for (UnsignedInteger i = 0; i < outputColumns.getSize(); ++i)
+        if (outputColumns[i] > maxColumn)
+          maxColumn = outputColumns[i];
+      importedDataset_.setSampleFromFile(Sample(0, maxColumn + 1));
+      importedDataset_.setColumns(inputColumns, outputColumns);
+    }
+  }
 }
+
+} // namespace PERSALYS

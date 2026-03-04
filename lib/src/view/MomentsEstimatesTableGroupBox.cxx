@@ -168,13 +168,13 @@ QWidget* MomentsEstimatesTableGroupBox::getMomentsEstimateTableView(const Unsign
   else
     momentsEstimationsTable->setNotEditableItem(++row, 1, "-");
 
-  if (isConfidenceIntervalRequired_)
-  {
-    if (result_.getStdConfidenceInterval().getFiniteLowerBound()[variableIndex])
-      momentsEstimationsTable->setNotEditableItem(row, 2, result_.getStdConfidenceInterval().getMarginal(variableIndex).__str__().c_str());
-    else
-      momentsEstimationsTable->setNotEditableItem(row, 2, "-");
-  }
+  //if (isConfidenceIntervalRequired_)
+  //{
+  //  if (result_.getStdConfidenceInterval().getFiniteLowerBound()[variableIndex])
+  //    momentsEstimationsTable->setNotEditableItem(row, 2, result_.getStdConfidenceInterval().getMarginal(variableIndex).__str__().c_str());
+  //  else
+  //    momentsEstimationsTable->setNotEditableItem(row, 2, "-");
+  //}
 
   // Coefficient of variation
   if (result_.getCoefficientOfVariation()[variableIndex].getSize() > 0)

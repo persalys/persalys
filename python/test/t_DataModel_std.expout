@@ -1,7 +1,7 @@
-class=DataModel name=myDataModel fileName=data.csv inputColumns=[0,2] outputColumns=[] inputNames=[X0,X2] outputNames=[]
+class=DataModel name=myDataModel importedDataset= fileName=data.csv inputColumns=[0,2] outputColumns=[] physicalModel=false inputNames=[X0,X2] outputNames=[] type=MC
 inputNames= [X0,X2]
 outputNames= []
-result= class=DataAnalysisResult name=Unnamed min=[[-2.29006],[-1.31178]] max=[[1.78236],[0.810668]] mean=[[0.201254],[-0.143151]] median=[[0.459701],[0.0607826]] standardDeviation=[[1.12247],[0.678845]] coefficientOfVariation=[[5.57739],[4.74217]] variance=[[1.25994],[0.460831]] skewness=[[-1.06322],[-0.430218]] kurtosis=[[5.03838],[2.07116]] firstQuartile=[[-0.355007],[-0.781366]] thirdQuartile=[[0.793156],[0.350042]] meanConfidenceInterval=class=Interval name=Unnamed dimension=2 lower bound=class=Point name=Unnamed dimension=2 values=[-0.494448,-0.563896] upper bound=class=Point name=Unnamed dimension=2 values=[0.896956,0.277594] finite lower bound=[1,1] finite upper bound=[1,1] stdConfidenceInterval=class=Interval name=Unnamed dimension=2 lower bound=class=Point name=Unnamed dimension=2 values=[0.772075,0.466934] upper bound=class=Point name=Unnamed dimension=2 values=[2.0492,1.23931] finite lower bound=[1,1] finite upper bound=[1,1] effectiveSize=[10,10]
+result= class=DataAnalysisResult name=Unnamed min=[[-2.29006],[-1.31178]] max=[[1.78236],[0.810668]] mean=[[0.201254],[-0.143151]] median=[[0.459701],[0.0607826]] standardDeviation=[[1.12247],[0.678845]] coefficientOfVariation=[[5.57739],[4.74217]] variance=[[1.25994],[0.460831]] skewness=[[-1.06322],[-0.430218]] kurtosis=[[5.03838],[2.07116]] firstQuartile=[[-0.355007],[-0.781366]] thirdQuartile=[[0.793156],[0.350042]] meanConfidenceInterval=class=Interval name=Unnamed dimension=2 lower bound=class=Point name=Unnamed dimension=2 values=[-0.494448,-0.563896] upper bound=class=Point name=Unnamed dimension=2 values=[0.896956,0.277594] finite lower bound=[1,1] finite upper bound=[1,1] effectiveSize=[10,10]
 PDF= [  0 : [ -4.21702      0.000969752 ]
   1 : [ -4.14787      0.00129605  ]
   2 : [ -4.07872      0.00171387  ]
@@ -774,15 +774,15 @@ SurvivalFunction= [  0 : [ -4.21702      0.999794    ]
 127 : [  2.76368      4.47547e-08 ]
 128 : [  2.81039      2.43881e-08 ]]
 outliers= [[-2.29006],[]]
-class=DataModel name=myDataModel2 fileName=data.csv inputColumns=[0,2] outputColumns=[1] inputNames=[var1,var2] outputNames=[var3]
+class=DataModel name=myDataModel2 importedDataset= fileName=data.csv inputColumns=[0,2] outputColumns=[1] physicalModel=false inputNames=[var1,var2] outputNames=[var3] type=MC
 inputNames= [var1,var2]
 outputNames= [var3]
 min= [0 : [ 1.20548  0.350042 ]]
 max= [0 : [ -0.355007  0.810668 ]]
-class=DataModel name=myDataModel3 fileName=data.csv inputColumns=[0,2] outputColumns=[1] inputNames=[X0,X2] outputNames=[X1]
-inputNames= [X0,X2]
-outputNames= [X1]
-inputSample=     [ X0         X2         ]
+class=DataModel name=myDataModel3 importedDataset= fileName=data.csv inputColumns=[0,2] outputColumns=[1] physicalModel=false inputNames=[var1,var2] outputNames=[var3] type=MC
+inputNames= [var1,var2]
+outputNames= [var3]
+inputSample=     [ var1       var2       ]
 0 : [  0.608202  -0.438266  ]
 1 : [  1.20548    0.350042  ]
 2 : [ -0.355007   0.810668  ]
@@ -793,7 +793,7 @@ inputSample=     [ X0         X2         ]
 7 : [  0.445785  -0.856712  ]
 8 : [  0.473617   0.351418  ]
 9 : [  1.78236   -0.781366  ]
-outputSample=     [ X1         ]
+outputSample=     [ var3       ]
 0 : [ -1.26617   ]
 1 : [ -2.18139   ]
 2 : [  1.43725   ]
@@ -806,7 +806,7 @@ outputSample=     [ X1         ]
 9 : [  0.0702074 ]
 min= [0 : [ 1.20548  0.350042 ]]
 max= [0 : [ -0.355007  0.810668 ]]
-class=DataModel name=myDataModel4 fileName=data_500.csv inputColumns=[0,1,2] outputColumns=[] inputNames=[X0,X1,X2] outputNames=[]
+class=DataModel name=myDataModel4 importedDataset= fileName=data_500.csv inputColumns=[0,1,2] outputColumns=[] physicalModel=false inputNames=[X0,X1,X2] outputNames=[] type=MC
 inputNames= [X0,X1,X2]
 outputNames= []
 [1,0]
@@ -827,30 +827,29 @@ import openturns as ot
 import persalys
 
 myStudy = persalys.Study('myStudy')
-persalys.Study.Add(myStudy)
-inputColumns = [0, 2]
-outputColumns = []
 inputNames = ['X0', 'X2']
 outputNames = []
-myDataModel = persalys.DataModel('myDataModel', 'data.csv', inputColumns, outputColumns, inputNames, outputNames)
+myDataModelImportedDataset = persalys.ImportedDataset('data.csv', [0,2], [])
+myDataModel = persalys.DataModel('myDataModel', myDataModelImportedDataset, inputNames, outputNames)
+myDataModel.setType(persalys.DataModel.MC)
 myStudy.add(myDataModel)
-inputColumns = [0, 2]
-outputColumns = [1]
 inputNames = ['var1', 'var2']
 outputNames = ['var3']
-myDataModel2 = persalys.DataModel('myDataModel2', 'data.csv', inputColumns, outputColumns, inputNames, outputNames)
+myDataModel2ImportedDataset = persalys.ImportedDataset('data.csv', [0,2], [1])
+myDataModel2 = persalys.DataModel('myDataModel2', myDataModel2ImportedDataset, inputNames, outputNames)
+myDataModel2.setType(persalys.DataModel.MC)
 myStudy.add(myDataModel2)
-inputColumns = [0, 2]
-outputColumns = [1]
-inputNames = ['X0', 'X2']
-outputNames = ['X1']
-myDataModel3 = persalys.DataModel('myDataModel3', 'data.csv', inputColumns, outputColumns, inputNames, outputNames)
+inputNames = ['var1', 'var2']
+outputNames = ['var3']
+myDataModel3ImportedDataset = persalys.ImportedDataset('data.csv', [0,2], [1])
+myDataModel3 = persalys.DataModel('myDataModel3', myDataModel3ImportedDataset, inputNames, outputNames)
+myDataModel3.setType(persalys.DataModel.MC)
 myStudy.add(myDataModel3)
-inputColumns = [0, 1, 2]
-outputColumns = []
 inputNames = ['X0', 'X1', 'X2']
 outputNames = []
-myDataModel4 = persalys.DataModel('myDataModel4', 'data_500.csv', inputColumns, outputColumns, inputNames, outputNames)
+myDataModel4ImportedDataset = persalys.ImportedDataset('data_500.csv', [0,1,2], [])
+myDataModel4 = persalys.DataModel('myDataModel4', myDataModel4ImportedDataset, inputNames, outputNames)
+myDataModel4.setType(persalys.DataModel.MC)
 myStudy.add(myDataModel4)
 aDataAnalysis = persalys.DataAnalysis('aDataAnalysis', myDataModel)
 myStudy.add(aDataAnalysis)
@@ -864,4 +863,5 @@ aQuantileAnalysis.setThreshold([
 [1.3, 1.3]]
 )
 myStudy.add(aQuantileAnalysis)
+persalys.Study.Add(myStudy)
 

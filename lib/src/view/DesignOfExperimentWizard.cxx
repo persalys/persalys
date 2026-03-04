@@ -79,18 +79,20 @@ Analysis DesignOfExperimentWizard::getAnalysis() const
     case DesignOfExperimentIntroPage::Deterministic:
       analysis = gridPage_->getAnalysis();
       break;
+    
     case DesignOfExperimentIntroPage::Probabilistic:
     {
-      // get the physical model
       PhysicalModel model = dynamic_cast<const PhysicalModelAnalysis*>(analysis_.getImplementation().get())->getPhysicalModel();
       analysis = probaPage_->getAnalysis(analysis_.getName(), model);
       break;
     }
+    
     case DesignOfExperimentIntroPage::Import:
       analysis = importPage_->getAnalysis();
       break;
+    
     default:
-      throw InvalidValueException(HERE) << "ReliabilityAnalysisWizard::getAnalysis no analysis";
+      throw OT::InvalidArgumentException(HERE) << "introPage_->getMethodId() returned an invalid value.";
   }
 
   return analysis;

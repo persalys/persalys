@@ -50,3 +50,23 @@ Parameters
 ----------
 columns : sequence of int
    Indices of columns in file of the index parameters"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::ImportedMeshModel::setMeshFilename
+"Mesh file name accessor.
+
+Parameters
+----------
+fileName : str
+   Name of the file containing the mesh data"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::ImportedMeshModel::getImportedDataset
+"Get the imported dataset.
+
+Returns
+-------
+:class:`persalys.ImportedDataset`
+   The imported dataset"

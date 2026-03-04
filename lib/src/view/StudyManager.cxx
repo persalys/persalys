@@ -36,6 +36,7 @@
 #include "persalys/PythonPhysicalModel.hxx"
 #include "persalys/PythonPhysicalModelPropertiesDialog.hxx"
 #include "persalys/ImportEvaluationsWizard.hxx"
+#include "persalys/DesignOfExperimentExportWizard.hxx"
 
 #include <QFileDialog>
 #include <QApplication>
@@ -232,7 +233,9 @@ void StudyManager::openExtractDataFieldWizard(StudyItem *item, const Analysis &a
 
 void StudyManager::openMetamodelExportWizard(StudyItem *item, const Analysis& analysis, const bool isGeneralWizard)
 {
-  QPointer<MetaModelExportWizard> wizard(new MetaModelExportWizard(analysis, isGeneralWizard, mainWidget_));
+  Q_ASSERT(item);
+
+  QPointer<MetaModelExportWizard> wizard{new MetaModelExportWizard(analysis, isGeneralWizard, mainWidget_)};
   wizard->setAttribute(Qt::WA_DeleteOnClose);
 
   connect(wizard, &QDialog::accepted, [item, wizard](){
@@ -247,6 +250,23 @@ void StudyManager::openMetamodelExportWizard(StudyItem *item, const Analysis& an
   wizard->open();
 }
 
+void StudyManager::openDesignOfExperimentExportWizard(const StudyItem *item)
+{
+  Q_ASSERT(item);
+  
+  QPointer<DesignOfExperimentExportWizard> wizard{new DesignOfExperimentExportWizard(item, mainWidget_)};
+  wizard->setAttribute(Qt::WA_DeleteOnClose);
+  connect(wizard, &QDialog::accepted, [item, wizard](){
+    const auto * doeEvaluation = dynamic_cast<const DesignOfExperimentEvaluation*>(wizard->getAnalysis().getImplementation().get());
+    if (doeEvaluation)
+    {
+      Study study = item->getStudy();
+      study.addDoEAsDataSet(*doeEvaluation);
+    }
+  });
+
+  wizard->open();
+}
 
 void StudyManager::openProperties(Item* item) const
 {
@@ -295,7 +315,8 @@ void StudyManager::createWindow(Item *item)
   connect(item, SIGNAL(wizardRequested(StudyItem*, Analysis, bool)), this, SLOT(openAnalysisWizard(StudyItem*, Analysis, bool)));
   connect(item, SIGNAL(doeEvaluationWizardRequested(Analysis, bool)), this, SLOT(openDesignOfExperimentEvaluationWizard(Analysis, bool)));
   connect(item, SIGNAL(mmExportWizardRequested(StudyItem*, Analysis, bool)), this, SLOT(openMetamodelExportWizard(StudyItem*, Analysis, bool)));
-  connect(item, &Item::openPropertiesRequested, [ = ] () {
+  connect(item, &ItemFactory::doeExportWizardRequested, this, &StudyManager::openDesignOfExperimentExportWizard);
+  connect(item, &Item::openPropertiesRequested, [item, this] () {
     openProperties(item);
   });
   connect(item, SIGNAL(wizardRequested(StudyItem*, DesignOfExperiment)), this, SLOT(openObservationsWizard(StudyItem*, DesignOfExperiment)));

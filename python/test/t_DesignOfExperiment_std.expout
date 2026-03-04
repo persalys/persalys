@@ -119,7 +119,6 @@ import openturns as ot
 import persalys
 
 anOTStudy = persalys.Study('anOTStudy')
-persalys.Study.Add(anOTStudy)
 dist_X0 = ot.Normal(0, 1)
 X0 = persalys.Input('X0', 1, dist_X0, '')
 dist_X1 = ot.Normal(0, 1)
@@ -151,24 +150,28 @@ aDesign_1 = persalys.GridDesignOfExperiment('aDesign_1', aModelPhys, values)
 aDesign_1.setBlockSize(1)
 interestVariables = ['Y0']
 aDesign_1.setInterestVariables(interestVariables)
+aDesign_1.run()
 anOTStudy.add(aDesign_1)
 inputColumns = [0, 2]
 aDesign_2 = persalys.ImportedDesignOfExperiment('aDesign_2', aModelPhys, 'normal.csv', inputColumns)
 aDesign_2.setBlockSize(1)
 interestVariables = ['Y0']
 aDesign_2.setInterestVariables(interestVariables)
+aDesign_2.setType(persalys.DataModel.MC)
 anOTStudy.add(aDesign_2)
 inputColumns = [0, 2]
 aDesign_2_1 = persalys.ImportedDesignOfExperiment('aDesign_2_1', aModelPhys, 'normal.csv', inputColumns)
 aDesign_2_1.setBlockSize(1)
 interestVariables = ['Y0']
 aDesign_2_1.setInterestVariables(interestVariables)
+aDesign_2_1.setType(persalys.DataModel.MC)
 anOTStudy.add(aDesign_2_1)
 aDesign_3 = persalys.ProbabilisticDesignOfExperiment('aDesign_3', aModelPhys, 10, 'QUASI_MONTE_CARLO')
 aDesign_3.setSeed(0)
 aDesign_3.setBlockSize(1)
 interestVariables = ['Y0']
 aDesign_3.setInterestVariables(interestVariables)
+aDesign_3.run()
 anOTStudy.add(aDesign_3)
 aDesign_4 = persalys.FixedDesignOfExperiment('aDesign_4', aModelPhys)
 inputSample = [
@@ -186,6 +189,7 @@ aDesign_4.setOriginalInputSample(inputSample)
 aDesign_4.setBlockSize(1)
 interestVariables = ['Y0']
 aDesign_4.setInterestVariables(interestVariables)
+aDesign_4.run()
 anOTStudy.add(aDesign_4)
 values = [[-3, 0, 3],
 [-3, 0, 3]]
@@ -193,6 +197,7 @@ aDesign_11 = persalys.GridDesignOfExperiment('aDesign_11', aModelPhys2, values)
 aDesign_11.setBlockSize(1)
 interestVariables = ['Y0']
 aDesign_11.setInterestVariables(interestVariables)
+aDesign_11.run()
 anOTStudy.add(aDesign_11)
 values = [[-3, 0, 3],
 [-3, 0, 3]]
@@ -200,7 +205,9 @@ aDesign_12 = persalys.GridDesignOfExperiment('aDesign_12', aModelPhys2, values)
 aDesign_12.setBlockSize(1)
 interestVariables = ['Y0']
 aDesign_12.setInterestVariables(interestVariables)
+aDesign_12.run()
 anOTStudy.add(aDesign_12)
+persalys.Study.Add(anOTStudy)
 
 #!/usr/bin/env python
 
@@ -208,7 +215,6 @@ import openturns as ot
 import persalys
 
 anOTStudy2 = persalys.Study('anOTStudy2')
-persalys.Study.Add(anOTStudy2)
 dist_X0 = ot.Normal(0, 1)
 X0 = persalys.Input('X0', 1, dist_X0, '')
 dist_X1 = ot.Normal(0, 1)
@@ -226,29 +232,35 @@ aDesign_5.setSeed(0)
 aDesign_5.setBlockSize(1)
 interestVariables = ['Y0']
 aDesign_5.setInterestVariables(interestVariables)
+aDesign_5.run()
 anOTStudy2.add(aDesign_5)
 aDesign_7 = persalys.ProbabilisticDesignOfExperiment('aDesign_7', aModelPhys, 10, 'SALHS')
 aDesign_7.setSeed(0)
 aDesign_7.setBlockSize(1)
 interestVariables = ['Y0']
 aDesign_7.setInterestVariables(interestVariables)
+aDesign_7.run()
 anOTStudy2.add(aDesign_7)
 aDesign_8 = persalys.ProbabilisticDesignOfExperiment('aDesign_8', aModelPhys, 10, 'MCLHS')
 aDesign_8.setSeed(0)
 aDesign_8.setBlockSize(1)
 interestVariables = ['Y0']
 aDesign_8.setInterestVariables(interestVariables)
+aDesign_8.run()
 anOTStudy2.add(aDesign_8)
 aDesign_9 = persalys.ProbabilisticDesignOfExperiment('aDesign_9', aModelPhys, 10, 'MCLHS')
 aDesign_9.setSeed(0)
 aDesign_9.setBlockSize(1)
 interestVariables = ['Y0']
 aDesign_9.setInterestVariables(interestVariables)
+aDesign_9.run()
 anOTStudy2.add(aDesign_9)
 aDesign_10 = persalys.ProbabilisticDesignOfExperiment('aDesign_10', aModelPhys, 10, 'MCLHS')
 aDesign_10.setSeed(0)
 aDesign_10.setBlockSize(1)
 interestVariables = ['Y0']
 aDesign_10.setInterestVariables(interestVariables)
+aDesign_10.run()
 anOTStudy2.add(aDesign_10)
+persalys.Study.Add(anOTStudy2)
 

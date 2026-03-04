@@ -38,44 +38,18 @@ namespace PERSALYS
 
 CLASSNAMEINIT(KrigingAnalysis)
 
-static Factory<KrigingAnalysis> Factory_KrigingAnalysis;
+const static Factory<KrigingAnalysis> Factory_KrigingAnalysis;
 
 /* Default constructor */
 KrigingAnalysis::KrigingAnalysis()
   : MetaModelAnalysis()
-  , basis_()
-  , covarianceModel_()
-  , result_()
-  , optimizeParameters_(true)
 {
-
 }
 
 
 /* Constructor with parameters */
 KrigingAnalysis::KrigingAnalysis(const String& name, const DesignOfExperiment& designOfExperiment)
   : MetaModelAnalysis(name, designOfExperiment)
-  , basis_()
-  , covarianceModel_()
-  , result_()
-  , optimizeParameters_(true)
-{
-  const UnsignedInteger inputDimension = getEffectiveInputSample().getDimension();
-
-  // basis
-  setBasis(ConstantBasisFactory(inputDimension).build());
-  // cov model
-  setCovarianceModel(SquaredExponential(inputDimension));
-}
-
-
-/* Constructor with parameters */
-KrigingAnalysis::KrigingAnalysis(const String& name, const Analysis& analysis)
-  : MetaModelAnalysis(name, analysis)
-  , basis_()
-  , covarianceModel_()
-  , result_()
-  , optimizeParameters_(true)
 {
   const UnsignedInteger inputDimension = getEffectiveInputSample().getDimension();
 
@@ -242,7 +216,7 @@ Function KrigingAnalysis::runAlgoMarginal(const Sample& inputSample, const Sampl
 GaussianProcessRegression KrigingAnalysis::buildGPRAlgorithm(const Sample& inputSample,
     const Sample& outputSample,
     const bool optimizeParameters,
-    const bool useOptimalCovModel)
+    const bool useOptimalCovModel) const
 {
   if (outputSample.getDimension() != 1)
     throw InternalException(HERE) << "KrigingAnalysis::buildGPRAlgorithm: the output sample must have a dimension of 1";
@@ -465,6 +439,9 @@ String KrigingAnalysis::getPythonScript() const
   oss << getName() << " = persalys.KrigingAnalysis('" << getName() << "', " << getDesignOfExperiment().getName() << ")\n";
 
   // interest outputs
+  std::cerr << "KrigingAnalysis::getPythonScript for name=" << getName() << std::endl;
+  std::cerr << "interestVariables: " << getInterestVariables() << std::endl;
+  std::cerr << "output sample variables: " << getDesignOfExperiment().getOutputSample().getDescription() << std::endl;
   if (getInterestVariables().getSize() < getDesignOfExperiment().getOutputSample().getDimension())
   {
     oss << "interestVariables = " << Parameters::GetOTDescriptionStr(getInterestVariables()) << "\n";

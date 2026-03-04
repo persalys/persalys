@@ -394,7 +394,16 @@ void InferenceAnalysis::setLillieforsMaximumSamplingSize(const int lillieforsMax
 
 bool InferenceAnalysis::canBeLaunched(String &errorMessage) const
 {
-  return DataAnalysis::CanBeLaunched(errorMessage, designOfExperiment_);
+  return InferenceAnalysis::CanBeLaunched(errorMessage, designOfExperiment_);
+}
+
+bool InferenceAnalysis::CanBeLaunched(String &errorMessage, const DesignOfExperiment & designOfExperiment)
+{
+  DataAnalysis::CanBeLaunched(errorMessage, designOfExperiment);
+  //if (designOfExperiment.getType() != DataModel::MC)
+  //  errorMessage =  "Variables must be i.i.d.";
+  
+  return errorMessage.empty();
 }
 
 String InferenceAnalysis::__repr__() const

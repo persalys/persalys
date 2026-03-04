@@ -19,7 +19,8 @@ Create the model:
 >>> filename = 'data.csv'
 >>> sample = ot.Normal(3).getSample(100)
 >>> sample.exportToCSVFile(filename)
->>> model = persalys.DataModel('myDataModel', 'data.csv', [0, 1, 2])
+>>> importedDataset = persalys.ImportedDataset(filename, [0, 1, 2])
+>>> model = persalys.DataModel('myDataModel', importedDataset)
 
 Create the Quantile analysis:
 

@@ -67,13 +67,13 @@ private:
   static OT::Sample removeNaNMarginals(const OT::Sample &sample);
 
 private:
-  OT::Sample inputSample_;
-  OT::Sample outputSample_;
-  mutable OT::Sample sample_;
-  mutable OT::PersistentCollection<OT::Sample> listXMin_;
-  mutable OT::PersistentCollection<OT::Sample> listXMax_;
-  bool inputContainsNaN_ = false;
-  bool outputContainsNaN_ = false;
+          OT::Sample                            inputSample_        = OT::Sample(0, 0);
+          OT::Sample                            outputSample_       = OT::Sample(0, 0);
+  mutable OT::Sample                            sample_;
+  mutable OT::PersistentCollection<OT::Sample>  listXMin_;
+  mutable OT::PersistentCollection<OT::Sample>  listXMax_;
+          bool                                  inputContainsNaN_   = false;
+          bool                                  outputContainsNaN_  = false;
 };
 }
 #endif

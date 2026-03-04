@@ -7,9 +7,8 @@ myStudy = persalys.Study("myStudy")
 
 # +++++++++++++++++++++++++++++++++ Model 1 +++++++++++++++++++++++++++++++++ #
 # simple example with a data model
-model1 = persalys.DataModel(
-    "model1", "Housing-prices-Boston.csv", list(range(13)), [13]
-)
+importedDataset1 = persalys.ImportedDataset("Housing-prices-Boston.csv", list(range(13)), [13])
+model1 = persalys.DataModel("model1", importedDataset1)
 myStudy.add(model1)
 print(model1)
 print("inputNames=", model1.getInputNames())
@@ -153,7 +152,8 @@ filename = "DataSensitivityAnalysis_std.csv"
 sample.exportToCSVFile(filename)
 
 # ------------------------test of the persalys model------------------------- #
-model2 = persalys.DataModel("model2", filename, list(range(5)), list(range(5, 8)))
+importedDataset2 = persalys.ImportedDataset(filename, list(range(5)), list(range(5, 8)))
+model2 = persalys.DataModel("model2", importedDataset2)
 myStudy.add(model2)
 print()
 print(model2)
@@ -174,12 +174,13 @@ print("Is independent ?", result2.isIndependent())
 print("Warning message: ", result2.getIndependenceWarningMessage())
 
 # -------------------------test without output sample------------------------ #
-model2_no_output = persalys.DataModel("model2_no_output", filename, list(range(5)), [])
+importedDataset2_no_output = persalys.ImportedDataset(filename, list(range(5)), [])
+model2_no_output = persalys.DataModel("model2_no_output", importedDataset2_no_output)
 myStudy.add(model2_no_output)
 
 analysis2_no_output = persalys.DataSensitivityAnalysis(
     "analysis2_no_output", model2_no_output
 )
 myStudy.add(analysis2_no_output)
-with ott.assert_raises(RuntimeError):
+with ott.assert_raises(Exception):
     analysis2_no_output.run()

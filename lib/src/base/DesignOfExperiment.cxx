@@ -19,6 +19,7 @@
  *
  */
 #include "persalys/DesignOfExperiment.hxx"
+#include "persalys/DesignOfExperimentEvaluation.hxx"
 
 using namespace OT;
 
@@ -27,30 +28,36 @@ namespace PERSALYS
 
 CLASSNAMEINIT(DesignOfExperiment)
 
-/* Default constructor */
-DesignOfExperiment::DesignOfExperiment()
-  : TypedInterfaceObject<DesignOfExperimentImplementation>(new DesignOfExperimentImplementation())
+DesignOfExperiment::DesignOfExperiment(const String & name)
+: TypedInterfaceObject<DataModel>(new DataModel(name))
 {
 }
 
-
-/* Constructor with parameters */
-DesignOfExperiment::DesignOfExperiment(const String& name, const PhysicalModel& physicalModel)
-  : TypedInterfaceObject<DesignOfExperimentImplementation>(new DesignOfExperimentImplementation(name, physicalModel))
+DesignOfExperiment::DesignOfExperiment(const String & name, const PhysicalModel & physicalModel)
+: TypedInterfaceObject<DataModel>(new DataModel(name, physicalModel))
 {
 }
 
+DesignOfExperiment::DesignOfExperiment(const String & name, const ImportedDataset & importedDataset, const Description & inputNames, const Description & outputNames)
+: TypedInterfaceObject<DataModel>(new DataModel(name, importedDataset, inputNames, outputNames))
+{
+}
+
+DesignOfExperiment::DesignOfExperiment(const String &name, const Sample &inSample, const Sample &outSample)
+  : TypedInterfaceObject<DataModel>(new DataModel(name, inSample, outSample))
+{
+}
 
 /* Default constructor */
-DesignOfExperiment::DesignOfExperiment(const DesignOfExperimentImplementation& implementation)
-  : TypedInterfaceObject<DesignOfExperimentImplementation>(implementation.clone())
+DesignOfExperiment::DesignOfExperiment(const DataModel& implementation)
+  : TypedInterfaceObject<DataModel>(implementation.clone())
 {
 }
 
 
 /* Constructor from implementation */
 DesignOfExperiment::DesignOfExperiment(const Implementation& p_implementation)
-  : TypedInterfaceObject<DesignOfExperimentImplementation>(p_implementation)
+  : TypedInterfaceObject<DataModel>(p_implementation)
 {
   // Initialize any other class members here
   // At last, allocate memory space if needed, but go to destructor to free it
@@ -58,32 +65,37 @@ DesignOfExperiment::DesignOfExperiment(const Implementation& p_implementation)
 
 
 /* Constructor from implementation pointer */
-DesignOfExperiment::DesignOfExperiment(DesignOfExperimentImplementation* p_implementation)
-  : TypedInterfaceObject<DesignOfExperimentImplementation>(p_implementation)
+DesignOfExperiment::DesignOfExperiment(DataModel* p_implementation)
+  : TypedInterfaceObject<DataModel>(p_implementation)
 {
   // Initialize any other class members here
   // At last, allocate memory space if needed, but go to destructor to free it
 }
 
-
-Bool DesignOfExperiment::operator==(const DesignOfExperiment& other) const
+DesignOfExperiment::DesignOfExperiment(const DesignOfExperimentEvaluation & eval)
+  : DesignOfExperiment(eval.getResult().getDesignOfExperiment().getImplementation()->clone())
 {
-  if (this == &other) return true;
-  return *getImplementation() == *other.getImplementation();
 }
 
-
-Bool DesignOfExperiment::operator!=(const DesignOfExperiment& other) const
+Bool DesignOfExperiment::operator ==(const DesignOfExperiment & other) const
 {
-  return !operator==(other);
+  return getImplementation().getImplementation() == other.getImplementation().getImplementation();
 }
 
+Bool DesignOfExperiment::operator !=(const DesignOfExperiment & other) const
+{
+  return !(getImplementation().getImplementation() == other.getImplementation().getImplementation());
+}
 
 void DesignOfExperiment::addObserver(Observer* observer)
 {
   getImplementation()->addObserver(observer);
 }
 
+void DesignOfExperiment::setName(const OT::String & name)
+{
+  getImplementation()->setName(name);
+}
 
 bool DesignOfExperiment::hasPhysicalModel() const
 {
@@ -96,6 +108,15 @@ PhysicalModel DesignOfExperiment::getPhysicalModel() const
   return getImplementation()->getPhysicalModel();
 }
 
+void DesignOfExperiment::setPhysicalModel(const PhysicalModel & physicalModel)
+{
+  getImplementation()->setPhysicalModel(physicalModel);
+}
+
+void DesignOfExperiment::removePhysicalModel()
+{
+  getImplementation()->removePhysicalModel();
+}
 
 Sample DesignOfExperiment::getInputSample() const
 {
@@ -159,7 +180,7 @@ void DesignOfExperiment::load(Advocate& adv)
 
 void DesignOfExperiment::setImplementationAsPersistentObject(const ImplementationAsPersistentObject& obj)
 {
-  TypedInterfaceObject< DesignOfExperimentImplementation >::setImplementationAsPersistentObject(obj);
+  TypedInterfaceObject< DataModel >::setImplementationAsPersistentObject(obj);
   getImplementation()->notify("implementationModified");
 }
 
@@ -167,6 +188,16 @@ void DesignOfExperiment::setImplementationAsPersistentObject(const Implementatio
 Indices DesignOfExperiment::getEffectiveInputIndices() const
 {
   return getImplementation()->getEffectiveInputIndices();
+}
+
+void DesignOfExperiment::setType(Type type)
+{
+  getImplementation()->setType(type);
+}
+
+DesignOfExperiment::Type DesignOfExperiment::getType() const
+{
+  return getImplementation()->getType();
 }
 
 }

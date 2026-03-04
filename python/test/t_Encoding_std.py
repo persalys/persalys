@@ -14,7 +14,9 @@ ot.Normal(3).getSample(10).exportToCSVFile(filename)
 inColumns = [0, 2]
 
 # Model 1
-model = persalys.DataModel("myDataModel", filename, inColumns)
+importedDataset = persalys.ImportedDataset(filename, inColumns)
+model = persalys.DataModel("myDataModel", importedDataset)
+model.setType(persalys.DataModel.MC)
 myStudy.add(model)
 print(model)
 
@@ -23,7 +25,7 @@ model2 = persalys.SymbolicPhysicalModel(
     "SM", [persalys.Input("A"), persalys.Input("B")], [persalys.Output("S")], ["A+B+2"]
 )
 myStudy.add(model2)
-importedDOE = persalys.ImportedDesignOfExperiment("doeI", model2, filename, inColumns)
+importedDOE = persalys.ImportedDesignOfExperiment("doeI", model2, filename, inColumns, [], persalys.DataModel.MC)
 myStudy.add(importedDOE)
 
 # script

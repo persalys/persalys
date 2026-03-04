@@ -63,49 +63,48 @@ public:
   }
   Analysis createAnalysis(const QString &analysisName, const DesignOfExperiment &doe) const;
   Analysis createAnalysis(const QString &analysisName, const LimitState &limitState)  const;
-  Analysis createAnalysis(const QString &analysisName, const Analysis &analysis)      const;
 
   QAction * createAction(const QString &analysisName, const PhysicalModel &model);
   QAction * createAction(const QString &analysisName, const DataFieldModel &model);
   QAction * createAction(const QString &analysisName, const DesignOfExperiment &doe);
   QAction * createAction(const QString &analysisName, const LimitState &limitState);
-  QAction * createAction(const QString &analysisName, const Analysis &analysis);
 
 signals:
   void showErrorMessageRequested(const QString & message);
   void wizardRequested(StudyItem*, const Analysis&, const bool isGeneralWizard = false);
   void doeEvaluationWizardRequested(const Analysis&, const bool isGeneralWizard = false);
   void mmExportWizardRequested(StudyItem*, const Analysis&, const bool isGeneralWizard = false);
+  void doeExportWizardRequested(const StudyItem*);
   void wizardRequested(const PhysicalModel&);
   void openPropertiesRequested();
   void wizardRequested(StudyItem*, const DesignOfExperiment& designOfExp);
   void analysisRequested(StudyItem*, const Analysis&);
 
 protected:
-  StudyItem * parentStudyItem_ = nullptr;
+  StudyItem * parentStudyItem_      = nullptr;
 
-  QAction * newSymbolicModel_ = nullptr;
-  QAction * newPythonModel_ = nullptr;
+  QAction * newSymbolicModel_       = nullptr;
+  QAction * newPythonModel_         = nullptr;
 #ifdef PERSALYS_HAVE_OTFMI
-  QAction * newFMIModel_ = nullptr;
+  QAction * newFMIModel_            = nullptr;
 #endif
-  QAction * newCouplingModel_ = nullptr;
-  QAction * newSymbolicFieldModel_ = nullptr;
-  QAction * newPythonFieldModel_ = nullptr;
-  QAction * newDataModel_ = nullptr;
-  QAction * newDataFieldModel_ = nullptr;
+  QAction * newCouplingModel_       = nullptr;
+  QAction * newSymbolicFieldModel_  = nullptr;
+  QAction * newPythonFieldModel_    = nullptr;
+  QAction * newDataModel_           = nullptr;
+  QAction * newDataFieldModel_      = nullptr;
 
-  QAction * newModelEvaluation_ = nullptr;
-  QAction * newScreening_ = nullptr;
-  QAction * newOptimization_ = nullptr;
-  QAction * newMoOptimization_ = nullptr;
-  QAction * newDesignOfExperiment_ = nullptr;
-  QAction * newProbabilisticModel_ = nullptr;
-  QAction * newCentralTendency_ = nullptr;
+  QAction * newModelEvaluation_     = nullptr;
+  QAction * newScreening_           = nullptr;
+  QAction * newOptimization_        = nullptr;
+  QAction * newMoOptimization_      = nullptr;
+  QAction * newDesignOfExperiment_  = nullptr;
+  QAction * newProbabilisticModel_  = nullptr;
+  QAction * newCentralTendency_     = nullptr;
   QAction * newSensitivityAnalysis_ = nullptr;
 
-  QAction * newLimitState_ = nullptr;
-  QAction * newObservations_ = nullptr;
+  QAction * newLimitState_          = nullptr;
+  QAction * newObservations_        = nullptr;
 };
 }
 #endif

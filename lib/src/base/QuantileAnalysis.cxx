@@ -445,6 +445,23 @@ namespace PERSALYS
     return result_;
   }
 
+  bool QuantileAnalysis::CanBeLaunched(String & errorMessage, const DesignOfExperiment & doe)
+  {
+    if (!DesignOfExperimentAnalysis::CanBeLaunched(errorMessage, doe))
+      return false;
+    if (doe.getType() != DataModel::MC)
+    {
+      errorMessage = "The variables must be i.i.d.";
+      return false;
+    }
+    return true;
+  }
+
+  bool QuantileAnalysis::canBeLaunched(String & errorMessage) const
+  {
+    return CanBeLaunched(errorMessage, getDesignOfExperiment());
+  }
+
 
   String QuantileAnalysis::getPythonScript() const
   {

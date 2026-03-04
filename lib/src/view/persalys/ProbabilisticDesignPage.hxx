@@ -52,6 +52,7 @@ private:
   OT::Scalar      modelEvalTime_        = 0.0;
   int             blockSize_            = 1;
   ErrorWidget   * lhsWarningLabel_      = nullptr;
+  ErrorWidget   * qmcWarningLabel_      = nullptr;
   QButtonGroup  * designButtonsGroup_   = nullptr;
   QComboBox     * optimComboBox_        = nullptr;
   LogSpinBox    * mcLhsSizeSB_          = nullptr;

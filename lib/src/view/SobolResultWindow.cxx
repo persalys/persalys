@@ -104,6 +104,7 @@ void SobolResultWindow::buildInterface()
         result_.getInputNames(),
         result_.getOutputNames()[i],
         SensitivityResultWidget::Sobol,
+        DesignOfExperiment::Type::MC,
         this);
     stackedWidget->addWidget(indicesResultWidget);
   }
@@ -123,6 +124,7 @@ void SobolResultWindow::buildInterface()
       result_.getInputNames(),
       result_.getOutputNames().__str__(),
       SensitivityResultWidget::Sobol,
+      DesignOfExperiment::Type::MC,
       this);
     tabWidget->addTab(aggregatedIndicesResultWidget, tr("Aggregated Indices"));
   }

@@ -26,6 +26,7 @@
 #include "persalys/ErrorWidget.hxx"
 
 #include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <QSplitter>
 #include <QScrollArea>
 #include <QComboBox>
@@ -55,19 +56,35 @@ void DataSensitivityAnalysisResultWindow::initialize(const AnalysisItem* item)
 
 void DataSensitivityAnalysisResultWindow::initializeVariablesNames()
 {
-  PhysicalModel model(designOfExperiment_.getPhysicalModel());
+  const bool hasPhysicalModel = designOfExperiment_.hasPhysicalModel();
 
   // inputs
   if (designOfExperiment_.getInputSample().getSize())
   {
     inputNames_ = QtOT::DescriptionToStringList(designOfExperiment_.getInputSample().getDescription());
-    inAxisTitles_ = QtOT::GetVariableAxisLabels(model, designOfExperiment_.getInputSample().getDescription());
+    if (hasPhysicalModel)
+    {
+      const PhysicalModel & model = designOfExperiment_.getPhysicalModel();
+      inAxisTitles_ = QtOT::GetVariableAxisLabels(model, designOfExperiment_.getInputSample().getDescription());
+    }
+    else
+    {
+      inAxisTitles_ = inputNames_;
+    }
   }
   // outputs
   if (designOfExperiment_.getOutputSample().getSize())
   {
     outputNames_ = QtOT::DescriptionToStringList(designOfExperiment_.getOutputSample().getDescription());
-    outAxisTitles_ = QtOT::GetVariableAxisLabels(model, designOfExperiment_.getOutputSample().getDescription());
+    if (hasPhysicalModel)
+    {
+      const PhysicalModel & model = designOfExperiment_.getPhysicalModel();
+      outAxisTitles_ = QtOT::GetVariableAxisLabels(model, designOfExperiment_.getOutputSample().getDescription());
+    }
+    else
+    {
+      outAxisTitles_ = outputNames_;
+    }
   }
 }
 
@@ -93,7 +110,10 @@ void DataSensitivityAnalysisResultWindow::buildInterface()
   mainWidget->setStretchFactor(0, 1);
 
   auto tabWidget = new QTabWidget;
-  addSobolTab(tabWidget);
+
+  if (designOfExperiment_.getType() == DesignOfExperiment::Type::MC)
+    addSobolTab(tabWidget);
+  
   addSRCTab(tabWidget);
 
   auto * widget = new QWidget;
@@ -138,6 +158,7 @@ void DataSensitivityAnalysisResultWindow::addSobolTab(QTabWidget * tabWidget)
         QtOT::StringListToDescription(inputNames_),
         outputNames_[i].toStdString(),
         SensitivityResultWidget::Sobol,
+        designOfExperiment_.getType(),
         this);
     stackedWidget->addWidget(indicesResultWidget);
   }
@@ -150,11 +171,6 @@ void DataSensitivityAnalysisResultWindow::addSobolTab(QTabWidget * tabWidget)
 void DataSensitivityAnalysisResultWindow::addSRCTab(QTabWidget * tabWidget)
 {
   const UnsignedInteger nbOutputs = designOfExperiment_.getOutputSample().getDimension();
-
-  auto * scrollArea = new QScrollArea;
-  scrollArea->setWidgetResizable(true);
-  auto * widget = new QWidget;
-  auto * vbox = new QVBoxLayout(widget);
 
   // - indices graph and table
   auto * stackedWidget = new ResizableStackedWidget;
@@ -171,6 +187,10 @@ void DataSensitivityAnalysisResultWindow::addSRCTab(QTabWidget * tabWidget)
     auto * indicesWidget = new QWidget;
     auto * indicesLayout = new QVBoxLayout(indicesWidget);
 
+    auto * r2Widget = new QWidget;
+    auto * r2Layout = new QHBoxLayout(r2Widget);
+    r2Widget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+
     // table
     if (r2.getSize() == nbOutputs)
     {
@@ -180,7 +200,15 @@ void DataSensitivityAnalysisResultWindow::addSRCTab(QTabWidget * tabWidget)
       QStringList valuesList;
       valuesList << QString::number(r2[i]);
       auto * basisTableView = new ParametersTableView(namesList, valuesList, true, true);
-      indicesLayout->addWidget(basisTableView);
+      r2Layout->addWidget(basisTableView);
+
+      if (r2[i] < 0.8)
+      {
+        auto * warningWidget = new ErrorWidget();
+        warningWidget->setMessage(tr("Warning: low coefficient of determination. The model might not be linear enough to use SRC indices."), ErrorWidget::Warning);
+        r2Layout->addWidget(warningWidget);
+      }
+      indicesLayout->addWidget(r2Widget);
     }
 
     // indices graph and table
@@ -193,15 +221,13 @@ void DataSensitivityAnalysisResultWindow::addSRCTab(QTabWidget * tabWidget)
         QtOT::StringListToDescription(inputNames_),
         outputNames_[i].toStdString(),
         SensitivityResultWidget::SRC,
+        designOfExperiment_.getType(),
         this);
     indicesLayout->addWidget(indicesResultWidget);
     stackedWidget->addWidget(indicesWidget);
   }
-  vbox->addWidget(stackedWidget);
 
-  vbox->setContentsMargins(0, 0, 0, 0);
-  scrollArea->setWidget(widget);
-  tabWidget->addTab(scrollArea, tr("SRC"));
+  tabWidget->addTab(stackedWidget, tr("SRC"));
 }
 
 } // namespace PERSALYS

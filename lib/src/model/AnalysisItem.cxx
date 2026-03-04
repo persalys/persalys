@@ -31,10 +31,12 @@
 #include "persalys/DesignOfExperimentEvaluation.hxx"
 #include "persalys/SimulationReliabilityAnalysis.hxx"
 #include "persalys/SobolAnalysis.hxx"
-#include "persalys/SRCAnalysis.hxx"
 #include "persalys/MultiObjectiveOptimizationAnalysis.hxx"
 #include "persalys/CalibrationAnalysis.hxx"
 #include "persalys/PythonPhysicalModel.hxx"
+#include "persalys/GridDesignOfExperiment.hxx"
+#include "persalys/ProbabilisticDesignOfExperiment.hxx"
+#include "persalys/ImportedDesignOfExperiment.hxx"
 
 
 #include <QDebug>
@@ -120,7 +122,10 @@ void AnalysisItem::buildActions()
   else if (analysisType.contains("DesignOfExperiment") ||
            analysisType == "MonteCarloAnalysis" || 
            analysisType == "MorrisAnalysis" ||
-           analysisType == "CalibrationAnalysis")
+           analysisType == "CalibrationAnalysis" ||
+           analysisType == "SobolAnalysis" ||
+           analysisType == "SimulationReliabilityAnalysis" ||
+           analysisType == "MultiObjectiveOptimizationAnalysis")
   {
     convertAction_ = new QAction(tr("Convert into data model"), this);
     convertAction_->setStatusTip(tr("Add a data model in the study tree"));
@@ -130,21 +135,6 @@ void AnalysisItem::buildActions()
 
     if(analysisType != "MonteCarloAnalysis" && analysisType != "MorrisAnalysis")
       return; // no remove action for these analyses
-  }
-
-  // DoE export
-  if ((analysisType.contains("MonteCarlo") && !analysisType.contains("field", Qt::CaseInsensitive))
-      || analysisType == "SobolAnalysis" || analysisType == "SRCAnalysis"
-      || analysisType == "FORMImportanceSamplingAnalysis"
-      || analysisType == "MorrisAnalysis"
-      || analysisType == "MultiObjectiveOptimizationAnalysis"
-    )
-  {
-    exportDoEAction_ = new QAction(tr("Export DoE"), this);
-    exportDoEAction_->setStatusTip(tr("Add the underlying DoE in the study tree"));
-    connect(exportDoEAction_, &QAction::triggered, this, &AnalysisItem::exportDoE);
-    exportDoEAction_->setEnabled(analysis_.getImplementation()->hasValidResult());
-    appendAction(exportDoEAction_);
   }
 
   appendSeparator();
@@ -221,8 +211,6 @@ void AnalysisItem::updateAnalysis(const Analysis & analysis)
   }
   if (extractDataAction_)
     extractDataAction_->setEnabled(analysis_.hasValidResult());
-  if (exportDoEAction_)
-    exportDoEAction_->setEnabled(analysis_.hasValidResult());
 
   emit windowRequested(this, false);
 }
@@ -303,18 +291,28 @@ void AnalysisItem::appendDataModelItem()
   Study study{getParentStudyItem()->getStudy()};
 
   EvaluationResult result;
-  AnalysisImplementation * implementation = analysis_.getImplementation().get();
-  const auto * doeEval              = dynamic_cast<DesignOfExperimentEvaluation*>(implementation);
-  const auto * MCAnalysis           = dynamic_cast<MonteCarloAnalysis*>(implementation);
-  const auto * morrisAnalysis       = dynamic_cast<MorrisAnalysis*>(implementation);
-  const auto * calibrationAnalysis  = dynamic_cast<CalibrationAnalysis*>(implementation);
+  const AnalysisImplementation * implementation = analysis_.getImplementation().get();
+  const auto * doeEval              = dynamic_cast<const DesignOfExperimentEvaluation*>(implementation);
+  const auto * MCAnalysis           = dynamic_cast<const MonteCarloAnalysis*>(implementation);
+  const auto * morrisAnalysis       = dynamic_cast<const MorrisAnalysis*>(implementation);
+  const auto * calibrationAnalysis  = dynamic_cast<const CalibrationAnalysis*>(implementation);
+  const auto * sobolAnalysis        = dynamic_cast<const SobolAnalysis*>(implementation);
+  const auto * SRAnalysis           = dynamic_cast<const SimulationReliabilityAnalysis*>(implementation);
+  const auto * mooAnalysis          = dynamic_cast<const MultiObjectiveOptimizationAnalysis*>(implementation);  
 
   if (doeEval)
-    result = doeEval->getResult();
+  {
+    study.addDoEAsDataSet(*doeEval);
+    return;
+  }
   else if (MCAnalysis)
     result = MCAnalysis->getResult();
   else if (morrisAnalysis)
     result = morrisAnalysis->getResult();
+  else if (sobolAnalysis)
+    result = sobolAnalysis->getResult();
+  else if (SRAnalysis)
+    result = SRAnalysis->getResult();
   else if (calibrationAnalysis)
   {
     CalibrationResult calibrationResult = calibrationAnalysis->getResult().getCalibrationResult();
@@ -351,17 +349,33 @@ void AnalysisItem::appendDataModelItem()
     }
     outSample.setDescription(outSampleDescription);
 
-    auto * newModel = new DataModel(newName, inSample, outSample);
+    auto * newModel = new DataModel(newName);
+    newModel->setInputSample(inSample);
+    newModel->setOutputSample(outSample);
     study.add(newModel);
+    return;
+  }
+  else if (mooAnalysis)
+  {
+    const PhysicalModel model = mooAnalysis->getPhysicalModel();
+    const MultiObjectiveOptimizationAnalysisResult mooResult = mooAnalysis->getResult();
+    const Sample sample = mooResult.getFinalPop();
+    const Description interestVariables = mooAnalysis->getInterestVariables();
+    DesignOfExperiment doe;
+    doe.setOutputSample(sample.getMarginal(interestVariables));
+    Indices inputIndices(sample.getDimension()-interestVariables.getSize()-1u);
+    inputIndices.fill();
+    doe.setInputSample(sample.getMarginal(inputIndices));
+    study.add(doe);
     return;
   }
   else
     return;
-
-  // create the data model
-  const String newName{study.getAvailableDataModelName((QString(result.getName().c_str()) + "_").toStdString())};
-  auto * newModel = new DataModel(newName, result.getDesignOfExperiment());
-  study.add(newModel);  // implicit conversion DesignOfExperiment(DesignOfExperimentImplementation*)
+  
+  const String newName{study.getAvailableDataModelName((QString(analysis_.getName().c_str()) + "_").toStdString())};
+  DesignOfExperiment doe = result.getDesignOfExperiment();
+  doe.setName(newName);
+  study.add(doe);
 }
 
 void AnalysisItem::addDoEToStudy(const StudyItem * studyItem, const String &name, const PhysicalModel &model, const DesignOfExperiment &doe) const
@@ -370,87 +384,6 @@ void AnalysisItem::addDoEToStudy(const StudyItem * studyItem, const String &name
   const DesignOfExperimentEvaluation doeEval(name, model,result);
   const Analysis analysis(doeEval);
   studyItem->getStudy().add(analysis);
-}
-
-void AnalysisItem::exportDoE()
-{
-  const String name = analysis_.getName();
-  const StudyItem *parentStudyItem = getParentStudyItem();
-
-  if (!parentStudyItem)
-  {
-    std::cerr << "AnalysisItem::exportDoe: no parent StudyItem" << std::endl;
-    return;
-  }
-  
-  if (const auto * SRAImplementation = dynamic_cast<SimulationReliabilityAnalysis*>(analysis_.getImplementation().get()); SRAImplementation)
-  {
-    // MonteCarloReliability or FORMImportanceSampling
-    const PhysicalModel model = SRAImplementation->getPhysicalModel();
-    const SimulationReliabilityResult result = SRAImplementation->getResult();
-    const DesignOfExperiment doe = result.getDesignOfExperiment();
-    addDoEToStudy(parentStudyItem, name, model, doe);
-    
-    return;
-  }
-
-  if (const auto * MCImplementation = dynamic_cast<MonteCarloAnalysis*>(analysis_.getImplementation().get()); MCImplementation)
-  {
-    const PhysicalModel model = MCImplementation->getPhysicalModel();
-    const DataAnalysisResult result = MCImplementation->getResult();
-    const DesignOfExperimentEvaluation doeEval(name, model, result);
-    const Analysis analysis(doeEval);
-    parentStudyItem->getStudy().add(analysis);
-
-    return;
-  }
-
-  if (const auto * sobolImplementation = dynamic_cast<SobolAnalysis*>(analysis_.getImplementation().get()); sobolImplementation)
-  {
-    const PhysicalModel model = sobolImplementation->getPhysicalModel();
-    const SobolResult result = sobolImplementation->getResult();
-    const DesignOfExperiment doe = result.getDesignOfExperiment();
-    addDoEToStudy(parentStudyItem, name, model, doe);
-    
-    return;
-  }
-
-  if (const auto * SRCImplementation = dynamic_cast<SRCAnalysis*>(analysis_.getImplementation().get()); SRCImplementation)
-  {
-    const PhysicalModel model = SRCImplementation->getPhysicalModel();
-    const SRCResult result = SRCImplementation->getResult();
-    const DesignOfExperiment doe = result.getDesignOfExperiment();
-    addDoEToStudy(parentStudyItem, name, model, doe);
-
-    return;
-  }
-
-  if (const auto * morrisImplementation = dynamic_cast<MorrisAnalysis*>(analysis_.getImplementation().get()); morrisImplementation)
-  {
-    const PhysicalModel model = morrisImplementation->getPhysicalModel();
-    const MorrisResult result = morrisImplementation->getResult();
-    const DesignOfExperiment doe = result.getDesignOfExperiment();
-    addDoEToStudy(parentStudyItem, name, model, doe);
-
-    return;
-  }
-
-  if (const auto * mooImplementation = dynamic_cast<MultiObjectiveOptimizationAnalysis*>(analysis_.getImplementation().get()); mooImplementation)
-  {
-    const PhysicalModel model = mooImplementation->getPhysicalModel();
-    const MultiObjectiveOptimizationAnalysisResult result = mooImplementation->getResult();
-    const Sample sample = result.getFinalPop();
-    const Description interestVariables = mooImplementation->getInterestVariables();
-    DesignOfExperiment doe;
-    doe.setOutputSample(sample.getMarginal(interestVariables));
-    Indices inputIndices(sample.getDimension()-interestVariables.getSize()-1u);
-    inputIndices.fill();
-    doe.setInputSample(sample.getMarginal(inputIndices));
-    addDoEToStudy(parentStudyItem, name, model, doe);
-    return;
-  }
-
-  std::cerr << "AnalysisItem::exportDoE: every cast failed for analysis " << analysis_.getClassName() << std::endl;
 }
 
 void AnalysisItem::removeAnalysis()
@@ -491,8 +424,6 @@ void AnalysisItem::update(Observable* /*source*/, const String& message)
     }
     if (extractDataAction_)
       extractDataAction_->setEnabled(true);
-    if (exportDoEAction_)
-      exportDoEAction_->setEnabled(true);
   }
   if (message == "analysisFinished" || message == "analysisBadlyFinished")
   {

@@ -168,8 +168,6 @@ void DesignOfExperimentDefinitionItem::appendEvaluationItem()
   font.setWeight(QFont::Medium);
   evaluationItem->setData(font, Qt::FontRole);
   evaluationItem->setEditable(false);
-  evaluationItem->appendSeparator(tr("Analysis"));
-  evaluationItem->appendAction(createAction("Metamodel", getAnalysis()));
 
   // insert item
   insertRow(0, evaluationItem);

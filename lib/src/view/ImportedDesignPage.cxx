@@ -23,6 +23,7 @@
 #include "persalys/QtTools.hxx"
 
 #include <QVBoxLayout>
+#include <QComboBox>
 
 using namespace OT;
 
@@ -32,7 +33,7 @@ namespace PERSALYS
 ImportedDesignPage::ImportedDesignPage(QWidget* parent)
   : QWizardPage(parent)
   , sampleWidget_(new ImportSampleWidget(this))
-  , designOfExperiment_()
+  , importedDoE_()
 {
   buildInterface();
 }
@@ -43,21 +44,49 @@ void ImportedDesignPage::buildInterface()
   setTitle(tr("Imported design"));
   setSubTitle(tr("Import data from a file"));
 
-  QVBoxLayout * mainLayout = new QVBoxLayout(this);
-  QLabel * estimatedTimeLabel = new QLabel(tr("Estimated duration (s): "));
-  estimatedTimeValueLabel_ = new QLabel;
-  QWidget * timeWidget = new QWidget;
-  QHBoxLayout * timeLayout = new QHBoxLayout(timeWidget);
+  auto * mainLayout         = new QVBoxLayout(this);
+  auto * estimatedTimeLabel = new QLabel(tr("Estimated duration (s): "));
+  estimatedTimeValueLabel_  = new QLabel;
+  auto * timeWidget         = new QWidget;
+  auto * timeLayout         = new QHBoxLayout(timeWidget);
+
   timeLayout->addWidget(estimatedTimeLabel, 0);
   timeLayout->addWidget(estimatedTimeValueLabel_, 1);
+
+  auto * typeLayout = new QHBoxLayout;
+  auto * typeLabel  = new QLabel(tr("Design type:"));
+  typeCombo_        = new QComboBox;
+
+  typeCombo_->addItem(tr("Generic"), static_cast<int>(ImportedDesignOfExperiment::Type::UK));
+  typeCombo_->addItem(tr("Monte-Carlo"), static_cast<int>(ImportedDesignOfExperiment::Type::MC));
+  typeCombo_->addItem(tr("Quasi-Monte-Carlo"), static_cast<int>(ImportedDesignOfExperiment::Type::QMC));
+  typeCombo_->addItem(tr("LHS"), static_cast<int>(ImportedDesignOfExperiment::Type::RLHS));
+  typeCombo_->addItem(tr("Optimized LHS"), static_cast<int>(ImportedDesignOfExperiment::Type::OLHS));
+  typeCombo_->addItem(tr("Grid"), static_cast<int>(ImportedDesignOfExperiment::Type::GRID));
+  typeCombo_->addItem((tr("Morris")), static_cast<int>(ImportedDesignOfExperiment::Type::MORRIS));
+
+  connect(typeCombo_, qOverload<int>(&QComboBox::currentIndexChanged), this, [this](int index) {
+    if (index < 0) return;
+    const auto type = static_cast<ImportedDesignOfExperiment::Type>(typeCombo_->itemData(index).toInt());
+    importedDoE_.setType(type);
+  });
+
+  typeLayout->addWidget(typeLabel);
+  typeLayout->addWidget(typeCombo_);
+
   mainLayout->addWidget(timeWidget);
   mainLayout->addWidget(sampleWidget_);
-  connect(sampleWidget_, SIGNAL(updateTableRequested(QString)), this, SLOT(setTable(QString)));
-  connect(sampleWidget_, SIGNAL(checkColumnsRequested()), this, SLOT(checkColumns()));
+  mainLayout->addLayout(typeLayout);
+
+  connect(sampleWidget_, &ImportSampleWidget::updateTableRequested, this, &ImportedDesignPage::setTable);
+  connect(sampleWidget_, &ImportSampleWidget::checkColumnsRequested, this, &ImportedDesignPage::checkColumns);
 
   estimatedTimeValueLabel_->setVisible(estimatedTimeValueLabel_->text().toFloat() > 1e-6);
   estimatedTimeLabel->setVisible(estimatedTimeValueLabel_->text().toFloat() > 1e-6);
-  connect(this, SIGNAL(showTime()), estimatedTimeLabel, SLOT(show()));
+
+  connect(this, &ImportedDesignPage::showTime, estimatedTimeValueLabel_, &QLabel::show);
+
+  selectType(importedDoE_.getType());
   checkColumns();
 }
 
@@ -65,22 +94,29 @@ void ImportedDesignPage::buildInterface()
 void ImportedDesignPage::setTable(const QString& fileName)
 {
   // set file name
-  designOfExperiment_.setFileName(fileName.toUtf8().data());
+  importedDoE_.setFileName(fileName.toUtf8().data());
 
   // update widgets
-  estimatedTimeValueLabel_->setText(QString::number(
-    (double) designOfExperiment_.getSampleFromFile().getSize() * designOfExperiment_.getPhysicalModel().getEvalTime()
-  ));
+  estimatedTimeValueLabel_->setText(
+    QString::number(
+      (double) importedDoE_.getImportedDataset().getSampleFromFile().getSize()
+      * importedDoE_.getPhysicalModel().getEvalTime()
+    )
+  );
+
   if(estimatedTimeValueLabel_->text().toFloat() > 1e-6)
   {
     estimatedTimeValueLabel_->setVisible(true);
     emit showTime();
   }
-  Description variableDescription(designOfExperiment_.getPhysicalModel().getInputNames());
-  variableDescription.add(designOfExperiment_.getPhysicalModel().getSelectedOutputsNames());
-  Indices variableColumns(designOfExperiment_.getInputColumns());
-  variableColumns.add(designOfExperiment_.getOutputColumns());
-  sampleWidget_->updateWidgets(designOfExperiment_.getSampleFromFile(),
+
+  Description variableDescription{importedDoE_.getPhysicalModel().getInputNames()};
+  variableDescription.add(importedDoE_.getPhysicalModel().getSelectedOutputsNames());
+
+  Indices variableColumns{importedDoE_.getImportedDataset().getInputColumns()};
+  variableColumns.add(importedDoE_.getImportedDataset().getOutputColumns());
+  
+  sampleWidget_->updateWidgets(importedDoE_.getImportedDataset().getSampleFromFile(),
                                variableDescription,
                                variableColumns);
 }
@@ -88,13 +124,13 @@ void ImportedDesignPage::setTable(const QString& fileName)
 
 void ImportedDesignPage::checkColumns()
 {
-  const Description inputNames = designOfExperiment_.getPhysicalModel().getInputNames();
-  const Description outputNames = designOfExperiment_.getPhysicalModel().getSelectedOutputsNames();
+  const Description inputNames{importedDoE_.getPhysicalModel().getInputNames()};
+  const Description outputNames{importedDoE_.getPhysicalModel().getSelectedOutputsNames()};
 
   // try to update the design of experiments
   try
   {
-    designOfExperiment_.setColumns(sampleWidget_->getColumns(inputNames), sampleWidget_->getColumns(outputNames));
+    importedDoE_.setColumns(sampleWidget_->getColumns(inputNames), sampleWidget_->getColumns(outputNames));
     sampleWidget_->tableValidity_ = true;
     sampleWidget_->errorWidget_->reset();
   }
@@ -108,26 +144,36 @@ void ImportedDesignPage::checkColumns()
 
 void ImportedDesignPage::initialize(const Analysis& analysis)
 {
-  const auto * analysis_ptr = dynamic_cast<ImportedDesignOfExperiment*>(analysis.getImplementation().get());
+  const auto * analysis_ptr = dynamic_cast<const ImportedDesignOfExperiment*>(analysis.getImplementation().get());
 
   // if already an ImportedDesignOfExperiment
   if (analysis_ptr)
   {
-    designOfExperiment_ = *analysis_ptr;
-    sampleWidget_->setData(QString::fromUtf8(designOfExperiment_.getFileName().c_str()));
+    importedDoE_ = *analysis_ptr;
+    sampleWidget_->setData(QString::fromUtf8(importedDoE_.getImportedDataset().getFileName().c_str()));
   }
   else
   {
     // create a new analysis
     PhysicalModel physicalModel = dynamic_cast<const PhysicalModelAnalysis*>(analysis.getImplementation().get())->getPhysicalModel();
-    designOfExperiment_ = ImportedDesignOfExperiment(analysis.getName(), physicalModel);
+    importedDoE_ = ImportedDesignOfExperiment(analysis.getName(), physicalModel);
   }
+  selectType(importedDoE_.getType());
+}
+
+
+void ImportedDesignPage::selectType(ImportedDesignOfExperiment::Type type)
+{
+  if (!typeCombo_) return;
+  const int index = typeCombo_->findData(static_cast<int>(type));
+  if (index >= 0)
+    typeCombo_->setCurrentIndex(index);
 }
 
 
 Analysis ImportedDesignPage::getAnalysis() const
 {
-  return designOfExperiment_;
+  return importedDoE_;
 }
 
 

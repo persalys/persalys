@@ -1,11 +1,10 @@
-class=DataModel name=myDataModel fileName=données.csv inputColumns=[0,2] outputColumns=[] inputNames=[X0,X2] outputNames=[]
+class=DataModel name=myDataModel importedDataset= fileName=données.csv inputColumns=[0,2] outputColumns=[] physicalModel=false inputNames=[X0,X2] outputNames=[] type=MC
 #!/usr/bin/env python
 
 import openturns as ot
 import persalys
 
 myStudy = persalys.Study('myStudy')
-persalys.Study.Add(myStudy)
 A = persalys.Input('A', 0, '')
 B = persalys.Input('B', 0, '')
 S = persalys.Output('S', '')
@@ -14,18 +13,20 @@ outputs = [S]
 formulas = ['A+B+2']
 SM = persalys.SymbolicPhysicalModel('SM', inputs, outputs, formulas)
 myStudy.add(SM)
-inputColumns = [0, 2]
-outputColumns = []
 inputNames = ['X0', 'X2']
 outputNames = []
-myDataModel = persalys.DataModel('myDataModel', 'données.csv', inputColumns, outputColumns, inputNames, outputNames)
+myDataModelImportedDataset = persalys.ImportedDataset('données.csv', [0,2], [])
+myDataModel = persalys.DataModel('myDataModel', myDataModelImportedDataset, inputNames, outputNames)
+myDataModel.setType(persalys.DataModel.MC)
 myStudy.add(myDataModel)
 inputColumns = [0, 2]
 doeI = persalys.ImportedDesignOfExperiment('doeI', SM, 'données.csv', inputColumns)
 doeI.setBlockSize(1)
 interestVariables = ['S']
 doeI.setInterestVariables(interestVariables)
+doeI.setType(persalys.DataModel.MC)
 myStudy.add(doeI)
+persalys.Study.Add(myStudy)
 
 #!/usr/bin/env python
 
@@ -33,7 +34,6 @@ import openturns as ot
 import persalys
 
 myStudy = persalys.Study('myStudy')
-persalys.Study.Add(myStudy)
 A = persalys.Input('A', 0, '')
 B = persalys.Input('B', 0, '')
 S = persalys.Output('S', '')
@@ -42,16 +42,18 @@ outputs = [S]
 formulas = ['A+B+2']
 SM = persalys.SymbolicPhysicalModel('SM', inputs, outputs, formulas)
 myStudy.add(SM)
-inputColumns = [0, 2]
-outputColumns = []
 inputNames = ['X0', 'X2']
 outputNames = []
-myDataModel = persalys.DataModel('myDataModel', 'données.csv', inputColumns, outputColumns, inputNames, outputNames)
+myDataModelImportedDataset = persalys.ImportedDataset('données.csv', [0,2], [])
+myDataModel = persalys.DataModel('myDataModel', myDataModelImportedDataset, inputNames, outputNames)
+myDataModel.setType(persalys.DataModel.MC)
 myStudy.add(myDataModel)
 inputColumns = [0, 2]
 doeI = persalys.ImportedDesignOfExperiment('doeI', SM, 'données.csv', inputColumns)
 doeI.setBlockSize(1)
 interestVariables = ['S']
 doeI.setInterestVariables(interestVariables)
+doeI.setType(persalys.DataModel.MC)
 myStudy.add(doeI)
+persalys.Study.Add(myStudy)
 

@@ -17,8 +17,8 @@ sample = distribution.getSample(300)
 sample.setDescription(["X0", "X1", "X2", "X3"])
 sample.exportToCSVFile(filename, ",")
 columns = [0, 2, 3]
-
-model = persalys.DataModel("myDataModel", "data2.csv", columns)
+importedDataset = persalys.ImportedDataset(filename, columns)
+model = persalys.DataModel("myDataModel", importedDataset)
 myStudy.add(model)
 print(model)
 

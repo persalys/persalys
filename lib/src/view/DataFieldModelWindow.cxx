@@ -65,7 +65,7 @@ void DataFieldModelWindow::buildInterface()
 {
   QVBoxLayout * mainLayout = new QVBoxLayout(this);
   mainLayout->addWidget(new TitleLabel(tr("Field data set"), 
-  "user_manual/graphical_interface/data_model/user_manual_data_model.html#datafieldmodel"));
+  "user_manual/graphical_interface/data_model/user_manual_data_set.html#datafieldmodel"));
 
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);

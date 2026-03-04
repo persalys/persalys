@@ -32,8 +32,8 @@ class PERSALYS_BASE_API DataAnalysisResult : public EvaluationResult
   CLASSNAME
 
 public:
-  typedef OT::Collection<OT::Point> PointCollection;
-  typedef OT::PersistentCollection<OT::Distribution> DistributionCollection;
+  using PointCollection = OT::Collection<OT::Point>;
+  using DistributionCollection = OT::PersistentCollection<OT::Distribution>;
 
   friend class DataAnalysis;
   friend class MonteCarloAnalysis;
@@ -60,7 +60,7 @@ public:
   PointCollection getFirstQuartile() const;
   PointCollection getThirdQuartile() const;
   OT::Interval getMeanConfidenceInterval() const;
-  OT::Interval getStdConfidenceInterval() const;
+  //OT::Interval getStdConfidenceInterval() const;
   PointCollection getOutliers() const;
   OT::Point getEffectiveSize() const;
   DesignOfExperiment getMultivariateDoE() const;
@@ -91,7 +91,7 @@ private:
   OT::PersistentCollection<OT::Point> firstQuartile_;
   OT::PersistentCollection<OT::Point> thirdQuartile_;
   OT::Interval meanConfidenceInterval_;
-  OT::Interval stdConfidenceInterval_;
+  //OT::Interval stdConfidenceInterval_;
   OT::PersistentCollection<OT::Point> outliers_;
   OT::PersistentCollection<OT::Sample> pdf_;
   OT::PersistentCollection<OT::Sample> cdf_;

@@ -36,7 +36,7 @@ DesignOfExperimentWindow::DesignOfExperimentWindow(AnalysisItem* item, QWidget *
 }
 
 
-void DesignOfExperimentWindow::initialize(AnalysisItem* item)
+void DesignOfExperimentWindow::initialize(const AnalysisItem* item)
 {
   DesignOfExperimentEvaluation analysis(*dynamic_cast<DesignOfExperimentEvaluation*>(item->getAnalysis().getImplementation().get()));
 

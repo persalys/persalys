@@ -1,0 +1,882 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openturns-study version="102600" manager="XMLH5StorageManager" persalys_version="19.1">
+  <object class="PersistentCollection&lt;Scalar&gt;" id="5" size="6578" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/5</string>
+  </object>
+  <object class="Description" id="6" size="13" StudyVisible="false" StudyLabel="">
+    <string index="0">CRIM</string>
+    <string index="1">ZN</string>
+    <string index="2">INDUS</string>
+    <string index="3">CHAS</string>
+    <string index="4">NOX</string>
+    <string index="5">RM</string>
+    <string index="6">AGE</string>
+    <string index="7">DIS</string>
+    <string index="8">RAD</string>
+    <string index="9">TAX</string>
+    <string index="10">PTRATIO</string>
+    <string index="11">B</string>
+    <string index="12">LSTAT</string>
+  </object>
+  <object class="SampleImplementation" id="4" size_="506" dimension_="13" StudyVisible="false" StudyLabel="">
+    <object member="data_" id="5"/>
+    <object member="description_" id="6"/>
+  </object>
+  <object class="PersistentCollection&lt;Scalar&gt;" id="8" size="506" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/8</string>
+  </object>
+  <object class="Description" id="9" size="1" StudyVisible="false" StudyLabel="">
+    <string index="0">MEDV</string>
+  </object>
+  <object class="SampleImplementation" id="7" size_="506" dimension_="1" StudyVisible="false" StudyLabel="">
+    <object member="data_" id="8"/>
+    <object member="description_" id="9"/>
+  </object>
+  <object class="PersistentCollection&lt;Sample&gt;" id="10" size="0" StudyVisible="false" StudyLabel=""/>
+  <object class="PersistentCollection&lt;Sample&gt;" id="11" size="0" StudyVisible="false" StudyLabel=""/>
+  <object class="PersistentCollection&lt;Input&gt;" id="13" size="0" StudyVisible="false" StudyLabel=""/>
+  <object class="PersistentCollection&lt;Output&gt;" id="14" size="0" StudyVisible="false" StudyLabel=""/>
+  <object class="Point" id="16" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/16</string>
+  </object>
+  <object class="MatrixImplementation" id="17" size="1" nbRows_="1" nbColumns_="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/17</string>
+  </object>
+  <object class="Point" id="18" size="0" StudyVisible="false" StudyLabel=""/>
+  <object class="Point" id="19" size="0" StudyVisible="false" StudyLabel=""/>
+  <object class="Point" id="21" size="2" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/21</string>
+  </object>
+  <object class="Point" id="22" size="2" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/22</string>
+  </object>
+  <object class="PersistentCollection&lt;UnsignedInteger&gt;" id="23" size="2" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/23</string>
+  </object>
+  <object class="PersistentCollection&lt;UnsignedInteger&gt;" id="24" size="2" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/24</string>
+  </object>
+  <object class="Interval" id="20" dimension_="2" StudyVisible="false" StudyLabel="">
+    <object member="lowerBound_" id="21"/>
+    <object member="upperBound_" id="22"/>
+    <object member="finiteLowerBound_" id="23"/>
+    <object member="finiteUpperBound_" id="24"/>
+  </object>
+  <object class="Description" id="25" size="2" StudyVisible="false" StudyLabel="">
+    <string index="0">_dummy_var_name0</string>
+    <string index="1">_dummy_var_name1</string>
+  </object>
+  <object class="Point" id="28" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/28</string>
+  </object>
+  <object class="MatrixImplementation" id="29" size="1" nbRows_="1" nbColumns_="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/29</string>
+  </object>
+  <object class="Point" id="30" size="0" StudyVisible="false" StudyLabel=""/>
+  <object class="Point" id="31" size="0" StudyVisible="false" StudyLabel=""/>
+  <object class="Point" id="33" size="2" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/33</string>
+  </object>
+  <object class="Point" id="34" size="2" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/34</string>
+  </object>
+  <object class="PersistentCollection&lt;UnsignedInteger&gt;" id="35" size="2" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/35</string>
+  </object>
+  <object class="PersistentCollection&lt;UnsignedInteger&gt;" id="36" size="2" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/36</string>
+  </object>
+  <object class="Interval" id="32" dimension_="2" StudyVisible="false" StudyLabel="">
+    <object member="lowerBound_" id="33"/>
+    <object member="upperBound_" id="34"/>
+    <object member="finiteLowerBound_" id="35"/>
+    <object member="finiteUpperBound_" id="36"/>
+  </object>
+  <object class="Description" id="37" size="2" StudyVisible="false" StudyLabel="">
+    <string index="0">X0</string>
+    <string index="1">X1</string>
+  </object>
+  <object class="IndependentCopula" id="27" name="IndependentCopula" integrationNodesNumber_="255" isAlreadyComputedMean_="false" isAlreadyComputedCovariance_="false" isAlreadyComputedGaussNodesAndWeights_="false" dimension_="2" weight_="1" isCopula_="true" isParallel_="true" supportEpsilon_="1e-14" StudyVisible="false" StudyLabel="">
+    <object member="mean_" id="28"/>
+    <object member="covariance_" id="29"/>
+    <object member="gaussNodes_" id="30"/>
+    <object member="gaussWeights_" id="31"/>
+    <object member="range_" id="32"/>
+    <object member="description_" id="37"/>
+  </object>
+  <object class="PersistentCollection&lt;Distribution&gt;" id="26" size="1" StudyVisible="false" StudyLabel="">
+    <object index="0" id="27"/>
+  </object>
+  <object class="BlockIndependentCopula" id="15" name="BlockIndependentCopula" integrationNodesNumber_="255" isAlreadyComputedMean_="false" isAlreadyComputedCovariance_="false" isAlreadyComputedGaussNodesAndWeights_="false" dimension_="2" weight_="1" isCopula_="true" isParallel_="true" supportEpsilon_="1e-14" isIndependent_="true" StudyVisible="false" StudyLabel="">
+    <object member="mean_" id="16"/>
+    <object member="covariance_" id="17"/>
+    <object member="gaussNodes_" id="18"/>
+    <object member="gaussWeights_" id="19"/>
+    <object member="range_" id="20"/>
+    <object member="description_" id="25"/>
+    <object member="copulaCollection_" id="26"/>
+  </object>
+  <object class="PersistentCollection&lt;Scalar&gt;" id="41" size="10" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/41</string>
+  </object>
+  <object class="Description" id="42" size="1" StudyVisible="false" StudyLabel="">
+    <string index="0">t</string>
+  </object>
+  <object class="SampleImplementation" id="40" size_="10" dimension_="1" StudyVisible="false" StudyLabel="">
+    <object member="data_" id="41"/>
+    <object member="description_" id="42"/>
+  </object>
+  <object class="Indices" id="44" size="18" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/44</string>
+  </object>
+  <object class="Indices" id="45" size="10" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/45</string>
+  </object>
+  <object class="IndicesCollectionImplementation" id="43" size_="9" StudyVisible="false" StudyLabel="">
+    <object member="values_" id="44"/>
+    <object member="offsets_" id="45"/>
+  </object>
+  <object class="Mesh" id="39" dimension_="1" hasBeenChecked_="false" StudyVisible="false" StudyLabel="">
+    <object member="vertices_" id="40"/>
+    <object member="simplices_" id="43"/>
+  </object>
+  <object class="Variable" id="47" name="t" value_="0" description_="" unit_="" StudyVisible="false" StudyLabel=""/>
+  <object class="PersistentCollection&lt;Variable&gt;" id="46" size="1" StudyVisible="false" StudyLabel="">
+    <object index="0" id="47"/>
+  </object>
+  <object class="Point" id="49" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/49</string>
+  </object>
+  <object class="Point" id="50" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/50</string>
+  </object>
+  <object class="PersistentCollection&lt;UnsignedInteger&gt;" id="51" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/51</string>
+  </object>
+  <object class="PersistentCollection&lt;UnsignedInteger&gt;" id="52" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/52</string>
+  </object>
+  <object class="Interval" id="48" dimension_="1" StudyVisible="false" StudyLabel="">
+    <object member="lowerBound_" id="49"/>
+    <object member="upperBound_" id="50"/>
+    <object member="finiteLowerBound_" id="51"/>
+    <object member="finiteUpperBound_" id="52"/>
+  </object>
+  <object class="Indices" id="53" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/53</string>
+  </object>
+  <object class="GridMeshModel" id="38" name="meshModel" StudyVisible="false" StudyLabel="">
+    <object member="mesh_" id="39"/>
+    <object member="indexParameters_" id="46"/>
+    <object member="bounds_" id="48"/>
+    <object member="nbNodes_" id="53"/>
+  </object>
+  <object class="Point" id="54" size="0" StudyVisible="false" StudyLabel=""/>
+  <object class="Description" id="55" size="0" StudyVisible="false" StudyLabel=""/>
+  <object class="SymbolicPhysicalModel" id="12" name="Unnamed" hasMesh_="false" isParallel_="false" evalTime_="0" processNumber_="6" StudyVisible="false" StudyLabel="">
+    <object member="inputs_" id="13"/>
+    <object member="outputs_" id="14"/>
+    <object member="blockIndependentCopula_" id="15"/>
+    <object member="meshModel_" id="38"/>
+    <object member="finiteDifferenceSteps_" id="54"/>
+    <object member="formulas_" id="55"/>
+  </object>
+  <object class="Indices" id="56" size="13" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/56</string>
+  </object>
+  <object class="Indices" id="57" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/57</string>
+  </object>
+  <object class="Description" id="58" size="13" StudyVisible="false" StudyLabel="">
+    <string index="0">CRIM</string>
+    <string index="1">ZN</string>
+    <string index="2">INDUS</string>
+    <string index="3">CHAS</string>
+    <string index="4">NOX</string>
+    <string index="5">RM</string>
+    <string index="6">AGE</string>
+    <string index="7">DIS</string>
+    <string index="8">RAD</string>
+    <string index="9">TAX</string>
+    <string index="10">PTRATIO</string>
+    <string index="11">B</string>
+    <string index="12">LSTAT</string>
+  </object>
+  <object class="Description" id="59" size="1" StudyVisible="false" StudyLabel="">
+    <string index="0">MEDV</string>
+  </object>
+  <object class="DataModel" id="3" name="HousingPricesBoston" inputContainsNaN_="false" outputContainsNaN_="false" hasPhysicalModel_="false" fileName_="/home/aroles/Documents/proj_persalys/studies/Housing-prices-Boston.csv" StudyVisible="false" StudyLabel="">
+    <object member="inputSample_" id="4"/>
+    <object member="outputSample_" id="7"/>
+    <object member="listXMin_" id="10"/>
+    <object member="listXMax_" id="11"/>
+    <object member="physicalModel_" id="12"/>
+    <object member="inputColumns_" id="56"/>
+    <object member="outputColumns_" id="57"/>
+    <object member="inputNames_" id="58"/>
+    <object member="outputNames_" id="59"/>
+  </object>
+  <object class="PersistentCollection&lt;Scalar&gt;" id="62" size="100" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/62</string>
+  </object>
+  <object class="Description" id="63" size="1" StudyVisible="false" StudyLabel="">
+    <string index="0">X1</string>
+  </object>
+  <object class="SampleImplementation" id="61" size_="100" dimension_="1" StudyVisible="false" StudyLabel="">
+    <object member="data_" id="62"/>
+    <object member="description_" id="63"/>
+  </object>
+  <object class="PersistentCollection&lt;Scalar&gt;" id="65" size="100" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/65</string>
+  </object>
+  <object class="Description" id="66" size="1" StudyVisible="false" StudyLabel="">
+    <string index="0">Y0</string>
+  </object>
+  <object class="SampleImplementation" id="64" size_="100" dimension_="1" StudyVisible="false" StudyLabel="">
+    <object member="data_" id="65"/>
+    <object member="description_" id="66"/>
+  </object>
+  <object class="PersistentCollection&lt;Sample&gt;" id="67" size="0" StudyVisible="false" StudyLabel=""/>
+  <object class="PersistentCollection&lt;Sample&gt;" id="68" size="0" StudyVisible="false" StudyLabel=""/>
+  <object class="Point" id="73" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/73</string>
+  </object>
+  <object class="MatrixImplementation" id="74" size="1" nbRows_="1" nbColumns_="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/74</string>
+  </object>
+  <object class="Point" id="75" size="0" StudyVisible="false" StudyLabel=""/>
+  <object class="Point" id="76" size="0" StudyVisible="false" StudyLabel=""/>
+  <object class="Point" id="78" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/78</string>
+  </object>
+  <object class="Point" id="79" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/79</string>
+  </object>
+  <object class="PersistentCollection&lt;UnsignedInteger&gt;" id="80" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/80</string>
+  </object>
+  <object class="PersistentCollection&lt;UnsignedInteger&gt;" id="81" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/81</string>
+  </object>
+  <object class="Interval" id="77" dimension_="1" StudyVisible="false" StudyLabel="">
+    <object member="lowerBound_" id="78"/>
+    <object member="upperBound_" id="79"/>
+    <object member="finiteLowerBound_" id="80"/>
+    <object member="finiteUpperBound_" id="81"/>
+  </object>
+  <object class="Description" id="82" size="1" StudyVisible="false" StudyLabel="">
+    <string index="0">X0</string>
+  </object>
+  <object class="Point" id="83" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/83</string>
+  </object>
+  <object class="Dirac" id="72" name="Dirac" integrationNodesNumber_="255" isAlreadyComputedMean_="false" isAlreadyComputedCovariance_="false" isAlreadyComputedGaussNodesAndWeights_="false" dimension_="1" weight_="1" isCopula_="false" isParallel_="true" supportEpsilon_="1e-14" StudyVisible="false" StudyLabel="">
+    <object member="mean_" id="73"/>
+    <object member="covariance_" id="74"/>
+    <object member="gaussNodes_" id="75"/>
+    <object member="gaussWeights_" id="76"/>
+    <object member="range_" id="77"/>
+    <object member="description_" id="82"/>
+    <object member="point_" id="83"/>
+  </object>
+  <object class="Input" id="71" name="X0" value_="3" description_="" unit_="" isStochastic_="false" distributionParametersType_="0" finiteDifferenceStep_="9.9999999999999995e-08" StudyVisible="false" StudyLabel="">
+    <object member="distribution_" id="72"/>
+  </object>
+  <object class="Point" id="86" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/86</string>
+  </object>
+  <object class="MatrixImplementation" id="87" size="1" nbRows_="1" nbColumns_="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/87</string>
+  </object>
+  <object class="Point" id="88" size="0" StudyVisible="false" StudyLabel=""/>
+  <object class="Point" id="89" size="0" StudyVisible="false" StudyLabel=""/>
+  <object class="Point" id="91" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/91</string>
+  </object>
+  <object class="Point" id="92" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/92</string>
+  </object>
+  <object class="PersistentCollection&lt;UnsignedInteger&gt;" id="93" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/93</string>
+  </object>
+  <object class="PersistentCollection&lt;UnsignedInteger&gt;" id="94" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/94</string>
+  </object>
+  <object class="Interval" id="90" dimension_="1" StudyVisible="false" StudyLabel="">
+    <object member="lowerBound_" id="91"/>
+    <object member="upperBound_" id="92"/>
+    <object member="finiteLowerBound_" id="93"/>
+    <object member="finiteUpperBound_" id="94"/>
+  </object>
+  <object class="Description" id="95" size="1" StudyVisible="false" StudyLabel="">
+    <string index="0">X0</string>
+  </object>
+  <object class="Uniform" id="85" name="Uniform" integrationNodesNumber_="255" isAlreadyComputedMean_="true" isAlreadyComputedCovariance_="false" isAlreadyComputedGaussNodesAndWeights_="false" dimension_="1" weight_="1" isCopula_="false" isParallel_="true" supportEpsilon_="1e-14" a_="-10" b_="10" StudyVisible="false" StudyLabel="">
+    <object member="mean_" id="86"/>
+    <object member="covariance_" id="87"/>
+    <object member="gaussNodes_" id="88"/>
+    <object member="gaussWeights_" id="89"/>
+    <object member="range_" id="90"/>
+    <object member="description_" id="95"/>
+  </object>
+  <object class="Input" id="84" name="X1" value_="0" description_="" unit_="" isStochastic_="true" distributionParametersType_="0" finiteDifferenceStep_="9.9999999999999995e-08" StudyVisible="false" StudyLabel="">
+    <object member="distribution_" id="85"/>
+  </object>
+  <object class="PersistentCollection&lt;Input&gt;" id="70" size="2" StudyVisible="false" StudyLabel="">
+    <object index="0" id="71"/>
+    <object index="1" id="84"/>
+  </object>
+  <object class="Output" id="97" name="Y0" value_="0" description_="" unit_="" isSelected_="true" hasBeenComputed_="false" StudyVisible="false" StudyLabel=""/>
+  <object class="PersistentCollection&lt;Output&gt;" id="96" size="1" StudyVisible="false" StudyLabel="">
+    <object index="0" id="97"/>
+  </object>
+  <object class="Point" id="99" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/99</string>
+  </object>
+  <object class="MatrixImplementation" id="100" size="1" nbRows_="1" nbColumns_="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/100</string>
+  </object>
+  <object class="Point" id="101" size="0" StudyVisible="false" StudyLabel=""/>
+  <object class="Point" id="102" size="0" StudyVisible="false" StudyLabel=""/>
+  <object class="Point" id="104" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/104</string>
+  </object>
+  <object class="Point" id="105" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/105</string>
+  </object>
+  <object class="PersistentCollection&lt;UnsignedInteger&gt;" id="106" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/106</string>
+  </object>
+  <object class="PersistentCollection&lt;UnsignedInteger&gt;" id="107" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/107</string>
+  </object>
+  <object class="Interval" id="103" dimension_="1" StudyVisible="false" StudyLabel="">
+    <object member="lowerBound_" id="104"/>
+    <object member="upperBound_" id="105"/>
+    <object member="finiteLowerBound_" id="106"/>
+    <object member="finiteUpperBound_" id="107"/>
+  </object>
+  <object class="Description" id="108" size="1" StudyVisible="false" StudyLabel="">
+    <string index="0">X1</string>
+  </object>
+  <object class="Point" id="111" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/111</string>
+  </object>
+  <object class="MatrixImplementation" id="112" size="1" nbRows_="1" nbColumns_="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/112</string>
+  </object>
+  <object class="Point" id="113" size="0" StudyVisible="false" StudyLabel=""/>
+  <object class="Point" id="114" size="0" StudyVisible="false" StudyLabel=""/>
+  <object class="Point" id="116" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/116</string>
+  </object>
+  <object class="Point" id="117" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/117</string>
+  </object>
+  <object class="PersistentCollection&lt;UnsignedInteger&gt;" id="118" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/118</string>
+  </object>
+  <object class="PersistentCollection&lt;UnsignedInteger&gt;" id="119" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/119</string>
+  </object>
+  <object class="Interval" id="115" dimension_="1" StudyVisible="false" StudyLabel="">
+    <object member="lowerBound_" id="116"/>
+    <object member="upperBound_" id="117"/>
+    <object member="finiteLowerBound_" id="118"/>
+    <object member="finiteUpperBound_" id="119"/>
+  </object>
+  <object class="Description" id="120" size="1" StudyVisible="false" StudyLabel="">
+    <string index="0">X1</string>
+  </object>
+  <object class="IndependentCopula" id="110" name="IndependentCopula" integrationNodesNumber_="255" isAlreadyComputedMean_="false" isAlreadyComputedCovariance_="false" isAlreadyComputedGaussNodesAndWeights_="false" dimension_="1" weight_="1" isCopula_="true" isParallel_="true" supportEpsilon_="1e-14" StudyVisible="false" StudyLabel="">
+    <object member="mean_" id="111"/>
+    <object member="covariance_" id="112"/>
+    <object member="gaussNodes_" id="113"/>
+    <object member="gaussWeights_" id="114"/>
+    <object member="range_" id="115"/>
+    <object member="description_" id="120"/>
+  </object>
+  <object class="PersistentCollection&lt;Distribution&gt;" id="109" size="1" StudyVisible="false" StudyLabel="">
+    <object index="0" id="110"/>
+  </object>
+  <object class="BlockIndependentCopula" id="98" name="BlockIndependentCopula" integrationNodesNumber_="255" isAlreadyComputedMean_="false" isAlreadyComputedCovariance_="false" isAlreadyComputedGaussNodesAndWeights_="false" dimension_="1" weight_="1" isCopula_="true" isParallel_="true" supportEpsilon_="1e-14" isIndependent_="true" StudyVisible="false" StudyLabel="">
+    <object member="mean_" id="99"/>
+    <object member="covariance_" id="100"/>
+    <object member="gaussNodes_" id="101"/>
+    <object member="gaussWeights_" id="102"/>
+    <object member="range_" id="103"/>
+    <object member="description_" id="108"/>
+    <object member="copulaCollection_" id="109"/>
+  </object>
+  <object class="PersistentCollection&lt;Scalar&gt;" id="124" size="10" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/124</string>
+  </object>
+  <object class="Description" id="125" size="1" StudyVisible="false" StudyLabel="">
+    <string index="0">t</string>
+  </object>
+  <object class="SampleImplementation" id="123" size_="10" dimension_="1" StudyVisible="false" StudyLabel="">
+    <object member="data_" id="124"/>
+    <object member="description_" id="125"/>
+  </object>
+  <object class="Indices" id="127" size="18" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/127</string>
+  </object>
+  <object class="Indices" id="128" size="10" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/128</string>
+  </object>
+  <object class="IndicesCollectionImplementation" id="126" size_="9" StudyVisible="false" StudyLabel="">
+    <object member="values_" id="127"/>
+    <object member="offsets_" id="128"/>
+  </object>
+  <object class="Mesh" id="122" dimension_="1" hasBeenChecked_="false" StudyVisible="false" StudyLabel="">
+    <object member="vertices_" id="123"/>
+    <object member="simplices_" id="126"/>
+  </object>
+  <object class="Variable" id="130" name="t" value_="0" description_="" unit_="" StudyVisible="false" StudyLabel=""/>
+  <object class="PersistentCollection&lt;Variable&gt;" id="129" size="1" StudyVisible="false" StudyLabel="">
+    <object index="0" id="130"/>
+  </object>
+  <object class="Point" id="132" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/132</string>
+  </object>
+  <object class="Point" id="133" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/133</string>
+  </object>
+  <object class="PersistentCollection&lt;UnsignedInteger&gt;" id="134" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/134</string>
+  </object>
+  <object class="PersistentCollection&lt;UnsignedInteger&gt;" id="135" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/135</string>
+  </object>
+  <object class="Interval" id="131" dimension_="1" StudyVisible="false" StudyLabel="">
+    <object member="lowerBound_" id="132"/>
+    <object member="upperBound_" id="133"/>
+    <object member="finiteLowerBound_" id="134"/>
+    <object member="finiteUpperBound_" id="135"/>
+  </object>
+  <object class="Indices" id="136" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/136</string>
+  </object>
+  <object class="GridMeshModel" id="121" name="meshModel" StudyVisible="false" StudyLabel="">
+    <object member="mesh_" id="122"/>
+    <object member="indexParameters_" id="129"/>
+    <object member="bounds_" id="131"/>
+    <object member="nbNodes_" id="136"/>
+  </object>
+  <object class="Point" id="137" size="2" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/137</string>
+  </object>
+  <object class="Description" id="138" size="1" StudyVisible="false" StudyLabel="">
+    <string index="0">X0*X1</string>
+  </object>
+  <object class="SymbolicPhysicalModel" id="69" name="SymbolicModel_0" hasMesh_="false" isParallel_="false" evalTime_="0.011999845504760742" processNumber_="6" StudyVisible="false" StudyLabel="">
+    <object member="inputs_" id="70"/>
+    <object member="outputs_" id="96"/>
+    <object member="blockIndependentCopula_" id="98"/>
+    <object member="meshModel_" id="121"/>
+    <object member="finiteDifferenceSteps_" id="137"/>
+    <object member="formulas_" id="138"/>
+  </object>
+  <object class="Indices" id="139" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/139</string>
+  </object>
+  <object class="Indices" id="140" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/140</string>
+  </object>
+  <object class="Description" id="141" size="1" StudyVisible="false" StudyLabel="">
+    <string index="0">X1</string>
+  </object>
+  <object class="Description" id="142" size="1" StudyVisible="false" StudyLabel="">
+    <string index="0">Y0</string>
+  </object>
+  <object class="Observations" id="60" name="observations_0" inputContainsNaN_="false" outputContainsNaN_="false" hasPhysicalModel_="true" fileName_="/home/aroles/Documents/proj_persalys/studies/table.csv" StudyVisible="false" StudyLabel="">
+    <object member="inputSample_" id="61"/>
+    <object member="outputSample_" id="64"/>
+    <object member="listXMin_" id="67"/>
+    <object member="listXMax_" id="68"/>
+    <object member="physicalModel_" id="69"/>
+    <object member="inputColumns_" id="139"/>
+    <object member="outputColumns_" id="140"/>
+    <object member="inputNames_" id="141"/>
+    <object member="outputNames_" id="142"/>
+  </object>
+  <object class="PersistentCollection&lt;DesignOfExperiment&gt;" id="2" size="2" StudyVisible="false" StudyLabel="">
+    <object index="0" id="3"/>
+    <object index="1" id="60"/>
+  </object>
+  <object class="PersistentCollection&lt;DataFieldModel&gt;" id="143" size="0" StudyVisible="false" StudyLabel=""/>
+  <object class="PersistentCollection&lt;PhysicalModel&gt;" id="144" size="1" StudyVisible="false" StudyLabel="">
+    <object index="0" id="69"/>
+  </object>
+  <object class="PersistentCollection&lt;LimitState&gt;" id="145" size="0" StudyVisible="false" StudyLabel=""/>
+  <object class="Description" id="148" size="1" StudyVisible="false" StudyLabel="">
+    <string index="0">Y0</string>
+  </object>
+  <object class="PersistentCollection&lt;Scalar&gt;" id="150" size="0" StudyVisible="false" StudyLabel=""/>
+  <object class="Description" id="151" size="2" StudyVisible="false" StudyLabel="">
+    <string index="0">X0</string>
+    <string index="1">X1</string>
+  </object>
+  <object class="SampleImplementation" id="149" size_="0" dimension_="2" StudyVisible="false" StudyLabel="">
+    <object member="data_" id="150"/>
+    <object member="description_" id="151"/>
+  </object>
+  <object class="Description" id="152" size="0" StudyVisible="false" StudyLabel=""/>
+  <object class="PersistentCollection&lt;Scalar&gt;" id="154" size="200" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/154</string>
+  </object>
+  <object class="Description" id="155" size="2" StudyVisible="false" StudyLabel="">
+    <string index="0">X0</string>
+    <string index="1">X1</string>
+  </object>
+  <object class="SampleImplementation" id="153" size_="100" dimension_="2" StudyVisible="false" StudyLabel="">
+    <object member="data_" id="154"/>
+    <object member="description_" id="155"/>
+  </object>
+  <object class="PersistentCollection&lt;Scalar&gt;" id="159" size="200" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/159</string>
+  </object>
+  <object class="Description" id="160" size="2" StudyVisible="false" StudyLabel="">
+    <string index="0">X0</string>
+    <string index="1">X1</string>
+  </object>
+  <object class="SampleImplementation" id="158" size_="100" dimension_="2" StudyVisible="false" StudyLabel="">
+    <object member="data_" id="159"/>
+    <object member="description_" id="160"/>
+  </object>
+  <object class="PersistentCollection&lt;Scalar&gt;" id="162" size="100" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/162</string>
+  </object>
+  <object class="Description" id="163" size="1" StudyVisible="false" StudyLabel="">
+    <string index="0">Y0</string>
+  </object>
+  <object class="SampleImplementation" id="161" size_="100" dimension_="1" StudyVisible="false" StudyLabel="">
+    <object member="data_" id="162"/>
+    <object member="description_" id="163"/>
+  </object>
+  <object class="PersistentCollection&lt;Scalar&gt;" id="166" size="2" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/166</string>
+  </object>
+  <object class="SampleImplementation" id="165" size_="1" dimension_="2" StudyVisible="false" StudyLabel="">
+    <object member="data_" id="166"/>
+  </object>
+  <object class="PersistentCollection&lt;Sample&gt;" id="164" size="1" StudyVisible="false" StudyLabel="">
+    <object index="0" id="165"/>
+  </object>
+  <object class="PersistentCollection&lt;Scalar&gt;" id="169" size="2" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/169</string>
+  </object>
+  <object class="SampleImplementation" id="168" size_="1" dimension_="2" StudyVisible="false" StudyLabel="">
+    <object member="data_" id="169"/>
+  </object>
+  <object class="PersistentCollection&lt;Sample&gt;" id="167" size="1" StudyVisible="false" StudyLabel="">
+    <object index="0" id="168"/>
+  </object>
+  <object class="DesignOfExperimentImplementation" id="157" name="design_0" inputContainsNaN_="false" outputContainsNaN_="false" hasPhysicalModel_="true" StudyVisible="false" StudyLabel="">
+    <object member="inputSample_" id="158"/>
+    <object member="outputSample_" id="161"/>
+    <object member="listXMin_" id="164"/>
+    <object member="listXMax_" id="167"/>
+    <object member="physicalModel_" id="69"/>
+  </object>
+  <object class="Point" id="171" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/171</string>
+  </object>
+  <object class="Point" id="172" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/172</string>
+  </object>
+  <object class="Point" id="173" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/173</string>
+  </object>
+  <object class="PersistentCollection&lt;Point&gt;" id="170" size="3" StudyVisible="false" StudyLabel="">
+    <object index="0" id="171"/>
+    <object index="1" id="172"/>
+    <object index="2" id="173"/>
+  </object>
+  <object class="Point" id="175" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/175</string>
+  </object>
+  <object class="Point" id="176" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/176</string>
+  </object>
+  <object class="Point" id="177" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/177</string>
+  </object>
+  <object class="PersistentCollection&lt;Point&gt;" id="174" size="3" StudyVisible="false" StudyLabel="">
+    <object index="0" id="175"/>
+    <object index="1" id="176"/>
+    <object index="2" id="177"/>
+  </object>
+  <object class="Point" id="179" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/179</string>
+  </object>
+  <object class="Point" id="180" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/180</string>
+  </object>
+  <object class="Point" id="181" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/181</string>
+  </object>
+  <object class="PersistentCollection&lt;Point&gt;" id="178" size="3" StudyVisible="false" StudyLabel="">
+    <object index="0" id="179"/>
+    <object index="1" id="180"/>
+    <object index="2" id="181"/>
+  </object>
+  <object class="Point" id="183" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/183</string>
+  </object>
+  <object class="Point" id="184" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/184</string>
+  </object>
+  <object class="Point" id="185" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/185</string>
+  </object>
+  <object class="PersistentCollection&lt;Point&gt;" id="182" size="3" StudyVisible="false" StudyLabel="">
+    <object index="0" id="183"/>
+    <object index="1" id="184"/>
+    <object index="2" id="185"/>
+  </object>
+  <object class="Point" id="187" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/187</string>
+  </object>
+  <object class="Point" id="188" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/188</string>
+  </object>
+  <object class="Point" id="189" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/189</string>
+  </object>
+  <object class="PersistentCollection&lt;Point&gt;" id="186" size="3" StudyVisible="false" StudyLabel="">
+    <object index="0" id="187"/>
+    <object index="1" id="188"/>
+    <object index="2" id="189"/>
+  </object>
+  <object class="Point" id="191" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/191</string>
+  </object>
+  <object class="Point" id="192" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/192</string>
+  </object>
+  <object class="Point" id="193" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/193</string>
+  </object>
+  <object class="PersistentCollection&lt;Point&gt;" id="190" size="3" StudyVisible="false" StudyLabel="">
+    <object index="0" id="191"/>
+    <object index="1" id="192"/>
+    <object index="2" id="193"/>
+  </object>
+  <object class="Point" id="195" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/195</string>
+  </object>
+  <object class="Point" id="196" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/196</string>
+  </object>
+  <object class="Point" id="197" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/197</string>
+  </object>
+  <object class="PersistentCollection&lt;Point&gt;" id="194" size="3" StudyVisible="false" StudyLabel="">
+    <object index="0" id="195"/>
+    <object index="1" id="196"/>
+    <object index="2" id="197"/>
+  </object>
+  <object class="Point" id="199" size="0" StudyVisible="false" StudyLabel=""/>
+  <object class="Point" id="200" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/200</string>
+  </object>
+  <object class="Point" id="201" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/201</string>
+  </object>
+  <object class="PersistentCollection&lt;Point&gt;" id="198" size="3" StudyVisible="false" StudyLabel="">
+    <object index="0" id="199"/>
+    <object index="1" id="200"/>
+    <object index="2" id="201"/>
+  </object>
+  <object class="Point" id="203" size="0" StudyVisible="false" StudyLabel=""/>
+  <object class="Point" id="204" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/204</string>
+  </object>
+  <object class="Point" id="205" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/205</string>
+  </object>
+  <object class="PersistentCollection&lt;Point&gt;" id="202" size="3" StudyVisible="false" StudyLabel="">
+    <object index="0" id="203"/>
+    <object index="1" id="204"/>
+    <object index="2" id="205"/>
+  </object>
+  <object class="Point" id="207" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/207</string>
+  </object>
+  <object class="Point" id="208" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/208</string>
+  </object>
+  <object class="Point" id="209" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/209</string>
+  </object>
+  <object class="PersistentCollection&lt;Point&gt;" id="206" size="3" StudyVisible="false" StudyLabel="">
+    <object index="0" id="207"/>
+    <object index="1" id="208"/>
+    <object index="2" id="209"/>
+  </object>
+  <object class="Point" id="211" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/211</string>
+  </object>
+  <object class="Point" id="212" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/212</string>
+  </object>
+  <object class="Point" id="213" size="1" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/213</string>
+  </object>
+  <object class="PersistentCollection&lt;Point&gt;" id="210" size="3" StudyVisible="false" StudyLabel="">
+    <object index="0" id="211"/>
+    <object index="1" id="212"/>
+    <object index="2" id="213"/>
+  </object>
+  <object class="Point" id="215" size="3" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/215</string>
+  </object>
+  <object class="Point" id="216" size="3" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/216</string>
+  </object>
+  <object class="PersistentCollection&lt;UnsignedInteger&gt;" id="217" size="3" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/217</string>
+  </object>
+  <object class="PersistentCollection&lt;UnsignedInteger&gt;" id="218" size="3" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/218</string>
+  </object>
+  <object class="Interval" id="214" dimension_="3" StudyVisible="false" StudyLabel="">
+    <object member="lowerBound_" id="215"/>
+    <object member="upperBound_" id="216"/>
+    <object member="finiteLowerBound_" id="217"/>
+    <object member="finiteUpperBound_" id="218"/>
+  </object>
+  <object class="Point" id="220" size="3" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/220</string>
+  </object>
+  <object class="Point" id="221" size="3" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/221</string>
+  </object>
+  <object class="PersistentCollection&lt;UnsignedInteger&gt;" id="222" size="3" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/222</string>
+  </object>
+  <object class="PersistentCollection&lt;UnsignedInteger&gt;" id="223" size="3" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/223</string>
+  </object>
+  <object class="Interval" id="219" dimension_="3" StudyVisible="false" StudyLabel="">
+    <object member="lowerBound_" id="220"/>
+    <object member="upperBound_" id="221"/>
+    <object member="finiteLowerBound_" id="222"/>
+    <object member="finiteUpperBound_" id="223"/>
+  </object>
+  <object class="Point" id="225" size="0" StudyVisible="false" StudyLabel=""/>
+  <object class="Point" id="226" size="0" StudyVisible="false" StudyLabel=""/>
+  <object class="Point" id="227" size="0" StudyVisible="false" StudyLabel=""/>
+  <object class="PersistentCollection&lt;Point&gt;" id="224" size="3" StudyVisible="false" StudyLabel="">
+    <object index="0" id="225"/>
+    <object index="1" id="226"/>
+    <object index="2" id="227"/>
+  </object>
+  <object class="PersistentCollection&lt;Scalar&gt;" id="230" size="0" StudyVisible="false" StudyLabel=""/>
+  <object class="SampleImplementation" id="229" size_="0" dimension_="1" StudyVisible="false" StudyLabel="">
+    <object member="data_" id="230"/>
+  </object>
+  <object class="PersistentCollection&lt;Scalar&gt;" id="232" size="258" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/232</string>
+  </object>
+  <object class="SampleImplementation" id="231" size_="129" dimension_="2" StudyVisible="false" StudyLabel="">
+    <object member="data_" id="232"/>
+  </object>
+  <object class="PersistentCollection&lt;Scalar&gt;" id="234" size="258" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/234</string>
+  </object>
+  <object class="SampleImplementation" id="233" size_="129" dimension_="2" StudyVisible="false" StudyLabel="">
+    <object member="data_" id="234"/>
+  </object>
+  <object class="PersistentCollection&lt;Sample&gt;" id="228" size="3" StudyVisible="false" StudyLabel="">
+    <object index="0" id="229"/>
+    <object index="1" id="231"/>
+    <object index="2" id="233"/>
+  </object>
+  <object class="PersistentCollection&lt;Scalar&gt;" id="237" size="0" StudyVisible="false" StudyLabel=""/>
+  <object class="SampleImplementation" id="236" size_="0" dimension_="1" StudyVisible="false" StudyLabel="">
+    <object member="data_" id="237"/>
+  </object>
+  <object class="PersistentCollection&lt;Scalar&gt;" id="239" size="258" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/239</string>
+  </object>
+  <object class="SampleImplementation" id="238" size_="129" dimension_="2" StudyVisible="false" StudyLabel="">
+    <object member="data_" id="239"/>
+  </object>
+  <object class="PersistentCollection&lt;Scalar&gt;" id="241" size="258" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/241</string>
+  </object>
+  <object class="SampleImplementation" id="240" size_="129" dimension_="2" StudyVisible="false" StudyLabel="">
+    <object member="data_" id="241"/>
+  </object>
+  <object class="PersistentCollection&lt;Sample&gt;" id="235" size="3" StudyVisible="false" StudyLabel="">
+    <object index="0" id="236"/>
+    <object index="1" id="238"/>
+    <object index="2" id="240"/>
+  </object>
+  <object class="PersistentCollection&lt;Scalar&gt;" id="244" size="0" StudyVisible="false" StudyLabel=""/>
+  <object class="SampleImplementation" id="243" size_="0" dimension_="1" StudyVisible="false" StudyLabel="">
+    <object member="data_" id="244"/>
+  </object>
+  <object class="PersistentCollection&lt;Scalar&gt;" id="246" size="258" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/246</string>
+  </object>
+  <object class="SampleImplementation" id="245" size_="129" dimension_="2" StudyVisible="false" StudyLabel="">
+    <object member="data_" id="246"/>
+  </object>
+  <object class="PersistentCollection&lt;Scalar&gt;" id="248" size="258" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/248</string>
+  </object>
+  <object class="SampleImplementation" id="247" size_="129" dimension_="2" StudyVisible="false" StudyLabel="">
+    <object member="data_" id="248"/>
+  </object>
+  <object class="PersistentCollection&lt;Sample&gt;" id="242" size="3" StudyVisible="false" StudyLabel="">
+    <object index="0" id="243"/>
+    <object index="1" id="245"/>
+    <object index="2" id="247"/>
+  </object>
+  <object class="Point" id="249" size="3" StudyVisible="false" StudyLabel="">
+    <string>DataModel_load.h5:/249</string>
+  </object>
+  <object class="DataAnalysisResult" id="156" elapsedTime_="0.010999917984008789" StudyVisible="false" StudyLabel="">
+    <object member="designOfExperiment_" id="157"/>
+    <object member="min_" id="170"/>
+    <object member="max_" id="174"/>
+    <object member="mean_" id="178"/>
+    <object member="median_" id="182"/>
+    <object member="standardDeviation_" id="186"/>
+    <object member="coefficientOfVariation_" id="190"/>
+    <object member="variance_" id="194"/>
+    <object member="skewness_" id="198"/>
+    <object member="kurtosis_" id="202"/>
+    <object member="firstQuartile_" id="206"/>
+    <object member="thirdQuartile_" id="210"/>
+    <object member="meanConfidenceInterval_" id="214"/>
+    <object member="stdConfidenceInterval_" id="219"/>
+    <object member="outliers_" id="224"/>
+    <object member="pdf_" id="228"/>
+    <object member="cdf_" id="235"/>
+    <object member="survFct__" id="242"/>
+    <object member="effectiveSize_" id="249"/>
+    <object member="multiVariateDoE_" id="157"/>
+  </object>
+  <object class="ProbabilisticDesignOfExperiment" id="147" name="design_0" errorMessage_="" warningMessage_="" isReliabilityAnalysis_="false" modelHtmlDescription_="&lt;h2&gt;&lt;center&gt;Physical model&lt;/center&gt;&lt;/h2&gt;&lt;h3&gt;Deterministic inputs&lt;/h3&gt;&lt;p&gt;&lt;table style=&quot;width:100%&quot; border=&quot;1&quot; cellpadding=&quot;5&quot;&gt;&lt;tr&gt;  &lt;th&gt;Name&lt;/th&gt;  &lt;th&gt;Description&lt;/th&gt;  &lt;th&gt;Value&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;  &lt;td&gt;X0&lt;/td&gt;  &lt;td&gt;-&lt;/td&gt;  &lt;td&gt;3&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/p&gt;&lt;h3&gt;Stochastic inputs&lt;/h3&gt;&lt;p&gt;&lt;table style=&quot;width:100%&quot; border=&quot;1&quot; cellpadding=&quot;5&quot;&gt;&lt;tr&gt;  &lt;th&gt;Name&lt;/th&gt;  &lt;th&gt;Description&lt;/th&gt;  &lt;th&gt;Distribution&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;  &lt;td&gt;X1&lt;/td&gt;  &lt;td&gt;-&lt;/td&gt;  &lt;td&gt;Uniform(a = -10, b = 10)&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/p&gt;&lt;h3&gt;Outputs&lt;/h3&gt;&lt;p&gt;&lt;table style=&quot;width:100%&quot; border=&quot;1&quot; cellpadding=&quot;5&quot;&gt;&lt;tr&gt;  &lt;th&gt;Name&lt;/th&gt;  &lt;th&gt;Description&lt;/th&gt;  &lt;th&gt;Formula&lt;/th&gt;&lt;/tr&gt;&lt;tr&gt;  &lt;td&gt;Y0&lt;/td&gt;  &lt;td&gt;-&lt;/td&gt;  &lt;td&gt;X0*X1&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/p&gt;" blockSize_="16" seed_="0" designName_="MONTE_CARLO" spaceFilling_="PhiP" size_="100" mcLhsSize_="0" StudyVisible="false" StudyLabel="">
+    <object member="interestVariables_" id="148"/>
+    <object member="physicalModel_" id="69"/>
+    <object member="failedInputSample_" id="149"/>
+    <object member="errorDescription_" id="152"/>
+    <object member="originalInputSample_" id="153"/>
+    <object member="result_" id="156"/>
+  </object>
+  <object class="PersistentCollection&lt;Analysis&gt;" id="146" size="1" StudyVisible="false" StudyLabel="">
+    <object index="0" id="147"/>
+  </object>
+  <object class="StudyImplementation" id="1" name="Study_0" StudyVisible="true" StudyLabel="aStudy">
+    <object member="dataModels_" id="2"/>
+    <object member="dataFieldModels_" id="143"/>
+    <object member="physicalModels_" id="144"/>
+    <object member="limitStates_" id="145"/>
+    <object member="analyses_" id="146"/>
+  </object>
+</openturns-study>

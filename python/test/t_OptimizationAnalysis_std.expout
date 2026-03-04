@@ -7,7 +7,6 @@ import openturns as ot
 import persalys
 
 myStudy = persalys.Study('myStudy')
-persalys.Study.Add(myStudy)
 dist_X0 = ot.Normal(1, 1)
 X0 = persalys.Input('X0', 0, dist_X0, '')
 dist_X1 = ot.Normal(1, 1)
@@ -36,6 +35,7 @@ optim.setMaximumRelativeError(1e-06)
 optim.setMaximumResidualError(1e-06)
 optim.setMaximumConstraintError(1e-06)
 myStudy.add(optim)
+persalys.Study.Add(myStudy)
 
 ParametricEvaluation(([[X0,X1,X20,Y0,X2]->[600.0-1.0*(Y0)]])o([[X0,X1,X2]->[X0,X1,X2],MemoizeEvaluation([X0,X1,X2] code=def _exec(X0,X1,X2):
     Y00 = X0

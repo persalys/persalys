@@ -2,7 +2,8 @@
 "Create a design of experiments, using an imported design.
 
 Available constructors:
-    ImportedDesignOfExperiment(*name, physicalModel, fileName, columns*)
+    ImportedDesignOfExperiment(*name, physicalModel*)
+    ImportedDesignOfExperiment(*name, physicalModel, fileName, inputColumns, outputColumns, type*)
 
 Parameters
 ----------
@@ -12,8 +13,12 @@ physicalModel : :class:`~persalys.PhysicalModel`
     Physical model
 fileName : str
     Name of a data file to load
-columns : sequence of int
-    Indices of columns in files to consider
+inputColumns : sequence of int
+    Columns of the input variables
+outputColumns : sequence of int
+    Columns of the output variables (optional)
+type : int
+    Type of the imported design of experiments (optional, default is GENERIC)
 
 Examples
 --------
@@ -36,10 +41,53 @@ Create the design of experiments:
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::DataImport::getResult
-"Result of the analysis of the data accessor.
+%feature("docstring") PERSALYS::ImportedDesignOfExperiment::setColumns
+"Set the columns of the variables.
+
+Parameters
+----------
+inputColumns : sequence of int
+    Columns of the input variables
+outputColumns : sequence of int (optional)
+    Columns of the output variables"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::ImportedDesignOfExperiment::setType
+"Set the type of the imported design of experiments.
+By default, the type is Monte-Carlo.
+
+Parameters
+----------
+type : int
+   Type of the imported design of experiments"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::ImportedDesignOfExperiment::getType
+"Get the type of the imported design of experiments.
 
 Returns
 -------
-result : :class:`~persalys.DataAnalysisResult`
-   Result of the analysis of the data"
+type : int
+   Type of the imported design of experiments"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::ImportedDesignOfExperiment::getImportedDataset
+"Get the imported dataset.
+
+Returns
+-------
+importedDataset : :class:`~persalys.ImportedDataset`
+   The imported dataset"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::ImportedDesignOfExperiment::setFileName
+"Set the name of the data file to load.
+
+Parameters
+----------
+fileName : str
+    Name of a data file to load"

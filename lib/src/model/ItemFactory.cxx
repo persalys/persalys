@@ -107,7 +107,7 @@ QString ItemFactory::getParentTitleType(const QString &objectName) const
 
 Item * ItemFactory::getTitleItem(const QString &objectName)
 {
-  Item * item = 0;
+  Item * item = nullptr;
 
   // models
   if (objectName.contains("Model") && !objectName.contains("ModelEvaluation"))
@@ -151,7 +151,7 @@ Item * ItemFactory::getTitleItem(const QString &objectName)
 #ifdef PERSALYS_HAVE_OTMORRIS
   else if (objectName == "MorrisAnalysis")
   {
-    item = new Item(tr("Screening"), "ScreeningTitle");
+    item = new Item(tr("Morris"), "ScreeningTitle");
     item->setData(QIcon(":/images/sensitivity.png"), Qt::DecorationRole);
     item->appendAction(newScreening_);
   }
@@ -185,8 +185,7 @@ Item * ItemFactory::getTitleItem(const QString &objectName)
     item->setData(QIcon(":/images/centralTendency.png"), Qt::DecorationRole);
     item->appendAction(newCentralTendency_);
   }
-  else if (objectName == "SobolAnalysis" ||
-           objectName == "SRCAnalysis")
+  else if (objectName == "SobolAnalysis")
   {
     item = new Item(tr("Sensitivity"), "SensitivityTitle");
     item->setData(QIcon(":/images/sensitivity.png"), Qt::DecorationRole);
@@ -218,16 +217,6 @@ Analysis ItemFactory::createAnalysis(const QString &analysisName, const DesignOf
   qDebug() << "Error: In createAnalysis: analysisName " << analysisName << " not recognized.\n";
   return nullptr;
 }
-
-
-Analysis ItemFactory::createAnalysis(const QString &analysisName, const Analysis &inAnalysis) const
-{
-  if (analysisName == "Metamodel")
-    return new PolynomialRegressionAnalysis(availableAnalysisName(tr("metaModel_")), inAnalysis);
-  qDebug() << "Error: In createAnalysis: analysisName " << analysisName << " not recognized.\n";
-  return nullptr;
-}
-
 
 Analysis ItemFactory::createAnalysis(const QString &analysisName, const LimitState &limitState) const
 {
@@ -285,11 +274,11 @@ QAction * ItemFactory::createAction(const QString &analysisName, const PhysicalM
 #ifdef PERSALYS_HAVE_OTMORRIS
   else if (analysisName == "Screening")
   {
-    action = new QAction(QIcon(":/images/sensitivity.png"), tr("Screening"), this);
-    action->setStatusTip(tr("Create a new screening"));
+    action = new QAction(QIcon(":/images/sensitivity.png"), tr("Morris"), this);
+    action->setStatusTip(tr("Create a new morris analysis"));
     connect(action, &QAction::triggered, [ = ]()
     {
-      MorrisAnalysis analysis(availableAnalysisName(tr("screening_")), model);
+      MorrisAnalysis analysis(availableAnalysisName(tr("morris_")), model);
       analysis.setBlockSize(GetNumberOfPhysicalCores());
       emit wizardRequested(getParentStudyItem(), analysis);
     });
@@ -352,15 +341,18 @@ QAction * ItemFactory::createAction(const QString &analysisName, const PhysicalM
 
 QAction * ItemFactory::createAction(const QString &analysisName, const DesignOfExperiment &doe)
 {
-  QAction * action = 0;
+  QAction * action = nullptr;
 
   if (analysisName == "DataAnalysis")
   {
     action = new QAction(tr("Data analysis"), this);
     action->setStatusTip(tr("Analyse the data sample"));
-    connect(action, &QAction::triggered, [ = ]()
+    connect(action, &QAction::triggered, [this, doe]()
     {
-      emit analysisRequested(getParentStudyItem(), DataAnalysis(availableAnalysisName(tr("dataAnalysis_")), doe));
+      DataAnalysis analysis(availableAnalysisName(tr("dataAnalysis_")), doe);
+      if (doe.getType() != DataModel::MC)
+        analysis.setIsConfidenceIntervalRequired(false);
+      emit analysisRequested(getParentStudyItem(), analysis);
     });
   }
   else if (analysisName == "DataSensitivityAnalysis")
@@ -461,24 +453,6 @@ QAction * ItemFactory::createAction(const QString &analysisName, const DataField
   qDebug() << "Error: In createAction: analysisName " << analysisName << " not recognized.\n";
   return nullptr;
 }
-
-
-QAction * ItemFactory::createAction(const QString &analysisName, const Analysis &analysis)
-{
-  if (analysisName == "Metamodel")
-  {
-    QAction * action = new QAction(tr("Metamodel"), this);
-    action->setStatusTip(tr("Create a new metamodel"));
-    connect(action, &QAction::triggered, [this, analysis]()
-    {
-      newAnalysis("Metamodel", analysis);
-    });
-    return action;
-  }
-  qDebug() << "Error: In createAction: analysisName " << analysisName << " not recognized.\n";
-  return nullptr;
-}
-
 
 String ItemFactory::availableAnalysisName(const QString &baseName) const
 {

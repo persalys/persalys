@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief Class to define data model
+ *  @brief Class to define data models
  *
  *  Copyright 2015-2025 EDF-Phimeca
  *
@@ -21,52 +21,92 @@
 #ifndef PERSALYS_DATAMODEL_HXX
 #define PERSALYS_DATAMODEL_HXX
 
-#include "DesignOfExperiment.hxx"
-#include "DataImport.hxx"
+#include "PhysicalModel.hxx"
+#include "DataSample.hxx"
+#include "ImportedDataset.hxx"
+
+#include <optional>
 
 namespace PERSALYS
 {
-class PERSALYS_BASE_API DataModel : public DesignOfExperimentImplementation, public DataImport
+class PERSALYS_BASE_API DataModel : public DataSample, public Observable
 {
   CLASSNAME
 
 public:
-  /** Default constructor */
-  DataModel(const OT::String & name = "Unnamed");
+  enum Type {UK, MC, QMC, RLHS, OLHS, GRID, MORRIS};
 
   /** Constructor with parameters */
-  DataModel(const OT::String & name,
-            const OT::String & fileName,
-            const OT::Indices & inputColumns,
-            const OT::Indices & outputColumns = OT::Indices(),
-            const OT::Description & inputNames = OT::Description(),
-            const OT::Description & outputNames = OT::Description());
+  explicit DataModel(const OT::String & name = "");
 
   /** Constructor with parameters */
-  DataModel(const OT::String & name,
-            const OT::Sample & inSample,
-            const OT::Sample & outSample);
+  DataModel(const OT::String & name, const PhysicalModel & physicalModel);
 
   /** Constructor with parameters */
-  DataModel(const OT::String & name,
-            const DesignOfExperiment & doe);
+  DataModel(
+    const OT::String & name,
+    const ImportedDataset & importedDataset,
+    const OT::Description & inputNames = OT::Description(),
+    const OT::Description & outputNames = OT::Description());
 
+  /** Constructor with parameters */
+  DataModel(
+    const OT::String & name,
+    const OT::Sample & inSample,
+    const OT::Sample & outSample);
+  
   /** Virtual constructor */
   DataModel * clone() const override;
+  
+protected:
+  DataModel(
+    const OT::String & name,
+    const std::optional<PhysicalModel> & physicalModel,
+    const std::optional<ImportedDataset> & importedDataset,
+    const OT::Description & inputNames,
+    const OT::Description & outputNames);
+  
+public:
+
+  void setName(const OT::String & name);
 
   void removeAllObservers() override;
 
-  virtual OT::Description getInputNames();
-  virtual OT::Description getOutputNames();
-  using DataImport::setColumns;
+  bool hasPhysicalModel() const;
+  PhysicalModel getPhysicalModel() const;
+  void setPhysicalModel(const PhysicalModel & physicalModel);
+  void removePhysicalModel();
+
+  void initialize();
+  void setInputSample(const OT::Sample & sample) override;
+  void setOutputSample(const OT::Sample & sample) override;
+
+  OT::Indices getEffectiveInputIndices() const;
+
+  void setType(Type type);
+  Type getType() const;
+
+  virtual OT::Description getInputNames() const;
+  virtual OT::Description getOutputNames() const;
   virtual void setColumns(const OT::Indices &inputColumns,
                           const OT::Description &inputNames,
                           const OT::Indices &outputColumns,
                           const OT::Description &outputNames);
 
-  OT::String getPythonScript() const override;
+  void setSample(const OT::Sample & sample);
 
-  /** String converter */
+  OT::Sample getSampleFromFile() const;
+  
+  OT::Indices getInputColumns() const;
+  OT::Indices getOutputColumns() const;
+
+  OT::String getFileName() const;
+  void setFileName(const OT::String & fileName);
+
+  static OT::String TypeToString(Type type);
+
+  virtual OT::String getPythonScript() const;
+
   OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
@@ -75,17 +115,19 @@ public:
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv) override;
 
-  void setSample(const OT::Sample & sample);
-
 protected:
   void setNames(const OT::Description &inputNames, const OT::Description &outputNames);
-  void check() override;
   virtual void update();
-  void setDefaultColumns() override;
+  
+private:
+    void loadDataModelAttributes(OT::Advocate & adv);
 
 protected:
-  OT::Description inputNames_;
-  OT::Description outputNames_;
+  std::optional<PhysicalModel>    physicalModel_    = std::nullopt;
+  std::optional<ImportedDataset>  importedDataset_  = std::nullopt;
+  Type type_ = UK;
+  bool resetImportedDataset_ = true;
 };
+
 }
 #endif

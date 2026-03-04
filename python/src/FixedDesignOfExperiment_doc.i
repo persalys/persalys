@@ -42,4 +42,11 @@ Parameters
 ----------
 sample : :py:class:`openturns.Sample`
     Input sample. The sample must have a dimension equal to the number of
-    inputs in the physical model"
+    inputs in the physical model
+type : int
+    Type of the data model. Possible values are:
+    - persalys.DataModel.GENERIC (default)
+    - persalys.DataModel.MC
+    - persalys.DataModel.LHS
+    - persalys.DataModel.QMC
+    - persalys.DataModel.GRID"

@@ -36,7 +36,7 @@ class PERSALYS_BASE_API StudyImplementation : public OT::PersistentObject, publi
 
 public:
   /** Default constructor */
-  StudyImplementation(const OT::String & name = "Unnamed");
+  explicit StudyImplementation(const OT::String & name = "Unnamed");
 
   /** Destructor */
   virtual ~StudyImplementation();

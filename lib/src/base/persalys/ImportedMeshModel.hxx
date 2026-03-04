@@ -23,11 +23,11 @@
 
 #include "MeshModelImplementation.hxx"
 #include "BaseTools.hxx"
-#include "DataImport.hxx"
+#include "ImportedDataset.hxx"
 
 namespace PERSALYS
 {
-class PERSALYS_BASE_API ImportedMeshModel : public MeshModelImplementation, public DataImport
+class PERSALYS_BASE_API ImportedMeshModel : public MeshModelImplementation
 {
   CLASSNAME
 
@@ -48,9 +48,9 @@ public:
   OT::Interval getBounds() const override;
   OT::Indices getNumberOfNodes() const override;
 
-  inline void setMeshFilename(const OT::String &filename) {
-    setFileName(filename, Tools::DataOrder::Unknown);
-  };
+  void setMeshFilename(const OT::String &filename);
+
+  const ImportedDataset& getImportedDataset() const;
 
   OT::String getHTMLDescription() const override;
   OT::String getPythonScript() const override;
@@ -65,11 +65,14 @@ public:
   void load(OT::Advocate & adv) override;
 
 protected:
-  OT::Sample importSample(const OT::String& fileName, const Tools::DataOrder order = Tools::DataOrder::Columns) override;
-  void setDefaultColumns() override;
+  OT::Sample importSample(const OT::String& fileName, const Tools::DataOrder order = Tools::DataOrder::Columns);
+
+private:
+  void loadOldFormat(OT::Advocate & adv);
 
 private:
   Tools::DataOrder order_ = Tools::DataOrder::Unknown;
+  ImportedDataset importedDataset_;
 };
 }
 #endif

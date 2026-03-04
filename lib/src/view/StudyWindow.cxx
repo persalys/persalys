@@ -118,7 +118,7 @@ void StudyWindow::buildInterface()
                  .arg(tr("Reliability"))
                  .arg(tr("Metamodel"));
 #ifdef PERSALYS_HAVE_OTMORRIS
-  text.append(QString("\n- %1").arg(tr("Screening")));
+  text.append(QString("\n- %1").arg(tr("Morris")));
 #endif
   textEdit->setText(text);
   layout->addWidget(textEdit, 2, 1, nbModels, 1, Qt::AlignLeft | Qt::AlignTop);

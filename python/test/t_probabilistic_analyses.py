@@ -42,9 +42,9 @@ cDist = ot.JointDistribution(
 )
 sample = cDist.getSample(200)
 sample.exportToCSVFile(filename, " ")
-model3 = persalys.DataModel(
-    "model3", filename, [0, 2, 3], [1], ["x_0", "x_2", "x_3"], ["x_1"]
-)
+importedDataset3 = persalys.ImportedDataset(filename, [0, 2, 3], [1])
+model3 = persalys.DataModel("model3", importedDataset3, ["x_0", "x_2", "x_3"], ["x_1"])
+model3.setType(persalys.DataModel.MC)
 myStudy.add(model3)
 
 # Designs of Experiment ##
@@ -54,12 +54,16 @@ values = [[0.5 + i * 1.5 for i in range(7)], [0.5 + i * 1.5 for i in range(7)], 
 design_2 = persalys.GridDesignOfExperiment("design_2", model1, values)
 myStudy.add(design_2)
 
+dataSet2 = myStudy.addDoEAsDataSet(design_2)
+
 # design 4 ##
 probaDesign = persalys.ProbabilisticDesignOfExperiment(
     "probaDesign", model1, 100, "MONTE_CARLO"
 )
 probaDesign.run()
 myStudy.add(probaDesign)
+
+probaDataSet = myStudy.addDoEAsDataSet(probaDesign)
 
 design_3 = persalys.ImportedDesignOfExperiment("design_3", model1, filename, [0, 2, 3])
 design_3.run()
@@ -69,7 +73,7 @@ myStudy.add(design_3)
 # 1- meta model1 ##
 
 # 1-a Kriging ##
-kriging = persalys.KrigingAnalysis("kriging", probaDesign)
+kriging = persalys.KrigingAnalysis("kriging", probaDataSet)
 kriging.setBasis(ot.LinearBasisFactory(2).build())
 kriging.setCovarianceModel(ot.MaternModel(2))
 kriging.setTestSampleValidation(True)
@@ -78,7 +82,7 @@ kriging.setInterestVariables(["y0", "y1"])
 myStudy.add(kriging)
 
 # 1-b Chaos ##
-chaos1 = persalys.FunctionalChaosAnalysis("chaos_1", probaDesign)
+chaos1 = persalys.FunctionalChaosAnalysis("chaos_1", probaDataSet)
 chaos1.setChaosDegree(7)
 chaos1.setSparseChaos(True)
 chaos1.setTestSampleValidation(True)
@@ -87,13 +91,13 @@ chaos1.setInterestVariables(["y1"])
 myStudy.add(chaos1)
 
 # 1-c Chaos ##
-chaos2 = persalys.FunctionalChaosAnalysis("chaos_2", design_2)
+chaos2 = persalys.FunctionalChaosAnalysis("chaos_2", dataSet2)
 chaos2.setChaosDegree(2)
 chaos2.setSparseChaos(True)
 myStudy.add(chaos2)
 
 # 1-d linear regression #
-linreg = persalys.PolynomialRegressionAnalysis("linreg", probaDesign)
+linreg = persalys.PolynomialRegressionAnalysis("linreg", probaDataSet)
 linreg.setInterestVariables(["y0", "y1"])
 linreg.setDegree(2)
 linreg.setInteraction(False)

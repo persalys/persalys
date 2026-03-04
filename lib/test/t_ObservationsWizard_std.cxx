@@ -42,7 +42,7 @@ private:
   SymbolicPhysicalModel model_;
 
 private slots:
-  void TestImport()
+  void TestImport() const
   {
     // create the observations
     String filename = "normal2.csv";
@@ -53,9 +53,9 @@ private slots:
     ObservationsWizard wizard(obs);
     wizard.show();
 
-    ErrorWidget * errorMessageLabel = wizard.page_->findChild<ErrorWidget*>();
+    const ErrorWidget * errorMessageLabel = wizard.page_->findChild<ErrorWidget*>();
     SampleTableModel * model = wizard.page_->findChild<SampleTableModel*>();
-    QLineEdit * fileLineEdit = wizard.page_->findChild<QLineEdit*>();
+    const QLineEdit * fileLineEdit = wizard.page_->findChild<QLineEdit*>();
 
     // checks
     QVERIFY2(wizard.nextId() == -1, "Next page ID must be -1");
@@ -74,7 +74,7 @@ private slots:
     model->setHeaderData(2, Qt::Horizontal, "", Qt::DisplayRole);
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
     QVERIFY2(errorMessageLabel->toPlainText().isEmpty(), "Label must be empty");
-
+    
     model->setHeaderData(2, Qt::Horizontal, "E", Qt::DisplayRole);
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
     QVERIFY2(errorMessageLabel->toPlainText().isEmpty(), "Label must be empty");

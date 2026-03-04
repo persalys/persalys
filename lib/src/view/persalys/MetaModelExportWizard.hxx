@@ -38,7 +38,7 @@ class PERSALYS_VIEW_API MetaModelExportWizard : public Wizard
 public:
   enum ExportType {Symbolic, Python};
 
-  MetaModelExportWizard(const Analysis& model, bool isGeneralWizard = false, QWidget* parent = 0);
+  explicit MetaModelExportWizard(const Analysis& model, bool isGeneralWizard = false, QWidget* parent = nullptr);
 
   Analysis getAnalysis() const;
   ExportType getExportType() const;

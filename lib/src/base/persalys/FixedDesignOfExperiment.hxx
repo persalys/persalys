@@ -30,6 +30,8 @@ class PERSALYS_BASE_API FixedDesignOfExperiment : public DesignOfExperimentEvalu
   CLASSNAME
 
 public:
+  using Type = DataModel::Type;
+
   /** Default constructor */
   FixedDesignOfExperiment();
   /** Constructor with parameters */
@@ -42,7 +44,7 @@ public:
   /** Virtual constructor */
   FixedDesignOfExperiment * clone() const override;
 
-  void setOriginalInputSample(const OT::Sample & sample);
+  void setOriginalInputSample(const OT::Sample & sample, Type type = DataModel::UK);
 
   OT::String getPythonScript() const override;
 
@@ -51,6 +53,10 @@ public:
 
 protected:
   OT::Sample generateInputSample(const OT::UnsignedInteger nbSimu) const override;
+  void launch() override;
+
+private:
+    Type type_ = DataModel::UK;
 };
 }
 #endif

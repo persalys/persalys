@@ -43,7 +43,6 @@ MetaModelAnalysis::MetaModelAnalysis()
 {
 }
 
-
 /* Constructor with parameters */
 MetaModelAnalysis::MetaModelAnalysis(const String& name, const DesignOfExperiment& designOfExperiment)
   : DesignOfExperimentAnalysis(name, designOfExperiment)
@@ -52,23 +51,6 @@ MetaModelAnalysis::MetaModelAnalysis(const String& name, const DesignOfExperimen
 {
   if (designOfExperiment_.getOutputSample().getSize())
     setInterestVariables(designOfExperiment_.getOutputSample().getDescription());
-}
-
-
-/* Constructor with parameters */
-MetaModelAnalysis::MetaModelAnalysis(const String& name, const Analysis& analysis)
-  : DesignOfExperimentAnalysis(name)
-  , seedTestSample_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
-  , seedKFold_(ResourceMap::GetAsUnsignedInteger("RandomGenerator-InitialSeed"))
-{
-  const auto * analysis_ptr = dynamic_cast<DesignOfExperimentEvaluation*>(analysis.getImplementation().get());
-
-  if (!analysis_ptr)
-  {
-    throw InvalidArgumentException(HERE) << "The given analysis does not contain any design of experiments";
-  }
-  designOfExperiment_ = analysis_ptr->getResult().getDesignOfExperiment();
-  setInterestVariables(analysis_ptr->getInterestVariables());
 }
 
 PythonPhysicalModel MetaModelAnalysis::asPythonPhysicalModel(const Study &study) const
@@ -280,7 +262,7 @@ void MetaModelAnalysis::buildMetaModel(MetaModelAnalysisResult& result, const Fu
   // inputs
   for (UnsignedInteger i = 0; i < inputsNames.getSize(); ++i)
   {
-    if (designOfExperiment_.getPhysicalModel().getInputNames().contains(inputsNames[i]))
+    if (designOfExperiment_.hasPhysicalModel() && designOfExperiment_.getPhysicalModel().getInputNames().contains(inputsNames[i]))
       metaModel.addInput(designOfExperiment_.getPhysicalModel().getInputByName(inputsNames[i]));
     else
       metaModel.addInput(Input(inputsNames[i]));
@@ -289,7 +271,7 @@ void MetaModelAnalysis::buildMetaModel(MetaModelAnalysisResult& result, const Fu
   // outputs
   for (UnsignedInteger i = 0; i < outputsNames.getSize(); ++i)
   {
-    if (designOfExperiment_.getPhysicalModel().getOutputNames().contains(outputsNames[i]))
+    if (designOfExperiment_.hasPhysicalModel() && designOfExperiment_.getPhysicalModel().getOutputNames().contains(outputsNames[i]))
     {
       Output output(designOfExperiment_.getPhysicalModel().getOutputByName(outputsNames[i]));
       if (!output.getDescription().empty())
@@ -320,7 +302,7 @@ void MetaModelAnalysis::buildMetaModel(MetaModelAnalysisResult& result, const Fu
   }
 
   // copula
-  if (designOfExperiment_.getPhysicalModel().hasStochasticInputs())
+  if (designOfExperiment_.hasPhysicalModel() && designOfExperiment_.getPhysicalModel().hasStochasticInputs())
   {
     const Collection<Distribution> coll(designOfExperiment_.getPhysicalModel().getCopulaCollection());
     for (UnsignedInteger i = 0; i < coll.getSize(); ++i)

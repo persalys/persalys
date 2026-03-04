@@ -31,7 +31,6 @@
 #include "persalys/FixedDesignOfExperiment.hxx"
 #include "persalys/GridDesignOfExperiment.hxx"
 #include "persalys/ImportedDesignOfExperiment.hxx"
-#include "persalys/SRCAnalysis.hxx"
 #include "persalys/SobolAnalysis.hxx"
 #include "persalys/FunctionalChaosAnalysis.hxx"
 

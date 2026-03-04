@@ -31,8 +31,10 @@ myStudy.add(aDesign)
 
 aDesign.run()
 
+aDoe = myStudy.addDoEAsDataSet(aDesign)
+
 # LM
-analysis = persalys.PolynomialRegressionAnalysis("lm_0", aDesign)
+analysis = persalys.PolynomialRegressionAnalysis("lm_0", aDoe)
 analysis.setDegree(2)
 analysis.setInteraction(True)
 myStudy.add(analysis)
@@ -41,8 +43,9 @@ analysis.run()
 metaModel = analysis.getResult().getMetaModel().getFunction()
 
 # boston price model
+importedDataset = persalys.ImportedDataset("Housing-prices-Boston.csv", range(13), [13])
 datamodel = persalys.DataModel(
-    "datamodel", "Housing-prices-Boston.csv", range(13), [13]
+    "datamodel", importedDataset
 )
 myStudy.add(datamodel)
 analysis2 = persalys.PolynomialRegressionAnalysis("lm_1", datamodel)

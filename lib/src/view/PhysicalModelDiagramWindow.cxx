@@ -51,7 +51,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
 
 #ifdef PERSALYS_HAVE_OTMORRIS
   DiagramPushButton * screeningButton = new DiagramPushButton;
-  screeningButton->setText(tr("Screening"));
+  screeningButton->setText(tr("Morris"));
   screeningButton->setWhatsThis(tr("One screening method : Morris"));
   connect(screeningButton, SIGNAL(clicked(bool)), physicalModelDiagramItem->newScreening_, SIGNAL(triggered()));
   connect(physicalModelDiagramItem, SIGNAL(twoInputsValidityChanged(bool, QString)), screeningButton, SLOT(setEnabled(bool, QString)));
@@ -115,21 +115,13 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
 
   appendButton(doeEvaluationButton, row, doeCreationButton);
 
-  DiagramPushButton * metamodelButton = new DiagramPushButton;
-  metamodelButton->setText(tr("Metamodel\ncreation"));
-  metamodelButton->setWhatsThis(tr("Build a computationally cheap approximation model from input-output data"));
-  connect(physicalModelDiagramItem, SIGNAL(doeEvaluationNumberValidityChanged(bool, QString)), metamodelButton, SLOT(setEnabled(bool, QString)));
-  connect(metamodelButton, SIGNAL(clicked(bool)), physicalModelDiagramItem, SLOT(requestMetaModelCreation()));
+  DiagramPushButton * doeExportButton = new DiagramPushButton;
+  doeExportButton->setText(tr("Design of\nexperiments\nexport"));
+  doeExportButton->setWhatsThis(tr("Export the design of experiments as a data set"));
+  connect(doeExportButton, &QPushButton::clicked, physicalModelDiagramItem, &PhysicalModelDiagramItem::requestDesignOfExperimentExport);
+  connect(physicalModelDiagramItem, &PhysicalModelDiagramItem::doeEvaluationNumberValidityChanged, doeExportButton, &DiagramPushButton::setEnabled);
 
-  appendButton(metamodelButton, row, doeEvaluationButton);
-
-  DiagramPushButton * metamodelExportButton = new DiagramPushButton;
-  metamodelExportButton->setText(tr("Export\nas model"));
-  metamodelExportButton->setWhatsThis(tr("Export metamodel as model"));
-  connect(physicalModelDiagramItem, SIGNAL(metamodelNumberValidityChanged(bool, QString)), metamodelExportButton, SLOT(setEnabled(bool, QString)));
-  connect(metamodelExportButton, SIGNAL(clicked(bool)), physicalModelDiagramItem, SLOT(requestMetaModelExport()));
-
-  appendButton(metamodelExportButton, row, metamodelButton);
+  appendButton(doeExportButton, row, doeEvaluationButton);
 
   DiagramPushButton * probaModelButton = new DiagramPushButton;
   probaModelButton->setText(tr("Probabilistic\nmodel\ndefinition"));
@@ -140,7 +132,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
   appendButton(probaModelButton, ++row, modelDefinitionButton);
 
   DiagramPushButton * sensitivityButton = new DiagramPushButton;
-  sensitivityButton->setText(tr("Sensitivity"));
+  sensitivityButton->setText(tr("Sobol\nSensitivity"));
   sensitivityButton->setWhatsThis(tr("Two methods : Sobol and SRC"));
   connect(sensitivityButton, SIGNAL(clicked(bool)), physicalModelDiagramItem->newSensitivityAnalysis_, SIGNAL(triggered()));
   connect(physicalModelDiagramItem, SIGNAL(dependenceValidityChanged(bool, QString)), sensitivityButton, SLOT(setEnabled(bool, QString)));

@@ -1,5 +1,4 @@
 #include "persalys/SobolAnalysis.hxx"
-#include "persalys/SRCAnalysis.hxx"
 #include "persalys/SensitivityAnalysisWizard.hxx"
 #include "persalys/SymbolicPhysicalModel.hxx"
 #include "persalys/ErrorWidget.hxx"
@@ -37,7 +36,7 @@ private:
   SymbolicPhysicalModel model;
 
 private slots:
-  void TestOutputsSelection()
+  void TestOutputsSelection() const
   {
     // create the analysis
     SobolAnalysis analysis("analysis", model);
@@ -49,10 +48,10 @@ private slots:
     // checks
 
     // - first page
-    OutputsSelectionGroupBox * outputsSelectionGroupBox = wizard.introPage_->findChild<OutputsSelectionGroupBox*>();
-    ErrorWidget * errorMessageLabel = wizard.introPage_->findChild<ErrorWidget*>();
-    TitledComboBox * comboBox = outputsSelectionGroupBox->findChild<TitledComboBox*>();
-    ListWidgetWithCheckBox * listWidget = outputsSelectionGroupBox->findChild<ListWidgetWithCheckBox*>();
+    const auto * outputsSelectionGroupBox = wizard.introPage_->findChild<OutputsSelectionGroupBox*>();
+    const auto * errorMessageLabel = wizard.introPage_->findChild<ErrorWidget*>();
+    auto * comboBox = outputsSelectionGroupBox->findChild<TitledComboBox*>();
+    const auto * listWidget = outputsSelectionGroupBox->findChild<ListWidgetWithCheckBox*>();
 
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
     QVERIFY2(errorMessageLabel->toPlainText().isEmpty(), "Label must be empty");
@@ -71,7 +70,7 @@ private slots:
   }
 
 
-  void TestSobol()
+  void TestSobol() const
   {
     // create the analysis
     SobolAnalysis analysis("analysis", model);
@@ -83,12 +82,10 @@ private slots:
     // checks
 
     // - first page
-    QButtonGroup * buttonGroup = wizard.introPage_->findChild<QButtonGroup*>();
-    QVERIFY2(buttonGroup->checkedId() == SensitivityIntroPage::Sobol, "Checked button must be Sobol");
     QVERIFY2(wizard.currentId() == 0, "Current page ID must be 0");
     // - second page
     wizard.next();
-    ErrorWidget * errorMessageLabel = wizard.sobolPage_->findChild<ErrorWidget*>();
+    const auto * errorMessageLabel = wizard.sobolPage_->findChild<ErrorWidget*>();
     QVERIFY2(wizard.currentId() == 1, "Current page ID must be 1");
     QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
     QVERIFY2(errorMessageLabel->toPlainText().isEmpty(), "Label must be empty");
@@ -97,55 +94,6 @@ private slots:
 
     bool analysisEquality = wizard.getAnalysis().getParameters() == analysis.getParameters();
     QVERIFY2(analysisEquality, "The two SobolAnalysis must be equal");
-  }
-
-
-  void TestSRC()
-  {
-    // create the analysis
-    SRCAnalysis analysis("analysis", model);
-
-    // create the wizard
-    SensitivityAnalysisWizard wizard(analysis);
-    wizard.show();
-
-    // checks
-
-    // - first page
-    QButtonGroup * buttonGroup = wizard.introPage_->findChild<QButtonGroup*>();
-    QVERIFY2(buttonGroup->checkedId() == SensitivityIntroPage::SRC, "Checked button must be SRC");
-    QVERIFY2(wizard.currentId() == 0, "Current page ID must be 0");
-    // - second page
-    wizard.next();
-    QVERIFY2(wizard.currentId() == 2, "Current page ID must be 2");
-    QVERIFY2(wizard.validateCurrentPage(), "Page must be valid");
-
-    QVERIFY2(wizard.nextId() == -1, "Next page ID must be -1");
-
-    bool analysisEquality = wizard.getAnalysis().getParameters() == analysis.getParameters();
-    QVERIFY2(analysisEquality, "The two SRCAnalysis must be equal");
-  }
-
-
-  void TestAnalysisModification()
-  {
-    // create the analysis
-    SobolAnalysis analysis("analysis", model);
-
-    // create the wizard
-    SensitivityAnalysisWizard wizard(analysis);
-    wizard.show();
-
-    // checks
-
-    // - first page
-    QButtonGroup * buttonGroup = wizard.introPage_->findChild<QButtonGroup*>();
-    buttonGroup->button(SensitivityIntroPage::SRC)->click();
-
-    QVERIFY2(wizard.nextId() == 2, "Next page ID must be 2");
-
-    bool analysisEquality = wizard.getAnalysis().getParameters() == SRCAnalysis("analysis", model).getParameters();
-    QVERIFY2(analysisEquality, "The two SRCAnalysis must be equal");
   }
 };
 }

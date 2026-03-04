@@ -21,28 +21,49 @@
 #ifndef PERSALYS_DESIGNOFEXPERIMENT_HXX
 #define PERSALYS_DESIGNOFEXPERIMENT_HXX
 
-#include "persalys/DesignOfExperimentImplementation.hxx"
+#include "persalys/DataModel.hxx"
 
 namespace PERSALYS
 {
-class PERSALYS_BASE_API DesignOfExperiment : public OT::TypedInterfaceObject<DesignOfExperimentImplementation>
+class DesignOfExperimentEvaluation;
+
+class PERSALYS_BASE_API DesignOfExperiment : public OT::TypedInterfaceObject<DataModel>
 {
   CLASSNAME
 
 public:
-  typedef OT::Pointer<DesignOfExperimentImplementation>       Implementation;
+  using Implementation = OT::Pointer<DataModel>;
+  using Type = DataModel::Type;
 
-  /** Default constructor */
-  DesignOfExperiment();
+  /** Constructor with parameters */
+  explicit DesignOfExperiment(const OT::String & name = "");
+
   /** Constructor with parameters */
   DesignOfExperiment(const OT::String & name, const PhysicalModel & physicalModel);
 
+  /** Constructor with parameters */
+  DesignOfExperiment(
+    const OT::String & name,
+    const ImportedDataset & importedDataset,
+    const OT::Description & inputNames = OT::Description(),
+    const OT::Description & outputNames = OT::Description());
+
+  /** Constructor with parameters */
+  DesignOfExperiment(
+    const OT::String & name,
+    const OT::Sample & inSample,
+    const OT::Sample & outSample);
+
   /** Default constructor */
-  DesignOfExperiment(const DesignOfExperimentImplementation & implementation);
+  DesignOfExperiment(const DataModel & implementation);
+
   /** Constructor from implementation */
   DesignOfExperiment(const Implementation & p_implementation);
+
   /** Constructor from implementation pointer */
-  DesignOfExperiment(DesignOfExperimentImplementation * p_implementation);
+  DesignOfExperiment(DataModel * p_implementation);
+
+  explicit DesignOfExperiment(const DesignOfExperimentEvaluation & eval);
 
   /** Comparison operator */
   OT::Bool operator ==(const DesignOfExperiment & other) const;
@@ -50,9 +71,12 @@ public:
 
   void addObserver(Observer * observer);
 
-  bool hasPhysicalModel() const;
+  void setName(const OT::String & name) override;
 
+  bool hasPhysicalModel() const;
   PhysicalModel getPhysicalModel() const;
+  void setPhysicalModel(const PhysicalModel & physicalModel);
+  void removePhysicalModel();
 
   OT::Sample getInputSample() const;
   OT::Sample getOutputSample() const;
@@ -65,6 +89,9 @@ public:
   OT::String getPythonScript() const;
 
   OT::Indices getEffectiveInputIndices() const;
+
+  void setType(Type type);
+  Type getType() const;
 
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const;

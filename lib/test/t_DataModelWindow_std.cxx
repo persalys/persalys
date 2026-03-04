@@ -39,7 +39,9 @@ private slots:
     Description outDesc(2);
     outDesc[0] = "out1";
     outDesc[1] = "out2";
-    model = new DataModel("model", "DataModelSample.csv", inCol, outCol, inDesc, outDesc);
+    ImportedDataset importedDataset("DataModelSample.csv", inCol, outCol);
+    model = new DataModel("model", importedDataset, inDesc, outDesc);
+    model->setType(DataModel::MC);
 
     Study aStudy;
     aStudy.add(model);
@@ -60,11 +62,11 @@ private slots:
     window.show();
 
     // get widgets
-    QTableView * variableTable = window.findChild<QTableView*>("variableTable");
-    DataModelTableModel * variableModel = static_cast<DataModelTableModel*>(variableTable->model());
-    CheckableHeaderView * headerView = dynamic_cast<CheckableHeaderView*>(variableTable->verticalHeader());
-    QTableView * rowIDTable = window.findChild<QTableView*>("rowIDTable");
-    QTableView * sampleTable = window.findChild<QTableView*>("sampleTable");
+    const auto * variableTable  = window.findChild<QTableView*>("variableTable");
+    const auto * variableModel  = static_cast<DataModelTableModel*>(variableTable->model());
+    const auto * headerView     = dynamic_cast<CheckableHeaderView*>(variableTable->verticalHeader());
+    const auto * rowIDTable     = window.findChild<QTableView*>("rowIDTable");
+    const auto * sampleTable    = window.findChild<QTableView*>("sampleTable");
 
     // check
     QVERIFY2(variableModel->rowCount() == 2, "one line in the variable table");
@@ -160,9 +162,9 @@ private slots:
     window.show();
 
     // get widgets
-    QTableView * variableTable = window.findChild<QTableView*>("variableTable");
-    DataModelTableModel * variableModel = static_cast<DataModelTableModel*>(variableTable->model());
-    QTableView * sampleTable = window.findChild<QTableView*>("sampleTable");
+    const auto * variableTable = window.findChild<QTableView*>("variableTable");
+    const auto * variableModel = static_cast<const DataModelTableModel*>(variableTable->model());
+    const auto * sampleTable = window.findChild<QTableView*>("sampleTable");
 
     // checks
 
@@ -179,7 +181,9 @@ private slots:
     Description outDesc(2);
     outDesc[0] = "outp1";
     outDesc[1] = "outp2";
+
     model->setColumns(inCol, inDesc, outCol, outDesc);
+    
     for (int i = 0; i < variableModel->columnCount(); ++i)
     {
       if (inCol.contains(i) || outCol.contains(i))

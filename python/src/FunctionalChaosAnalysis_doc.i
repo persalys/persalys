@@ -31,10 +31,11 @@ Create the design of experiments:
 >>> inputSample = ot.LHSExperiment(myPhysicalModel.getDistribution(), 250).generate()
 >>> aDesign.setOriginalInputSample(inputSample)
 >>> aDesign.run()
+>>> aDoE = persalys.DesignOfExperiment(aDesign)
 
 Create the Functional Chaos Analysis:
 
->>> chaos = persalys.FunctionalChaosAnalysis('chaos', aDesign)
+>>> chaos = persalys.FunctionalChaosAnalysis('chaos', aDoE)
 >>> chaos.setChaosDegree(6)
 >>> chaos.setSparseChaos(False)
 >>> chaos.setLeaveOneOutValidation(False)

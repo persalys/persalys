@@ -24,7 +24,6 @@
 #include "persalys/AnalysisWizard.hxx"
 #include "persalys/SensitivityIntroPage.hxx"
 #include "persalys/SobolPage.hxx"
-#include "persalys/SRCPage.hxx"
 
 namespace PERSALYS
 {
@@ -35,10 +34,9 @@ class PERSALYS_VIEW_API SensitivityAnalysisWizard : public AnalysisWizard
   friend class TestSensitivityAnalysisWizard;
 
 public:
-  enum {Page_Intro, Page_Sobol, Page_SRC};
-  enum Method {Sobol, SRC};
+  enum {Page_Intro, Page_Sobol};
 
-  SensitivityAnalysisWizard(const Analysis& analysis, QWidget* parent = 0);
+  explicit SensitivityAnalysisWizard(const Analysis& analysis, QWidget* parent = nullptr);
 
   Analysis getAnalysis() const override;
   int nextId() const override;
@@ -49,7 +47,6 @@ protected:
 private:
   SensitivityIntroPage * introPage_;
   SobolPage * sobolPage_;
-  SRCPage * srcPage_;
 };
 }
 #endif

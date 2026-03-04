@@ -1,4 +1,4 @@
-class=DataModel name=myDataModel fileName=data1.csv inputColumns=[0,2,3] outputColumns=[] inputNames=[X0,X2,X3] outputNames=[]
+class=DataModel name=myDataModel importedDataset= fileName=data1.csv inputColumns=[0,2,3] outputColumns=[] physicalModel=false inputNames=[X0,X2,X3] outputNames=[] type=UK
 class=InferenceAnalysis name=analysis designOfExperiment=myDataModel interestVariables=[X0,X3] level=0.1 interestVariable X0 distributionFactories=[NormalFactory] interestVariable X3 distributionFactories=[NormalFactory,GumbelFactory]
 result= class=InferenceResult FittingTestResultCollection=[class=FittingTestResult variableName=X0 testedDistributions=[Normal(mu = -0.0698719, sigma = 0.948364)] paramConfidenceInterval=[[-0.192328, 0.0525837]
 [0.861954, 1.03531]] testResults=[class=TestResult name=Unnamed type=Kolmogorov Normal binaryQualityMeasure=true p-value threshold=0.1 p-value=0.927898 statistic=0.0309239 description=[Normal(mu = -0.0698719, sigma = 0.948364) vs sample Unnamed]] bicResults=class=Point name=Unnamed dimension=1 values=[2.76653] error messages=[],class=FittingTestResult variableName=X3 testedDistributions=[Normal(mu = 0.651858, sigma = 1.37028),Gumbel(beta = 1.0684, gamma = 0.0351576)] paramConfidenceInterval=[[0.474923, 0.828793]
@@ -21,12 +21,11 @@ import openturns as ot
 import persalys
 
 myStudy = persalys.Study('myStudy')
-persalys.Study.Add(myStudy)
-inputColumns = [0, 2, 3]
-outputColumns = []
 inputNames = ['X0', 'X2', 'X3']
 outputNames = []
-myDataModel = persalys.DataModel('myDataModel', 'data1.csv', inputColumns, outputColumns, inputNames, outputNames)
+myDataModelImportedDataset = persalys.ImportedDataset('data1.csv', [0,2,3], [])
+myDataModel = persalys.DataModel('myDataModel', myDataModelImportedDataset, inputNames, outputNames)
+myDataModel.setType(persalys.DataModel.UK)
 myStudy.add(myDataModel)
 analysis = persalys.InferenceAnalysis('analysis', myDataModel)
 interestVariables = ['X0', 'X3']
@@ -46,4 +45,5 @@ factories = [ot.NormalFactory(), ot.GumbelFactory()]
 analysis2.setDistributionsFactories('X3', factories)
 analysis2.setLevel(0.1)
 myStudy.add(analysis2)
+persalys.Study.Add(myStudy)
 

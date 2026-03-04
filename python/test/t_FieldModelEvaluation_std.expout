@@ -50,7 +50,6 @@ import openturns as ot
 import persalys
 
 Study_0 = persalys.Study('Study_0')
-persalys.Study.Add(Study_0)
 t = persalys.Variable('t', 0, '')
 meshModel = persalys.GridMeshModel([t], ot.Interval([0], [12]), [20])
 z0 = persalys.Input('z0', 100, '')
@@ -72,4 +71,5 @@ analysis2 = persalys.FieldModelEvaluation('analysis2', PhysicalModel_1, values)
 interestVariables = ['z2']
 analysis2.setInterestVariables(interestVariables)
 Study_0.add(analysis2)
+persalys.Study.Add(Study_0)
 

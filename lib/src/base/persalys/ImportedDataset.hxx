@@ -18,8 +18,8 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifndef PERSALYS_DATAIMPORT_HXX
-#define PERSALYS_DATAIMPORT_HXX
+#ifndef PERSALYS_IMPORTEDDATASET_HXX
+#define PERSALYS_IMPORTEDDATASET_HXX
 
 #include "persalys/PersalysPrivate.hxx"
 #include "persalys/BaseTools.hxx"
@@ -28,49 +28,55 @@
 
 namespace PERSALYS
 {
-class PERSALYS_BASE_API DataImport
+class PERSALYS_BASE_API ImportedDataset final : public OT::PersistentObject
 {
+  CLASSNAME
+
 public:
 
   /** Default constructor */
-  DataImport() = default;
+  ImportedDataset() = default;
 
   /** Constructor with parameters */
-  DataImport(const OT::String & fileName,
-             const OT::Indices & inputColumns,
-             const OT::Indices & outputColumns = OT::Indices());
+  ImportedDataset(const OT::String & fileName,
+                  const OT::Indices & inputColumns,
+                  const OT::Indices & outputColumns = OT::Indices());
 
-  virtual ~DataImport() = default;
+  /** Virtual constructor */
+  ImportedDataset * clone() const override;
 
   OT::String getFileName() const;
-  void setFileName(const OT::String& fileName,
+  bool setFileName(const OT::String& fileName,
                    const Tools::DataOrder order = Tools::DataOrder::Columns);
 
   OT::Indices getInputColumns() const;
   OT::Indices getOutputColumns() const;
 
   OT::Sample getSampleFromFile() const;
+  void setSampleFromFile(const OT::Sample & sample);
+
+  void setColumns(const OT::Indices & inputColumns, const OT::Indices & outputColumns);
+  void setNames(const OT::Description & inputNames, const OT::Description & outputNames);
 
   /** String converter */
-  virtual OT::String __repr__() const;
+  OT::String __repr__() const override;
 
   /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const;
+  void save(OT::Advocate & adv) const override;
 
   /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv);
+  void load(OT::Advocate & adv) override;
 
-protected:
-  virtual void setColumns(const OT::Indices & inputColumns, const OT::Indices & outputColumns);
-  virtual OT::Sample importSample(const OT::String& fileName, const Tools::DataOrder order = Tools::DataOrder::Columns);
-  virtual void check();
-  virtual void setDefaultColumns();
+private:
+  void check();
+  void setDefaultColumns();
 
-protected:
+private:
   OT::String fileName_;
   OT::Indices outputColumns_;
   OT::Indices inputColumns_;
   OT::Sample sampleFromFile_;
+  Tools::DataOrder dataOrder_; // for saving purpose only
 };
 }
 #endif

@@ -88,6 +88,8 @@ void DistributionsForInferenceWidget::buildInterface()
   // add button
   addComboBox_ = new TitledComboBox(QIcon(":/images/list-add.png"), tr("Add"));
   addComboBox_->addItems(notUsedDistributions);
+  addComboBox_->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
+  addComboBox_->setMinimumContentsLength(10);
   buttonsLayout->addWidget(addComboBox_);
 
   connect(addComboBox_, SIGNAL(textActivated(QString)), tableModel_, SLOT(appendDistribution(QString)));

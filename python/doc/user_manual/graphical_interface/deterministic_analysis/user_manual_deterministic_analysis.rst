@@ -1,3 +1,5 @@
+.. _deterministic_analyses:
+
 ====================================
 User manual - Deterministic analyses
 ====================================
@@ -503,23 +505,23 @@ the evaluation point and the corresponding output values.
 .. image:: /user_manual/graphical_interface/deterministic_analysis/modelEvaluationResults.png
     :align: center
 
-3- Screening
+3- Morris Screening
 ===================
 
 The interface proposes one method of screening, the `Morris method <http://openturns.github.io/otmorris/master/user_manual/user_manual.html>`_.
 
-New screening analysis can be created thanks to:
-  - the **Screening** item in the context menu of the relevant model in the study tree
+New morris analysis can be created thanks to:
+  - the **Morris** item in the context menu of the relevant model in the study tree
 
     .. image:: /user_manual/graphical_interface/physical_model/physicalModelDefinitionContextMenu.png
         :align: center
 
-  - the **Screening** box of the model diagram
+  - the **Morris** box of the model diagram
 
     .. image:: /user_manual/graphical_interface/deterministic_analysis/deterministicBoxes.png
         :align: center
 
-  - the **New Analysis** item in the context menu of the **Screening** section
+  - the **New Analysis** item in the context menu of the **Morris** sections
 
 .. _screeningwizard:
 
@@ -673,7 +675,7 @@ The results window gathers several tabs:
 
 - The **Model** tab shows the model content used to perform the analysis.
 
-.. _screeningresultwizard:
+.. _morrisresultwizard:
 
 3-4 Use results
 ''''''''''''''''''

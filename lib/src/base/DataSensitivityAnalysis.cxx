@@ -33,7 +33,7 @@ namespace PERSALYS
 {
 CLASSNAMEINIT(DataSensitivityAnalysis)
 
-static Factory<DataSensitivityAnalysis> Factory_DataSensitivityAnalysis;
+const static Factory<DataSensitivityAnalysis> Factory_DataSensitivityAnalysis;
 
 DataSensitivityAnalysis::DataSensitivityAnalysis()
   : DesignOfExperimentAnalysis()
@@ -224,6 +224,9 @@ bool DataSensitivityAnalysis::CanBeLaunched(String &errorMessage, const DesignOf
   if (!DesignOfExperimentAnalysis::CanBeLaunched(errorMessage, doe))
     return false;
   // doe must have in/output data
+  DataModel::Type type = doe.getType();
+  if (!(type == DataModel::MC || type == DataModel::QMC || type == DataModel::OLHS || type == DataModel::RLHS))
+    errorMessage = "The design of experiment must be of type MC, QMC or LHS.";
   if (!doe.getOutputSample().getSize() || !doe.getInputSample().getSize())
     errorMessage = "The sample must contain data for input and output variables.";
   if (doe.getInputSample().getDimension() < 2)

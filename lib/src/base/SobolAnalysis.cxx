@@ -307,6 +307,7 @@ void SobolAnalysis::launch()
   Sample outSample = function.getOutputHistory();
   outSample.setDescription(function.getOutputDescription());
   doe.setOutputSample(outSample);
+  doe.setPhysicalModel(getPhysicalModel());
   
   result_.setDesignOfExperiment(doe);
 

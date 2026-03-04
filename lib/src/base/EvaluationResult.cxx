@@ -29,7 +29,7 @@ namespace PERSALYS
 
 CLASSNAMEINIT(EvaluationResult)
 
-static Factory<EvaluationResult> Factory_EvaluationResult;
+const static Factory<EvaluationResult> Factory_EvaluationResult;
 
 /* Default constructor */
 EvaluationResult::EvaluationResult()

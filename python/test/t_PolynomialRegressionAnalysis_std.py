@@ -34,8 +34,10 @@ myStudy.add(aDesign)
 
 aDesign.run()
 
+aDoe = myStudy.addDoEAsDataSet(aDesign)
+
 # LM
-analysis = persalys.PolynomialRegressionAnalysis("lm_0", aDesign)
+analysis = persalys.PolynomialRegressionAnalysis("lm_0", aDoe)
 analysis.setDegree(2)
 analysis.setInteraction(True)
 analysis.setDirection(ot.LinearModelStepwiseAlgorithm.FORWARD)
@@ -74,9 +76,8 @@ assert os.path.exists(path_py)
 shutil.rmtree(temp_path)
 
 # boston price model
-datamodel = persalys.DataModel(
-    "datamodel", "Housing-prices-Boston.csv", range(13), [13]
-)
+importedDataset = persalys.ImportedDataset("Housing-prices-Boston.csv", range(13), [13])
+datamodel = persalys.DataModel("datamodel", importedDataset)
 myStudy.add(datamodel)
 analysis2 = persalys.PolynomialRegressionAnalysis("lm_1", datamodel)
 analysis2.setDegree(2)

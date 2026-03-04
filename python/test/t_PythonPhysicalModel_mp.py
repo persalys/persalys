@@ -65,6 +65,7 @@ except Exception as e:
     print("Error on the line 4 : %s" % ("line 4" in str(e)))
 
 # script
+model.setCode(code)
 script = myStudy.getPythonScript()
 print(script)
 exec(script)

@@ -34,7 +34,7 @@ namespace PERSALYS
 
 CLASSNAMEINIT(FunctionalChaosAnalysis)
 
-static Factory<FunctionalChaosAnalysis> Factory_FunctionalChaosAnalysis;
+const static Factory<FunctionalChaosAnalysis> Factory_FunctionalChaosAnalysis;
 
 /* Default constructor */
 FunctionalChaosAnalysis::FunctionalChaosAnalysis()
@@ -46,13 +46,6 @@ FunctionalChaosAnalysis::FunctionalChaosAnalysis()
 /* Constructor with parameters */
 FunctionalChaosAnalysis::FunctionalChaosAnalysis(const String& name, const DesignOfExperiment& designOfExperiment)
   : MetaModelAnalysis(name, designOfExperiment)
-{
-}
-
-
-/* Constructor with parameters */
-FunctionalChaosAnalysis::FunctionalChaosAnalysis(const String& name, const Analysis& analysis)
-  : MetaModelAnalysis(name, analysis)
 {
 }
 
@@ -136,10 +129,10 @@ void FunctionalChaosAnalysis::initialize()
 void FunctionalChaosAnalysis::launch()
 {
   // get effective samples
-  const Sample effectiveInputSample(getEffectiveInputSample());
-  const Sample effectiveOutputSample(getEffectiveOutputSample());
-  const UnsignedInteger outputDimension = effectiveOutputSample.getDimension();
-  const Description outputVariables(effectiveOutputSample.getDescription());
+  const Sample effectiveInputSample{getEffectiveInputSample()};
+  const Sample effectiveOutputSample{getEffectiveOutputSample()};
+  const UnsignedInteger outputDimension{effectiveOutputSample.getDimension()};
+  const Description outputVariables{effectiveOutputSample.getDescription()};
 
   // check
   if (designOfExperiment_.getInputSample().getSize() * designOfExperiment_.getOutputSample().getSize() == 0)
@@ -154,7 +147,6 @@ void FunctionalChaosAnalysis::launch()
   for (UnsignedInteger i = 0; i < outputDimension; ++ i)
     if (!(stddev[i] > 0.0))
       throw InvalidArgumentException(HERE) << "No variance for output variable " << outputVariables[i];
-
 
 
   // check chaos degree

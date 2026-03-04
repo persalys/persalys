@@ -36,7 +36,7 @@ class PERSALYS_VIEW_API SobolPage : public QWizardPage
   Q_OBJECT
 
 public:
-  SobolPage(QWidget* parent = 0);
+  explicit SobolPage(QWidget* parent = nullptr);
 
   void initialize(const Analysis& analysis);
   Analysis getAnalysis(const OT::String& name, const PhysicalModel& physicalModel) const;
@@ -51,13 +51,13 @@ public slots:
   void updateNumberSimulations(double);
 
 private:
-  OT::UnsignedInteger numberStochasticVariables_;
-  StopCriteriaGroupBox * stopCriteriaGroupBox_ = nullptr;
-  BlockSizeGroupBox * blockSizeGroupBox_ = nullptr;
-  QLabel * totalNbSimuLabel_ = nullptr;
-  DoubleSpinBox * confidenceLevelSpinbox_ = nullptr;
-  QSpinBox * seedSpinbox_ = nullptr;
-  ErrorWidget * errorWidget_ = nullptr;
+  OT::UnsignedInteger     numberStochasticVariables_;
+  StopCriteriaGroupBox  * stopCriteriaGroupBox_       = nullptr;
+  BlockSizeGroupBox     * blockSizeGroupBox_          = nullptr;
+  QLabel                * totalNbSimuLabel_           = nullptr;
+  DoubleSpinBox         * confidenceLevelSpinbox_     = nullptr;
+  QSpinBox              * seedSpinbox_                = nullptr;
+  ErrorWidget           * errorWidget_                = nullptr;
 };
 }
 #endif

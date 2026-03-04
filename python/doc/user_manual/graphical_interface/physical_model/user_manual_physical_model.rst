@@ -422,3 +422,6 @@ Second order centered finite difference scheme:
                                         f_k(x - \epsilon_i - \epsilon_j) -
                                         f_k(x - \epsilon_i + \epsilon_j)}
                                      {4 \epsilon_i \epsilon_j}
+
+Documentation on the analyses that can be performed with a physical model is available
+in the :ref:`Deterministic analyses <deterministic_analyses>` and :ref:`Probabilistic analyses <probabilistic_analyses>` sections.

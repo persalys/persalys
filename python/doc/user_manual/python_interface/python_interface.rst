@@ -165,6 +165,7 @@ Data analysis
     DataAnalysisResult
     DataSensitivityAnalysis
     DataSensitivityAnalysisResult
+    ImportedDataset
     InferenceAnalysis
     InferenceResult
     FittingTestResult

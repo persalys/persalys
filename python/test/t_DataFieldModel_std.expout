@@ -127,7 +127,6 @@ import openturns as ot
 import persalys
 
 myStudy = persalys.Study('myStudy')
-persalys.Study.Add(myStudy)
 t = persalys.Variable('t', 0, 'date')
 meshModel = persalys.GridMeshModel([t], ot.Interval([1], [12]), [12])
 collection = [[[21.7], [20.74], [20.52], [19.82], [20.19], [20.46], [21.92], [25.13], [25.44], [25.9], [25.29], [24.9]],
@@ -192,4 +191,5 @@ myAnalysis = persalys.FieldKarhunenLoeveAnalysis('myAnalysis', myModel)
 myAnalysis.setKarhunenLoeveThreshold(1e-05)
 myAnalysis.setQuantileLevel(0.05)
 myStudy.add(myAnalysis)
+persalys.Study.Add(myStudy)
 

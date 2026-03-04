@@ -35,6 +35,7 @@
 #include "persalys/CalibrationAnalysis.hxx"
 #include "persalys/CouplingPhysicalModel.hxx"
 #include "persalys/DataFieldModel.hxx"
+#include "persalys/Observations.hxx"
 
 #ifdef PERSALYS_HAVE_OTFMI
 #include "persalys/FMIPhysicalModel.hxx"
@@ -294,7 +295,11 @@ void StudyItem::emitClose()
 
 void StudyItem::appendItem(const DesignOfExperiment &dataModel)
 {
-  if (!dataModel.hasPhysicalModel())
+  bool isObservation = false;
+  if (dynamic_cast<Observations *>(dataModel.getImplementation().get()))
+    isObservation = true;
+
+  if (!isObservation)
   {
     DataModelDiagramItem * newItem = new DataModelDiagramItem(dataModel);
     Item * titleItem = getTitleItemNamed("DataModel");

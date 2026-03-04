@@ -26,70 +26,70 @@ namespace PERSALYS
 DataModelDiagramWindow::DataModelDiagramWindow(DataModelDiagramItem * dataModelDiagramItem, QWidget * parent)
   : DiagramWindow(dataModelDiagramItem, parent)
 {
-  titleLabel_->setDocLink("user_manual/graphical_interface/data_model/user_manual_data_model.html#datamodeldiagram");
+  titleLabel_->setDocLink("user_manual/graphical_interface/data_model/user_manual_data_set.html#datamodeldiagram");
 
   int row = 0;
 
-  DiagramPushButton * modelDefinitionButton = new DiagramPushButton;
+  auto * modelDefinitionButton = new DiagramPushButton;
   modelDefinitionButton->setText(tr("Model\ndefinition"));
   modelDefinitionButton->setWhatsThis(tr("Import a data file and define the input and output variables"));
-  connect(modelDefinitionButton, SIGNAL(clicked(bool)), dataModelDiagramItem, SLOT(appendDataModelItem()));
+  connect(modelDefinitionButton, &QPushButton::clicked, dataModelDiagramItem, &DataModelDiagramItem::appendDataModelItem);
 
   appendButton(modelDefinitionButton, row);
 
-  DiagramPushButton * dataAnalysisButton = new DiagramPushButton;
+  auto * dataAnalysisButton = new DiagramPushButton;
   dataAnalysisButton->setText(tr("Data\nanalysis"));
   dataAnalysisButton->setWhatsThis(tr("Analyse each variable"));
-  connect(dataAnalysisButton, SIGNAL(clicked(bool)), dataModelDiagramItem->newDataAnalysis_, SIGNAL(triggered()));
-  connect(dataModelDiagramItem, SIGNAL(dataSizeValidityChanged(bool, QString)), dataAnalysisButton, SLOT(setEnabled(bool, QString)));
+  connect(dataAnalysisButton, &QPushButton::clicked, dataModelDiagramItem->newDataAnalysis_, &QAction::triggered);
+  connect(dataModelDiagramItem, &DataModelDiagramItem::dataSizeValidityChanged, dataAnalysisButton, &DiagramPushButton::setEnabled);
 
   appendButton(dataAnalysisButton, row, modelDefinitionButton);
 
-  DiagramPushButton * sensitivityAnalysisButton = new DiagramPushButton;
+  auto * sensitivityAnalysisButton = new DiagramPushButton;
   sensitivityAnalysisButton->setText(tr("Sensitivity\nanalysis"));
   sensitivityAnalysisButton->setWhatsThis(tr("Compute Rank Sobol' indices"));
-  connect(sensitivityAnalysisButton, SIGNAL(clicked(bool)), dataModelDiagramItem->newDataSensitivityAnalysis_, SIGNAL(triggered()));
-  connect(dataModelDiagramItem, SIGNAL(dataSensitivityValidityChanged(bool, QString)), sensitivityAnalysisButton, SLOT(setEnabled(bool, QString)));
+  connect(sensitivityAnalysisButton, &QPushButton::clicked, dataModelDiagramItem->newDataSensitivityAnalysis_, &QAction::triggered);
+  connect(dataModelDiagramItem, &DataModelDiagramItem::dataSensitivityValidityChanged, sensitivityAnalysisButton, &DiagramPushButton::setEnabled);
 
   appendButton(sensitivityAnalysisButton, ++row, modelDefinitionButton);
 
-  DiagramPushButton * quantileAnalysisButton = new DiagramPushButton;
+  auto * quantileAnalysisButton = new DiagramPushButton;
   quantileAnalysisButton->setText(tr("Quantile\nanalysis"));
   quantileAnalysisButton->setWhatsThis(tr("Estimate quantiles"));
-  connect(quantileAnalysisButton, SIGNAL(clicked(bool)), dataModelDiagramItem->newQuantileAnalysis_, SIGNAL(triggered()));
-  connect(dataModelDiagramItem, SIGNAL(dataModelValidityChanged(bool, QString)), quantileAnalysisButton, SLOT(setEnabled(bool, QString)));
+  connect(quantileAnalysisButton, &QPushButton::clicked, dataModelDiagramItem->newQuantileAnalysis_, &QAction::triggered);
+  connect(dataModelDiagramItem, &DataModelDiagramItem::dataModelValidityChanged, quantileAnalysisButton, &DiagramPushButton::setEnabled);
 
   appendButton(quantileAnalysisButton, ++row, modelDefinitionButton);
 
-  DiagramPushButton * inferenceButton = new DiagramPushButton;
+  auto * inferenceButton = new DiagramPushButton;
   inferenceButton->setText(tr("Marginals\ninference"));
   inferenceButton->setWhatsThis(tr("Make an inference analysis for variables with given distributions"));
-  connect(inferenceButton, SIGNAL(clicked(bool)), dataModelDiagramItem->newInferenceAnalysis_, SIGNAL(triggered()));
-  connect(dataModelDiagramItem, SIGNAL(dataSizeValidityChanged(bool, QString)), inferenceButton, SLOT(setEnabled(bool, QString)));
+  connect(inferenceButton, &QPushButton::clicked, dataModelDiagramItem->newInferenceAnalysis_, &QAction::triggered);
+  connect(dataModelDiagramItem, &DataModelDiagramItem::inferenceValidityChanged, inferenceButton, &DiagramPushButton::setEnabled);
 
   appendButton(inferenceButton, ++row, modelDefinitionButton);
 
-  DiagramPushButton * copulaInferenceButton = new DiagramPushButton;
+  auto * copulaInferenceButton = new DiagramPushButton;
   copulaInferenceButton->setText(tr("Dependence\ninference"));
   copulaInferenceButton->setWhatsThis(tr("Test the dependence of the variables"));
-  connect(copulaInferenceButton, SIGNAL(clicked(bool)), dataModelDiagramItem->newCopulaInferenceAnalysis_, SIGNAL(triggered()));
-  connect(dataModelDiagramItem, SIGNAL(dependenciesValidityChanged(bool, QString)), copulaInferenceButton, SLOT(setEnabled(bool, QString)));
+  connect(copulaInferenceButton, &QPushButton::clicked, dataModelDiagramItem->newCopulaInferenceAnalysis_, &QAction::triggered);
+  connect(dataModelDiagramItem, &DataModelDiagramItem::dependenciesValidityChanged, copulaInferenceButton, &DiagramPushButton::setEnabled);
 
   appendButton(copulaInferenceButton, ++row, modelDefinitionButton);
 
-  DiagramPushButton * metamodelButton = new DiagramPushButton;
+  auto * metamodelButton = new DiagramPushButton;
   metamodelButton->setText(tr("Metamodel\ncreation"));
   metamodelButton->setWhatsThis(tr("Build a computationally cheap approximation model from input-output data"));
-  connect(metamodelButton, SIGNAL(clicked(bool)), dataModelDiagramItem->newMetaModel_, SIGNAL(triggered()));
-  connect(dataModelDiagramItem, SIGNAL(metaModelValidityChanged(bool, QString)), metamodelButton, SLOT(setEnabled(bool, QString)));
+  connect(metamodelButton, &QPushButton::clicked, dataModelDiagramItem->newMetaModel_, &QAction::triggered);
+  connect(dataModelDiagramItem, &DataModelDiagramItem::metaModelValidityChanged, metamodelButton, &DiagramPushButton::setEnabled);
 
   appendButton(metamodelButton, ++row, modelDefinitionButton);
 
-  DiagramPushButton * metamodelExportButton = new DiagramPushButton;
+  auto * metamodelExportButton = new DiagramPushButton;
   metamodelExportButton->setText(tr("Export\nas model"));
   metamodelExportButton->setWhatsThis(tr("Export metamodel as model"));
-  connect(dataModelDiagramItem, SIGNAL(metamodelNumberValidityChanged(bool, QString)), metamodelExportButton, SLOT(setEnabled(bool, QString)));
-  connect(metamodelExportButton, SIGNAL(clicked(bool)), dataModelDiagramItem, SLOT(requestMetaModelExport()));
+  connect(dataModelDiagramItem, &DataModelDiagramItem::metamodelNumberValidityChanged, metamodelExportButton, &DiagramPushButton::setEnabled);
+  connect(metamodelExportButton, &QPushButton::clicked, dataModelDiagramItem, &DataModelDiagramItem::requestMetaModelExport);
 
   appendButton(metamodelExportButton, row, metamodelButton);
 

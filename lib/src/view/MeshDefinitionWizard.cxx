@@ -133,7 +133,7 @@ void MeshDefinitionWizard::buildInterface()
   {
     importButton->click();
     importedMesh_ = *importedMeshModel;
-    sampleWidget_->setData(QString::fromUtf8(importedMeshModel->getFileName().c_str()));
+    sampleWidget_->setData(QString::fromUtf8(importedMeshModel->getImportedDataset().getFileName().c_str()));
   }
   else if (gridMeshModel)
   {
@@ -160,9 +160,9 @@ void MeshDefinitionWizard::resizeEvent(QResizeEvent* event)
 void MeshDefinitionWizard::setTable(const QString& fileName)
 {
   importedMesh_.setMeshFilename(fileName.toUtf8().data());
-  sampleWidget_->updateWidgets(importedMesh_.getSampleFromFile(),
+  sampleWidget_->updateWidgets(importedMesh_.getImportedDataset().getSampleFromFile(),
                               Description(1, mesh_.getIndexParameters()[0].getName()),
-                              importedMesh_.getInputColumns());
+                              importedMesh_.getImportedDataset().getInputColumns());
 }
 
 
@@ -177,11 +177,12 @@ void MeshDefinitionWizard::checkColumns()
     sampleWidget_->tableValidity_ = true;
     sampleWidget_->errorWidget_->reset();
   }
-  catch (const InvalidArgumentException &)
+  catch (const InvalidArgumentException &e)
   {
     sampleWidget_->errorWidget_->setFramelessErrorMessage(tr("The parameter must be associated with one column."));
     sampleWidget_->tableValidity_ = false;
   }
+
 }
 
 
@@ -195,7 +196,7 @@ MeshModel MeshDefinitionWizard::getMesh() const
   }
   else
   {
-    newMesh = ImportedMeshModel(importedMesh_.getFileName(), mesh_.getIndexParameters());
+    newMesh = ImportedMeshModel(importedMesh_.getImportedDataset().getFileName(), mesh_.getIndexParameters());
   }
   return newMesh;
 }

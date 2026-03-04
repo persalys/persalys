@@ -354,6 +354,7 @@ void FunctionalChaosResultWindow::addSobolTab(QTabWidget * tabWidget, const Vari
         result_.getSobolResult().getInputNames(),
         result_.getSobolResult().getOutputNames()[i],
         SensitivityResultWidget::Sobol,
+        DesignOfExperiment::Type::UK,
         this);
     sobolStackedWidget->addWidget(sobolResultWidget);
   }

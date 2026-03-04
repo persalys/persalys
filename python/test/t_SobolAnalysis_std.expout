@@ -16,7 +16,6 @@ import openturns as ot
 import persalys
 
 myStudy = persalys.Study('myStudy')
-persalys.Study.Add(myStudy)
 dist_x0 = ot.Normal(0, 1)
 x0 = persalys.Input('x0', 0, dist_x0, '')
 dist_x1 = ot.Normal(0, 1)
@@ -63,4 +62,5 @@ aSobol3.setReplicationSize(200)
 aSobol3.setSeed(2)
 aSobol3.setConfidenceLevel(0.95)
 myStudy.add(aSobol3)
+persalys.Study.Add(myStudy)
 

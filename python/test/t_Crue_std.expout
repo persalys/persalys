@@ -4,7 +4,6 @@ import openturns as ot
 import persalys
 
 myStudy = persalys.Study('myStudy')
-persalys.Study.Add(myStudy)
 dist_Q = ot.Gumbel(0.00179211, 1013)
 Q = persalys.Input('Q', 1000, dist_Q, 'Debit maximal annuel (m3/s)')
 dist_Ks = ot.Normal(30, 7.5)
@@ -44,4 +43,5 @@ optimizationAlgo.setMaximumResidualError(1e-05)
 optimizationAlgo.setMaximumConstraintError(1e-05)
 myformIS.setOptimizationAlgorithm(optimizationAlgo)
 myStudy.add(myformIS)
+persalys.Study.Add(myStudy)
 

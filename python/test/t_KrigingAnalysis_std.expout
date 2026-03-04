@@ -1,13 +1,12 @@
-class=KrigingAnalysis name=kriging_0 designOfExperiment=design interestVariables=[y0] analyticalValidation=true testSampleValidation=false kFoldValidation=false leaveOneOutValidation=false test sample parameters=class=PointWithDescription name=Unnamed dimension=2 description=[Percentage,Seed] values=[20,0] k-Fold parameters=class=PointWithDescription name=Unnamed dimension=2 description=[Number of folds,Seed] values=[5,0] basis=class=Basis coll=[class=Function name=Unnamed implementation=class=FunctionImplementation name=Unnamed description=[x0,x1,y0] evaluationImplementation=class=ConstantEvaluation name=Unnamed constant=class=Point name=Unnamed dimension=1 values=[1] gradientImplementation=class=ConstantGradient name=Unnamed constant=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=2 columns=1 values=[0,0] hessianImplementation=class=NullHessian name=Unnamed inputDimension=2 outputDimension=1,class=Function name=Unnamed implementation=class=FunctionImplementation name=Unnamed description=[x0,x1,y0] evaluationImplementation=class=LinearEvaluation name=Unnamed center=class=Point name=Unnamed dimension=2 values=[0,0] constant=class=Point name=Unnamed dimension=1 values=[0] linear=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=2 columns=1 values=[1,0] gradientImplementation=class=ConstantGradient name=Unnamed constant=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=2 columns=1 values=[1,0] hessianImplementation=class=NullHessian name=Unnamed inputDimension=2 outputDimension=1,class=Function name=Unnamed implementation=class=FunctionImplementation name=Unnamed description=[x0,x1,y0] evaluationImplementation=class=LinearEvaluation name=Unnamed center=class=Point name=Unnamed dimension=2 values=[0,0] constant=class=Point name=Unnamed dimension=1 values=[0] linear=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=2 columns=1 values=[0,1] gradientImplementation=class=ConstantGradient name=Unnamed constant=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=2 columns=1 values=[0,1] hessianImplementation=class=NullHessian name=Unnamed inputDimension=2 outputDimension=1] covarianceModel=class=MaternModel scale=class=Point name=Unnamed dimension=2 values=[1,1] amplitude=class=Point name=Unnamed dimension=1 values=[1] nu=1.5 optimizeParameters=true
-class=KrigingAnalysis name=kriging_1 designOfExperiment=design interestVariables=[y1,y0] analyticalValidation=true testSampleValidation=false kFoldValidation=false leaveOneOutValidation=false test sample parameters=class=PointWithDescription name=Unnamed dimension=2 description=[Percentage,Seed] values=[20,0] k-Fold parameters=class=PointWithDescription name=Unnamed dimension=2 description=[Number of folds,Seed] values=[5,0] basis=class=Basis coll=[class=Function name=Unnamed implementation=class=FunctionImplementation name=Unnamed description=[x0,x1,y0] evaluationImplementation=class=ConstantEvaluation name=Unnamed constant=class=Point name=Unnamed dimension=1 values=[1] gradientImplementation=class=ConstantGradient name=Unnamed constant=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=2 columns=1 values=[0,0] hessianImplementation=class=NullHessian name=Unnamed inputDimension=2 outputDimension=1] covarianceModel=class=SquaredExponential scale=class=Point name=Unnamed dimension=2 values=[1,1] amplitude=class=Point name=Unnamed dimension=1 values=[1] optimizeParameters=true
-class=KrigingAnalysis name=kriging_2 designOfExperiment=design interestVariables=[y0] analyticalValidation=true testSampleValidation=false kFoldValidation=false leaveOneOutValidation=false test sample parameters=class=PointWithDescription name=Unnamed dimension=2 description=[Percentage,Seed] values=[20,0] k-Fold parameters=class=PointWithDescription name=Unnamed dimension=2 description=[Number of folds,Seed] values=[5,0] basis=class=Basis coll=[class=Function name=Unnamed implementation=class=FunctionImplementation name=Unnamed description=[x0,x1,y0] evaluationImplementation=class=ConstantEvaluation name=Unnamed constant=class=Point name=Unnamed dimension=1 values=[1] gradientImplementation=class=ConstantGradient name=Unnamed constant=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=2 columns=1 values=[0,0] hessianImplementation=class=NullHessian name=Unnamed inputDimension=2 outputDimension=1] covarianceModel=class=SquaredExponential scale=class=Point name=Unnamed dimension=2 values=[1,1] amplitude=class=Point name=Unnamed dimension=1 values=[1] optimizeParameters=false
+class=KrigingAnalysis name=kriging_0 designOfExperiment=design_0 interestVariables=[y0] analyticalValidation=true testSampleValidation=false kFoldValidation=false leaveOneOutValidation=false test sample parameters=class=PointWithDescription name=Unnamed dimension=2 description=[Percentage,Seed] values=[20,0] k-Fold parameters=class=PointWithDescription name=Unnamed dimension=2 description=[Number of folds,Seed] values=[5,0] basis=class=Basis coll=[class=Function name=Unnamed implementation=class=FunctionImplementation name=Unnamed description=[x0,x1,y0] evaluationImplementation=class=ConstantEvaluation name=Unnamed constant=class=Point name=Unnamed dimension=1 values=[1] gradientImplementation=class=ConstantGradient name=Unnamed constant=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=2 columns=1 values=[0,0] hessianImplementation=class=NullHessian name=Unnamed inputDimension=2 outputDimension=1,class=Function name=Unnamed implementation=class=FunctionImplementation name=Unnamed description=[x0,x1,y0] evaluationImplementation=class=LinearEvaluation name=Unnamed center=class=Point name=Unnamed dimension=2 values=[0,0] constant=class=Point name=Unnamed dimension=1 values=[0] linear=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=2 columns=1 values=[1,0] gradientImplementation=class=ConstantGradient name=Unnamed constant=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=2 columns=1 values=[1,0] hessianImplementation=class=NullHessian name=Unnamed inputDimension=2 outputDimension=1,class=Function name=Unnamed implementation=class=FunctionImplementation name=Unnamed description=[x0,x1,y0] evaluationImplementation=class=LinearEvaluation name=Unnamed center=class=Point name=Unnamed dimension=2 values=[0,0] constant=class=Point name=Unnamed dimension=1 values=[0] linear=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=2 columns=1 values=[0,1] gradientImplementation=class=ConstantGradient name=Unnamed constant=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=2 columns=1 values=[0,1] hessianImplementation=class=NullHessian name=Unnamed inputDimension=2 outputDimension=1] covarianceModel=class=MaternModel scale=class=Point name=Unnamed dimension=2 values=[1,1] amplitude=class=Point name=Unnamed dimension=1 values=[1] nu=1.5 optimizeParameters=true
+class=KrigingAnalysis name=kriging_1 designOfExperiment=design_1 interestVariables=[y1,y0] analyticalValidation=true testSampleValidation=false kFoldValidation=false leaveOneOutValidation=false test sample parameters=class=PointWithDescription name=Unnamed dimension=2 description=[Percentage,Seed] values=[20,0] k-Fold parameters=class=PointWithDescription name=Unnamed dimension=2 description=[Number of folds,Seed] values=[5,0] basis=class=Basis coll=[class=Function name=Unnamed implementation=class=FunctionImplementation name=Unnamed description=[x0,x1,y0] evaluationImplementation=class=ConstantEvaluation name=Unnamed constant=class=Point name=Unnamed dimension=1 values=[1] gradientImplementation=class=ConstantGradient name=Unnamed constant=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=2 columns=1 values=[0,0] hessianImplementation=class=NullHessian name=Unnamed inputDimension=2 outputDimension=1] covarianceModel=class=SquaredExponential scale=class=Point name=Unnamed dimension=2 values=[1,1] amplitude=class=Point name=Unnamed dimension=1 values=[1] optimizeParameters=true
+class=KrigingAnalysis name=kriging_2 designOfExperiment=design_1 interestVariables=[y0] analyticalValidation=true testSampleValidation=false kFoldValidation=false leaveOneOutValidation=false test sample parameters=class=PointWithDescription name=Unnamed dimension=2 description=[Percentage,Seed] values=[20,0] k-Fold parameters=class=PointWithDescription name=Unnamed dimension=2 description=[Number of folds,Seed] values=[5,0] basis=class=Basis coll=[class=Function name=Unnamed implementation=class=FunctionImplementation name=Unnamed description=[x0,x1,y0] evaluationImplementation=class=ConstantEvaluation name=Unnamed constant=class=Point name=Unnamed dimension=1 values=[1] gradientImplementation=class=ConstantGradient name=Unnamed constant=class=Matrix implementation=class=MatrixImplementation name=Unnamed rows=2 columns=1 values=[0,0] hessianImplementation=class=NullHessian name=Unnamed inputDimension=2 outputDimension=1] covarianceModel=class=SquaredExponential scale=class=Point name=Unnamed dimension=2 values=[1,1] amplitude=class=Point name=Unnamed dimension=1 values=[1] optimizeParameters=false
 #!/usr/bin/env python
 
 import openturns as ot
 import persalys
 
 myStudy = persalys.Study('myStudy')
-persalys.Study.Add(myStudy)
 dist_xi1 = ot.Uniform(0, 10)
 xi1 = persalys.Input('xi1', 0, dist_xi1, '')
 dist_xi2 = ot.Uniform(0, 10)
@@ -22,6 +21,68 @@ outputs = [fake_y0, y0, y1]
 formulas = ['xi1', 'cos(0.5*xi1) + sin(xi2)', 'cos(0.5*xi1) + sin(xi2) + xi3']
 model = persalys.SymbolicPhysicalModel('model', inputs, outputs, formulas)
 myStudy.add(model)
+design_0 = persalys.DataModel('design_0', model)
+inputSample = ot.Sample([
+[4.68457, 6.82803, 0.5],
+[0.359802, 4.95475, 0.5],
+[6.58862, 8.18204, 0.5],
+[9.08578, 5.66073, 0.5],
+[7.21044, 2.38623, 0.5],
+[1.02456, 0.418919, 0.5],
+[2.98184, 3.91613, 0.5],
+[5.9556, 7.47295, 0.5],
+[3.25986, 9.66134, 0.5],
+[8.48977, 1.46852, 0.5]]
+)
+inputSample.setDescription(['xi1', 'xi2', 'xi3'])
+outputSample = ot.Sample([
+[-0.178922],
+[0.0130864],
+[-0.0416917],
+[-0.75172],
+[-0.208882],
+[1.2784],
+[-0.619596],
+[-0.0583347],
+[-0.293461],
+[0.544117]]
+)
+outputSample.setDescription(['y0'])
+design_0.setInputSample(inputSample)
+design_0.setOutputSample(outputSample)
+design_0.setType(persalys.DataModel.UK)
+myStudy.add(design_0)
+design_1 = persalys.DataModel('design_1', model)
+inputSample = ot.Sample([
+[4.68457, 6.82803, 0.5],
+[0.359802, 4.95475, 0.5],
+[6.58862, 8.18204, 0.5],
+[9.08578, 5.66073, 0.5],
+[7.21044, 2.38623, 0.5],
+[1.02456, 0.418919, 0.5],
+[2.98184, 3.91613, 0.5],
+[5.9556, 7.47295, 0.5],
+[3.25986, 9.66134, 0.5],
+[8.48977, 1.46852, 0.5]]
+)
+inputSample.setDescription(['xi1', 'xi2', 'xi3'])
+outputSample = ot.Sample([
+[-0.178922, 0.321078],
+[0.0130864, 0.513086],
+[-0.0416917, 0.458308],
+[-0.75172, -0.25172],
+[-0.208882, 0.291118],
+[1.2784, 1.7784],
+[-0.619596, -0.119596],
+[-0.0583347, 0.441665],
+[-0.293461, 0.206539],
+[0.544117, 1.04412]]
+)
+outputSample.setDescription(['y0', 'y1'])
+design_1.setInputSample(inputSample)
+design_1.setOutputSample(outputSample)
+design_1.setType(persalys.DataModel.UK)
+myStudy.add(design_1)
 design = persalys.FixedDesignOfExperiment('design', model)
 inputSample = [
 [4.68457, 6.82803, 0.5],
@@ -38,10 +99,9 @@ design.setOriginalInputSample(inputSample)
 design.setBlockSize(1)
 interestVariables = ['y0', 'y1']
 design.setInterestVariables(interestVariables)
+design.run()
 myStudy.add(design)
-kriging_0 = persalys.KrigingAnalysis('kriging_0', design)
-interestVariables = ['y0']
-kriging_0.setInterestVariables(interestVariables)
+kriging_0 = persalys.KrigingAnalysis('kriging_0', design_0)
 kriging_0.setBasis(ot.LinearBasisFactory(2).build())
 kriging_0.setCovarianceModel(ot.MaternModel([1, 1], [1], 1.5))
 kriging_0.setOptimizeParameters(True)
@@ -49,7 +109,7 @@ kriging_0.setAnalyticalValidation(True)
 kriging_0.setTestSampleValidation(False)
 kriging_0.setKFoldValidation(False)
 myStudy.add(kriging_0)
-kriging_1 = persalys.KrigingAnalysis('kriging_1', design)
+kriging_1 = persalys.KrigingAnalysis('kriging_1', design_1)
 kriging_1.setBasis(ot.ConstantBasisFactory(2).build())
 kriging_1.setCovarianceModel(ot.SquaredExponential([1, 1], [1]))
 kriging_1.setOptimizeParameters(True)
@@ -57,7 +117,7 @@ kriging_1.setAnalyticalValidation(True)
 kriging_1.setTestSampleValidation(False)
 kriging_1.setKFoldValidation(False)
 myStudy.add(kriging_1)
-kriging_2 = persalys.KrigingAnalysis('kriging_2', design)
+kriging_2 = persalys.KrigingAnalysis('kriging_2', design_1)
 interestVariables = ['y0']
 kriging_2.setInterestVariables(interestVariables)
 kriging_2.setBasis(ot.ConstantBasisFactory(2).build())
@@ -67,4 +127,5 @@ kriging_2.setAnalyticalValidation(True)
 kriging_2.setTestSampleValidation(False)
 kriging_2.setKFoldValidation(False)
 myStudy.add(kriging_2)
+persalys.Study.Add(myStudy)
 

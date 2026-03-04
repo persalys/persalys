@@ -12,7 +12,6 @@ import openturns as ot
 import persalys
 
 myStudy = persalys.Study('myStudy')
-persalys.Study.Add(myStudy)
 dist_X0 = ot.Normal(1, 1)
 X0 = persalys.Input('X0', 0, dist_X0, '')
 dist_X1 = ot.Normal(1, 1)
@@ -57,4 +56,5 @@ myIS4.setBlockSize(10)
 myIS4.setSeed(0)
 myIS4.setStandardSpaceDesignPoint([0.0686039,1.14043])
 myStudy.add(myIS4)
+persalys.Study.Add(myStudy)
 

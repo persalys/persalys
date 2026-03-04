@@ -41,7 +41,7 @@ namespace PERSALYS
 
 CLASSNAMEINIT(ProbabilisticDesignOfExperiment)
 
-static Factory<ProbabilisticDesignOfExperiment> Factory_ProbabilisticDesignOfExperiment;
+const static Factory<ProbabilisticDesignOfExperiment> Factory_ProbabilisticDesignOfExperiment;
 
 Description ProbabilisticDesignOfExperiment::DesignNames_;
 Description ProbabilisticDesignOfExperiment::SpaceFillings_;
@@ -231,6 +231,27 @@ Sample ProbabilisticDesignOfExperiment::generateInputSample(const UnsignedIntege
   }
 }
 
+void ProbabilisticDesignOfExperiment::launch()
+{
+  DesignOfExperimentEvaluation::launch();
+  if (designName_ == "LHS")
+  {
+    result_.designOfExperiment_.setType(DesignOfExperiment::Type::RLHS);
+  }
+  else if (designName_ == "SALHS" || designName_ == "MCLHS")
+  {
+    result_.designOfExperiment_.setType(DesignOfExperiment::Type::OLHS);
+  }
+  else if (designName_ == "QUASI_MONTE_CARLO")
+  {
+    result_.designOfExperiment_.setType(DesignOfExperiment::Type::QMC);
+  }
+  else if (designName_ == "MONTE_CARLO")
+  {
+    result_.designOfExperiment_.setType(DesignOfExperiment::Type::MC);
+  }
+}
+
 
 Parameters ProbabilisticDesignOfExperiment::getParameters() const
 {
@@ -275,6 +296,9 @@ String ProbabilisticDesignOfExperiment::getPythonScript() const
   oss << getName() << ".setBlockSize(" << getBlockSize() << ")\n";
   oss << "interestVariables = " << Parameters::GetOTDescriptionStr(getInterestVariables()) << "\n";
   oss << getName() << ".setInterestVariables(interestVariables)\n";
+
+  if (getResult().getDesignOfExperiment().getOutputSample().getSize())
+    oss << getName() << ".run()\n";
 
   return oss;
 }

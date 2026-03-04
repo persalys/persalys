@@ -1,3 +1,5 @@
+.. _data_analysis:
+
 ===========================
 User manual - Data analysis
 ===========================
@@ -17,7 +19,7 @@ The interface allows one to perform the following types of data analysis:
 ''''''''''''
 
 A new sample analysis can be created through:
-  - the context menu of the **Definition** item of the data model
+  - the context menu of the **Definition** item of the data set
 
     .. image:: /user_manual/graphical_interface/data_analysis/dataAnalysisdefContextMenu.png
         :align: center
@@ -27,7 +29,7 @@ A new sample analysis can be created through:
     .. image:: /user_manual/graphical_interface/data_analysis/dataModelDiagramBoxes.png
         :align: center
 
-When the analysis is required, a new item is added in the study tree below the data model item.
+When the analysis is required, a new item is added in the study tree below the data set item.
 
 Its context menu has the following actions:
   - **Rename**: Rename the analysis
@@ -152,7 +154,7 @@ Here, the first order Sobol' indices are computed using the :py:class:`openturns
 2-1 Creation
 ''''''''''''''
 A new sensitivity analysis can be created through:
-  - the context menu of the **Definition** item of the data model
+  - the context menu of the **Definition** item of the data set
 
     .. image:: /user_manual/graphical_interface/data_analysis/dataAnalysisdefContextMenu.png
         :align: center
@@ -162,7 +164,7 @@ A new sensitivity analysis can be created through:
     .. image:: /user_manual/graphical_interface/data_analysis/dataModelDiagramBoxes.png
         :align: center
 
-When the analysis is required, a new item is added in the study tree below the data model item.
+When the analysis is required, a new item is added in the study tree below the data set item.
 
 Its context menu has the following actions:
   - **Rename**: Rename the analysis
@@ -206,7 +208,7 @@ The inference analysis allows one to perform a Bayesian Information Criterion
 either a `Kolmogorov-Smirnov <http://openturns.github.io/openturns/latest/theory/data_analysis/kolmogorov_test.html>`_ or `Lilliefors <http://openturns.github.io/openturns/latest/auto_data_analysis/statistical_tests/plot_kolmogorov_test.html#case-2-the-distribution-parameters-are-estimated-from-the-sample>`_ goodness-of-fit tests for 1-d continuous distributions.
 
 New marginals inference can be created thanks to:
-  - the context menu of the **Definition** item of the data model
+  - the context menu of the **Definition** item of the data set
 
     .. image:: /user_manual/graphical_interface/data_analysis/dataAnalysisdefContextMenu.png
         :align: center
@@ -260,7 +262,7 @@ When an analysis is required, a window appears, in order to set up:
 3-2 Launch
 ''''''''''
 
-When the analysis is required, a new item is added in the study tree below the data model item.
+When the analysis is required, a new item is added in the study tree below the data set item.
 
 Its context menu has two actions:
   - **Rename**: Rename the analysis
@@ -332,10 +334,10 @@ The result can be used in the :ref:`Probabilistic model window <inferenceresultw
 4- Dependence inference
 =======================
 
-The dependence inference allows one to infer copulas on the sample of the data model.
+The dependence inference allows one to infer copulas on the sample of the data set.
 
 This analysis can be created thanks to:
-  - the context menu of the **Definition** item of the relevant data model
+  - the context menu of the **Definition** item of the relevant data set
 
     .. image:: /user_manual/graphical_interface/data_analysis/dataAnalysisdefContextMenu.png
         :align: center
@@ -388,7 +390,7 @@ To remove a group:
 4-2 Launch
 '''''''''''
 
-When the analysis is required, a new item is added in the study tree below the data model item.
+When the analysis is required, a new item is added in the study tree below the data set item.
 
 Its context menu has the following actions:
   - **Rename**: Rename the analysis;
@@ -457,7 +459,7 @@ The result can be used in the :ref:`Probabilistic model window <dependenceinfere
 5- Metamodel creation
 ======================
 
-To perform this analysis, the data model or the design of experiments must contain an output sample.
+To perform this analysis, the data set or the design of experiments must contain an output sample.
 
 A new metamodel can be created in 4 different ways:
   - the context menu of a design of experiments item
@@ -470,12 +472,12 @@ A new metamodel can be created in 4 different ways:
     .. image:: /user_manual/graphical_interface/data_analysis/physicalModel_Diagram_metamodelBox.png
         :align: center
 
-  - the context menu of the **Definition** item of a data model
+  - the context menu of the **Definition** item of a data set
 
     .. image:: /user_manual/graphical_interface/data_analysis/dataAnalysisdefContextMenu.png
         :align: center
 
-  - the **Metamodel creation** box of a data model diagram
+  - the **Metamodel creation** box of a data set diagram
 
     .. image:: /user_manual/graphical_interface/data_analysis/dataModelDiagramBoxes.png
         :align: center
@@ -570,7 +572,7 @@ See more details on cross-validation `here <https://openturns.github.io/openturn
 '''''''''''
 
 When the window is validated, a new element appears in the study tree below the
-data model item or the design of experiments item.
+data set item or the design of experiments item.
 
 The context menu of this item contains these actions:
   - **Rename**: Rename the analysis
@@ -719,7 +721,7 @@ The results window gathers:
 You can export the metamodel as a physical model to perform analyses on it as with any physical model.
 To do so, right-click on the metamodel analysis and select **Convert metamodel into physical model**.
 If the metamodel is based on a physical model, the probabilistic model of the inputs is exported with the metamodel.
-If the metamodel is a functional chaos metamodel built from a data model, the probabilistic model inferred during the analysis is exported as well.
+If the metamodel is a functional chaos metamodel built from a data set, the probabilistic model inferred during the analysis is exported as well.
 
 .. image:: /user_manual/graphical_interface/data_analysis/convert_into_physical_model.png
   :align: center
@@ -752,7 +754,7 @@ quantiles and their associated confidence intervals.
 ''''''''''''''
 
 Quantile estimation analysis can be created thanks to:
-  - the context menu of the **Definition** item of the data model
+  - the context menu of the **Definition** item of the data set
 
     .. image:: /user_manual/graphical_interface/data_analysis/quantileAnalysisdefContextMenu.png
         :align: center
