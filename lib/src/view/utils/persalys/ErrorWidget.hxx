@@ -24,6 +24,7 @@
 #include "persalys/PersalysPrivate.hxx"
 
 #include <QPlainTextEdit>
+#include <QTextCursor>
 #include <QTimeLine>
 
 namespace PERSALYS

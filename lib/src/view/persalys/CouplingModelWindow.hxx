@@ -389,8 +389,8 @@ signals:
 
 private:
   PhysicalModel model_;
-  CopyableTableView * inputTableView_;
-  CopyableTableView * outputTableView_;
+  CopyableTableView * inputTableView_ = nullptr;
+  CopyableTableView * outputTableView_ = nullptr;
 };
 
 class PERSALYS_VIEW_API PythonCodeModel : public QAbstractTableModel

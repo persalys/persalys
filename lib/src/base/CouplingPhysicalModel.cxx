@@ -343,6 +343,12 @@ String CouplingPhysicalModel::writeCode(const Description &inputNames, const Des
   code << "            remote_target = remote_workdir / input_file.getConfiguredPath()\n";
   code << "            remote_mkdir_p(remote_target.parent, ssh)\n";
   code << "            sftp.put(str(target), str(remote_target))\n";
+  code << "            if os.name == 'posix':\n";
+  code << "               # Preserve file permissions\n";
+  code << "               local_mode = target.stat().st_mode & 0o777\n";
+  code << "            else:\n";
+  code << "                local_mode = 0o755\n";
+  code << "            sftp.chmod(str(remote_target), local_mode)\n";
   code << "\n";
   }
   code << "        for resource_file in step.getResourceFiles():\n";
@@ -364,6 +370,12 @@ String CouplingPhysicalModel::writeCode(const Description &inputNames, const Des
   code << "                remote_res = remote_workdir / src_path.name\n";
   code << "                remote_mkdir_p(remote_res.parent, ssh)\n";
   code << "                sftp.put(str(local_res), str(remote_res))\n";
+  code << "                if os.name == 'posix'\n";
+  code << "                    # Preserve file permissions\n";
+  code << "                    local_mode = src_path.stat().st_mode & 0o777\n";
+  code << "                else:\n";
+  code << "                    local_mode = 0o755\n";
+  code << "                sftp.chmod(str(remote_res), local_mode)\n";
   code << "            elif src_path.is_dir():\n";
   code << "                dst_dir = workdir / src_path.name\n";
   code << "                shutil.copytree(src_path, dst_dir, dirs_exist_ok=True)\n";
@@ -375,6 +387,13 @@ String CouplingPhysicalModel::writeCode(const Description &inputNames, const Des
   code << "                        local_f = Path(root) / f\n";
   code << "                        remote_f = remote_root / f\n";
   code << "                        sftp.put(str(local_f), str(remote_f))\n";
+  code << "                        # Preserve file permissions\n";
+  code << "                        original_path = src_path / local_f.relative_to(dst_dir)\n";
+  code << "                        if os.name == 'posix':\n";
+  code << "                            local_mode = original_path.stat().st_mode & 0o777\n";
+  code << "                        else:\n";
+  code << "                            local_mode = 0o755\n";
+  code << "                        sftp.chmod(str(remote_f), local_mode)\n";
   }
   code << "            else:\n";
   code << "                raise FileNotFoundError(resource_file.getPath())\n";
