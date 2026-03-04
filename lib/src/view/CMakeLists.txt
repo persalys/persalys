@@ -131,6 +131,7 @@ ot_add_source_file (DataSensitivityAnalysisResultWindow.cxx )
 ot_add_source_file ( ImportEvaluationsWizard.cxx )
 ot_add_source_file ( ImportMeshWidget.cxx )
 ot_add_source_file ( DesignOfExperimentExportWizard.cxx )
+ot_add_source_file (HSICTab.cxx)
 if (OTMORRIS_FOUND)
   ot_add_source_file ( ScreeningIntroPage.cxx )
   ot_add_source_file ( MorrisPage.cxx )
@@ -272,6 +273,7 @@ if (OTMORRIS_FOUND)
   ot_install_header_file ( MorrisResultWindow.hxx )
   ot_install_header_file ( ScreeningResultWizard.hxx )
 endif ()
+ot_install_header_file ( HSICTab.hxx )
 
 qt_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MainWindow.hxx
                                   persalys/MainWidget.hxx
@@ -393,6 +395,7 @@ qt_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MainWindow.hxx
                                   persalys/ImportEvaluationsWizard.hxx
                                   persalys/ImportMeshWidget.hxx
                                   persalys/DesignOfExperimentExportWizard.hxx
+                                  persalys/HSICTab.hxx
                                   )
 
 

@@ -24,6 +24,7 @@
 #include "persalys/SensitivityResultWidget.hxx"
 #include "persalys/ParametersTableView.hxx"
 #include "persalys/ErrorWidget.hxx"
+#include "persalys/HSICTab.hxx"
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -111,10 +112,14 @@ void DataSensitivityAnalysisResultWindow::buildInterface()
 
   auto tabWidget = new QTabWidget;
 
-  if (designOfExperiment_.getType() == DesignOfExperiment::Type::MC)
+  if (result_.getAnalysisType().computeRankSobol())
     addSobolTab(tabWidget);
   
-  addSRCTab(tabWidget);
+  if (result_.getAnalysisType().computeSRC())
+    addSRCTab(tabWidget);
+
+  if (result_.getAnalysisType().computeGlobalHSIC())
+    addGlobalHSICTab(tabWidget);
 
   auto * widget = new QWidget;
   auto * vbox = new QVBoxLayout(widget);
@@ -201,6 +206,7 @@ void DataSensitivityAnalysisResultWindow::addSRCTab(QTabWidget * tabWidget)
       valuesList << QString::number(r2[i]);
       auto * basisTableView = new ParametersTableView(namesList, valuesList, true, true);
       r2Layout->addWidget(basisTableView);
+      r2Layout->addStretch();
 
       if (r2[i] < 0.8)
       {
@@ -228,6 +234,12 @@ void DataSensitivityAnalysisResultWindow::addSRCTab(QTabWidget * tabWidget)
   }
 
   tabWidget->addTab(stackedWidget, tr("SRC"));
+}
+
+void DataSensitivityAnalysisResultWindow::addGlobalHSICTab(QTabWidget * tabWidget)
+{
+  auto * hsicTab = new HSICTab(result_, designOfExperiment_, outputsListWidget_, HSICTab::Type::Global, this);
+  tabWidget->addTab(hsicTab, tr("Global HSIC"));
 }
 
 } // namespace PERSALYS
