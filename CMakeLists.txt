@@ -65,6 +65,16 @@ if (MSVC)
   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
 endif ()
 
+# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=86164
+if (CMAKE_CXX_COMPILER_ID MATCHES "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 16)
+  find_package (Boost CONFIG COMPONENTS regex)
+  if (Boost_FOUND)
+    message(STATUS "Found Boost: ${Boost_DIR} (found suitable version \"${Boost_VERSION}\")")
+  else ()
+    find_package (Boost MODULE COMPONENTS regex REQUIRED)
+  endif ()
+endif ()
+
 if (PERSALYS_BUILD_NSIS OR USE_STACKTRACE)
   set (_boost_components)
   if (PERSALYS_BUILD_NSIS)

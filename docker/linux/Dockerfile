@@ -138,7 +138,7 @@ RUN git clone --depth 1 https://github.com/ianlancetaylor/libbacktrace.git && cd
 # boost
 RUN curl -fSsL https://archives.boost.io/release/1.89.0/source/boost_1_89_0.tar.bz2 | tar xj && cd boost* \
  && ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/local/bin/python3 \
- && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system ${MAKEFLAGS} install --with-graph --with-chrono --with-serialization --with-program_options --with-filesystem > /dev/null 2>&1 && cd - && rm -r boost*
+ && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system ${MAKEFLAGS} install --with-graph --with-chrono --with-serialization --with-program_options --with-filesystem --with-regex > /dev/null 2>&1 && cd - && rm -r boost*
 
 # pagmo
 RUN curl -fsSL https://github.com/esa/pagmo2/archive/refs/tags/v2.19.1.tar.gz | tar xz && cd pagmo* && cmake -DPAGMO_WITH_EIGEN3=ON -DCMAKE_UNITY_BUILD=ON . && make install > /dev/null 2>&1 && cd - && rm -r pagmo*

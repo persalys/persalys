@@ -236,6 +236,10 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_L
   target_link_libraries (persalysbase PRIVATE stdc++fs)
 endif ()
 
+if (TARGET Boost::regex)
+  target_link_libraries (persalysbase PRIVATE Boost::regex)
+endif ()
+
 target_link_libraries (persalysbase PUBLIC ${PERSALYS_PUBLIC_LIBRARIES})
 target_link_libraries (persalysbase PRIVATE ${PERSALYS_PRIVATE_LIBRARIES})
 target_link_libraries (persalysbase PRIVATE Python::Python)

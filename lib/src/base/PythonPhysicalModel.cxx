@@ -23,10 +23,20 @@
 #include "persalys/PythonScriptEvaluation.hxx"
 #include "persalys/BaseTools.hxx"
 
-#include <regex>
-
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/MemoizeFunction.hxx>
+
+#if defined(__GNUC__) && (__GNUC__ < 16)
+// we cannot use std::regex on long strings yet
+// xref https://gcc.gnu.org/bugzilla/show_bug.cgi?id=86164
+#include <boost/regex.hpp>
+using regex = boost::regex;
+using smatch = boost::smatch;
+#else
+#include <regex>
+using regex = std::regex;
+using smatch = std::smatch;
+#endif
 
 using namespace OT;
 
@@ -64,16 +74,21 @@ PythonPhysicalModel* PythonPhysicalModel::clone() const
 
 void PythonPhysicalModel::setCode(const String & code)
 {
-  std::regex eol_regex("\n");
-  std::sregex_token_iterator it{code.begin(), code.end(), eol_regex, -1};
-  std::vector<std::string> lines {it, {}};
+  // split lines
+  std::vector<std::string> lines;
+  {
+    std::stringstream stream(code);
+    std::string line;
+    while (std::getline(stream, line))
+      lines.push_back(line);
+  }
 
   Description inputVariables;
   Description outputVariables;
 
-  std::regex variable("([_a-zA-Z][_a-zA-Z0-9]*)");
+  regex variable(R"(([_a-zA-Z]\w*))");
   bool inExecScope = false;
-  for (String line: lines)
+  for (const String & line : lines)
   {
     // skip empty lines
     if (line.empty())
@@ -82,44 +97,41 @@ void PythonPhysicalModel::setCode(const String & code)
     if (inExecScope && line[0] != ' ')
       inExecScope = false;
 
-    std::regex defFunction(R"(def\s+_exec\s*\(([\w, ]*)\)\s*:)");
-    std::smatch what;
-    if (std::regex_match(line, what, defFunction))
+    regex defFunction(R"(def\s+_exec\s*\(([\w,\s]*)\)\s*:)");
+    smatch what;
+    if (regex_match(line, what, defFunction))
     {
       inExecScope = true;
-      String inputList = what[1];
+      const String inputList = what[1];
       std::string::const_iterator start = inputList.begin();
       std::string::const_iterator end = inputList.end();
       inputVariables.clear();
-      while (std::regex_search(start, end, what, variable))
+      while (regex_search(start, end, what, variable))
       {
         start = what[0].second;
         inputVariables.add(what[1]);
       }
+      const UnsignedInteger commaNumber = std::count(inputList.begin(), inputList.end(), ',');
+      if (commaNumber + 1 != inputVariables.getSize())
+        inputVariables.clear();
     }
 
     // Allow 2-spaces indent as well to match YACS behavior
-    std::regex returnOutput(R"(  (?:  )?return\s+(?:\(([\w, ]+)\)|\[([\w, ]+)\]|([\w, ]+)))");
-    if (inExecScope && std::regex_match(line, what, returnOutput))
+    regex returnOutput(R"(  (?:  )?return\s+([\w,\s]*)(#.*)?)");
+    if (inExecScope && regex_match(line, what, returnOutput))
     {
-      String outputList;
-      for(unsigned int i = 1; i < what.size(); ++i)
-      {
-        if (what[i].matched)
-        {
-          outputList = what[i];
-          break;
-        }
-      }
-
+      const String outputList = what[1];
       std::string::const_iterator start = outputList.begin();
       std::string::const_iterator end = outputList.end();
       outputVariables.clear();
-      while (std::regex_search(start, end, what, variable))
+      while (regex_search(start, end, what, variable))
       {
         start = what[0].second;
         outputVariables.add(what[1]);
       }
+      const UnsignedInteger commaNumber = std::count(outputList.begin(), outputList.end(), ',');
+      if (commaNumber + 1 != outputVariables.getSize())
+        outputVariables.clear();
       break; // we found the return statement, no need to continue
     }
   }
