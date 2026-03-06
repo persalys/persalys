@@ -14,6 +14,7 @@ Several dependencies are needed in order to build the GUI:
 - Qwt >=6
 - Python >=3.6
 - SWIG >=4
+- Boost.regex library
 - Boost.program_options (optional, for win32 launcher)
 - Boost.stacktrace (/backtrace) library (optional, to dump the call stack)
 - SalomeYACS (optional, for YACS support)
