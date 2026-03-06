@@ -119,6 +119,7 @@ QWidget * PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(PVSpreadSheetViewWid
   pqSpreadSheetView * view = qobject_cast<pqSpreadSheetView*>(pvWidget->getView());
   if (view)
   {
+    view->setParent(pvWidget);
     pqSpreadSheetViewDecorator * decorator = new pqSpreadSheetViewDecorator(view);
     // hide decorator header
     // see header location at: pqSpreadSheetViewDecorator::pqSpreadSheetViewDecorator
