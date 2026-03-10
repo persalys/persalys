@@ -68,6 +68,19 @@ public:
   void load(OT::Advocate & adv) override;
 
   static bool CanBeLaunched(OT::String &errorMessage, const DesignOfExperiment &doe);
+  Parameters getParameters() const override;
+
+  bool computeRankSobol() const;
+  bool computeSRC() const;
+  bool computeGlobalHSIC() const;
+
+  bool computeAsymptoticPValues() const;
+  bool computePermutationPValues() const;
+  bool useUStatistic() const;
+
+  OT::Collection<OT::CovarianceModel> getCovarianceModels() const;
+
+  bool defaultHSICParametersChanged() const;
 
 protected:
   void initialize() override;
@@ -88,6 +101,7 @@ private:
   OT::Bool computePermutationPValues_ = false;
   OT::Bool useUStatistic_ = false;
   OT::Bool computeCovModelParameters_ = true;
+  OT::Bool defaultHSICParametersChanged_ = false;
 };
 
 } // namespace PERSALYS

@@ -63,11 +63,76 @@ void DataSensitivityAnalysis::setHSICParameters(bool computeAsymptoticPValues, b
   computeAsymptoticPValues_   = computeAsymptoticPValues;
   computePermutationPValues_  = computePermutationPValues;
   useUStatistic_              = useUStatistic;
+  
+  defaultHSICParametersChanged_ = true;
 }
 
 bool DataSensitivityAnalysis::canBeLaunched(String &errorMessage) const
 {
   return DataSensitivityAnalysis::CanBeLaunched(errorMessage, designOfExperiment_);
+}
+
+Parameters DataSensitivityAnalysis::getParameters() const
+{
+  Parameters parameters;
+  
+  OT::String analysisTypesStr;
+  if (type_.computeRankSobol())
+    analysisTypesStr += "Rank Sobol indices, ";
+  if (type_.computeSRC())
+    analysisTypesStr += "SRC indices, ";
+  if (type_.computeGlobalHSIC())
+    analysisTypesStr += "Global HSIC indices, ";
+  analysisTypesStr = analysisTypesStr.substr(0, analysisTypesStr.size() - 2); // remove last ", "
+  parameters.add("Analysis types", analysisTypesStr);
+  if (type_.computeGlobalHSIC())
+  {
+    parameters.add("Compute asymptotic p-values", computeAsymptoticPValues_ ? "Yes" : "No");
+    parameters.add("Compute permutation p-values", computePermutationPValues_ ? "Yes" : "No");
+    parameters.add("Statistic used for HSIC: ", useUStatistic_ ? "U-statistic" : "V-statistic");
+  }
+
+  return parameters;
+}
+
+bool DataSensitivityAnalysis::computeRankSobol() const
+{
+  return type_.computeRankSobol();
+}
+
+bool DataSensitivityAnalysis::computeSRC() const
+{
+  return type_.computeSRC();
+}
+
+bool DataSensitivityAnalysis::computeGlobalHSIC() const
+{
+  return type_.computeGlobalHSIC();
+}
+
+bool DataSensitivityAnalysis::computeAsymptoticPValues() const
+{
+  return computeAsymptoticPValues_;
+}
+
+bool DataSensitivityAnalysis::computePermutationPValues() const
+{
+  return computePermutationPValues_;
+}
+
+bool DataSensitivityAnalysis::useUStatistic() const
+{
+  return useUStatistic_;
+}
+
+OT::Collection<OT::CovarianceModel> DataSensitivityAnalysis::getCovarianceModels() const
+{
+  return covarianceModels_;
+}
+
+bool DataSensitivityAnalysis::defaultHSICParametersChanged() const
+{
+  return defaultHSICParametersChanged_;
 }
 
 bool DataSensitivityAnalysis::hasValidResult() const
@@ -232,9 +297,12 @@ void DataSensitivityAnalysis::computeGlobalHSICIndices()
   const Sample sample{designOfExperiment_.getSample()};
   if (computeCovModelParameters_)
   {
+    Point stdDevs = sample.computeStandardDeviation();
     for(UnsignedInteger i = 0; i < covarianceModels_.getSize(); ++i)
     {
-      covarianceModels_[i].setScale(sample.getMarginal(i).computeStandardDeviation());
+      if (stdDevs[i] == 0.)
+        throw InvalidArgumentException(HERE) << "The standard deviation of variable " << sample.getDescription()[i] << " is zero, the covariance model parameters cannot be estimated.";
+      covarianceModels_[i].setScale(Point{stdDevs[i]});
     }
   }
 
@@ -275,7 +343,7 @@ void DataSensitivityAnalysis::computeGlobalHSICIndices()
     if (result_.computeAsymptoticPValues_)
       result_.globalPValuesAsymptotic_[i] = estimator.getPValuesAsymptotic();
     if (result_.computePermutationPValues_)
-      result_.globalPValuesPermutation_.add(estimator.getPValuesPermutation());
+      result_.globalPValuesPermutation_[i] = estimator.getPValuesPermutation();
   }
   
 }

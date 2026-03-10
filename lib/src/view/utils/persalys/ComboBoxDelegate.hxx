@@ -33,12 +33,13 @@ class PERSALYS_UTILS_API ComboBoxDelegate : public QItemDelegate
   Q_OBJECT
 
 public:
-  ComboBoxDelegate(QObject *parent = nullptr);
-  ComboBoxDelegate(QPair<int, int> cell, QObject *parent = nullptr);
+  explicit ComboBoxDelegate(QObject *parent = nullptr);
+  explicit ComboBoxDelegate(QPair<int, int> cell, QObject *parent = nullptr);
 
   void setNoWheelEvent(const bool noWheelEvent);
   void addSeparatorIndex(const int index, const QString &text = "");
 
+  void paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const override;
   QWidget *createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const override;
   void setEditorData(QWidget * editor, const QModelIndex & index) const override;
   void setModelData(QWidget * editor, QAbstractItemModel * model, const QModelIndex & index) const override;
@@ -58,7 +59,7 @@ private:
 class PERSALYS_UTILS_API ComboBoxWithSeparatorDelegate : public QItemDelegate
 {
 public:
-  ComboBoxWithSeparatorDelegate(QObject *parent);
+  explicit ComboBoxWithSeparatorDelegate(QObject *parent);
 
   void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
   QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;

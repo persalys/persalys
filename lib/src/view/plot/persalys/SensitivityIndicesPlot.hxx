@@ -51,8 +51,8 @@ private:
 
 private:
   QStringList legendNames_;
-  double yMin_;
-  double yMax_;
+  double yMin_ = 0.;
+  double yMax_ = 0.;
 };
 }
 #endif

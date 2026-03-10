@@ -67,5 +67,89 @@ Get the result:
 Returns
 -------
 result : :class:`~persalys.DataSensitivityAnalysisResult`
-    Result of the sensitivity analysis.
-"
+    Result of the sensitivity analysis."
+
+// ---------------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::DataSensitivityAnalysis::setHSICParameters
+"Set the parameters for the computation of global HSIC indices.
+
+Parameters
+----------
+asymptoticPValues : bool, optional
+    Whether to compute asymptotic p-values for the HSIC indices. The default value is true.
+permutationPValues : bool, optional
+    Whether to compute permutation p-values for the HSIC indices. The default value is true.
+useUStatistic : bool, optional
+    Whether to use the U-statistic for the HSIC computation. The default value is true."
+
+// ---------------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::computeRankSobol
+"Whether to compute Rank Sobol indices.
+
+Returns
+-------
+compute : bool
+    True if Rank Sobol indices will be computed, false otherwise."
+
+// ---------------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::computeSRC
+"Whether to compute SRC indices.
+
+Returns
+-------
+compute : bool
+    True if SRC indices will be computed, false otherwise."
+
+// ---------------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::computeGlobalHSIC
+"Whether to compute global HSIC indices.
+
+Returns
+-------
+compute : bool
+    True if global HSIC indices will be computed, false otherwise."
+
+// ---------------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::computeAsymptoticPValues
+"Whether to compute asymptotic p-values for global HSIC indices.
+
+Returns
+-------
+compute : bool
+    True if asymptotic p-values will be computed, false otherwise."
+
+// --------------------------------------------------------------------------- 
+
+%feature("docstring") PERSALYS::computePermutationPValues
+"Whether to compute permutation p-values for global HSIC indices.
+
+Returns
+-------
+compute : bool
+    True if permutation p-values will be computed, false otherwise."
+
+// ---------------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::useUStatistic
+"Whether to use the U-statistic for the computation of HSIC indices.
+
+Returns
+-------
+useUStatistic : bool
+    True if the U-statistic will be used for the computation of HSIC indices, false if the V-statistic will be used."
+
+// ---------------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::getCovarianceModels
+"Get the covariance models used for the computation of HSIC indices.
+
+Returns
+-------
+covarianceModels : collection of :class:`~openturns.CovarianceModel`
+    Collection of covariance models used for the computation of HSIC indices. 
+    The size of the collection is equal to the total number of input and output variables in the design of experiment."

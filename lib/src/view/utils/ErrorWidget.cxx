@@ -152,6 +152,9 @@ int ErrorWidget::computeHeight() const
           + contentsMargins().top()
           + contentsMargins().bottom()
           + 2 * frameWidth();
+  
+  if (usePadding_)
+    h += 10; // padding top + bottom
 
   return h;
 }
