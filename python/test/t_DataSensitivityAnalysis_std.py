@@ -7,12 +7,11 @@ myStudy = persalys.Study("myStudy")
 
 # +++++++++++++++++++++++++++++++++ Model 1 +++++++++++++++++++++++++++++++++ #
 # simple example with a data model
-importedDataset1 = persalys.ImportedDataset("Housing-prices-Boston.csv", list(range(13)), [13])
+importedDataset1 = persalys.ImportedDataset(
+    "Housing-prices-Boston.csv", list(range(13)), [13]
+)
 model1 = persalys.DataModel("model1", importedDataset1)
 myStudy.add(model1)
-print(model1)
-print("inputNames=", model1.getInputNames())
-print("outputNames=", model1.getOutputNames())
 
 # Sensitivity analysis
 analysis1 = persalys.DataSensitivityAnalysis("analysis1", model1)
@@ -110,8 +109,15 @@ ott.assert_almost_equal(
 
 ott.assert_almost_equal(result1.getR2()[0], 0.638872)
 
+assert result1.getGlobalHSICIndices().getSize() == 0
+assert result1.getGlobalR2HSICIndices().getSize() == 0
+assert result1.getGlobalPValuesAsymptotic().getSize() == 0
+assert result1.getGlobalPValuesPermutation().getSize() == 0
+
+
 # +++++++++++++++++++++++++++++++++ Model 2 +++++++++++++++++++++++++++++++++ #
 # Model with several outputs and dependences between inputs
+ot.RandomGenerator.SetSeed(0)
 
 # ------------------------------model definition----------------------------- #
 marginals = [
@@ -140,7 +146,6 @@ def model2_def(X):
 ot_model2 = ot.PythonFunction(5, 3, model2_def)
 
 sample_size = 300
-ot.RandomGenerator.SetSeed(0)
 sample = distribution.getSample(sample_size)
 output_sample = ot_model2(sample)
 output_sample.setDescription(["Y0", "Y1", "Y2"])
@@ -155,23 +160,34 @@ sample.exportToCSVFile(filename)
 importedDataset2 = persalys.ImportedDataset(filename, list(range(5)), list(range(5, 8)))
 model2 = persalys.DataModel("model2", importedDataset2)
 myStudy.add(model2)
-print()
-print(model2)
 
 analysis2 = persalys.DataSensitivityAnalysis("analysis2", model2)
 myStudy.add(analysis2)
 analysis2.run()
 
 result2 = analysis2.getResult()
-for i in range(3):
-    print(f"Output Y{i} first order indices: ", result2.getFirstOrderSobolIndices()[i])
-    print(
-        f"Output Y{i} first order indices intervals: ",
-        result2.getFirstOrderSobolIndicesInterval()[i],
-    )
 
-print("Is independent ?", result2.isIndependent())
-print("Warning message: ", result2.getIndependenceWarningMessage())
+ott.assert_almost_equal(
+    result2.getFirstOrderSobolIndices(),
+    [
+        [0.731891, -0.0296164, 0.489005, 0.0508961, -0.054944],
+        [0.695839, 0.122029, 0.0114455, 0.12667, 0.0458143],
+        [0.0247123, 0.00144117, 0.467444, 0.192548, 0.204893],
+    ],
+)
+
+ott.assert_almost_equal(
+    result2.getFirstOrderSobolIndicesInterval()[0].getLowerBound(),
+    [0.695092, -0.14747, 0.433013, -0.058401, -0.145523],
+)
+
+ott.assert_almost_equal(
+    result2.getFirstOrderSobolIndicesInterval()[2].getUpperBound(),
+    [0.141488, 0.110519, 0.517855, 0.291101, 0.28865],
+)
+
+assert not result2.isIndependent()
+assert len(result2.getIndependenceWarningMessage()) > 0
 
 # -------------------------test without output sample------------------------ #
 importedDataset2_no_output = persalys.ImportedDataset(filename, list(range(5)), [])
@@ -184,3 +200,137 @@ analysis2_no_output = persalys.DataSensitivityAnalysis(
 myStudy.add(analysis2_no_output)
 with ott.assert_raises(Exception):
     analysis2_no_output.run()
+
+
+# +++++++++++++++++++++++++++++++++ Model 3 +++++++++++++++++++++++++++++++++ #
+# Test the constructor with type parameter and HSIC analysis
+ot.RandomGenerator.SetSeed(0)
+
+# ------------------------------ model definition --------------------------- #
+sample3 = ot.Normal(3).getSample(100)
+output_sample3 = ot.Sample([[x[0] + x[1] ** 2 + x[2]] for x in sample3])
+output_sample3.setDescription(["Y0"])
+sample3.stack(output_sample3)
+filename3 = "DataSensitivityAnalysis_type_std.csv"
+sample3.exportToCSVFile(filename3)
+
+importedDataset3 = persalys.ImportedDataset(filename3, [0, 1, 2], [3])
+model3 = persalys.DataModel("model3", importedDataset3)
+myStudy.add(model3)
+
+RankSobol = persalys.DataSensitivityAnalysisResult.RankSobol
+SRC = persalys.DataSensitivityAnalysisResult.SRC
+GlobalHSIC = persalys.DataSensitivityAnalysisResult.GlobalHSIC
+
+# --------------------- Test with type = RankSobol only --------------------- #
+analysis3_sobol = persalys.DataSensitivityAnalysis("analysis3_sobol", model3, RankSobol)
+myStudy.add(analysis3_sobol)
+analysis3_sobol.run()
+result3_sobol = analysis3_sobol.getResult()
+
+ott.assert_almost_equal(
+    result3_sobol.getFirstOrderSobolIndices()[0],
+    [0.109269, 0.4685, 0.185635],
+)
+# SRC and HSIC should be empty
+assert (
+    result3_sobol.getSRCIndices().getSize() == 0
+), "SRC should be empty when only RankSobol is requested"
+assert (
+    len(result3_sobol.getGlobalHSICIndices()) == 0
+), "HSIC should be empty when only RankSobol is requested"
+
+# ----------------------- Test with type = SRC only ------------------------- #
+analysis3_src = persalys.DataSensitivityAnalysis("analysis3_src", model3, SRC)
+myStudy.add(analysis3_src)
+analysis3_src.run()
+result3_src = analysis3_src.getResult()
+
+ott.assert_almost_equal(
+    result3_src.getSRCIndices(),
+    [[0.157031, 0.00808757, 0.243416]],
+)
+# Sobol and HSIC should be empty
+assert (
+    len(result3_src.getFirstOrderSobolIndices()) == 0
+), "Sobol should be empty when only SRC is requested"
+assert (
+    len(result3_src.getGlobalHSICIndices()) == 0
+), "HSIC should be empty when only SRC is requested"
+
+# --------------- Test with type = GlobalHSIC with V-statistic -------------- #
+covModels3 = ot.CovarianceModelCollection([ot.SquaredExponential() for _ in range(4)])
+analysis3_hsic_v = persalys.DataSensitivityAnalysis(
+    "analysis3_hsic_v", model3, GlobalHSIC, covModels3
+)
+analysis3_hsic_v.setHSICParameters(True, False, False)  # asymptotic only, V-stat
+myStudy.add(analysis3_hsic_v)
+analysis3_hsic_v.run()
+result3_hsic_v = analysis3_hsic_v.getResult()
+
+ott.assert_almost_equal(
+    result3_hsic_v.getGlobalHSICIndices()[0],
+    [0.0196875, 0.0103777, 0.0224746],
+)
+ott.assert_almost_equal(
+    result3_hsic_v.getGlobalR2HSICIndices()[0],
+    [0.238798, 0.111624, 0.265083],
+)
+ott.assert_almost_equal(
+    result3_hsic_v.getGlobalPValuesAsymptotic()[0],
+    [4.27333e-10, 0.000214159, 3.3177e-12],
+    1e-3,
+    1e-15,
+)
+# Sobol and SRC should be empty
+assert (
+    len(result3_hsic_v.getFirstOrderSobolIndices()) == 0
+), "Sobol should be empty when only HSIC is requested"
+assert (
+    result3_hsic_v.getSRCIndices().getSize() == 0
+), "SRC should be empty when only HSIC is requested"
+assert (
+    len(result3_hsic_v.getGlobalPValuesPermutation()) == 0
+), "Permutation p-values should be empty when only asymptotic p-values are requested"
+
+# --------------- Test with type = GlobalHSIC with U-statistic -------------- #
+analysis3_hsic_u = persalys.DataSensitivityAnalysis(
+    "analysis3_hsic_u", model3, GlobalHSIC, covModels3
+)
+analysis3_hsic_u.setHSICParameters(True, True, True)  # asymptotic, permutation, U-stat
+myStudy.add(analysis3_hsic_u)
+analysis3_hsic_u.run()
+result3_hsic_u = analysis3_hsic_u.getResult()
+
+ott.assert_almost_equal(
+    result3_hsic_u.getGlobalHSICIndices()[0],
+    [0.0171594, 0.00718277, 0.0202698],
+)
+ott.assert_almost_equal(
+    result3_hsic_u.getGlobalR2HSICIndices()[0],
+    [0.211286, 0.0781581, 0.241761],
+)
+ott.assert_almost_equal(
+    result3_hsic_u.getGlobalPValuesAsymptotic()[0],
+    [3.15345e-10, 0.000260492, 1.76196e-12],
+    1e-3,
+    1e-15,
+)
+
+# ----------------------- Test with all types combined ---------------------- #
+analysis3_all = persalys.DataSensitivityAnalysis(
+    "analysis3_all", model3, RankSobol | SRC | GlobalHSIC, covModels3
+)
+analysis3_all.setHSICParameters(True, False, False)
+myStudy.add(analysis3_all)
+analysis3_all.run()
+result3_all = analysis3_all.getResult()
+
+# All result types should be populated
+assert len(result3_all.getFirstOrderSobolIndices()) > 0, "Sobol should not be empty"
+assert result3_all.getSRCIndices().getSize() > 0, "SRC should not be empty"
+assert len(result3_all.getGlobalHSICIndices()) > 0, "HSIC should not be empty"
+ott.assert_almost_equal(
+    result3_all.getGlobalHSICIndices()[0],
+    [0.0196875, 0.0103777, 0.0224746],
+)
