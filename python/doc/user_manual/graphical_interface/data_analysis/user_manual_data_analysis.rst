@@ -149,7 +149,32 @@ automatically selected in the other tabs.
 =======================
 
 The sensitivity analysis allows one to assess the influence of input variables on output variables.
-Here, the first order Sobol' indices are computed using the :py:class:`openturns.experimental.RankSobolSensitivityAlgorithm` along with the SRC indices.
+
+Several methods are available, split into two categories:
+
+**Global sensitivity analysis (GSA) methods:**
+
+- **Rank Sobol' indices**: Non-parametric first order Sobol' indices computed using the
+  :py:class:`openturns.experimental.RankSobolSensitivityAlgorithm`. These indices measure
+  any monotonic relationship between inputs and outputs since they are calculated on ranks.
+
+- **Standard regression coefficients (SRC)**: Signed and squared SRC indices that measure
+  linear relationships between an output and the input vector. A coefficient of determination
+  :math:`R^2` is also provided to assess the quality of the linear approximation.
+
+- **Global HSIC indices**: The Hilbert-Schmidt Independence Criterion (HSIC) measures the
+  dependence between an input variable and an output variable through kernel-based statistics.
+  See `HSIC sensitivity indices <http://openturns.github.io/openturns/latest/theory/reliability_sensitivity/sensitivity_hsic.html>`_.
+
+**Reliability-oriented sensitivity analysis (ROSA) methods:**
+
+- **Target HSIC indices**: A variant of HSIC that focuses on a specific region of interest in
+  the output space defined by a filter function. This is useful when one is interested in the
+  sensitivity of the model with respect to extreme or critical output values.
+
+- **Conditional HSIC indices**: Another ROSA variant that uses weight functions to focus
+  the sensitivity analysis on specific output regions. Unlike Target HSIC, this method
+  does not support asymptotic p-values or the U-statistic estimator.
 
 2-1 Creation
 ''''''''''''''
@@ -176,6 +201,42 @@ progress bar and Run/Stop buttons, to launch or stop the analysis.
 .. image:: /user_manual/graphical_interface/data_analysis/dataSensitivityAnalysisWindow.png
     :align: center
 
+.. _datasensitivityanalysiswizard:
+
+2-1-1 Wizard
+~~~~~~~~~~~~~
+
+The wizard allows one to configure the sensitivity analysis:
+
+- **First page** — Method selection:
+
+  - Select the output variable(s) of interest.
+  - Select one or more analysis methods from the two groups (GSA and ROSA).
+    By default, Rank Sobol' and SRC are selected.
+  - If any HSIC method is checked (Global, Target, or Conditional), the wizard
+    will show additional pages to configure their parameters.
+
+- **HSIC parameters pages** (one per selected HSIC type):
+
+  Each HSIC parameters page allows one to configure:
+
+  - **Statistic type** (Global and Target HSIC only): Choose between V-statistic
+    (biased but faster, asymptotically unbiased) and U-statistic (unbiased but
+    more computationally expensive).
+  - **P-values computation**:
+
+    - Permutation p-values (available for all HSIC types).
+    - Asymptotic p-values (available for Global and Target HSIC only).
+
+  - **Covariance models**: A table listing the covariance model for each input and
+    output variable. The default is the Squared Exponential model.
+  - **Filter functions** (Target HSIC only): An alpha parameter table for each output
+    variable of interest. The filter function is constructed as
+    :math:`x \mapsto \exp\left(-x / (\alpha_i \cdot \sigma_i)\right)` where :math:`\sigma_i`
+    is the standard deviation of the :math:`i`-th output variable.
+  - **Weight functions** (Conditional HSIC only): An alpha parameter table for each
+    output variable of interest, with the same functional form as the filter functions.
+
 .. _datasensitivityanalysisresult:
 
 2-2 Results
@@ -187,16 +248,33 @@ When the analysis is finished or stopped, the following window appears.
     :align: center
 
 On the left, you can select the output variable.
-The first tab shows the first order Sobol' indices for each input variable in both the graph and the table.
-You can sort the table by any column by clicking on the column header.
-The graph will be sorted in the same way as the table.
-The second tab displays signed and squared SRC indices in the same way and the :math: `R^2` coefficient at the top.
+The result window shows one tab per selected analysis method:
+
+- The **Rank Sobol'** tab shows the first order Sobol' indices for each input variable
+  in both the graph and the table. You can sort the table by any column by clicking
+  on the column header. The graph will be sorted in the same way as the table.
+
+- The **SRC** tab displays signed and squared SRC indices in the same way and the
+  :math:`R^2` coefficient at the top. If :math:`R^2 < 0.8`, a warning is displayed
+  indicating that the model might not be linear enough for SRC indices.
+
+- The **Global HSIC**, **Target HSIC** and/or **Conditional HSIC** tabs (depending on
+  the selected methods) each contain sub-tabs for:
+
+  - HSIC indices
+  - R2-HSIC indices
+  - Permutation p-values (if computed)
+  - Asymptotic p-values (if computed)
+
+  Each sub-tab shows a bar chart and a table of the indices for all input variables.
 
 If the Spearman test detects a dependency between two variables, a warning will be displayed at the top of the window.
 Remember that both Sobol' and SRC indices are only valid for independent variables.
 Always ensure that the input variables are independent before interpreting the sensitivity indices.
 SRC indices only measure linear relationship between an output and the input vector.
 Since they are in that case calculated on ranks, Sobol' indices can measure any monotonic relationship.
+HSIC indices are valid for independent variables and can detect any type
+of dependence, including non-monotonic relationships. For dependant variables, they mesure a total dependence that includes both direct and indirect effects.
 
 .. _inferenceAnalysis:
 
