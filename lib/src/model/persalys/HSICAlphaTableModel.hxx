@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QAbstractTableModel to list covariance models for HSCI sensitivity analysis
+ *  @brief QAbstractTableModel to configure alpha parameter for HSIC filter/weight functions
  *
  *  Copyright 2015-2025 EDF-Phimeca
  *
@@ -19,26 +19,25 @@
  *
  */
 
-#ifndef PERSALYS_HSICCOVARIANCEMODELSTABLEMODEL_HXX
-#define PERSALYS_HSICCOVARIANCEMODELSTABLEMODEL_HXX
+#ifndef PERSALYS_HSICALPHATABLEMODEL_HXX
+#define PERSALYS_HSICALPHATABLEMODEL_HXX
 
 #include "persalys/PersalysPrivate.hxx"
 
 #include <QAbstractTableModel>
 
-#include <openturns/Collection.hxx>
-#include <openturns/CovarianceModel.hxx>
+#include <openturns/Point.hxx>
+#include <openturns/Description.hxx>
 
 namespace PERSALYS
 {
-class PERSALYS_MODEL_API HSICCovarianceModelsTableModel : public QAbstractTableModel
+class PERSALYS_MODEL_API HSICAlphaTableModel : public QAbstractTableModel
 {
   Q_OBJECT
 
 public:
-  explicit HSICCovarianceModelsTableModel(const OT::Description & variableNames, QObject *parent = nullptr);
-  
-  void setVariablesNames(const OT::Description & variableNames);
+  explicit HSICAlphaTableModel(const OT::Description & variableNames,
+                               QObject *parent = nullptr);
 
   int columnCount(const QModelIndex & parent = QModelIndex()) const override;
   int rowCount(const QModelIndex & parent = QModelIndex()) const override;
@@ -47,15 +46,14 @@ public:
   bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole) override;
   Qt::ItemFlags flags(const QModelIndex & index) const override;
 
-  OT::Collection<OT::CovarianceModel> getCovarianceModels() const;
-  void setCovarianceModels(const OT::Collection<OT::CovarianceModel> & models);
+  void setAlphas(const OT::Point & alphas);
+  OT::Point getAlphas() const;
 
 private:
   OT::Description variableNames_;
-  QList<int> modelIndices_;   // 0=Matern, 1=SquaredExponential, 2=AbsoluteExponential, 3=GeneralizedExponential
-  QList<int> nuIndices_;      // 0=1/2, 1=3/2, 2=5/2
+  QList<double> alphaValues_;
 };
 
 } // namespace PERSALYS
 
-#endif // PERSALYS_HSICCOVARIANCEMODELSTABLEMODEL_HXX
+#endif // PERSALYS_HSICALPHATABLEMODEL_HXX

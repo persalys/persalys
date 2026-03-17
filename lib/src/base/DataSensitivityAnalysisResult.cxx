@@ -80,34 +80,99 @@ const Point& DataSensitivityAnalysisResult::getR2() const
   return r2_;
 }
 
-const Collection<Point>& DataSensitivityAnalysisResult::getGlobalHSICIndices() const
+const Collection<Point>& DataSensitivityAnalysisResult::getHSICIndices(HSICType hsicType) const
 {
-  return globalHSICIndices_;
+  switch (hsicType)
+  {
+    case Global:      
+      return globalHSICIndices_;
+    case Target:      
+      return targetHSICIndices_;
+    case Conditional:          
+      return conditionalHSICIndices_;
+    default:
+      throw InvalidArgumentException(HERE) << "Invalid HSIC type";
+  }
 }
 
-const Collection<Point>& DataSensitivityAnalysisResult::getGlobalR2HSICIndices() const
+const Collection<Point>& DataSensitivityAnalysisResult::getR2HSICIndices(HSICType hsicType) const
 {
-  return globalR2HSICIndices_;
+  switch (hsicType)
+  {
+    case Global:      
+      return globalR2HSICIndices_;
+    case Target:      
+      return targetR2HSICIndices_;
+    case Conditional:          
+      return conditionalR2HSICIndices_;
+    default:
+      throw InvalidArgumentException(HERE) << "Invalid HSIC type";
+  }
 }
 
-const Collection<Point>& DataSensitivityAnalysisResult::getGlobalPValuesAsymptotic() const
+const Collection<Point>& DataSensitivityAnalysisResult::getPValuesAsymptotic(HSICType hsicType) const
 {
-  return globalPValuesAsymptotic_;
+  switch (hsicType)
+  {
+    case Global:      
+      return globalPValuesAsymptotic_;
+    case Target:      
+      return targetPValuesAsymptotic_;
+    case Conditional:          
+      throw InvalidArgumentException(HERE) << "Asymptotic p-values are not available for conditional HSIC indices";
+    default:
+      throw InvalidArgumentException(HERE) << "Invalid HSIC type";
+  }
 }
 
-const Collection<Point>& DataSensitivityAnalysisResult::getGlobalPValuesPermutation() const
+const Collection<Point>& DataSensitivityAnalysisResult::getPValuesPermutation(HSICType hsicType) const
 {
-  return globalPValuesPermutation_;
+  switch (hsicType)
+  {
+    case Global:      
+      return globalPValuesPermutation_;
+    case Target:      
+      return targetPValuesPermutation_;
+    case Conditional:          
+      return conditionalPValuesPermutation_;
+    default:
+      throw InvalidArgumentException(HERE) << "Invalid HSIC type";
+  }
 }
 
-bool DataSensitivityAnalysisResult::computeHSICPValuesAsymptotic() const
+bool DataSensitivityAnalysisResult::computeHSICPValuesAsymptotic(HSICType hsicType) const
 {
-  return computeAsymptoticPValues_;
+  switch (hsicType)
+  {
+    case Global:      
+      return computeGlobalAsymptoticPValues_;
+    case Target:      
+      return computeTargetAsymptoticPValues_;
+    case Conditional:          
+      return false;
+    default:
+      throw InvalidArgumentException(HERE) << "Invalid HSIC Type";
+  }
 }
 
-bool DataSensitivityAnalysisResult::computeHSICPValuesPermutation() const
+bool DataSensitivityAnalysisResult::computeHSICPValuesPermutation(HSICType hsicType) const
 {
-  return computePermutationPValues_;
+  switch (hsicType)
+  {
+    case Global:      
+      return computeGlobalPermutationPValues_;
+    case Target:      
+      return computeTargetPermutationPValues_;
+    case Conditional:         
+      return computeConditionalPermutationPValues_;
+    default:
+      throw InvalidArgumentException(HERE) << "Invalid HSIC Type";
+  }
+}
+
+const Description& DataSensitivityAnalysisResult::getInterestVariables() const
+{
+  return interestVariables_;
 }
 
 #ifndef SWIG
@@ -146,15 +211,33 @@ void DataSensitivityAnalysisResult::save(OT::Advocate & adv) const
   adv.saveAttribute("firstOrderSobolIndicesInterval_", firstOrderSobolIndicesInterval_);
   adv.saveAttribute("SRCIndices_", SRCIndices_);
   adv.saveAttribute("signedSRCIndices_", signedSRCIndices_);
+  adv.saveAttribute("r2_", r2_);
   adv.saveAttribute("SRCIndicesInterval_", SRCIndicesInterval_);
   adv.saveAttribute("signedSRCIndicesInterval_", signedSRCIndicesInterval_);
-  adv.saveAttribute("r2_", r2_);
-  adv.saveAttribute("isIndependent_", isIndependent_);
-  adv.saveAttribute("independenceWarningMessage_", independenceWarningMessage_);
   adv.saveAttribute("globalHSICIndices_", globalHSICIndices_);
   adv.saveAttribute("globalR2HSICIndices_", globalR2HSICIndices_);
   adv.saveAttribute("globalPValuesAsymptotic_", globalPValuesAsymptotic_);
   adv.saveAttribute("globalPValuesPermutation_", globalPValuesPermutation_);
+  adv.saveAttribute("globalCovarianceModels_", globalCovarianceModels_);
+  adv.saveAttribute("computeGlobalAsymptoticPValues_", computeGlobalAsymptoticPValues_);
+  adv.saveAttribute("computeGlobalPermutationPValues_", computeGlobalPermutationPValues_);
+  adv.saveAttribute("useUStatisticGlobal_", useUStatisticGlobal_);
+  adv.saveAttribute("targetHSICIndices_", targetHSICIndices_);
+  adv.saveAttribute("targetR2HSICIndices_", targetR2HSICIndices_);
+  adv.saveAttribute("targetPValuesAsymptotic_", targetPValuesAsymptotic_);
+  adv.saveAttribute("targetPValuesPermutation_", targetPValuesPermutation_);
+  adv.saveAttribute("targetCovarianceModels_", targetCovarianceModels_);
+  adv.saveAttribute("computeTargetAsymptoticPValues_", computeTargetAsymptoticPValues_);
+  adv.saveAttribute("computeTargetPermutationPValues_", computeTargetPermutationPValues_);
+  adv.saveAttribute("useUStatisticTarget_", useUStatisticTarget_);
+  adv.saveAttribute("conditionalHSICIndices_", conditionalHSICIndices_);
+  adv.saveAttribute("conditionalR2HSICIndices_", conditionalR2HSICIndices_);
+  adv.saveAttribute("conditionalPValuesPermutation_", conditionalPValuesPermutation_);
+  adv.saveAttribute("conditionalCovarianceModels_", conditionalCovarianceModels_);
+  adv.saveAttribute("computeConditionalPermutationPValues_", computeConditionalPermutationPValues_);
+  adv.saveAttribute("isIndependent_", isIndependent_);
+  adv.saveAttribute("independenceWarningMessage_", independenceWarningMessage_);
+  adv.saveAttribute("interestVariables_", interestVariables_);
 }
 
 /* Method load() reloads the object from the StorageManager */
@@ -178,12 +261,33 @@ void DataSensitivityAnalysisResult::load(OT::Advocate & adv)
   adv.loadAttribute("r2_", r2_);
   adv.loadAttribute("isIndependent_", isIndependent_);
   adv.loadAttribute("independenceWarningMessage_", independenceWarningMessage_);
-  if (analysisType_.computeGlobalHSIC())
+  if (analysisType_.computeGlobalHSIC() || analysisType_.computeTargetHSIC() || analysisType_.computeConditionalHSIC())
   {
     adv.loadAttribute("globalHSICIndices_", globalHSICIndices_);
     adv.loadAttribute("globalR2HSICIndices_", globalR2HSICIndices_);
     adv.loadAttribute("globalPValuesAsymptotic_", globalPValuesAsymptotic_);
     adv.loadAttribute("globalPValuesPermutation_", globalPValuesPermutation_);
+    adv.loadAttribute("globalCovarianceModels_", globalCovarianceModels_);
+    adv.loadAttribute("computeGlobalAsymptoticPValues_", computeGlobalAsymptoticPValues_);
+    adv.loadAttribute("computeGlobalPermutationPValues_", computeGlobalPermutationPValues_);
+    adv.loadAttribute("useUStatisticGlobal_", useUStatisticGlobal_);
+    adv.loadAttribute("targetHSICIndices_", targetHSICIndices_);
+    adv.loadAttribute("targetR2HSICIndices_", targetR2HSICIndices_);
+    adv.loadAttribute("targetPValuesAsymptotic_", targetPValuesAsymptotic_);
+    adv.loadAttribute("targetPValuesPermutation_", targetPValuesPermutation_);
+    adv.loadAttribute("targetCovarianceModels_", targetCovarianceModels_);
+    adv.loadAttribute("computeTargetAsymptoticPValues_", computeTargetAsymptoticPValues_);
+    adv.loadAttribute("computeTargetPermutationPValues_", computeTargetPermutationPValues_);
+    adv.loadAttribute("useUStatisticTarget_", useUStatisticTarget_);
+    adv.loadAttribute("conditionalHSICIndices_", conditionalHSICIndices_);
+    adv.loadAttribute("conditionalR2HSICIndices_", conditionalR2HSICIndices_);
+    adv.loadAttribute("conditionalPValuesPermutation_", conditionalPValuesPermutation_);
+    adv.loadAttribute("conditionalCovarianceModels_", conditionalCovarianceModels_);
+    adv.loadAttribute("computeConditionalPermutationPValues_", computeConditionalPermutationPValues_);
+  }
+  if (adv.hasAttribute("interestVariables_"))
+  {
+     adv.loadAttribute("interestVariables_", interestVariables_);
   }
 }
 

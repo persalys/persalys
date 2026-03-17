@@ -23,6 +23,7 @@
 #include "DataSensitivityAnalysisResult.hxx"
 
 #include <openturns/CovarianceModel.hxx>
+#include <openturns/Function.hxx>
 
 #ifndef PERSALYS_DATASENSITIVITYANALYSIS_HXX
 #define PERSALYS_DATASENSITIVITYANALYSIS_HXX
@@ -33,8 +34,28 @@ class PERSALYS_BASE_API DataSensitivityAnalysis : public DesignOfExperimentAnaly
 {
   CLASSNAME
 
+#ifndef SWIG
+  struct HSICParameters
+  {
+    HSICParameters(bool computePermutationPValues = false, bool computeAsymptoticPValues = false, bool useUStatistic = false)
+      : computePermutationPValues_(computePermutationPValues)
+      , computeAsymptoticPValues_(computeAsymptoticPValues)
+      , useUStatistic_(useUStatistic)
+    {}
+
+    bool computePermutationPValues()  const { return computePermutationPValues_; }
+    bool computeAsymptoticPValues()   const { return computeAsymptoticPValues_; }
+    bool useUStatistic()              const { return useUStatistic_; }
+
+    bool computePermutationPValues_ = false;
+    bool computeAsymptoticPValues_ = false;
+    bool useUStatistic_ = false;
+  };
+#endif
+
 public:
   using Type = DataSensitivityAnalysisResult::Type;
+  using HSICType = DataSensitivityAnalysisResult::HSICType;
 
   /** constructors */
   DataSensitivityAnalysis() = default;
@@ -44,14 +65,23 @@ public:
     const OT::String &name, 
     const DesignOfExperiment& design, 
     const unsigned char analysisType = Type::RankSobol | Type::SRC,
-    const OT::Collection<OT::CovarianceModel> &covarianceModels = OT::Collection<OT::CovarianceModel>(),
+    const OT::Description & interestVariables = OT::Description(),
     bool computeCovModelParameters = true
   );
 
   /** Virtual constructor */
   DataSensitivityAnalysis * clone() const override;
 
-  void setHSICParameters(bool computeAsymptoticPValues, bool computePermutationPValues, bool useUStatistic);
+  void setType(unsigned char analysisType);
+
+  void setCovarianceModels(const OT::Collection<OT::CovarianceModel> &covarianceModels, HSICType hsicType);
+
+  void setFilterAlphas(const OT::Point & filterAlphas);
+  void setWeightAlphas(const OT::Point & weightAlphas);
+  void setFilterFunctions(const OT::Collection<OT::Function> &filterFunctions);
+  void setWeightFunctions(const OT::Collection<OT::Function> &weightFunctions);
+
+  void setHSICParameters(bool computePermutationPValues, bool computeAsymptoticPValues, bool useUStatistic, HSICType hsicType);
 
   bool canBeLaunched(OT::String &errorMessage) const override;
   bool hasValidResult() const override;
@@ -72,13 +102,18 @@ public:
 
   bool computeRankSobol() const;
   bool computeSRC() const;
-  bool computeGlobalHSIC() const;
+  bool computeHSIC(HSICType hsicType) const;
 
-  bool computeAsymptoticPValues() const;
-  bool computePermutationPValues() const;
-  bool useUStatistic() const;
+  bool computeAsymptoticPValues(HSICType hsicType) const;
+  bool computePermutationPValues(HSICType hsicType) const;
+  bool useUStatistic(HSICType hsicType) const;
 
-  OT::Collection<OT::CovarianceModel> getCovarianceModels() const;
+  OT::Collection<OT::CovarianceModel> getCovarianceModels(HSICType hsicType) const;
+
+  OT::Point getFilterAlphas() const;
+  OT::Point getWeightAlphas() const;
+  OT::Collection<OT::Function> getFilterFunctions() const;
+  OT::Collection<OT::Function> getWeightFunctions() const;
 
   bool defaultHSICParametersChanged() const;
 
@@ -90,18 +125,28 @@ private:
   void computeSobolIndices();
   void computeSRCIndices();
   void computeGlobalHSICIndices();
+  void computeTargetHSICIndices();
+  void computeConditionalHSICIndices();
   
   void checkIndependance();
 
 private:
   DataSensitivityAnalysisResult result_;
   DataSensitivityAnalysisResult::AnalysisType type_ = std::byte{0b0011};
-  OT::PersistentCollection<OT::CovarianceModel> covarianceModels_;
-  OT::Bool computeAsymptoticPValues_ = false;
-  OT::Bool computePermutationPValues_ = false;
-  OT::Bool useUStatistic_ = false;
+  OT::PersistentCollection<OT::CovarianceModel> globalCovarianceModels_;
+  OT::PersistentCollection<OT::CovarianceModel> targetCovarianceModels_;
+  OT::PersistentCollection<OT::CovarianceModel> conditionalCovarianceModels_;
+  HSICParameters globalHSICParameters_;
+  HSICParameters targetHSICParameters_;
+  HSICParameters conditionalHSICParameters_;
+  OT::PersistentCollection<OT::Function> filterFunctions_;
+  OT::PersistentCollection<OT::Function> weightFunctions_;
   OT::Bool computeCovModelParameters_ = true;
   OT::Bool defaultHSICParametersChanged_ = false;
+  OT::Description interestVariables_;
+  OT::Point filterAlphas_;
+  OT::Point weightAlphas_;
+
 };
 
 } // namespace PERSALYS

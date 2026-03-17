@@ -28,6 +28,7 @@
 #include "persalys/DataSensitivityAnalysis.hxx"
 
 #include <openturns/CovarianceModel.hxx>
+#include <openturns/Point.hxx>
 
 #include <QButtonGroup>
 #include <QCheckBox>
@@ -51,6 +52,9 @@ public:
   int nextId() const override;
   bool validatePage() override;
 
+signals:
+  void pageValidated();
+
 private:
   OutputsSelectionGroupBox  * outputsSelectionGroupBox_  = nullptr;
   QButtonGroup              * methodGroup_               = nullptr;
@@ -59,27 +63,44 @@ private:
 };
 
 class HSICCovarianceModelsTableModel;
+class HSICAlphaTableModel;
 
-class PERSALYS_VIEW_API DataSensitivityAnalysisHSCIParametersPage : public QWizardPage
+class PERSALYS_VIEW_API DataSensitivityAnalysisHSICParametersPage : public QWizardPage
 {
   Q_OBJECT
 
 public:
-  explicit DataSensitivityAnalysisHSCIParametersPage(OT::UnsignedInteger sampleSize, const OT::Description & variableNames, QWidget* parent = nullptr);
+  DataSensitivityAnalysisHSICParametersPage(
+    OT::UnsignedInteger sampleSize, 
+    const OT::Description & variableNames, 
+    DataSensitivityAnalysis::HSICType type, 
+    QWidget* parent = nullptr
+  );
 
-  void initialize(const DataSensitivityAnalysis * analysis_ptr);
+  void initialize(DataSensitivityAnalysis * analysis_ptr);
 
   bool computeAsymptoticPValues() const;
   bool computePermutationPValues() const;
   bool useUStatistic() const;
   OT::Collection<OT::CovarianceModel> getCovarianceModels() const;
+  OT::Point getAlphas() const;
+
+  int nextId() const override;
+  bool validatePage() override;
+
+signals:
+  void pageValidated();
 
 private:
-    QCheckBox * computeAsymptoticPValuesCheckBox_           = nullptr;
-    QCheckBox * computePermutationPValuesCheckBox_          = nullptr;
-    QComboBox * useUStatisticComboBox_                      = nullptr;
-    HSICCovarianceModelsTableModel * covarianceTableModel_  = nullptr;
-    QTableView * covarianceTableView_                       = nullptr;
+    DataSensitivityAnalysis::HSICType type_;
+    QCheckBox                         * computeAsymptoticPValuesCheckBox_   = nullptr;
+    QCheckBox                         * computePermutationPValuesCheckBox_  = nullptr;
+    QComboBox                         * useUStatisticComboBox_              = nullptr;
+    HSICCovarianceModelsTableModel    * covarianceTableModel_               = nullptr;
+    QTableView                        * covarianceTableView_                = nullptr;
+    HSICAlphaTableModel               * alphaTableModel_                    = nullptr;
+    QTableView                        * alphaTableView_                     = nullptr;
+    DataSensitivityAnalysis           * analysis_ptr_                       = nullptr;
 };
 
 class PERSALYS_VIEW_API DataSensitivityAnalysisWizard : public AnalysisWizard
@@ -89,7 +110,7 @@ class PERSALYS_VIEW_API DataSensitivityAnalysisWizard : public AnalysisWizard
   friend class TestDataSensitivityAnalysisWizard;
 
 public:
-  enum Page {Intro, HSCIParameters};
+  enum Page {Intro, GlobalHSICParameters, TargetHSICParameters, ConditionalHSICParameters};
 
   explicit DataSensitivityAnalysisWizard(const Analysis& analysis, QWidget* parent = nullptr);
 
@@ -97,9 +118,11 @@ public:
   int nextId() const override;
 
 private:
-  DataSensitivityAnalysisIntroPage * introPage_ = nullptr;
-  DataSensitivityAnalysisHSCIParametersPage * hsciparametersPage_ = nullptr;
-  DataSensitivityAnalysis * analysis_ptr_ = nullptr;
+  DataSensitivityAnalysisIntroPage          * introPage_                      = nullptr;
+  DataSensitivityAnalysisHSICParametersPage * globalHSICParametersPage_       = nullptr;
+  DataSensitivityAnalysisHSICParametersPage * targetHSICParametersPage_       = nullptr;
+  DataSensitivityAnalysisHSICParametersPage * conditionalHSICParametersPage_  = nullptr;
+  const DataSensitivityAnalysis             * analysis_ptr_                   = nullptr;
 
 };
 

@@ -37,11 +37,15 @@ public:
 
   friend class DataSensitivityAnalysis;
 
+  enum HSICType {Global, Target, Conditional};
+
   enum Type : unsigned char
   {
-    RankSobol   = 0b00000001,
-    SRC         = 0b00000010,
-    GlobalHSIC  = 0b00000100
+    RankSobol       = 0b00000001,
+    SRC             = 0b00000010,
+    GlobalHSIC      = 0b00000100,
+    TargetHSIC      = 0b00001000,
+    ConditionalHSIC = 0b00010000
   };
 
 private:
@@ -52,14 +56,18 @@ private:
    * - bit 0 (0b0001): compute Rank Sobol indices
    * - bit 1 (0b0010): compute SRC indices
    * - bit 2 (0b0100): compute global HSIC indices
+   * - bit 3 (0b1000): compute target HSIC indices
+   * - bit 4 (0b10000): compute conditional HSIC indices
    */
   struct AnalysisType
   {
     AnalysisType(std::byte type) : type_(type) {}
 
-    bool computeRankSobol()   const {return (type_ & std::byte{RankSobol})  != std::byte{0};}
-    bool computeSRC()         const {return (type_ & std::byte{SRC})        != std::byte{0};}
-    bool computeGlobalHSIC()  const {return (type_ & std::byte{GlobalHSIC}) != std::byte{0};}
+    bool computeRankSobol()       const {return (type_ & std::byte{RankSobol})        != std::byte{0};}
+    bool computeSRC()             const {return (type_ & std::byte{SRC})              != std::byte{0};}
+    bool computeGlobalHSIC()      const {return (type_ & std::byte{GlobalHSIC})       != std::byte{0};}
+    bool computeTargetHSIC()      const {return (type_ & std::byte{TargetHSIC})       != std::byte{0};}
+    bool computeConditionalHSIC() const {return (type_ & std::byte{ConditionalHSIC})  != std::byte{0};}
 
     std::byte getType() const { return type_; }
 
@@ -88,13 +96,14 @@ public:
   const OT::Collection<OT::Interval>& getSignedSRCIndicesInterval() const;
   const OT::Point& getR2() const;
 
-  const OT::Collection<OT::Point>& getGlobalHSICIndices() const;
-  const OT::Collection<OT::Point>& getGlobalR2HSICIndices() const;
-  const OT::Collection<OT::Point>& getGlobalPValuesAsymptotic() const;
-  const OT::Collection<OT::Point>& getGlobalPValuesPermutation() const;
+  const OT::Collection<OT::Point>& getHSICIndices(HSICType hsicType) const;
+  const OT::Collection<OT::Point>& getR2HSICIndices(HSICType hsicType) const;
+  const OT::Collection<OT::Point>& getPValuesAsymptotic(HSICType hsicType) const;
+  const OT::Collection<OT::Point>& getPValuesPermutation(HSICType hsicType) const;
+  bool computeHSICPValuesAsymptotic(HSICType hsicType) const;
+  bool computeHSICPValuesPermutation(HSICType hsicType) const;
 
-  bool computeHSICPValuesAsymptotic() const;
-  bool computeHSICPValuesPermutation() const;
+  const OT::Description& getInterestVariables() const;
 
 #ifndef SWIG
   const AnalysisType& getAnalysisType() const;
@@ -129,12 +138,30 @@ private:
   OT::PersistentCollection<OT::Point> globalPValuesAsymptotic_;
   OT::PersistentCollection<OT::Point> globalPValuesPermutation_;
 
-  OT::PersistentCollection<OT::CovarianceModel> covarianceModels_; // covariance models used for the computation of global HSIC indices
-  bool computeAsymptoticPValues_  = false;  // whether to compute asymptotic p-values for global HSIC indices
-  bool computePermutationPValues_ = false;  // whether to compute permutation p-values for global HSIC indices  
-  bool useUStatistic_             = false;  // wether to use U-Statistic or V-statistic for the computation of global HSIC indices 
-                                            // (the default is V-statistic, which is faster to compute but can be biased for small samples)
+  OT::PersistentCollection<OT::CovarianceModel> globalCovarianceModels_;  
+  bool computeGlobalAsymptoticPValues_  = false;                          
+  bool computeGlobalPermutationPValues_ = false;                           
+  bool useUStatisticGlobal_             = false;                          
 
+  OT::PersistentCollection<OT::Point> targetHSICIndices_;
+  OT::PersistentCollection<OT::Point> targetR2HSICIndices_;
+  OT::PersistentCollection<OT::Point> targetPValuesAsymptotic_;
+  OT::PersistentCollection<OT::Point> targetPValuesPermutation_;
+
+  OT::PersistentCollection<OT::CovarianceModel> targetCovarianceModels_;
+  bool computeTargetAsymptoticPValues_  = false;
+  bool computeTargetPermutationPValues_ = false;
+  bool useUStatisticTarget_             = false;
+
+  OT::PersistentCollection<OT::Point> conditionalHSICIndices_;
+  OT::PersistentCollection<OT::Point> conditionalR2HSICIndices_;
+  OT::PersistentCollection<OT::Point> conditionalPValuesPermutation_;
+
+  OT::PersistentCollection<OT::CovarianceModel> conditionalCovarianceModels_;
+  bool computeConditionalPermutationPValues_ = false;
+
+  OT::Description interestVariables_;
+                                                                    
   bool isIndependent_ = true;
   OT::String independenceWarningMessage_; // used to store the warning message if the variables are not independent
 

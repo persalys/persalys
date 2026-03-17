@@ -21,6 +21,7 @@
 
 #include "persalys/DataSensitivityAnalysisWizard.hxx"
 #include "persalys/HSICCovarianceModelsTableModel.hxx"
+#include "persalys/HSICAlphaTableModel.hxx"
 #include "persalys/ComboBoxDelegate.hxx"
 
 #include <QVBoxLayout>
@@ -42,49 +43,107 @@ DataSensitivityAnalysisWizard::DataSensitivityAnalysisWizard(const Analysis& ana
   setWindowTitle(tr("Data sensitivity analysis"));
   docLink_ = "user_manual/graphical_interface/data_analysis/user_manual_data_analysis.html#sensitivityAnalysis";
 
-  analysis_ptr_ = dynamic_cast<DataSensitivityAnalysis *>(analysis.getImplementation().get());
+  analysis_ptr_ = dynamic_cast<const DataSensitivityAnalysis *>(analysis.getImplementation().get());
 
   if (!analysis_ptr_)
     throw InvalidArgumentException(HERE) << "DataSensitivityAnalysisWizard received an analysis of type " << analysis.getClassName();
   
+  auto * draft_analysis_ptr = analysis_ptr_->clone();
+
+  // Intro page
   introPage_ = new DataSensitivityAnalysisIntroPage(analysis_ptr_->getDesignOfExperiment().getType());
-  introPage_->initialize(analysis_ptr_);
+  introPage_->initialize(draft_analysis_ptr);
   setPage(Page::Intro, introPage_);
 
-  const auto inDesc = analysis_ptr_->getDesignOfExperiment().getInputSample().getDescription();
-  const auto outDesc = analysis_ptr_->getDesignOfExperiment().getOutputSample().getDescription();
-  OT::Description variableNames;
-  for (OT::UnsignedInteger i = 0; i < inDesc.getSize(); ++i)
-    variableNames.add(inDesc[i]);
-  for (OT::UnsignedInteger i = 0; i < outDesc.getSize(); ++i)
-    variableNames.add(outDesc[i]);
+  const auto doe            = analysis_ptr_->getDesignOfExperiment();
+  
+  // Global HSIC parameters page
+  globalHSICParametersPage_ = new DataSensitivityAnalysisHSICParametersPage(
+    doe.getSample().getSize(), 
+    doe.getSample().getDescription(), 
+    DataSensitivityAnalysis::HSICType::Global
+  );
 
-  hsciparametersPage_ = new DataSensitivityAnalysisHSCIParametersPage(
-    analysis_ptr_->getDesignOfExperiment().getSample().getSize(), variableNames);
-  hsciparametersPage_->initialize(analysis_ptr_);
-  setPage(Page::HSCIParameters, hsciparametersPage_);
+  setPage(Page::GlobalHSICParameters, globalHSICParametersPage_);
+
+  connect (introPage_, &DataSensitivityAnalysisIntroPage::pageValidated, this, [this, draft_analysis_ptr]() {
+    draft_analysis_ptr->setType(introPage_->getType());
+    globalHSICParametersPage_->initialize(draft_analysis_ptr);
+  });
+
+  // Target HSIC parameters page
+  targetHSICParametersPage_ = new DataSensitivityAnalysisHSICParametersPage(
+    doe.getSample().getSize(), 
+    doe.getSample().getDescription(), 
+    DataSensitivityAnalysis::HSICType::Target
+  );
+
+  setPage(Page::TargetHSICParameters, targetHSICParametersPage_);
+
+  connect(introPage_, &DataSensitivityAnalysisIntroPage::pageValidated, this, [this, draft_analysis_ptr]() {
+    targetHSICParametersPage_->initialize(draft_analysis_ptr);
+  });
+
+  connect(globalHSICParametersPage_, &DataSensitivityAnalysisHSICParametersPage::pageValidated, this, [this, draft_analysis_ptr]() {
+    targetHSICParametersPage_->initialize(draft_analysis_ptr);
+  });
+
+  // Conditional HSIC parameters page
+  conditionalHSICParametersPage_ = new DataSensitivityAnalysisHSICParametersPage(
+    doe.getSample().getSize(), 
+    doe.getSample().getDescription(), 
+    DataSensitivityAnalysis::HSICType::Conditional
+  );
+
+  setPage(Page::ConditionalHSICParameters, conditionalHSICParametersPage_);
+
+  connect(introPage_, &DataSensitivityAnalysisIntroPage::pageValidated, this, [this, draft_analysis_ptr]() {
+    conditionalHSICParametersPage_->initialize(draft_analysis_ptr);
+  });
+
+  connect(globalHSICParametersPage_, &DataSensitivityAnalysisHSICParametersPage::pageValidated, this, [this, draft_analysis_ptr]() {
+    conditionalHSICParametersPage_->initialize(draft_analysis_ptr);
+  });
+
+  connect(targetHSICParametersPage_, &DataSensitivityAnalysisHSICParametersPage::pageValidated, this, [this, draft_analysis_ptr]() {
+    conditionalHSICParametersPage_->initialize(draft_analysis_ptr);
+  });
 }
 
 Analysis DataSensitivityAnalysisWizard::getAnalysis() const
 {
   const unsigned char type = introPage_->getType();
 
-  OT::Collection<OT::CovarianceModel> covModels;
-  if (type & DataSensitivityAnalysisResult::GlobalHSIC)
-    covModels = hsciparametersPage_->getCovarianceModels();
-
   DataSensitivityAnalysis analysis(
     analysis_ptr_->getName(),
     analysis_ptr_->getDesignOfExperiment(),
     type,
-    covModels
+    introPage_->getInterestVariables()
   );
 
-  analysis.setHSICParameters(
-    hsciparametersPage_->computeAsymptoticPValues(), 
-    hsciparametersPage_->computePermutationPValues(), 
-    hsciparametersPage_->useUStatistic()
-  );
+  auto HSICTypesTable = {
+    std::make_tuple(DataSensitivityAnalysis::HSICType::Global, DataSensitivityAnalysis::Type::GlobalHSIC, globalHSICParametersPage_),
+    std::make_tuple(DataSensitivityAnalysis::HSICType::Target, DataSensitivityAnalysis::Type::TargetHSIC, targetHSICParametersPage_),
+    std::make_tuple(DataSensitivityAnalysis::HSICType::Conditional, DataSensitivityAnalysis::Type::ConditionalHSIC, conditionalHSICParametersPage_)
+  };
+
+  for (const auto& [HSICType, analysisType, page] : HSICTypesTable)
+  {
+    if (type & analysisType)
+    {
+      analysis.setHSICParameters(
+        page->computePermutationPValues(),
+        page->computeAsymptoticPValues(),
+        page->useUStatistic(),
+        HSICType
+      );
+      analysis.setCovarianceModels(page->getCovarianceModels(), HSICType);
+      if (HSICType == DataSensitivityAnalysisResult::HSICType::Target)
+        analysis.setFilterAlphas(page->getAlphas());
+      else if (HSICType == DataSensitivityAnalysisResult::HSICType::Conditional)
+        analysis.setWeightAlphas(page->getAlphas());
+    }
+  }
 
   analysis.setInterestVariables(introPage_->getInterestVariables());
 
@@ -93,10 +152,19 @@ Analysis DataSensitivityAnalysisWizard::getAnalysis() const
 
 int DataSensitivityAnalysisWizard::nextId() const
 {
-  if (currentId() == Page::Intro)
-    return introPage_->nextId();
-  else
-    return -1;
+  switch (currentId())
+  {
+    case Page::Intro:
+      return introPage_->nextId();
+    case Page::GlobalHSICParameters:
+      return globalHSICParametersPage_->nextId();
+    case Page::TargetHSICParameters:
+      return targetHSICParametersPage_->nextId();
+    case Page::ConditionalHSICParameters:
+      return -1;
+    default:
+      return -1;
+  }
 }
 
 /********************************* Intro Page *********************************/
@@ -113,8 +181,8 @@ DataSensitivityAnalysisIntroPage::DataSensitivityAnalysisIntroPage(DesignOfExper
   pageLayout->addWidget(outputsSelectionGroupBox_);
 
   // method selection
-  auto * methodGroupBox = new QGroupBox(tr("Global sensitivity methods"));
-  auto * methodLayout = new QVBoxLayout(methodGroupBox);
+  auto * GSAGroupBox = new QGroupBox(tr("Global sensitivity analysis methods"));
+  auto * GSALayout = new QVBoxLayout(GSAGroupBox);
 
   methodGroup_ = new QButtonGroup(this);
   methodGroup_->setExclusive(false);
@@ -123,27 +191,44 @@ DataSensitivityAnalysisIntroPage::DataSensitivityAnalysisIntroPage(DesignOfExper
   auto * SobolCB = new QCheckBox(tr("Sobol indices (rank sobol algorithm)"));
   methodGroup_->addButton(SobolCB, DataSensitivityAnalysisResult::RankSobol);
   SobolCB->setChecked(doeType == DesignOfExperiment::Type::MC);
-  methodLayout->addWidget(SobolCB);
+  GSALayout->addWidget(SobolCB);
 
   // SRC
   auto * SRCCB = new QCheckBox(tr("Standard regression coefficients"));
   methodGroup_->addButton(SRCCB, DataSensitivityAnalysisResult::SRC);
   SRCCB->setChecked(true);
-  methodLayout->addWidget(SRCCB);
+  GSALayout->addWidget(SRCCB);
 
   // Global HSIC
-  auto * GlobalHSICCB = new QCheckBox(tr("Global HSIC"));
-  GlobalHSICCB->setChecked(false);
-  methodGroup_->addButton(GlobalHSICCB, DataSensitivityAnalysisResult::GlobalHSIC);
-  // setFinalPage triggers QWizard::updateButtonLayout(), which re-evaluates
-  // nextId() and updates Next/Finish button visibility accordingly.
-  // completeChanged alone only updates button enabled state, not visibility.
-  connect(GlobalHSICCB, &QCheckBox::toggled, this, [this](bool checked) {
-    setFinalPage(!checked);
+  auto * globalHSICCB = new QCheckBox(tr("Global HSIC"));
+  methodGroup_->addButton(globalHSICCB, DataSensitivityAnalysisResult::GlobalHSIC);
+  connect(globalHSICCB, &QCheckBox::toggled, this, [this]() {
+    setFinalPage(nextId() == -1);
   });
-  methodLayout->addWidget(GlobalHSICCB);
+  GSALayout->addWidget(globalHSICCB);
 
-  pageLayout->addWidget(methodGroupBox);
+  pageLayout->addWidget(GSAGroupBox);
+
+  auto * ROSAGroupBox = new QGroupBox(tr("Reliability oriented sensitivity analysis methods"));
+  auto * ROSALayout = new QVBoxLayout(ROSAGroupBox);
+
+  // Target HSIC
+  auto * targetHSICCB = new QCheckBox(tr("Target HSIC"));
+  methodGroup_->addButton(targetHSICCB, DataSensitivityAnalysisResult::TargetHSIC);
+  connect(targetHSICCB, &QCheckBox::toggled, this, [this]() {
+    setFinalPage(nextId() == -1);
+  });
+  ROSALayout->addWidget(targetHSICCB);
+
+  // Conditional HSIC
+  auto * conditionalHSICCB = new QCheckBox(tr("Conditional HSIC"));
+  methodGroup_->addButton(conditionalHSICCB, DataSensitivityAnalysisResult::ConditionalHSIC);
+  connect(conditionalHSICCB, &QCheckBox::toggled, this, [this]() {
+    setFinalPage(nextId() == -1);
+  });
+  ROSALayout->addWidget(conditionalHSICCB);
+
+  pageLayout->addWidget(ROSAGroupBox);
 
   // warning message
   if (doeType != DesignOfExperiment::Type::MC)
@@ -169,13 +254,20 @@ void DataSensitivityAnalysisIntroPage::initialize(DataSensitivityAnalysis * anal
   const auto outputsNames = analysis_ptr->getDesignOfExperiment().getOutputSample().getDescription();
   outputsSelectionGroupBox_->updateComboBoxModel(outputsNames, analysis_ptr->getInterestVariables());
 
+  if (analysis_ptr->getInterestVariables().isEmpty())
+    analysis_ptr->setInterestVariables(outputsNames);
+  
+  outputsSelectionGroupBox_->updateComboBoxModel(outputsNames, analysis_ptr->getInterestVariables());
+
   connect(outputsSelectionGroupBox_, &OutputsSelectionGroupBox::outputsSelectionChanged, this, [this, analysis_ptr]() {
     analysis_ptr->setInterestVariables(getInterestVariables());
   });
 
   methodGroup_->button(DataSensitivityAnalysisResult::RankSobol)->setChecked(analysis_ptr->computeRankSobol());
   methodGroup_->button(DataSensitivityAnalysisResult::SRC)->setChecked(analysis_ptr->computeSRC());
-  methodGroup_->button(DataSensitivityAnalysisResult::GlobalHSIC)->setChecked(analysis_ptr->computeGlobalHSIC());
+  methodGroup_->button(DataSensitivityAnalysisResult::GlobalHSIC)->setChecked(analysis_ptr->computeHSIC(DataSensitivityAnalysisResult::Global));
+  methodGroup_->button(DataSensitivityAnalysisResult::TargetHSIC)->setChecked(analysis_ptr->computeHSIC(DataSensitivityAnalysisResult::Target));
+  methodGroup_->button(DataSensitivityAnalysisResult::ConditionalHSIC)->setChecked(analysis_ptr->computeHSIC(DataSensitivityAnalysisResult::Conditional));
 }
 
 unsigned char DataSensitivityAnalysisIntroPage::getType() const
@@ -204,7 +296,11 @@ OT::Description DataSensitivityAnalysisIntroPage::getInterestVariables() const
 int DataSensitivityAnalysisIntroPage::nextId() const
 {
   if (methodGroup_->button(DataSensitivityAnalysisResult::GlobalHSIC) -> isChecked())
-    return DataSensitivityAnalysisWizard::Page::HSCIParameters;
+    return DataSensitivityAnalysisWizard::Page::GlobalHSICParameters;
+  if (methodGroup_->button(DataSensitivityAnalysisResult::TargetHSIC) -> isChecked())
+    return DataSensitivityAnalysisWizard::Page::TargetHSICParameters;
+  if (methodGroup_->button(DataSensitivityAnalysisResult::ConditionalHSIC) -> isChecked())
+    return DataSensitivityAnalysisWizard::Page::ConditionalHSICParameters;
   else
     return -1;
 }
@@ -223,29 +319,57 @@ bool DataSensitivityAnalysisIntroPage::validatePage()
     return false;
   }
 
+  emit pageValidated();
   return QWizardPage::validatePage();
 }
 
 /**************************** HSIC Parameters page ****************************/
 
-DataSensitivityAnalysisHSCIParametersPage::DataSensitivityAnalysisHSCIParametersPage(OT::UnsignedInteger sampleSize, const OT::Description & variableNames, QWidget* parent)
+DataSensitivityAnalysisHSICParametersPage::DataSensitivityAnalysisHSICParametersPage(
+  OT::UnsignedInteger sampleSize, 
+  const OT::Description & variableNames, 
+  DataSensitivityAnalysis::HSICType type, 
+  QWidget* parent)
 : QWizardPage(parent)
+, type_(type)
 {
-  setTitle((tr("HSIC parameters")));
+  QString title;
+  switch (type)
+  {
+    case DataSensitivityAnalysis::HSICType::Global:
+      title = tr("Global HSIC parameters");
+      break;
+    case DataSensitivityAnalysis::HSICType::Target:
+      title = tr("Target HSIC parameters");
+      break;
+    case DataSensitivityAnalysis::HSICType::Conditional:
+      title = tr("Conditional HSIC parameters");
+      break;
+    default:
+      throw InvalidArgumentException(HERE) << "Invalid HSIC Type";
+  }
+  setTitle(title);
+
   auto * pageLayout = new QVBoxLayout(this);
 
-  useUStatisticComboBox_ = new QComboBox;
-  useUStatisticComboBox_->addItem(tr("Use V-statistic (biased but faster and asymptotically unbiased)"), false);
-  useUStatisticComboBox_->addItem(tr("Use U-statistic (unbiased but more computationally expensive)"), true);
-  pageLayout->addWidget(useUStatisticComboBox_);
+  if (type != DataSensitivityAnalysis::HSICType::Conditional)
+  {
+    useUStatisticComboBox_ = new QComboBox;
+    useUStatisticComboBox_->addItem(tr("Use V-statistic (biased but faster and asymptotically unbiased)"), false);
+    useUStatisticComboBox_->addItem(tr("Use U-statistic (unbiased but more computationally expensive)"), true);
+    pageLayout->addWidget(useUStatisticComboBox_);
+  }
 
   computePermutationPValuesCheckBox_ = new QCheckBox(tr("Compute permutation p-values"));
   computePermutationPValuesCheckBox_->setChecked(sampleSize < 100);
   pageLayout->addWidget(computePermutationPValuesCheckBox_);
 
-  computeAsymptoticPValuesCheckBox_ = new QCheckBox(tr("Compute asymptotic p-values"));
-  computeAsymptoticPValuesCheckBox_->setChecked(sampleSize >= 100);
-  pageLayout->addWidget(computeAsymptoticPValuesCheckBox_);
+  if (type != DataSensitivityAnalysis::HSICType::Conditional)
+  {
+    computeAsymptoticPValuesCheckBox_ = new QCheckBox(tr("Compute asymptotic p-values"));
+    computeAsymptoticPValuesCheckBox_->setChecked(sampleSize >= 100);
+    pageLayout->addWidget(computeAsymptoticPValuesCheckBox_);
+  }
 
   // Covariance models table
   auto * covGroupBox = new QGroupBox(tr("Covariance models"));
@@ -287,43 +411,130 @@ DataSensitivityAnalysisHSCIParametersPage::DataSensitivityAnalysisHSCIParameters
 
   covLayout->addWidget(covarianceTableView_);
   pageLayout->addWidget(covGroupBox);
+
+  // Alpha table for filter/weight functions
+  if (type == DataSensitivityAnalysis::HSICType::Target
+      || type == DataSensitivityAnalysis::HSICType::Conditional)
+  {
+    const QString groupTitle = (type == DataSensitivityAnalysis::HSICType::Target)
+      ? tr("Filter functions")
+      : tr("Weight functions");
+    auto * alphaGroupBox = new QGroupBox(groupTitle);
+    auto * alphaLayout = new QVBoxLayout(alphaGroupBox);
+
+    alphaTableView_ = new QTableView;
+    alphaTableView_->verticalHeader()->hide();
+    alphaTableView_->horizontalHeader()->setStretchLastSection(true);
+    alphaTableView_->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+    alphaLayout->addWidget(alphaTableView_);
+    pageLayout->addWidget(alphaGroupBox);
+  }
 }
 
-void DataSensitivityAnalysisHSCIParametersPage::initialize(const DataSensitivityAnalysis * analysis_ptr)
+void DataSensitivityAnalysisHSICParametersPage::initialize(DataSensitivityAnalysis * analysis_ptr)
 {
   if (!analysis_ptr)
     return;
+  
+  analysis_ptr_ = analysis_ptr;
+
+  Description interestVariables = analysis_ptr->getInterestVariables();
 
   if (analysis_ptr->defaultHSICParametersChanged())
   {
-    computeAsymptoticPValuesCheckBox_->setChecked(analysis_ptr->computeAsymptoticPValues());
-    computePermutationPValuesCheckBox_->setChecked(analysis_ptr->computePermutationPValues());
-    useUStatisticComboBox_->setCurrentIndex(analysis_ptr->useUStatistic() ? 1 : 0);
+    if (type_ != DataSensitivityAnalysis::HSICType::Conditional)
+    {
+      computeAsymptoticPValuesCheckBox_->setChecked(analysis_ptr->computeAsymptoticPValues(type_));
+      useUStatisticComboBox_->setCurrentIndex(analysis_ptr->useUStatistic(type_) ? 1 : 0);
+    }
+    computePermutationPValuesCheckBox_->setChecked(analysis_ptr->computePermutationPValues(type_));
   }
-  if (!analysis_ptr->getCovarianceModels().isEmpty())
+
+  Description variableNames = analysis_ptr->getDesignOfExperiment().getInputSample().getDescription();
+  
+  variableNames.add(interestVariables);
+  covarianceTableModel_->setVariablesNames(variableNames);
+
+  if (!analysis_ptr->getCovarianceModels(type_).isEmpty())
   {
-    covarianceTableModel_->setCovarianceModels(analysis_ptr->getCovarianceModels());
+    covarianceTableModel_->setCovarianceModels(analysis_ptr->getCovarianceModels(type_));
   }
+  else if (type_ != DataSensitivityAnalysis::HSICType::Global)
+  {
+    covarianceTableModel_->setCovarianceModels(analysis_ptr->getCovarianceModels(DataSensitivityAnalysis::HSICType::Global));
+  }
+
+  if (alphaTableView_)
+  {
+    alphaTableModel_ = new HSICAlphaTableModel(interestVariables, this);
+    alphaTableView_->setModel(alphaTableModel_);
+    if (type_ == DataSensitivityAnalysis::HSICType::Target && !analysis_ptr->getFilterAlphas().isEmpty())
+    {
+      alphaTableModel_->setAlphas(analysis_ptr->getFilterAlphas());
+    }
+    else if (type_ == DataSensitivityAnalysis::HSICType::Conditional && !analysis_ptr->getWeightAlphas().isEmpty())
+    {
+      alphaTableModel_->setAlphas(analysis_ptr->getWeightAlphas());
+    }
+  }
+
+  setFinalPage(nextId() == -1);
 }
 
-bool DataSensitivityAnalysisHSCIParametersPage::computeAsymptoticPValues() const
+bool DataSensitivityAnalysisHSICParametersPage::computeAsymptoticPValues() const
 {
-  return computeAsymptoticPValuesCheckBox_->isChecked();
+  return type_ == DataSensitivityAnalysis::HSICType::Conditional ? false : computeAsymptoticPValuesCheckBox_->isChecked();
 }
 
-bool DataSensitivityAnalysisHSCIParametersPage::computePermutationPValues() const
+bool DataSensitivityAnalysisHSICParametersPage::computePermutationPValues() const
 {
   return computePermutationPValuesCheckBox_->isChecked();
 }
 
-bool DataSensitivityAnalysisHSCIParametersPage::useUStatistic() const
+bool DataSensitivityAnalysisHSICParametersPage::useUStatistic() const
 {
-  return useUStatisticComboBox_->currentData().toBool();
+  return type_ == DataSensitivityAnalysis::HSICType::Conditional ? false : useUStatisticComboBox_->currentData().toBool();
 }
 
-OT::Collection<OT::CovarianceModel> DataSensitivityAnalysisHSCIParametersPage::getCovarianceModels() const
+OT::Collection<OT::CovarianceModel> DataSensitivityAnalysisHSICParametersPage::getCovarianceModels() const
 {
   return covarianceTableModel_->getCovarianceModels();
+}
+
+OT::Point DataSensitivityAnalysisHSICParametersPage::getAlphas() const
+{
+  if (alphaTableModel_)
+    return alphaTableModel_->getAlphas();
+  return OT::Point();
+}
+
+int DataSensitivityAnalysisHSICParametersPage::nextId() const
+{
+  switch (type_)
+  {
+    case DataSensitivityAnalysis::HSICType::Global:
+      if (analysis_ptr_->computeHSIC(DataSensitivityAnalysis::HSICType::Target))
+        return DataSensitivityAnalysisWizard::Page::TargetHSICParameters;
+      if (analysis_ptr_->computeHSIC(DataSensitivityAnalysis::HSICType::Conditional))
+        return DataSensitivityAnalysisWizard::Page::ConditionalHSICParameters;
+      return -1;
+    case DataSensitivityAnalysis::HSICType::Target:
+      if (analysis_ptr_->computeHSIC(DataSensitivityAnalysis::HSICType::Conditional))
+        return DataSensitivityAnalysisWizard::Page::ConditionalHSICParameters;
+      return -1;
+    case DataSensitivityAnalysis::HSICType::Conditional:
+      return -1;
+    default:
+      return -1;
+  }
+}
+
+bool DataSensitivityAnalysisHSICParametersPage::validatePage()
+{
+  analysis_ptr_->setCovarianceModels(getCovarianceModels(), type_);
+  emit pageValidated();
+  return QWizardPage::validatePage();
 }
 
 } // namespace PERSALYS

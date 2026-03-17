@@ -109,10 +109,25 @@ ott.assert_almost_equal(
 
 ott.assert_almost_equal(result1.getR2()[0], 0.638872)
 
-assert result1.getGlobalHSICIndices().getSize() == 0
-assert result1.getGlobalR2HSICIndices().getSize() == 0
-assert result1.getGlobalPValuesAsymptotic().getSize() == 0
-assert result1.getGlobalPValuesPermutation().getSize() == 0
+assert (
+    result1.getHSICIndices(persalys.DataSensitivityAnalysisResult.Global).getSize() == 0
+)
+assert (
+    result1.getR2HSICIndices(persalys.DataSensitivityAnalysisResult.Global).getSize()
+    == 0
+)
+assert (
+    result1.getPValuesAsymptotic(
+        persalys.DataSensitivityAnalysisResult.Global
+    ).getSize()
+    == 0
+)
+assert (
+    result1.getPValuesPermutation(
+        persalys.DataSensitivityAnalysisResult.Global
+    ).getSize()
+    == 0
+)
 
 
 # +++++++++++++++++++++++++++++++++ Model 2 +++++++++++++++++++++++++++++++++ #
@@ -237,7 +252,8 @@ assert (
     result3_sobol.getSRCIndices().getSize() == 0
 ), "SRC should be empty when only RankSobol is requested"
 assert (
-    len(result3_sobol.getGlobalHSICIndices()) == 0
+    len(result3_sobol.getHSICIndices(persalys.DataSensitivityAnalysisResult.Global))
+    == 0
 ), "HSIC should be empty when only RankSobol is requested"
 
 # ----------------------- Test with type = SRC only ------------------------- #
@@ -255,30 +271,37 @@ assert (
     len(result3_src.getFirstOrderSobolIndices()) == 0
 ), "Sobol should be empty when only SRC is requested"
 assert (
-    len(result3_src.getGlobalHSICIndices()) == 0
+    len(result3_src.getHSICIndices(persalys.DataSensitivityAnalysisResult.Global)) == 0
 ), "HSIC should be empty when only SRC is requested"
 
 # --------------- Test with type = GlobalHSIC with V-statistic -------------- #
 covModels3 = ot.CovarianceModelCollection([ot.SquaredExponential() for _ in range(4)])
 analysis3_hsic_v = persalys.DataSensitivityAnalysis(
-    "analysis3_hsic_v", model3, GlobalHSIC, covModels3
+    "analysis3_hsic_v", model3, GlobalHSIC
 )
-analysis3_hsic_v.setHSICParameters(True, False, False)  # asymptotic only, V-stat
+analysis3_hsic_v.setCovarianceModels(
+    covModels3, persalys.DataSensitivityAnalysisResult.Global
+)
+analysis3_hsic_v.setHSICParameters(
+    False, True, False, persalys.DataSensitivityAnalysisResult.Global
+)  # asymptotic only, V-stat
 myStudy.add(analysis3_hsic_v)
 analysis3_hsic_v.run()
 result3_hsic_v = analysis3_hsic_v.getResult()
 
 ott.assert_almost_equal(
-    result3_hsic_v.getGlobalHSICIndices()[0],
-    [0.0196875, 0.0103777, 0.0224746],
+    result3_hsic_v.getHSICIndices(persalys.DataSensitivityAnalysisResult.Global)[0],
+    [0.0145197, 0.00998482, 0.0207494],
 )
 ott.assert_almost_equal(
-    result3_hsic_v.getGlobalR2HSICIndices()[0],
-    [0.238798, 0.111624, 0.265083],
+    result3_hsic_v.getR2HSICIndices(persalys.DataSensitivityAnalysisResult.Global)[0],
+    [0.230779, 0.148265, 0.306366],
 )
 ott.assert_almost_equal(
-    result3_hsic_v.getGlobalPValuesAsymptotic()[0],
-    [4.27333e-10, 0.000214159, 3.3177e-12],
+    result3_hsic_v.getPValuesAsymptotic(persalys.DataSensitivityAnalysisResult.Global)[
+        0
+    ],
+    [7.96808e-08, 2.2285e-05, 6.5083e-12],
     1e-3,
     1e-15,
 )
@@ -290,38 +313,55 @@ assert (
     result3_hsic_v.getSRCIndices().getSize() == 0
 ), "SRC should be empty when only HSIC is requested"
 assert (
-    len(result3_hsic_v.getGlobalPValuesPermutation()) == 0
+    len(
+        result3_hsic_v.getPValuesPermutation(
+            persalys.DataSensitivityAnalysisResult.Global
+        )
+    )
+    == 0
 ), "Permutation p-values should be empty when only asymptotic p-values are requested"
 
 # --------------- Test with type = GlobalHSIC with U-statistic -------------- #
 analysis3_hsic_u = persalys.DataSensitivityAnalysis(
-    "analysis3_hsic_u", model3, GlobalHSIC, covModels3
+    "analysis3_hsic_u", model3, GlobalHSIC
 )
-analysis3_hsic_u.setHSICParameters(True, True, True)  # asymptotic, permutation, U-stat
+analysis3_hsic_u.setCovarianceModels(
+    covModels3, persalys.DataSensitivityAnalysisResult.Global
+)
+analysis3_hsic_u.setHSICParameters(
+    True, True, True, persalys.DataSensitivityAnalysisResult.Global
+)  # asymptotic, permutation, U-stat
 myStudy.add(analysis3_hsic_u)
 analysis3_hsic_u.run()
 result3_hsic_u = analysis3_hsic_u.getResult()
 
 ott.assert_almost_equal(
-    result3_hsic_u.getGlobalHSICIndices()[0],
-    [0.0171594, 0.00718277, 0.0202698],
+    result3_hsic_u.getHSICIndices(persalys.DataSensitivityAnalysisResult.Global)[0],
+    [0.013004, 0.0080629, 0.0195008],
 )
 ott.assert_almost_equal(
-    result3_hsic_u.getGlobalR2HSICIndices()[0],
-    [0.211286, 0.0781581, 0.241761],
+    result3_hsic_u.getR2HSICIndices(persalys.DataSensitivityAnalysisResult.Global)[0],
+    [0.209012, 0.120633, 0.290126],
 )
 ott.assert_almost_equal(
-    result3_hsic_u.getGlobalPValuesAsymptotic()[0],
-    [3.15345e-10, 0.000260492, 1.76196e-12],
+    result3_hsic_u.getPValuesAsymptotic(persalys.DataSensitivityAnalysisResult.Global)[
+        0
+    ],
+    [7.23848e-08, 3.28072e-05, 3.73796e-12],
     1e-3,
     1e-15,
 )
 
 # ----------------------- Test with all types combined ---------------------- #
 analysis3_all = persalys.DataSensitivityAnalysis(
-    "analysis3_all", model3, RankSobol | SRC | GlobalHSIC, covModels3
+    "analysis3_all", model3, RankSobol | SRC | GlobalHSIC
 )
-analysis3_all.setHSICParameters(True, False, False)
+analysis3_all.setCovarianceModels(
+    covModels3, persalys.DataSensitivityAnalysisResult.Global
+)
+analysis3_all.setHSICParameters(
+    False, True, False, persalys.DataSensitivityAnalysisResult.Global
+)  # asymptotic only, V-stat
 myStudy.add(analysis3_all)
 analysis3_all.run()
 result3_all = analysis3_all.getResult()
@@ -329,8 +369,10 @@ result3_all = analysis3_all.getResult()
 # All result types should be populated
 assert len(result3_all.getFirstOrderSobolIndices()) > 0, "Sobol should not be empty"
 assert result3_all.getSRCIndices().getSize() > 0, "SRC should not be empty"
-assert len(result3_all.getGlobalHSICIndices()) > 0, "HSIC should not be empty"
+assert (
+    len(result3_all.getHSICIndices(persalys.DataSensitivityAnalysisResult.Global)) > 0
+), "HSIC should not be empty"
 ott.assert_almost_equal(
-    result3_all.getGlobalHSICIndices()[0],
-    [0.0196875, 0.0103777, 0.0224746],
+    result3_all.getHSICIndices(persalys.DataSensitivityAnalysisResult.Global)[0],
+    [0.0145197, 0.00998482, 0.0207494],
 )

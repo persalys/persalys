@@ -44,8 +44,8 @@ protected:
 private:
   void addSobolTab(QTabWidget * tabWidget);
   void addSRCTab(QTabWidget * tabWidget);
-  void addGlobalHSICTab(QTabWidget * tabWidget);
-  
+  void addHSICTab(QTabWidget * tabWidget, DataSensitivityAnalysisResult::HSICType type);
+
 protected:
   DataSensitivityAnalysisResult result_;
   DesignOfExperiment designOfExperiment_;

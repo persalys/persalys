@@ -36,23 +36,21 @@ class PERSALYS_VIEW_API HSICTab : public QTabWidget
   Q_OBJECT
 
 public:
-  enum class Type {Global, Target, Conditional};
 
   HSICTab(
     const DataSensitivityAnalysisResult & result, 
     const DesignOfExperiment & design, 
     VariablesListWidget * outputsListWidget,
-    Type type, 
-    QWidget * parent = nullptr);
+    DataSensitivityAnalysisResult::HSICType type, 
+    QWidget * parent = nullptr
+  );
 
 private:
-  void addSubTab(const OT::Collection<OT::Point> & values, const QString & title, SensitivityResultWidget::Type widgetType);
+  void addSubTab(const OT::Collection<OT::Point> & values, const QString & title, int widgetType);
 
 private:
-  DataSensitivityAnalysisResult result_;
   DesignOfExperiment designOfExperiment_;
   VariablesListWidget * outputsListWidget_ = nullptr;
-  Type type_;
   QStringList inputNames_;
   QStringList outputNames_;
 };

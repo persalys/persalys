@@ -27,8 +27,12 @@
 #include <openturns/CorrelationAnalysis.hxx>
 #include <openturns/BootstrapExperiment.hxx>
 #include <openturns/HSICEstimatorGlobalSensitivity.hxx>
+#include <openturns/HSICEstimatorTargetSensitivity.hxx>
+#include <openturns/HSICEstimatorConditionalSensitivity.hxx>
 #include <openturns/HSICUStat.hxx>
 #include <openturns/HSICVStat.hxx>
+#include <openturns/SymbolicFunction.hxx>
+#include <openturns/OSS.hxx>
 
 using namespace OT;
 
@@ -41,16 +45,16 @@ const static Factory<DataSensitivityAnalysis> Factory_DataSensitivityAnalysis;
 DataSensitivityAnalysis::DataSensitivityAnalysis(const String &name, 
   const DesignOfExperiment & design, 
   const unsigned char analysisType,
-  const OT::Collection<OT::CovarianceModel> &covarianceModels,
+  const OT::Description & interestVariables,
   bool computeCovModelParameters)
   : DesignOfExperimentAnalysis(name, design)
   , type_(std::byte{analysisType})
-  , covarianceModels_(covarianceModels)
   , computeCovModelParameters_(computeCovModelParameters)
 {
-  UnsignedInteger variablesNumber = design.getInputSample().getDimension() + design.getOutputSample().getDimension();
-  if (type_.computeGlobalHSIC() && covarianceModels_.getSize() != variablesNumber)
-    throw InvalidArgumentException(HERE) << "The number of covariance models (" << covarianceModels_.getSize() << ") must be equal to the total number of input and output variables (" << variablesNumber << ") when HSIC indices are computed.";
+  if (interestVariables.isEmpty())
+    interestVariables_ = design.getOutputSample().getDescription();
+  else
+    interestVariables_ = interestVariables;
 }
 
 DataSensitivityAnalysis * DataSensitivityAnalysis::clone() const
@@ -58,14 +62,94 @@ DataSensitivityAnalysis * DataSensitivityAnalysis::clone() const
   return new DataSensitivityAnalysis(*this);
 }
 
-void DataSensitivityAnalysis::setHSICParameters(bool computeAsymptoticPValues, bool computePermutationPValues, bool useUStatistic)
+void DataSensitivityAnalysis::setType(unsigned char analysisType)
 {
-  computeAsymptoticPValues_   = computeAsymptoticPValues;
-  computePermutationPValues_  = computePermutationPValues;
-  useUStatistic_              = useUStatistic;
-  
+  type_ = std::byte{analysisType};
+}
+
+void DataSensitivityAnalysis::setCovarianceModels(const OT::Collection<OT::CovarianceModel> &covarianceModels, HSICType hsicType)
+{
+  switch (hsicType)
+  {
+    case DataSensitivityAnalysisResult::Global:
+      globalCovarianceModels_ = covarianceModels;
+      break;
+    case DataSensitivityAnalysisResult::Target:
+      targetCovarianceModels_ = covarianceModels;
+      break;
+    case DataSensitivityAnalysisResult::Conditional:
+      conditionalCovarianceModels_ = covarianceModels;
+      break;
+    default:
+      throw InvalidArgumentException(HERE) << "Invalid HSIC Type";
+  }
+}
+
+void DataSensitivityAnalysis::setFilterAlphas(const OT::Point & filterAlphas)
+{
+  filterAlphas_ = filterAlphas;
+
+  filterFunctions_.clear();
+  Sample outSample = designOfExperiment_.getOutputSample().getMarginal(interestVariables_);
+  const Point stdDevs = outSample.computeStandardDeviation();
+  for (UnsignedInteger i = 0; i < filterAlphas_.getSize(); ++i)
+  {
+    const Scalar s = filterAlphas_[i] * stdDevs[i];
+    OSS formula;
+    formula << "exp(-x/" << s << ")";
+    filterFunctions_.add(SymbolicFunction(Description(1, "x"), Description(1, formula.str())));
+  }
+}
+
+void DataSensitivityAnalysis::setWeightAlphas(const OT::Point & weightAlphas)
+{
+  weightAlphas_ = weightAlphas;
+
+  weightFunctions_.clear();
+  Sample outSample = designOfExperiment_.getOutputSample().getMarginal(interestVariables_);
+  const Point stdDevs = outSample.computeStandardDeviation();
+  for (UnsignedInteger i = 0; i < weightAlphas_.getSize(); ++i)
+  {
+    const Scalar s = weightAlphas_[i] * stdDevs[i];
+    OSS formula;
+    formula << "exp(-x/" << s << ")";
+    weightFunctions_.add(SymbolicFunction(Description(1, "x"), Description(1, formula.str())));
+  }
+}
+
+void DataSensitivityAnalysis::setFilterFunctions(const OT::Collection<OT::Function> &filterFunctions)
+{
+  filterAlphas_.clear();
+  filterFunctions_ = filterFunctions;
+}
+
+void DataSensitivityAnalysis::setWeightFunctions(const OT::Collection<OT::Function> &weightFunctions)
+{
+  weightAlphas_.clear();
+  weightFunctions_ = weightFunctions;
+}
+
+void DataSensitivityAnalysis::setHSICParameters(bool computePermutationPValues, bool computeAsymptoticPValues, bool useUStatistic, HSICType hsicType)
+{
+  switch (hsicType)
+  {
+    case DataSensitivityAnalysisResult::Global:
+      globalHSICParameters_ = HSICParameters(computePermutationPValues, computeAsymptoticPValues, useUStatistic);
+      break;
+    case DataSensitivityAnalysisResult::Target:
+      targetHSICParameters_ = HSICParameters(computePermutationPValues, computeAsymptoticPValues, useUStatistic);
+      break;
+    case DataSensitivityAnalysisResult::Conditional:
+      if (computeAsymptoticPValues || useUStatistic)
+        throw InvalidArgumentException(HERE) << "Asymptotic p-values and U-statistic are not supported for conditional HSIC indices";
+      conditionalHSICParameters_ = HSICParameters(computePermutationPValues, false, false);
+      break;
+    default:
+      throw InvalidArgumentException(HERE) << "Invalid HSIC Type";
+  }
   defaultHSICParametersChanged_ = true;
 }
+
 
 bool DataSensitivityAnalysis::canBeLaunched(String &errorMessage) const
 {
@@ -83,13 +167,27 @@ Parameters DataSensitivityAnalysis::getParameters() const
     analysisTypesStr += "SRC indices, ";
   if (type_.computeGlobalHSIC())
     analysisTypesStr += "Global HSIC indices, ";
+  if (type_.computeTargetHSIC())
+    analysisTypesStr += "Target HSIC indices, ";
+  if (type_.computeConditionalHSIC())
+    analysisTypesStr += "Conditional HSIC indices, ";
   analysisTypesStr = analysisTypesStr.substr(0, analysisTypesStr.size() - 2); // remove last ", "
   parameters.add("Analysis types", analysisTypesStr);
   if (type_.computeGlobalHSIC())
   {
-    parameters.add("Compute asymptotic p-values", computeAsymptoticPValues_ ? "Yes" : "No");
-    parameters.add("Compute permutation p-values", computePermutationPValues_ ? "Yes" : "No");
-    parameters.add("Statistic used for HSIC: ", useUStatistic_ ? "U-statistic" : "V-statistic");
+    parameters.add("Compute asymptotic p-values for global HSIC", globalHSICParameters_.computeAsymptoticPValues() ? "Yes" : "No");
+    parameters.add("Compute permutation p-values for global HSIC", globalHSICParameters_.computePermutationPValues() ? "Yes" : "No");
+    parameters.add("Statistic used for global HSIC: ", globalHSICParameters_.useUStatistic() ? "U-statistic" : "V-statistic");
+  }
+  if (type_.computeTargetHSIC())
+  {
+    parameters.add("Compute asymptotic p-values for target HSIC", targetHSICParameters_.computeAsymptoticPValues() ? "Yes" : "No");
+    parameters.add("Compute permutation p-values for target HSIC", targetHSICParameters_.computePermutationPValues() ? "Yes" : "No");
+    parameters.add("Statistic used for target HSIC: ", targetHSICParameters_.useUStatistic() ? "U-statistic" : "V-statistic");
+  }
+  if (type_.computeConditionalHSIC())
+  {
+    parameters.add("Compute permutation p-values for conditional HSIC", conditionalHSICParameters_.computePermutationPValues() ? "Yes" : "No");
   }
 
   return parameters;
@@ -105,29 +203,99 @@ bool DataSensitivityAnalysis::computeSRC() const
   return type_.computeSRC();
 }
 
-bool DataSensitivityAnalysis::computeGlobalHSIC() const
+bool DataSensitivityAnalysis::computeHSIC(HSICType hsicType) const
 {
-  return type_.computeGlobalHSIC();
+  switch (hsicType)
+  {
+    case DataSensitivityAnalysisResult::Global:
+      return type_.computeGlobalHSIC();
+    case DataSensitivityAnalysisResult::Target:
+      return type_.computeTargetHSIC();
+    case DataSensitivityAnalysisResult::Conditional:
+      return type_.computeConditionalHSIC();
+    default:
+      throw InvalidArgumentException(HERE) << "Invalid HSIC Type";
+  }
 }
 
-bool DataSensitivityAnalysis::computeAsymptoticPValues() const
+bool DataSensitivityAnalysis::computeAsymptoticPValues(HSICType hsicType) const
 {
-  return computeAsymptoticPValues_;
+  switch (hsicType)
+  {
+    case DataSensitivityAnalysisResult::Global:
+      return globalHSICParameters_.computeAsymptoticPValues();
+    case DataSensitivityAnalysisResult::Target:
+      return targetHSICParameters_.computeAsymptoticPValues();
+    case DataSensitivityAnalysisResult::Conditional:
+      return conditionalHSICParameters_.computeAsymptoticPValues();
+    default:
+      throw InvalidArgumentException(HERE) << "Invalid HSIC Type";
+  }
 }
 
-bool DataSensitivityAnalysis::computePermutationPValues() const
+bool DataSensitivityAnalysis::computePermutationPValues(HSICType hsicType) const
 {
-  return computePermutationPValues_;
+  switch (hsicType)
+  {
+    case DataSensitivityAnalysisResult::Global:
+      return globalHSICParameters_.computePermutationPValues();
+    case DataSensitivityAnalysisResult::Target:
+      return targetHSICParameters_.computePermutationPValues();
+    case DataSensitivityAnalysisResult::Conditional:
+      return conditionalHSICParameters_.computePermutationPValues();
+    default:
+      throw InvalidArgumentException(HERE) << "Invalid HSIC Type";
+  }
 }
 
-bool DataSensitivityAnalysis::useUStatistic() const
+bool DataSensitivityAnalysis::useUStatistic(HSICType hsicType) const
 {
-  return useUStatistic_;
+  switch (hsicType)
+  {
+    case DataSensitivityAnalysisResult::Global:
+      return globalHSICParameters_.useUStatistic();
+    case DataSensitivityAnalysisResult::Target:
+      return targetHSICParameters_.useUStatistic();
+    case DataSensitivityAnalysisResult::Conditional:
+      return conditionalHSICParameters_.useUStatistic();
+    default:
+      throw InvalidArgumentException(HERE) << "Invalid HSIC Type";
+  }
 }
 
-OT::Collection<OT::CovarianceModel> DataSensitivityAnalysis::getCovarianceModels() const
+Collection<CovarianceModel> DataSensitivityAnalysis::getCovarianceModels(HSICType hsicType) const
 {
-  return covarianceModels_;
+  switch (hsicType)
+  {
+    case DataSensitivityAnalysisResult::Global:
+      return globalCovarianceModels_;
+    case DataSensitivityAnalysisResult::Target:
+      return targetCovarianceModels_;
+    case DataSensitivityAnalysisResult::Conditional:
+      return conditionalCovarianceModels_;
+    default:
+      throw InvalidArgumentException(HERE) << "Invalid HSIC Type";
+  }
+}
+
+Point DataSensitivityAnalysis::getFilterAlphas() const
+{
+  return filterAlphas_;
+}
+
+Point DataSensitivityAnalysis::getWeightAlphas() const
+{
+  return weightAlphas_;
+}
+
+Collection<Function> DataSensitivityAnalysis::getFilterFunctions() const
+{  
+  return filterFunctions_;
+}
+
+Collection<Function> DataSensitivityAnalysis::getWeightFunctions() const
+{
+  return weightFunctions_;
 }
 
 bool DataSensitivityAnalysis::defaultHSICParametersChanged() const
@@ -158,10 +326,26 @@ bool DataSensitivityAnalysis::hasValidResult() const
   {
     hasValidResult = hasValidResult && !result_.globalHSICIndices_.isEmpty();
     hasValidResult = hasValidResult && !result_.globalR2HSICIndices_.isEmpty();
-    if (computeAsymptoticPValues_)
+    if (globalHSICParameters_.computeAsymptoticPValues())
       hasValidResult = hasValidResult && !result_.globalPValuesAsymptotic_.isEmpty();
-    if (computePermutationPValues_)
+    if (globalHSICParameters_.computePermutationPValues())
       hasValidResult = hasValidResult && !result_.globalPValuesPermutation_.isEmpty();
+  }
+  if (type_.computeTargetHSIC())
+  {
+    hasValidResult = hasValidResult && !result_.targetHSICIndices_.isEmpty();
+    hasValidResult = hasValidResult && !result_.targetR2HSICIndices_.isEmpty();
+    if (targetHSICParameters_.computeAsymptoticPValues())
+      hasValidResult = hasValidResult && !result_.targetPValuesAsymptotic_.isEmpty();
+    if (targetHSICParameters_.computePermutationPValues())
+      hasValidResult = hasValidResult && !result_.targetPValuesPermutation_.isEmpty();
+  }
+  if (type_.computeConditionalHSIC())
+  {
+    hasValidResult = hasValidResult && !result_.conditionalHSICIndices_.isEmpty();
+    hasValidResult = hasValidResult && !result_.conditionalR2HSICIndices_.isEmpty();
+    if (conditionalHSICParameters_.computePermutationPValues())
+      hasValidResult = hasValidResult && !result_.conditionalPValuesPermutation_.isEmpty();
   }
   
   return hasValidResult;
@@ -177,11 +361,22 @@ void DataSensitivityAnalysis::initialize()
   AnalysisImplementation::initialize();
   result_ = DataSensitivityAnalysisResult(designOfExperiment_);
 
-  result_.analysisType_               = type_;
-  result_.covarianceModels_           = covarianceModels_;
-  result_.computeAsymptoticPValues_   = computeAsymptoticPValues_;
-  result_.computePermutationPValues_  = computePermutationPValues_;
-  result_.useUStatistic_              = useUStatistic_;
+  result_.analysisType_                     = type_;
+  
+  result_.globalCovarianceModels_           = globalCovarianceModels_;
+  result_.computeGlobalAsymptoticPValues_   = globalHSICParameters_.computeAsymptoticPValues();
+  result_.computeGlobalPermutationPValues_  = globalHSICParameters_.computePermutationPValues();
+  result_.useUStatisticGlobal_              = globalHSICParameters_.useUStatistic();
+
+  result_.targetCovarianceModels_           = targetCovarianceModels_;
+  result_.computeTargetAsymptoticPValues_   = targetHSICParameters_.computeAsymptoticPValues();
+  result_.computeTargetPermutationPValues_  = targetHSICParameters_.computePermutationPValues();
+  result_.useUStatisticTarget_              = targetHSICParameters_.useUStatistic();
+
+  result_.conditionalCovarianceModels_           = conditionalCovarianceModels_;
+  result_.computeConditionalPermutationPValues_  = conditionalHSICParameters_.computePermutationPValues();
+
+  result_.interestVariables_ = interestVariables_;
 }
 
 void DataSensitivityAnalysis::launch()
@@ -192,13 +387,17 @@ void DataSensitivityAnalysis::launch()
     computeSRCIndices();
   if (result_.analysisType_.computeGlobalHSIC())
     computeGlobalHSICIndices();
+  if (result_.analysisType_.computeTargetHSIC())
+    computeTargetHSICIndices();
+  if (result_.analysisType_.computeConditionalHSIC())
+    computeConditionalHSICIndices();
 
   checkIndependance();
 }
 
 void DataSensitivityAnalysis::computeSobolIndices()
 {
-  const Sample outSample{designOfExperiment_.getOutputSample()};
+  const Sample outSample{designOfExperiment_.getOutputSample().getMarginal(interestVariables_)};
   Sample marginalOutSample;
   const Sample inSample{designOfExperiment_.getInputSample()};
   const auto nbOutputs = outSample.getDimension();
@@ -218,7 +417,7 @@ void DataSensitivityAnalysis::computeSobolIndices()
 void DataSensitivityAnalysis::computeSRCIndices()
 {
   const Sample inputSample{designOfExperiment_.getInputSample()};
-  const Sample outputSample{designOfExperiment_.getOutputSample()};
+  const Sample outputSample{designOfExperiment_.getOutputSample().getMarginal(interestVariables_)};
 
   const UnsignedInteger nbOutputs = outputSample.getDimension();
   const UnsignedInteger nbInputs  = inputSample.getDimension();
@@ -293,46 +492,51 @@ void DataSensitivityAnalysis::computeSRCIndices()
 
 void DataSensitivityAnalysis::computeGlobalHSICIndices()
 {
+  Sample sample = designOfExperiment_.getInputSample();
+  sample.stack(designOfExperiment_.getOutputSample().getMarginal(interestVariables_));
 
-  const Sample sample{designOfExperiment_.getSample()};
+  if (globalCovarianceModels_.getSize() != sample.getDimension())
+    throw InvalidArgumentException(HERE) << "The number of covariance models for global HSIC indices (" << globalCovarianceModels_.getSize() << ") must be equal to the number of variables (" << sample.getDimension() << ").";
+
   if (computeCovModelParameters_)
   {
     Point stdDevs = sample.computeStandardDeviation();
-    for(UnsignedInteger i = 0; i < covarianceModels_.getSize(); ++i)
+    for(UnsignedInteger i = 0; i < globalCovarianceModels_.getSize(); ++i)
     {
       if (stdDevs[i] == 0.)
         throw InvalidArgumentException(HERE) << "The standard deviation of variable " << sample.getDescription()[i] << " is zero, the covariance model parameters cannot be estimated.";
-      covarianceModels_[i].setScale(Point{stdDevs[i]});
+      globalCovarianceModels_[i].setScale(Point{stdDevs[i]});
     }
   }
 
   HSICStat stat;
-  if (result_.useUStatistic_)
+  if (globalHSICParameters_.useUStatistic())
     stat = HSICUStat();
   else
     stat = HSICVStat();
 
   const Sample inSample{designOfExperiment_.getInputSample()};
-  const Sample outSample{designOfExperiment_.getOutputSample()};
+  const Sample outSample{designOfExperiment_.getOutputSample().getMarginal(interestVariables_)};
   const UnsignedInteger nbOutputs = outSample.getDimension();
+  const UnsignedInteger nbInputs  = inSample.getDimension();
 
   result_.globalHSICIndices_ = PersistentCollection<Point>(nbOutputs);
   result_.globalR2HSICIndices_ = PersistentCollection<Point>(nbOutputs);
-  if (result_.computeAsymptoticPValues_)
+  if (globalHSICParameters_.computeAsymptoticPValues())
     result_.globalPValuesAsymptotic_ = PersistentCollection<Point>(nbOutputs);
-  if (result_.computePermutationPValues_)
+  if (globalHSICParameters_.computePermutationPValues())
     result_.globalPValuesPermutation_ = PersistentCollection<Point>(nbOutputs);
   
-  Indices covarianceModelIndices(inSample.getDimension() + 1u);
+  Indices covarianceModelIndices(nbInputs + 1u);
   covarianceModelIndices.fill();
 
   for (UnsignedInteger i = 0 ; i < nbOutputs ; ++i)
   {
     
-    covarianceModelIndices[inSample.getDimension()] = inSample.getDimension() + i; // the last covariance model is for the output variable
+    covarianceModelIndices[nbInputs] = nbInputs + i; // the last covariance model is for the output variable
 
     auto estimator = HSICEstimatorGlobalSensitivity(
-      result_.covarianceModels_.select(covarianceModelIndices), 
+      globalCovarianceModels_.select(covarianceModelIndices), 
       inSample, 
       outSample.getMarginal(i), 
       stat
@@ -340,12 +544,133 @@ void DataSensitivityAnalysis::computeGlobalHSICIndices()
 
     result_.globalHSICIndices_[i] = estimator.getHSICIndices();
     result_.globalR2HSICIndices_[i] = estimator.getR2HSICIndices();
-    if (result_.computeAsymptoticPValues_)
+    if (globalHSICParameters_.computeAsymptoticPValues())
       result_.globalPValuesAsymptotic_[i] = estimator.getPValuesAsymptotic();
-    if (result_.computePermutationPValues_)
+    if (globalHSICParameters_.computePermutationPValues())
       result_.globalPValuesPermutation_[i] = estimator.getPValuesPermutation();
   }
+}
+
+void DataSensitivityAnalysis::computeTargetHSICIndices()
+{
+  const Sample inSample{designOfExperiment_.getInputSample()};
+  const Sample outSample{designOfExperiment_.getOutputSample().getMarginal(interestVariables_)};
+
+  const UnsignedInteger nbInputs  = inSample.getDimension();
+  const UnsignedInteger nbOutputs = outSample.getDimension();
+
+  if (filterFunctions_.getSize() != nbOutputs)
+    throw InvalidArgumentException(HERE) << "The number of filter functions (" << filterFunctions_.getSize() << ") must be equal to the number of output variables (" << nbOutputs << ").";
   
+  if (targetCovarianceModels_.getSize() != nbInputs + nbOutputs)
+    throw InvalidArgumentException(HERE) << "The number of covariance models for target HSIC indices (" << targetCovarianceModels_.getSize() << ") must be equal to the number of variables (" << nbInputs + nbOutputs << ").";
+  
+  if (computeCovModelParameters_)
+  {
+    Point stdDevs = inSample.computeStandardDeviation();
+    for(UnsignedInteger i = 0; i < nbInputs ; ++i)
+    {
+      if (stdDevs[i] == 0.)
+        throw InvalidArgumentException(HERE) << "The standard deviation of variable " << designOfExperiment_.getSample().getDescription()[i] << " is zero, the covariance model parameters cannot be estimated.";
+      targetCovarianceModels_[i].setScale(Point{stdDevs[i]});
+    }
+    for (UnsignedInteger i = 0 ; i < nbOutputs ; ++i)
+    {
+      Sample outputMarginal = outSample.getMarginal(i);
+      Sample filteredOutputMarginal = filterFunctions_[i](outputMarginal);
+      Point stdDevsFiltered = filteredOutputMarginal.computeStandardDeviation();
+      if (stdDevsFiltered[0] == 0.)
+        throw InvalidArgumentException(HERE) << "The standard deviation of the filtered output variable "<< outSample.getDescription()[i] << " is zero, the covariance model parameters cannot be estimated.";
+      targetCovarianceModels_[nbInputs + i].setScale(Point{stdDevsFiltered[0]});
+    }
+  }
+
+  HSICStat stat;
+  if (targetHSICParameters_.useUStatistic())
+    stat = HSICUStat();
+  else
+    stat = HSICVStat();
+
+  result_.targetHSICIndices_ = PersistentCollection<Point>(nbOutputs);
+  result_.targetR2HSICIndices_ = PersistentCollection<Point>(nbOutputs);
+  if (targetHSICParameters_.computeAsymptoticPValues())
+    result_.targetPValuesAsymptotic_ = PersistentCollection<Point>(nbOutputs);
+  if (targetHSICParameters_.computePermutationPValues())
+    result_.targetPValuesPermutation_ = PersistentCollection<Point>(nbOutputs);
+  
+  Indices covarianceModelIndices(nbInputs + 1u);
+  covarianceModelIndices.fill();
+
+  for (UnsignedInteger i = 0 ; i < nbOutputs ; ++i)
+  {
+    covarianceModelIndices[nbInputs] = nbInputs + i; // the last covariance model is for the output variable
+
+    auto estimator = HSICEstimatorTargetSensitivity(
+      targetCovarianceModels_.select(covarianceModelIndices), 
+      inSample, 
+      outSample.getMarginal(i), 
+      stat,
+      filterFunctions_[i]
+    );
+
+    result_.targetHSICIndices_[i] = estimator.getHSICIndices();
+    result_.targetR2HSICIndices_[i] = estimator.getR2HSICIndices();
+    if (targetHSICParameters_.computeAsymptoticPValues())
+      result_.targetPValuesAsymptotic_[i] = estimator.getPValuesAsymptotic();
+    if (targetHSICParameters_.computePermutationPValues())
+      result_.targetPValuesPermutation_[i] = estimator.getPValuesPermutation();
+  }
+}
+
+void DataSensitivityAnalysis::computeConditionalHSICIndices()
+{
+  const Sample inSample{designOfExperiment_.getInputSample()};
+  const Sample outSample{designOfExperiment_.getOutputSample().getMarginal(interestVariables_)};
+
+  const UnsignedInteger nbInputs  = inSample.getDimension();
+  const UnsignedInteger nbOutputs = outSample.getDimension();
+
+  if (weightFunctions_.getSize() != nbOutputs)
+    throw InvalidArgumentException(HERE) << "The number of weight functions must be equal to the number of output variables.";
+  
+  if (conditionalCovarianceModels_.getSize() != nbInputs + nbOutputs)
+    throw InvalidArgumentException(HERE) << "The number of covariance models for conditional HSIC indices (" << conditionalCovarianceModels_.getSize() << ") must be equal to the number of variables (" << nbInputs + nbOutputs << ").";
+  
+  if (computeCovModelParameters_)
+  {
+    Point stDevs = designOfExperiment_.getSample().computeStandardDeviation();
+    for(UnsignedInteger i = 0; i < nbInputs + nbOutputs; ++i)
+    {
+      if (stDevs[i] == 0.)
+        throw InvalidArgumentException(HERE) << "The standard deviation of variable " << designOfExperiment_.getSample().getDescription()[i] << " is zero, the covariance model parameters cannot be estimated.";
+      conditionalCovarianceModels_[i].setScale(Point{stDevs[i]});
+    }
+  }
+
+  result_.conditionalHSICIndices_ = PersistentCollection<Point>(nbOutputs);
+  result_.conditionalR2HSICIndices_ = PersistentCollection<Point>(nbOutputs);
+  if (conditionalHSICParameters_.computePermutationPValues())
+    result_.conditionalPValuesPermutation_ = PersistentCollection<Point>(nbOutputs);
+  
+  Indices covarianceModelIndices(nbInputs + 1u);
+  covarianceModelIndices.fill();
+
+  for (UnsignedInteger i = 0 ; i < nbOutputs ; ++i)
+  {
+    covarianceModelIndices[nbInputs] = nbInputs + i; // the last covariance model is for the output variable
+
+    auto estimator = HSICEstimatorConditionalSensitivity(
+      conditionalCovarianceModels_.select(covarianceModelIndices), 
+      inSample, 
+      outSample.getMarginal(i), 
+      weightFunctions_[i]
+    );
+
+    result_.conditionalHSICIndices_[i] = estimator.getHSICIndices();
+    result_.conditionalR2HSICIndices_[i] = estimator.getR2HSICIndices();
+    if (conditionalHSICParameters_.computePermutationPValues())
+      result_.conditionalPValuesPermutation_[i] = estimator.getPValuesPermutation();
+  }
 }
 
 void DataSensitivityAnalysis::checkIndependance()
@@ -388,10 +713,25 @@ void DataSensitivityAnalysis::save(OT::Advocate & adv) const
   DesignOfExperimentAnalysis::save(adv);
   adv.saveAttribute("result_", result_);
   adv.saveAttribute("type_", static_cast<UnsignedInteger>(type_.getType()));
-  adv.saveAttribute("covarianceModels_", covarianceModels_);
-  adv.saveAttribute("computeAsymptoticPValues_", computeAsymptoticPValues_);
-  adv.saveAttribute("computePermutationPValues_", computePermutationPValues_);
-  adv.saveAttribute("useUStatistic_", useUStatistic_);
+  adv.saveAttribute("globalCovarianceModels_", globalCovarianceModels_);
+  adv.saveAttribute("targetCovarianceModels_", targetCovarianceModels_);
+  adv.saveAttribute("conditionalCovarianceModels_", conditionalCovarianceModels_);
+  adv.saveAttribute("globalComputePermutationPValues_", globalHSICParameters_.computePermutationPValues_);
+  adv.saveAttribute("globalComputeAsymptoticPValues_", globalHSICParameters_.computeAsymptoticPValues_);
+  adv.saveAttribute("globalUseUStatistic_", globalHSICParameters_.useUStatistic_);
+  adv.saveAttribute("targetComputePermutationPValues_", targetHSICParameters_.computePermutationPValues_);
+  adv.saveAttribute("targetComputeAsymptoticPValues_", targetHSICParameters_.computeAsymptoticPValues_);
+  adv.saveAttribute("targetUseUStatistic_", targetHSICParameters_.useUStatistic_);
+  adv.saveAttribute("conditionalComputePermutationPValues_", conditionalHSICParameters_.computePermutationPValues_);
+  adv.saveAttribute("conditionalComputeAsymptoticPValues_", conditionalHSICParameters_.computeAsymptoticPValues_);
+  adv.saveAttribute("conditionalUseUStatistic_", conditionalHSICParameters_.useUStatistic_);
+  adv.saveAttribute("filterFunctions_", filterFunctions_);
+  adv.saveAttribute("weightFunctions_", weightFunctions_);
+  adv.saveAttribute("computeCovModelParameters_", computeCovModelParameters_);
+  adv.saveAttribute("defaultHSICParametersChanged_", defaultHSICParametersChanged_);
+  adv.saveAttribute("interestVariables_", interestVariables_);
+  adv.saveAttribute("filterAlphas_", filterAlphas_);
+  adv.saveAttribute("weightAlphas_", weightAlphas_);
 }
 
 void DataSensitivityAnalysis::load(OT::Advocate & adv)
@@ -403,10 +743,25 @@ void DataSensitivityAnalysis::load(OT::Advocate & adv)
     UnsignedInteger typeInt;
     adv.loadAttribute("type_", typeInt);
     type_ = DataSensitivityAnalysisResult::AnalysisType(std::byte{static_cast<unsigned char>(typeInt)});
-    adv.loadAttribute("covarianceModels_", covarianceModels_);
-    adv.loadAttribute("computeAsymptoticPValues_", computeAsymptoticPValues_);
-    adv.loadAttribute("computePermutationPValues_", computePermutationPValues_);
-    adv.loadAttribute("useUStatistic_", useUStatistic_);
+    adv.loadAttribute("globalCovarianceModels_", globalCovarianceModels_);
+    adv.loadAttribute("targetCovarianceModels_", targetCovarianceModels_);
+    adv.loadAttribute("conditionalCovarianceModels_", conditionalCovarianceModels_);
+    adv.loadAttribute("globalComputePermutationPValues_", globalHSICParameters_.computePermutationPValues_);
+    adv.loadAttribute("globalComputeAsymptoticPValues_", globalHSICParameters_.computeAsymptoticPValues_);
+    adv.loadAttribute("globalUseUStatistic_", globalHSICParameters_.useUStatistic_);
+    adv.loadAttribute("targetComputePermutationPValues_", targetHSICParameters_.computePermutationPValues_);
+    adv.loadAttribute("targetComputeAsymptoticPValues_", targetHSICParameters_.computeAsymptoticPValues_);
+    adv.loadAttribute("targetUseUStatistic_", targetHSICParameters_.useUStatistic_);
+    adv.loadAttribute("conditionalComputePermutationPValues_", conditionalHSICParameters_.computePermutationPValues_);
+    adv.loadAttribute("conditionalComputeAsymptoticPValues_", conditionalHSICParameters_.computeAsymptoticPValues_);
+    adv.loadAttribute("conditionalUseUStatistic_", conditionalHSICParameters_.useUStatistic_);
+    adv.loadAttribute("filterFunctions_", filterFunctions_);
+    adv.loadAttribute("weightFunctions_", weightFunctions_);
+    adv.loadAttribute("computeCovModelParameters_", computeCovModelParameters_);
+    adv.loadAttribute("defaultHSICParametersChanged_", defaultHSICParametersChanged_);
+    adv.loadAttribute("interestVariables_", interestVariables_);
+    adv.loadAttribute("filterAlphas_", filterAlphas_);
+    adv.loadAttribute("weightAlphas_", weightAlphas_);
   }
 }
 

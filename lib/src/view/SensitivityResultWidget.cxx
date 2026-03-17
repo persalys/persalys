@@ -107,10 +107,10 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
     break;
     
   case GlobalHSICR2Indices:
-    graphTitle = tr("Global HSIC R² indices:");
+    graphTitle = tr("Global R2-HSIC indices:");
     defaultFileName = tr("sensitivityGlobalHSICR2");
-    legendNames << tr("Global HSIC R² index");
-    tableTitles << tr("Global HSIC R² index");
+    legendNames << tr("Global R2-HSIC index");
+    tableTitles << tr("Global R2-HSIC index");
     break;
   
   case GlobalHSICPValuesAsymptotic:
@@ -135,10 +135,10 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
     break;
   
   case TargetHSICR2Indices:
-    graphTitle = tr("Target HSIC R² indices:");
+    graphTitle = tr("Target R2-HSIC indices:");
     defaultFileName = tr("sensitivityTargetHSICR2");
-    legendNames << tr("Target HSIC R² index");
-    tableTitles << tr("Target HSIC R² index");
+    legendNames << tr("Target R2-HSIC index");
+    tableTitles << tr("Target R2-HSIC index");
     break;
   
   case TargetHSICPValuesAsymptotic:
@@ -163,10 +163,10 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
     break;
   
   case ConditionalHSICR2Indices:
-    graphTitle = tr("Conditional HSIC R² indices:");
+    graphTitle = tr("Conditional R2-HSIC indices:");
     defaultFileName = tr("sensitivityConditionalHSICR2");
-    legendNames << tr("Conditional HSIC R² index");
-    tableTitles << tr("Conditional HSIC R² index");
+    legendNames << tr("Conditional R2-HSIC index");
+    tableTitles << tr("Conditional R2-HSIC index");
     break;
   
   case ConditionalHSICPValuesAsymptotic:

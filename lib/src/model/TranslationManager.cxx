@@ -208,6 +208,15 @@ void TranslationManager::InitializeParametersNames()
   ParametersNames_.insert("Maximization", tr("Maximization"));
   ParametersNames_.insert("Optimization", tr("Optimization"));
   ParametersNames_.insert("Multi-objective optimization", tr("Multi-objective optimization"));
+  ParametersNames_.insert("Analysis types", tr("Analysis types"));
+  ParametersNames_.insert("Compute asymptotic p-values for global HSIC", tr("Compute asymptotic p-values for global HSIC"));
+  ParametersNames_.insert("Compute permutation p-values for global HSIC", tr("Compute permutation p-values for global HSIC"));
+  ParametersNames_.insert("Use U-statistic for global HSIC", tr("Use U-statistic for global HSIC"));
+  ParametersNames_.insert("Compute asymptotic p-values for target HSIC", tr("Compute asymptotic p-values for target HSIC"));
+  ParametersNames_.insert("Compute permutation p-values for target HSIC", tr("Compute permutation p-values for target HSIC"));
+  ParametersNames_.insert("Use U-statistic for target HSIC", tr("Use U-statistic for target HSIC"));
+  ParametersNames_.insert("Compute asymptotic p-values for conditional HSIC", tr("Compute asymptotic p-values for conditional HSIC"));
+  ParametersNames_.insert("Compute permutation p-values for conditional HSIC", tr("Compute permutation p-values for conditional HSIC"));
 }
 
 

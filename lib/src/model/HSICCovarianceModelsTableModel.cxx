@@ -42,6 +42,20 @@ HSICCovarianceModelsTableModel::HSICCovarianceModelsTableModel(const Description
   }
 }
 
+void HSICCovarianceModelsTableModel::setVariablesNames(const Description & variableNames)
+{
+  beginResetModel();
+  variableNames_ = variableNames;
+  modelIndices_.clear();
+  nuIndices_.clear();
+  for (UnsignedInteger i = 0; i < variableNames_.getSize(); ++i)
+  {
+    modelIndices_ << 1;  // default: Squared exponential
+    nuIndices_ << 1;     // default: 3/2
+  }
+  endResetModel();
+}
+
 int HSICCovarianceModelsTableModel::rowCount(const QModelIndex & /*parent*/) const
 {
   return variableNames_.getSize();

@@ -36,9 +36,9 @@ class PERSALYS_VIEW_API OutputsSelectionGroupBox : public QGroupBox
   Q_OBJECT
 
 public:
-  OutputsSelectionGroupBox(QWidget* parent = 0);
-  OutputsSelectionGroupBox(bool pluralText, QWidget* parent = 0);
-  OutputsSelectionGroupBox(const OT::Description& outputsNames, const OT::Description& interestVariables, QWidget* parent = 0);
+  explicit OutputsSelectionGroupBox(QWidget* parent = nullptr);
+  explicit OutputsSelectionGroupBox(bool pluralText, QWidget* parent = nullptr);
+  OutputsSelectionGroupBox(const OT::Description& outputsNames, const OT::Description& interestVariables, QWidget* parent = nullptr);
 
   QStringList getSelectedOutputsNames() const;
   void updateComboBoxModel(const OT::Description& outputsNames, const OT::Description& interestVariables);
@@ -50,10 +50,10 @@ private slots:
   void updateLabel(const QStringList& variables);
 
 private:
-  bool pluralText_;
-  QLabel * namesLabel_;
-  ListWidgetWithCheckBox * outputsListWidget_;
-  TitledComboBox * outputsComboBox_;
+  bool                    pluralText_;
+  QLabel                  * namesLabel_         = nullptr;
+  ListWidgetWithCheckBox  * outputsListWidget_  = nullptr;
+  TitledComboBox          * outputsComboBox_    = nullptr;
 };
 }
 #endif

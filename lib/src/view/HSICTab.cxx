@@ -31,37 +31,42 @@ HSICTab::HSICTab(
   const DataSensitivityAnalysisResult & result, 
   const DesignOfExperiment & design, 
   VariablesListWidget * outputsListWidget,
-  Type type, 
+  DataSensitivityAnalysisResult::HSICType type, 
   QWidget * parent)
   : QTabWidget(parent)
-  , result_(result)
   , designOfExperiment_(design)
   , outputsListWidget_(outputsListWidget)
-  , type_(type)
 {
   inputNames_ = QtOT::DescriptionToStringList(designOfExperiment_.getInputSample().getDescription());
   outputNames_ = QtOT::DescriptionToStringList(designOfExperiment_.getOutputSample().getDescription());
 
+  int widgetType = -1;
   switch (type)
   {
-    case Type::Global:
-      addSubTab(result.getGlobalHSICIndices(), tr("Global HSIC indices"), SensitivityResultWidget::GlobalHSICIndices);
-      addSubTab(result.getGlobalR2HSICIndices(), tr("Global HSIC R² indices"), SensitivityResultWidget::GlobalHSICR2Indices);
-      if(result.computeHSICPValuesPermutation())
-        addSubTab(result.getGlobalPValuesPermutation(), tr("Global HSIC p-values (permutation)"), SensitivityResultWidget::GlobalHSICPValuesPermutation);
-      if(result.computeHSICPValuesAsymptotic())
-        addSubTab(result.getGlobalPValuesAsymptotic(), tr("Global HSIC p-values (asymptotic)"), SensitivityResultWidget::GlobalHSICPValuesAsymptotic);
+    case DataSensitivityAnalysisResult::Global:
+      widgetType = SensitivityResultWidget::GlobalHSICIndices;
       break;
-    
-    default:
-      // Not yet implemented for Target and Conditional HSIC
+    case DataSensitivityAnalysisResult::Target:
+      widgetType = SensitivityResultWidget::TargetHSICIndices;
       break;
+    case DataSensitivityAnalysisResult::Conditional:
+      widgetType = SensitivityResultWidget::ConditionalHSICIndices;
   }
+
+  addSubTab(result.getHSICIndices(type), tr("HSIC Indices"), widgetType);
+  ++widgetType;
+  addSubTab(result.getR2HSICIndices(type), tr("R2-HSIC Indices"), widgetType);
+  ++widgetType;
+  if (result.computeHSICPValuesPermutation(type))
+    addSubTab(result.getPValuesPermutation(type), tr("HSIC permutations p-values"), widgetType);
+  ++widgetType;
+  if (result.computeHSICPValuesAsymptotic(type))
+    addSubTab(result.getPValuesAsymptotic(type), tr("HSIC asymptotic p-values"), widgetType);
 }
 
-void HSICTab::addSubTab(const Collection<Point> & values, const QString & title, SensitivityResultWidget::Type widgetType)
+void HSICTab::addSubTab(const Collection<Point> & values, const QString & title, int widgetType)
 {
-  const UnsignedInteger nbOutputs = designOfExperiment_.getOutputSample().getDimension();
+  const UnsignedInteger nbOutputs = values.getSize();
 
   auto * stackedWidget = new ResizableStackedWidget;
   connect(outputsListWidget_, &VariablesListWidget::currentRowChanged, stackedWidget, &ResizableStackedWidget::setCurrentIndex);
@@ -75,7 +80,7 @@ void HSICTab::addSubTab(const Collection<Point> & values, const QString & title,
     Interval(),
     QtOT::StringListToDescription(inputNames_),
     outputNames_[i].toStdString(),
-    widgetType,
+    static_cast<SensitivityResultWidget::Type>(widgetType),
     designOfExperiment_.getType(),
     this
    );

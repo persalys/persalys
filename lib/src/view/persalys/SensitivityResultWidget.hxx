@@ -58,9 +58,9 @@ public:
   enum Type {
     Sobol, 
     SRC, 
-    GlobalHSICIndices, GlobalHSICR2Indices, GlobalHSICPValuesAsymptotic, GlobalHSICPValuesPermutation, 
-    TargetHSICIndices, TargetHSICR2Indices, TargetHSICPValuesAsymptotic, TargetHSICPValuesPermutation, 
-    ConditionalHSICIndices, ConditionalHSICR2Indices, ConditionalHSICPValuesAsymptotic, ConditionalHSICPValuesPermutation
+    GlobalHSICIndices, GlobalHSICR2Indices, GlobalHSICPValuesPermutation, GlobalHSICPValuesAsymptotic, 
+    TargetHSICIndices, TargetHSICR2Indices, TargetHSICPValuesPermutation, TargetHSICPValuesAsymptotic, 
+    ConditionalHSICIndices, ConditionalHSICR2Indices, ConditionalHSICPValuesPermutation, ConditionalHSICPValuesAsymptotic
   };
 
   enum ColumnRole {

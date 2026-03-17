@@ -32,8 +32,6 @@ OutputsSelectionGroupBox::OutputsSelectionGroupBox(QWidget* parent)
   : QGroupBox(tr("Outputs of interest"), parent)
   , pluralText_(true)
   , namesLabel_(new QLabel)
-  , outputsListWidget_(0)
-  , outputsComboBox_(0)
 {
   QVBoxLayout * outputLayout = new QVBoxLayout(this);
 
@@ -51,8 +49,6 @@ OutputsSelectionGroupBox::OutputsSelectionGroupBox(bool pluralText, QWidget* par
   : QGroupBox((pluralText ? tr("Outputs of interest") : tr("Output of interest")), parent)
   , pluralText_(pluralText)
   , namesLabel_(new QLabel)
-  , outputsListWidget_(0)
-  , outputsComboBox_(0)
 {
   QVBoxLayout * outputLayout = new QVBoxLayout(this);
 
@@ -70,8 +66,6 @@ OutputsSelectionGroupBox::OutputsSelectionGroupBox(const Description& outputsNam
   : QGroupBox(tr("Outputs of interest"), parent)
   , pluralText_(true)
   , namesLabel_(new QLabel)
-  , outputsListWidget_(0)
-  , outputsComboBox_(0)
 {
   QVBoxLayout * outputLayout = new QVBoxLayout(this);
 
