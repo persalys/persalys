@@ -236,6 +236,8 @@ myStudy.add(model3)
 RankSobol = persalys.DataSensitivityAnalysisResult.RankSobol
 SRC = persalys.DataSensitivityAnalysisResult.SRC
 GlobalHSIC = persalys.DataSensitivityAnalysisResult.GlobalHSIC
+TargetHSIC = persalys.DataSensitivityAnalysisResult.TargetHSIC
+ConditionalHSIC = persalys.DataSensitivityAnalysisResult.ConditionalHSIC
 
 # --------------------- Test with type = RankSobol only --------------------- #
 analysis3_sobol = persalys.DataSensitivityAnalysis("analysis3_sobol", model3, RankSobol)
@@ -376,3 +378,242 @@ ott.assert_almost_equal(
     result3_all.getHSICIndices(persalys.DataSensitivityAnalysisResult.Global)[0],
     [0.0145197, 0.00998482, 0.0207494],
 )
+
+# --------------- Test with type = TargetHSIC with V-statistic -------------- #
+analysis3_target_v = persalys.DataSensitivityAnalysis(
+    "analysis3_target_v", model3, TargetHSIC
+)
+analysis3_target_v.setCovarianceModels(
+    covModels3, persalys.DataSensitivityAnalysisResult.Target
+)
+analysis3_target_v.setFilterAlphas(ot.Point([2.0]))
+analysis3_target_v.setHSICParameters(
+    False, True, False, persalys.DataSensitivityAnalysisResult.Target
+)  # asymptotic only, V-stat
+myStudy.add(analysis3_target_v)
+analysis3_target_v.run()
+result3_target_v = analysis3_target_v.getResult()
+
+assert (
+    len(result3_target_v.getHSICIndices(persalys.DataSensitivityAnalysisResult.Target))
+    > 0
+), "Target HSIC indices should not be empty"
+assert (
+    len(
+        result3_target_v.getR2HSICIndices(
+            persalys.DataSensitivityAnalysisResult.Target
+        )
+    )
+    > 0
+), "Target R2-HSIC indices should not be empty"
+assert (
+    len(
+        result3_target_v.getPValuesAsymptotic(
+            persalys.DataSensitivityAnalysisResult.Target
+        )
+    )
+    > 0
+), "Target asymptotic p-values should not be empty"
+assert (
+    len(
+        result3_target_v.getPValuesPermutation(
+            persalys.DataSensitivityAnalysisResult.Target
+        )
+    )
+    == 0
+), "Target permutation p-values should be empty when not requested"
+# Global HSIC should be empty
+assert (
+    len(
+        result3_target_v.getHSICIndices(
+            persalys.DataSensitivityAnalysisResult.Global
+        )
+    )
+    == 0
+), "Global HSIC should be empty when only Target is requested"
+# Sobol and SRC should be empty
+assert (
+    len(result3_target_v.getFirstOrderSobolIndices()) == 0
+), "Sobol should be empty when only TargetHSIC is requested"
+assert (
+    result3_target_v.getSRCIndices().getSize() == 0
+), "SRC should be empty when only TargetHSIC is requested"
+
+# ----------- Test with type = TargetHSIC with U-statistic + perm ----------- #
+analysis3_target_u = persalys.DataSensitivityAnalysis(
+    "analysis3_target_u", model3, TargetHSIC
+)
+analysis3_target_u.setCovarianceModels(
+    covModels3, persalys.DataSensitivityAnalysisResult.Target
+)
+analysis3_target_u.setFilterAlphas(ot.Point([2.0]))
+analysis3_target_u.setHSICParameters(
+    True, True, True, persalys.DataSensitivityAnalysisResult.Target
+)  # permutation + asymptotic, U-stat
+myStudy.add(analysis3_target_u)
+analysis3_target_u.run()
+result3_target_u = analysis3_target_u.getResult()
+
+assert (
+    len(
+        result3_target_u.getPValuesPermutation(
+            persalys.DataSensitivityAnalysisResult.Target
+        )
+    )
+    > 0
+), "Target permutation p-values should not be empty when requested"
+assert (
+    len(
+        result3_target_u.getPValuesAsymptotic(
+            persalys.DataSensitivityAnalysisResult.Target
+        )
+    )
+    > 0
+), "Target asymptotic p-values should not be empty when requested"
+
+# -------------- Test with type = ConditionalHSIC with permutation ---------- #
+analysis3_cond = persalys.DataSensitivityAnalysis(
+    "analysis3_cond", model3, ConditionalHSIC
+)
+analysis3_cond.setCovarianceModels(
+    covModels3, persalys.DataSensitivityAnalysisResult.Conditional
+)
+analysis3_cond.setWeightAlphas(ot.Point([2.0]))
+analysis3_cond.setHSICParameters(
+    True, False, False, persalys.DataSensitivityAnalysisResult.Conditional
+)  # permutation only (no asymptotic/U-stat for conditional)
+myStudy.add(analysis3_cond)
+analysis3_cond.run()
+result3_cond = analysis3_cond.getResult()
+
+assert (
+    len(
+        result3_cond.getHSICIndices(
+            persalys.DataSensitivityAnalysisResult.Conditional
+        )
+    )
+    > 0
+), "Conditional HSIC indices should not be empty"
+assert (
+    len(
+        result3_cond.getR2HSICIndices(
+            persalys.DataSensitivityAnalysisResult.Conditional
+        )
+    )
+    > 0
+), "Conditional R2-HSIC indices should not be empty"
+assert (
+    len(
+        result3_cond.getPValuesPermutation(
+            persalys.DataSensitivityAnalysisResult.Conditional
+        )
+    )
+    > 0
+), "Conditional permutation p-values should not be empty when requested"
+# Global and Target HSIC should be empty
+assert (
+    len(
+        result3_cond.getHSICIndices(persalys.DataSensitivityAnalysisResult.Global)
+    )
+    == 0
+), "Global HSIC should be empty when only Conditional is requested"
+assert (
+    len(
+        result3_cond.getHSICIndices(persalys.DataSensitivityAnalysisResult.Target)
+    )
+    == 0
+), "Target HSIC should be empty when only Conditional is requested"
+# Sobol and SRC should be empty
+assert (
+    len(result3_cond.getFirstOrderSobolIndices()) == 0
+), "Sobol should be empty when only ConditionalHSIC is requested"
+assert (
+    result3_cond.getSRCIndices().getSize() == 0
+), "SRC should be empty when only ConditionalHSIC is requested"
+
+# ------- Test with type = ConditionalHSIC without permutation p-values ----- #
+analysis3_cond_noperm = persalys.DataSensitivityAnalysis(
+    "analysis3_cond_noperm", model3, ConditionalHSIC
+)
+analysis3_cond_noperm.setCovarianceModels(
+    covModels3, persalys.DataSensitivityAnalysisResult.Conditional
+)
+analysis3_cond_noperm.setWeightAlphas(ot.Point([2.0]))
+myStudy.add(analysis3_cond_noperm)
+analysis3_cond_noperm.run()
+result3_cond_noperm = analysis3_cond_noperm.getResult()
+
+assert (
+    len(
+        result3_cond_noperm.getHSICIndices(
+            persalys.DataSensitivityAnalysisResult.Conditional
+        )
+    )
+    > 0
+), "Conditional HSIC indices should not be empty"
+assert (
+    len(
+        result3_cond_noperm.getPValuesPermutation(
+            persalys.DataSensitivityAnalysisResult.Conditional
+        )
+    )
+    == 0
+), "Conditional permutation p-values should be empty when not requested"
+
+# ----------- Test with all types including Target and Conditional ---------- #
+analysis3_all2 = persalys.DataSensitivityAnalysis(
+    "analysis3_all2",
+    model3,
+    RankSobol | SRC | GlobalHSIC | TargetHSIC | ConditionalHSIC,
+)
+analysis3_all2.setCovarianceModels(
+    covModels3, persalys.DataSensitivityAnalysisResult.Global
+)
+analysis3_all2.setCovarianceModels(
+    covModels3, persalys.DataSensitivityAnalysisResult.Target
+)
+analysis3_all2.setCovarianceModels(
+    covModels3, persalys.DataSensitivityAnalysisResult.Conditional
+)
+analysis3_all2.setFilterAlphas(ot.Point([2.0]))
+analysis3_all2.setWeightAlphas(ot.Point([2.0]))
+analysis3_all2.setHSICParameters(
+    False, True, False, persalys.DataSensitivityAnalysisResult.Global
+)
+analysis3_all2.setHSICParameters(
+    False, True, False, persalys.DataSensitivityAnalysisResult.Target
+)
+analysis3_all2.setHSICParameters(
+    True, False, False, persalys.DataSensitivityAnalysisResult.Conditional
+)
+myStudy.add(analysis3_all2)
+analysis3_all2.run()
+result3_all2 = analysis3_all2.getResult()
+
+# All result types should be populated
+assert (
+    len(result3_all2.getFirstOrderSobolIndices()) > 0
+), "Sobol should not be empty in combined test"
+assert (
+    result3_all2.getSRCIndices().getSize() > 0
+), "SRC should not be empty in combined test"
+assert (
+    len(
+        result3_all2.getHSICIndices(persalys.DataSensitivityAnalysisResult.Global)
+    )
+    > 0
+), "Global HSIC should not be empty in combined test"
+assert (
+    len(
+        result3_all2.getHSICIndices(persalys.DataSensitivityAnalysisResult.Target)
+    )
+    > 0
+), "Target HSIC should not be empty in combined test"
+assert (
+    len(
+        result3_all2.getHSICIndices(
+            persalys.DataSensitivityAnalysisResult.Conditional
+        )
+    )
+    > 0
+), "Conditional HSIC should not be empty in combined test"

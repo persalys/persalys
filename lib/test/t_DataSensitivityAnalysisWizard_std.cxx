@@ -232,6 +232,262 @@ private slots:
     hsicCB->setChecked(false);
     QVERIFY2(wizard.nextId() == -1, "Should finish again when HSIC is off");
   }
+
+
+  void TestTargetHSICPageNavigation() const
+  {
+    DataSensitivityAnalysis analysis("analysis", model_);
+    DataSensitivityAnalysisWizard wizard(analysis);
+    wizard.show();
+
+    const auto * methodGroup = wizard.introPage_->findChild<QButtonGroup*>();
+
+    // Enable Target HSIC only
+    auto * targetCB = qobject_cast<QCheckBox*>(methodGroup->button(DataSensitivityAnalysisResult::TargetHSIC));
+    QVERIFY2(targetCB != nullptr, "Target HSIC button should exist");
+    targetCB->setChecked(true);
+
+    // Next from intro should go to Target HSIC parameters page (skipping Global)
+    QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::TargetHSICParameters,
+             "Next page should be Target HSIC parameters when only Target HSIC is checked");
+
+    // Navigate to Target HSIC page
+    wizard.next();
+    QVERIFY2(wizard.currentId() == DataSensitivityAnalysisWizard::Page::TargetHSICParameters,
+             "Current page should be Target HSIC parameters page");
+
+    // Validate Target HSIC parameters page
+    QVERIFY2(wizard.validateCurrentPage(), "Target HSIC parameters page must be valid");
+
+    // Next from Target HSIC page should be -1 (finish, no Conditional)
+    QVERIFY2(wizard.nextId() == -1, "Next page after Target HSIC parameters should be -1");
+  }
+
+
+  void TestConditionalHSICPageNavigation() const
+  {
+    DataSensitivityAnalysis analysis("analysis", model_);
+    DataSensitivityAnalysisWizard wizard(analysis);
+    wizard.show();
+
+    const auto * methodGroup = wizard.introPage_->findChild<QButtonGroup*>();
+
+    // Enable Conditional HSIC only
+    auto * condCB = qobject_cast<QCheckBox*>(methodGroup->button(DataSensitivityAnalysisResult::ConditionalHSIC));
+    QVERIFY2(condCB != nullptr, "Conditional HSIC button should exist");
+    condCB->setChecked(true);
+
+    // Next from intro should go to Conditional HSIC parameters page
+    QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::ConditionalHSICParameters,
+             "Next page should be Conditional HSIC parameters when only Conditional HSIC is checked");
+
+    // Navigate to Conditional HSIC page
+    wizard.next();
+    QVERIFY2(wizard.currentId() == DataSensitivityAnalysisWizard::Page::ConditionalHSICParameters,
+             "Current page should be Conditional HSIC parameters page");
+
+    // Validate Conditional HSIC parameters page
+    QVERIFY2(wizard.validateCurrentPage(), "Conditional HSIC parameters page must be valid");
+
+    // Next from Conditional HSIC page should always be -1 (it's the last)
+    QVERIFY2(wizard.nextId() == -1, "Next page after Conditional HSIC parameters should be -1");
+  }
+
+
+  void TestMultiHSICPageNavigation() const
+  {
+    DataSensitivityAnalysis analysis("analysis", model_);
+    DataSensitivityAnalysisWizard wizard(analysis);
+    wizard.show();
+
+    const auto * methodGroup = wizard.introPage_->findChild<QButtonGroup*>();
+
+    // Enable all three HSIC types
+    auto * globalCB = qobject_cast<QCheckBox*>(methodGroup->button(DataSensitivityAnalysisResult::GlobalHSIC));
+    auto * targetCB = qobject_cast<QCheckBox*>(methodGroup->button(DataSensitivityAnalysisResult::TargetHSIC));
+    auto * condCB = qobject_cast<QCheckBox*>(methodGroup->button(DataSensitivityAnalysisResult::ConditionalHSIC));
+
+    globalCB->setChecked(true);
+    targetCB->setChecked(true);
+    condCB->setChecked(true);
+
+    // From intro, should go to Global HSIC first
+    QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::GlobalHSICParameters,
+             "First HSIC page should be Global");
+
+    // Navigate: Intro -> Global HSIC
+    wizard.next();
+    QVERIFY2(wizard.currentId() == DataSensitivityAnalysisWizard::Page::GlobalHSICParameters,
+             "Should be on Global HSIC page");
+
+    // From Global, should go to Target
+    QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::TargetHSICParameters,
+             "From Global HSIC, next should be Target HSIC");
+
+    // Navigate: Global HSIC -> Target HSIC
+    wizard.next();
+    QVERIFY2(wizard.currentId() == DataSensitivityAnalysisWizard::Page::TargetHSICParameters,
+             "Should be on Target HSIC page");
+
+    // From Target, should go to Conditional
+    QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::ConditionalHSICParameters,
+             "From Target HSIC, next should be Conditional HSIC");
+
+    // Navigate: Target HSIC -> Conditional HSIC
+    wizard.next();
+    QVERIFY2(wizard.currentId() == DataSensitivityAnalysisWizard::Page::ConditionalHSICParameters,
+             "Should be on Conditional HSIC page");
+
+    // From Conditional, should finish
+    QVERIFY2(wizard.nextId() == -1, "From Conditional HSIC, should finish");
+  }
+
+
+  void TestTargetHSICParametersPage() const
+  {
+    DataSensitivityAnalysis analysis("analysis", model_);
+    DataSensitivityAnalysisWizard wizard(analysis);
+    wizard.show();
+
+    // Enable Target HSIC and navigate to its page
+    const auto * methodGroup = wizard.introPage_->findChild<QButtonGroup*>();
+    auto * targetCB = qobject_cast<QCheckBox*>(methodGroup->button(DataSensitivityAnalysisResult::TargetHSIC));
+    targetCB->setChecked(true);
+    wizard.next();
+
+    // Check widgets exist on Target HSIC page
+    const auto * asymCB = wizard.targetHSICParametersPage_->findChild<QCheckBox*>();
+    QVERIFY2(asymCB != nullptr, "Should find checkboxes on Target HSIC page");
+
+    const auto * comboBox = wizard.targetHSICParametersPage_->findChild<QComboBox*>();
+    QVERIFY2(comboBox != nullptr, "Should find U/V statistic combo box on Target HSIC page");
+
+    // Should have covariance models table
+    const auto * tableView = wizard.targetHSICParametersPage_->findChild<QTableView*>();
+    QVERIFY2(tableView != nullptr, "Should find table view on Target HSIC page");
+  }
+
+
+  void TestConditionalHSICParametersPage() const
+  {
+    DataSensitivityAnalysis analysis("analysis", model_);
+    DataSensitivityAnalysisWizard wizard(analysis);
+    wizard.show();
+
+    // Enable Conditional HSIC and navigate to its page
+    const auto * methodGroup = wizard.introPage_->findChild<QButtonGroup*>();
+    auto * condCB = qobject_cast<QCheckBox*>(methodGroup->button(DataSensitivityAnalysisResult::ConditionalHSIC));
+    condCB->setChecked(true);
+    wizard.next();
+
+    // Should have permutation p-values checkbox
+    const auto * permCB = wizard.conditionalHSICParametersPage_->findChild<QCheckBox*>();
+    QVERIFY2(permCB != nullptr, "Should find permutation p-values checkbox on Conditional HSIC page");
+
+    // Should have covariance models table
+    const auto * tableView = wizard.conditionalHSICParametersPage_->findChild<QTableView*>();
+    QVERIFY2(tableView != nullptr, "Should find table view on Conditional HSIC page");
+  }
+
+
+  void TestGetAnalysisWithTargetHSIC() const
+  {
+    DataSensitivityAnalysis analysis("analysis", model_);
+    DataSensitivityAnalysisWizard wizard(analysis);
+    wizard.show();
+
+    // Enable Target HSIC
+    const auto * methodGroup = wizard.introPage_->findChild<QButtonGroup*>();
+    auto * targetCB = qobject_cast<QCheckBox*>(methodGroup->button(DataSensitivityAnalysisResult::TargetHSIC));
+    targetCB->setChecked(true);
+    wizard.next();
+
+    // Get the analysis from wizard
+    Analysis result = wizard.getAnalysis();
+    auto params = result.getParameters();
+    QVERIFY2(params.getSize() > 0, "Analysis with Target HSIC should have parameters");
+
+    // Verify the analysis parameters contain Target HSIC
+    bool foundTargetHSIC = false;
+    for (UnsignedInteger i = 0; i < params.getSize(); ++i)
+    {
+      auto [name, value] = params[i];
+      if (value.find("Target HSIC") != std::string::npos)
+      {
+        foundTargetHSIC = true;
+        break;
+      }
+    }
+    QVERIFY2(foundTargetHSIC, "Analysis parameters should mention Target HSIC");
+  }
+
+
+  void TestGetAnalysisWithConditionalHSIC() const
+  {
+    DataSensitivityAnalysis analysis("analysis", model_);
+    DataSensitivityAnalysisWizard wizard(analysis);
+    wizard.show();
+
+    // Enable Conditional HSIC
+    const auto * methodGroup = wizard.introPage_->findChild<QButtonGroup*>();
+    auto * condCB = qobject_cast<QCheckBox*>(methodGroup->button(DataSensitivityAnalysisResult::ConditionalHSIC));
+    condCB->setChecked(true);
+    wizard.next();
+
+    // Get the analysis from wizard
+    Analysis result = wizard.getAnalysis();
+    auto params = result.getParameters();
+    QVERIFY2(params.getSize() > 0, "Analysis with Conditional HSIC should have parameters");
+
+    // Verify the analysis parameters contain Conditional HSIC
+    bool foundConditionalHSIC = false;
+    for (UnsignedInteger i = 0; i < params.getSize(); ++i)
+    {
+      auto [name, value] = params[i];
+      if (value.find("Conditional HSIC") != std::string::npos)
+      {
+        foundConditionalHSIC = true;
+        break;
+      }
+    }
+    QVERIFY2(foundConditionalHSIC, "Analysis parameters should mention Conditional HSIC");
+  }
+
+
+  void TestToggleTargetAndConditionalHSIC() const
+  {
+    DataSensitivityAnalysis analysis("analysis", model_);
+    DataSensitivityAnalysisWizard wizard(analysis);
+    wizard.show();
+
+    const auto * methodGroup = wizard.introPage_->findChild<QButtonGroup*>();
+    auto * targetCB = qobject_cast<QCheckBox*>(methodGroup->button(DataSensitivityAnalysisResult::TargetHSIC));
+    auto * condCB = qobject_cast<QCheckBox*>(methodGroup->button(DataSensitivityAnalysisResult::ConditionalHSIC));
+
+    // Initially both off
+    QVERIFY2(!targetCB->isChecked(), "Target HSIC should not be checked initially");
+    QVERIFY2(!condCB->isChecked(), "Conditional HSIC should not be checked initially");
+    QVERIFY2(wizard.nextId() == -1, "Should finish when no HSIC is checked");
+
+    // Turn Target on only
+    targetCB->setChecked(true);
+    QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::TargetHSICParameters,
+             "Should navigate to Target HSIC when only Target is enabled");
+
+    // Turn Conditional on too
+    condCB->setChecked(true);
+    QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::TargetHSICParameters,
+             "Should still navigate to Target HSIC first when both are enabled");
+
+    // Turn Target off, only Conditional remains
+    targetCB->setChecked(false);
+    QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::ConditionalHSICParameters,
+             "Should navigate to Conditional HSIC when only Conditional is enabled");
+
+    // Turn Conditional off
+    condCB->setChecked(false);
+    QVERIFY2(wizard.nextId() == -1, "Should finish when no HSIC is checked");
+  }
 };
 }
 
