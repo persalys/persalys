@@ -188,7 +188,8 @@ CalibrationResultWindow::CalibrationResultWindow(AnalysisItem *item, QWidget *pa
     if(pdfSamplePrior.getSize() == 1)
     {
       pdfSamplePrior.add(pdfSamplePrior[0]);
-      pdfSamplePrior[1][1] = 0.1 * pdfSamplePosterior.getMarginal(1).getMax()[0];
+      for (UnsignedInteger i = 0; i < nbInputs; ++i)
+        pdfSamplePrior[1][2*i+1] = 0.1 * pdfSamplePosterior.getMarginal(2*i+1).getMax()[0];
     }
 
     pvWidget->setData(pdfSamplePrior, Qt::red);

@@ -19,7 +19,7 @@ public:
   enum Type {Scatter, TrajectoriesPoints, Trajectories, BagChart, FunctionalBagChart};
 
   PVXYChartViewWidget(QWidget *parent, PVServerManagerInterface *smb, const Type type = Scatter);
-  ~PVXYChartViewWidget();
+  ~PVXYChartViewWidget() override;
   virtual void setData(const std::vector< std::vector<double> >& valuesByColumn, const std::vector<std::string>& columnNames) override;
   void setData(const OT::Sample& sample, const QColor color);
   const char *getRepresentationName() const override

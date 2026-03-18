@@ -42,13 +42,13 @@ const QColor PVXYChartViewWidget::DEFAULT_SCATTER_PLOT_COLOR = Qt::blue;
 
 PVXYChartViewWidget::PVXYChartViewWidget(QWidget *parent, PVServerManagerInterface *smb, const Type type)
   : PVViewWidget(parent, smb, PV_VIEW_TYPE[type])
-  , chartXY_(0)
+  , chartXY_(nullptr)
   , chartsTitle_()
   , axisLabels_()
   , type_(type)
   , reprColors_()
 {
-  pqContextView * viewC(dynamic_cast<pqContextView *>(getView()));
+  const pqContextView * viewC(dynamic_cast<const pqContextView *>(getView()));
 
   if (!viewC)
     return ;
@@ -66,7 +66,7 @@ PVXYChartViewWidget::PVXYChartViewWidget(QWidget *parent, PVServerManagerInterfa
 
 PVXYChartViewWidget::~PVXYChartViewWidget()
 {
-  chartXY_ = 0;
+  chartXY_ = nullptr;
 }
 
 
