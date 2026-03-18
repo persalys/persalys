@@ -173,7 +173,11 @@ else ()
 endif ()
 
 if (PERSALYS_BUILD_APPIMAGE)
-  target_compile_definitions(persalysmodel PRIVATE PERSALYS_APPIMAGE)
+  target_compile_definitions(persalysmodel PUBLIC PERSALYS_APPIMAGE)
+endif ()
+
+if (PERSALYS_BUILD_NSIS)
+  target_compile_definitions(persalysmodel PUBLIC PERSALYS_NSIS)
 endif ()
 
 if ( NOT DEFINED LIB_VERSION )

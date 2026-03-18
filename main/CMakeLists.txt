@@ -30,10 +30,6 @@ endif ()
 
 install (TARGETS persalys DESTINATION bin)
 
-if (PERSALYS_BUILD_NSIS)
-  target_compile_definitions(persalys PRIVATE PERSALYS_NSIS)
-endif ()
-
 if (boost_stacktrace_backtrace_FOUND OR (Boost_FOUND AND LIBBACKTRACE_FOUND))
   target_compile_definitions(persalys PRIVATE PERSALYS_STACKTRACE)
   if (TARGET Boost::stacktrace_backtrace)
