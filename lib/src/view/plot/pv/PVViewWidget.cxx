@@ -148,7 +148,7 @@ void PVViewWidget::setArrayData(const std::vector< std::vector<T> >& valuesByCol
   // create a new representation
   pqDataRepresentation * newRepr(builder->createDataRepresentation(mySourceProducer->getOutputPort(0), getView(), getRepresentationName()));
   vtkSMViewProxy::RepresentationVisibilityChanged(newRepr->getViewProxy(), newRepr->getProxy(), true);
-  newRepr->setVisible(1);
+  newRepr->setVisible(true);
   // update view
   getView()->resetDisplay();
   getView()->render();
