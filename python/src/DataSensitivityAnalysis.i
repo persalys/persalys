@@ -79,6 +79,8 @@ template <>
 }
 %}
 
+%apply const CovarianceModelCollection & { const OT::CovarianceModelCollection & };
+
 
 %include DataSensitivityAnalysis_doc.i
 

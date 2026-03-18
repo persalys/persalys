@@ -250,6 +250,27 @@ Description Parameters::GetOTIntervalDescription(const Interval& interval)
   return resu;
 }
 
+String Parameters::GetOTCovModelCollectionStr(const Collection<CovarianceModel>& covarianceModels)
+{
+  OSS oss;
+  oss << "[";
+  for (UnsignedInteger i = 0; i < covarianceModels.getSize(); ++i)
+  {
+    const String className = covarianceModels[i].getImplementation()->getClassName();
+    oss << "ot." << className << "()";
+
+    if (i < covarianceModels.getSize() - 1)
+      oss << ", ";
+  }
+  oss << "]";
+  return oss.str();
+}
+
+OT::String Parameters::GetOTBoolStr(const OT::Bool value)
+{
+  return value ? "True" : "False";
+}
+
 // ------------------------ Tools --------------------------------------
 
 Sample Tools::ImportRawSample(const String &fileName)

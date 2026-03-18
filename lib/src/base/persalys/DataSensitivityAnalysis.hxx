@@ -57,6 +57,8 @@ public:
   using Type = DataSensitivityAnalysisResult::Type;
   using HSICType = DataSensitivityAnalysisResult::HSICType;
 
+  typedef OT::Collection<OT::CovarianceModel> CovarianceModelCollection;
+
   /** constructors */
   DataSensitivityAnalysis() = default;
 
@@ -74,7 +76,7 @@ public:
 
   void setType(unsigned char analysisType);
 
-  void setCovarianceModels(const OT::Collection<OT::CovarianceModel> &covarianceModels, HSICType hsicType);
+  void setCovarianceModels(const CovarianceModelCollection &covarianceModels, HSICType hsicType);
 
   void setFilterAlphas(const OT::Point & filterAlphas);
   void setWeightAlphas(const OT::Point & weightAlphas);
@@ -87,15 +89,6 @@ public:
   bool hasValidResult() const override;
 
   const DataSensitivityAnalysisResult& getResult() const;
-
-  /** String converter */
-  OT::String __repr__() const override;
-
-  /** Method save() stores the object through the StorageManager */
-  void save(OT::Advocate & adv) const override;
-
-  /** Method load() reloads the object from the StorageManager */
-  void load(OT::Advocate & adv) override;
 
   static bool CanBeLaunched(OT::String &errorMessage, const DesignOfExperiment &doe);
   Parameters getParameters() const override;
@@ -116,6 +109,17 @@ public:
   OT::Collection<OT::Function> getWeightFunctions() const;
 
   bool defaultHSICParametersChanged() const;
+
+  OT::String getPythonScript() const override;
+
+  /** String converter */
+  OT::String __repr__() const override;
+
+  /** Method save() stores the object through the StorageManager */
+  void save(OT::Advocate & adv) const override;
+
+  /** Method load() reloads the object from the StorageManager */
+  void load(OT::Advocate & adv) override;
 
 protected:
   void initialize() override;
@@ -146,6 +150,8 @@ private:
   OT::Description interestVariables_;
   OT::Point filterAlphas_;
   OT::Point weightAlphas_;
+  OT::Bool userDefinedFilterFunctions_ = false;
+  OT::Bool userDefinedWeightFunctions_ = false;
 
 };
 

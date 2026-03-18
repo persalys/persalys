@@ -223,7 +223,7 @@ bool AnalysisImplementation::canBeDetached() const
 
 String AnalysisImplementation::getPythonScript() const
 {
-  return "";
+  throw NotYetImplementedException(HERE) << "AnalysisImplementation does not implement getPythonScript()";
 }
 
 

@@ -20,6 +20,7 @@
  */
 
 #include "persalys/DataSensitivityAnalysis.hxx"
+#include "persalys/BaseTools.hxx"
 
 #include <openturns/RankSobolSensitivityAlgorithm.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
@@ -99,6 +100,8 @@ void DataSensitivityAnalysis::setFilterAlphas(const OT::Point & filterAlphas)
     formula << "exp(-x/" << s << ")";
     filterFunctions_.add(SymbolicFunction(Description(1, "x"), Description(1, formula.str())));
   }
+
+  userDefinedFilterFunctions_ = false;
 }
 
 void DataSensitivityAnalysis::setWeightAlphas(const OT::Point & weightAlphas)
@@ -115,18 +118,22 @@ void DataSensitivityAnalysis::setWeightAlphas(const OT::Point & weightAlphas)
     formula << "exp(-x/" << s << ")";
     weightFunctions_.add(SymbolicFunction(Description(1, "x"), Description(1, formula.str())));
   }
+
+  userDefinedWeightFunctions_ = false;
 }
 
 void DataSensitivityAnalysis::setFilterFunctions(const OT::Collection<OT::Function> &filterFunctions)
-{
+{ 
   filterAlphas_.clear();
   filterFunctions_ = filterFunctions;
+  userDefinedFilterFunctions_ = true;
 }
 
 void DataSensitivityAnalysis::setWeightFunctions(const OT::Collection<OT::Function> &weightFunctions)
 {
   weightAlphas_.clear();
   weightFunctions_ = weightFunctions;
+  userDefinedWeightFunctions_ = true;
 }
 
 void DataSensitivityAnalysis::setHSICParameters(bool computePermutationPValues, bool computeAsymptoticPValues, bool useUStatistic, HSICType hsicType)
@@ -701,6 +708,38 @@ void DataSensitivityAnalysis::checkIndependance()
   }
 }
 
+String DataSensitivityAnalysis::getPythonScript() const
+{
+  if (userDefinedFilterFunctions_ || userDefinedWeightFunctions_)
+    throw InvalidArgumentException(HERE) << "Python script cannot be generated when user-defined filter or weight functions are used.";
+  OSS oss;
+  oss << getName() << " = persalys.DataSensitivityAnalysis('" << getName() << "', " << designOfExperiment_.getName() << ", " << static_cast<unsigned char>(type_.getType()) << ", " << Parameters::GetOTDescriptionStr(interestVariables_)  << ", " << Parameters::GetOTBoolStr(computeCovModelParameters_) << ")\n";
+  oss << "globalCovModels = " << Parameters::GetOTCovModelCollectionStr(globalCovarianceModels_) << "\n";
+  oss << "targetCovModels = " << Parameters::GetOTCovModelCollectionStr(targetCovarianceModels_) << "\n";
+  oss << "conditionalCovModels = " << Parameters::GetOTCovModelCollectionStr(conditionalCovarianceModels_) << "\n";
+  for (UnsignedInteger i = 0 ; i < globalCovarianceModels_.getSize(); ++i)
+  {
+    if (type_.computeGlobalHSIC())
+      oss << "globalCovModels[" << i << "].setFullParameter(" << Parameters::GetOTPointStr(globalCovarianceModels_[i].getFullParameter()) << ")\n";
+    if (type_.computeTargetHSIC())
+      oss << "targetCovModels[" << i << "].setFullParameter(" << Parameters::GetOTPointStr(targetCovarianceModels_[i].getFullParameter()) << ")\n";
+    if (type_.computeConditionalHSIC())
+      oss << "conditionalCovModels[" << i << "].setFullParameter(" << Parameters::GetOTPointStr(conditionalCovarianceModels_[i].getFullParameter()) << ")\n";
+  }
+  oss << getName() << ".setCovarianceModels(ot.CovarianceModelCollection(globalCovModels), persalys.DataSensitivityAnalysisResult.Global)\n";
+  oss << getName() << ".setCovarianceModels(ot.CovarianceModelCollection(targetCovModels), persalys.DataSensitivityAnalysisResult.Target)\n";
+  oss << getName() << ".setCovarianceModels(ot.CovarianceModelCollection(conditionalCovModels), persalys.DataSensitivityAnalysisResult.Conditional)\n";
+
+  oss << getName() << ".setFilterAlphas(" << Parameters::GetOTPointStr(filterAlphas_) << ")\n";
+  oss << getName() << ".setWeightAlphas(" << Parameters::GetOTPointStr(weightAlphas_) << ")\n";
+
+  oss << getName() << ".setHSICParameters(" << Parameters::GetOTBoolStr(globalHSICParameters_.computePermutationPValues()) << ", " << Parameters::GetOTBoolStr(globalHSICParameters_.computeAsymptoticPValues()) << ", " << Parameters::GetOTBoolStr(globalHSICParameters_.useUStatistic()) << ", persalys.DataSensitivityAnalysisResult.Global)\n";
+  oss << getName() << ".setHSICParameters(" << Parameters::GetOTBoolStr(targetHSICParameters_.computePermutationPValues()) << ", " << Parameters::GetOTBoolStr(targetHSICParameters_.computeAsymptoticPValues()) << ", " << Parameters::GetOTBoolStr(targetHSICParameters_.useUStatistic()) << ", persalys.DataSensitivityAnalysisResult.Target)\n";
+  oss << getName() << ".setHSICParameters(" << Parameters::GetOTBoolStr(conditionalHSICParameters_.computePermutationPValues()) << ", " << Parameters::GetOTBoolStr(conditionalHSICParameters_.computeAsymptoticPValues()) << ", " << Parameters::GetOTBoolStr(conditionalHSICParameters_.useUStatistic()) << ", persalys.DataSensitivityAnalysisResult.Conditional)\n";
+
+  return oss;
+}
+
 String DataSensitivityAnalysis::__repr__() const
 {
   return OSS() << "class=" << getClassName()
@@ -732,6 +771,8 @@ void DataSensitivityAnalysis::save(OT::Advocate & adv) const
   adv.saveAttribute("interestVariables_", interestVariables_);
   adv.saveAttribute("filterAlphas_", filterAlphas_);
   adv.saveAttribute("weightAlphas_", weightAlphas_);
+  adv.saveAttribute("userDefinedFilterFunctions_", userDefinedFilterFunctions_);
+  adv.saveAttribute("userDefinedWeightFunctions_", userDefinedWeightFunctions_);
 }
 
 void DataSensitivityAnalysis::load(OT::Advocate & adv)
@@ -762,6 +803,8 @@ void DataSensitivityAnalysis::load(OT::Advocate & adv)
     adv.loadAttribute("interestVariables_", interestVariables_);
     adv.loadAttribute("filterAlphas_", filterAlphas_);
     adv.loadAttribute("weightAlphas_", weightAlphas_);
+    adv.loadAttribute("userDefinedFilterFunctions_", userDefinedFilterFunctions_);
+    adv.loadAttribute("userDefinedWeightFunctions_", userDefinedWeightFunctions_);
   }
 }
 

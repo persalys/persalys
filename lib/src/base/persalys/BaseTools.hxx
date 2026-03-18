@@ -25,6 +25,7 @@
 
 #include <openturns/OTType.hxx>
 #include <openturns/ProcessSample.hxx>
+#include <openturns/CovarianceModel.hxx>
 #include <regex>
 #include <thread>
 #include <algorithm>
@@ -61,6 +62,8 @@ public:
   static OT::String GetOTCorrelationMatrixStr(const OT::CorrelationMatrix &correlationMatrix);
   static OT::String GetOTNormalCopulaStr(const OT::Distribution &distribution);
   static OT::Description GetOTIntervalDescription(const OT::Interval& interval);
+  static OT::String GetOTCovModelCollectionStr(const OT::Collection<OT::CovarianceModel>& covarianceModels);
+  static OT::String GetOTBoolStr(const OT::Bool value);
 
 private:
   template <typename T>
