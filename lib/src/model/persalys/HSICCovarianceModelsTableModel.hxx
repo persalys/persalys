@@ -36,6 +36,21 @@ class PERSALYS_MODEL_API HSICCovarianceModelsTableModel : public QAbstractTableM
   Q_OBJECT
 
 public:
+  enum class CovarianceModelType
+  {
+    Matern = 0,
+    SquaredExponential = 1,
+    AbsoluteExponential = 2,
+    GeneralizedExponential = 3
+  };
+
+  enum class NuType
+  {
+    OneHalf = 0,
+    ThreeHalf = 1,
+    FiveHalf = 2
+  };
+
   explicit HSICCovarianceModelsTableModel(const OT::Description & variableNames, QObject *parent = nullptr);
   
   void setVariablesNames(const OT::Description & variableNames);
@@ -52,8 +67,8 @@ public:
 
 private:
   OT::Description variableNames_;
-  QList<int> modelIndices_;   // 0=Matern, 1=SquaredExponential, 2=AbsoluteExponential, 3=GeneralizedExponential
-  QList<int> nuIndices_;      // 0=1/2, 1=3/2, 2=5/2
+  QList<CovarianceModelType> modelIndices_;
+  QList<NuType> nuIndices_;
 };
 
 } // namespace PERSALYS

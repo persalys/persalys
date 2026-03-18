@@ -37,8 +37,8 @@ HSICCovarianceModelsTableModel::HSICCovarianceModelsTableModel(const Description
 {
   for (UnsignedInteger i = 0; i < variableNames_.getSize(); ++i)
   {
-    modelIndices_ << 1;  // default: Squared exponential
-    nuIndices_ << 1;     // default: 3/2
+    modelIndices_ << CovarianceModelType::SquaredExponential;
+    nuIndices_ << NuType::ThreeHalf;
   }
 }
 
@@ -50,8 +50,8 @@ void HSICCovarianceModelsTableModel::setVariablesNames(const Description & varia
   nuIndices_.clear();
   for (UnsignedInteger i = 0; i < variableNames_.getSize(); ++i)
   {
-    modelIndices_ << 1;  // default: Squared exponential
-    nuIndices_ << 1;     // default: 3/2
+    modelIndices_ << CovarianceModelType::SquaredExponential;
+    nuIndices_ << NuType::ThreeHalf;
   }
   endResetModel();
 }
@@ -100,7 +100,7 @@ Qt::ItemFlags HSICCovarianceModelsTableModel::flags(const QModelIndex & index) c
   // Column 2 (ν): editable only for Matérn
   if (index.column() == 2)
   {
-    if (modelIndices_[index.row()] == 0) // Matérn
+    if (modelIndices_[index.row()] == CovarianceModelType::Matern)
       return result | Qt::ItemIsEditable;
     else
       return result & ~Qt::ItemIsEnabled;
@@ -126,14 +126,14 @@ QVariant HSICCovarianceModelsTableModel::data(const QModelIndex & index, int rol
     {
       const QStringList names = {tr("Matérn"), tr("Squared exponential"),
                                   tr("Absolute exponential"), tr("Generalized exponential")};
-      return names[modelIndices_[row]];
+      return names[static_cast<int>(modelIndices_[row])];
     }
     case 2:
     {
-      if (modelIndices_[row] == 0) // Matérn
+      if (modelIndices_[row] == CovarianceModelType::Matern)
       {
         const QStringList nuVals = {"1/2", "3/2", "5/2"};
-        return nuVals[nuIndices_[row]];
+        return nuVals[static_cast<int>(nuIndices_[row])];
       }
       return "-";
     }
@@ -148,7 +148,7 @@ QVariant HSICCovarianceModelsTableModel::data(const QModelIndex & index, int rol
     if (index.column() == 1)
       return QStringList() << tr("Matérn") << tr("Squared exponential")
                            << tr("Absolute exponential") << tr("Generalized exponential");
-    if (index.column() == 2 && modelIndices_[row] == 0)
+    if (index.column() == 2 && modelIndices_[row] == CovarianceModelType::Matern)
       return QStringList() << "1/2" << "3/2" << "5/2";
   }
 
@@ -168,7 +168,7 @@ bool HSICCovarianceModelsTableModel::setData(const QModelIndex & index, const QV
                                 tr("Absolute exponential"), tr("Generalized exponential")};
     const int idx = names.indexOf(value.toString());
     if (idx >= 0)
-      modelIndices_[row] = idx;
+      modelIndices_[row] = static_cast<CovarianceModelType>(idx);
     // Refresh ν column when model changes
     emit dataChanged(this->index(row, 2), this->index(row, 2));
     emit dataChanged(index, index);
@@ -180,7 +180,7 @@ bool HSICCovarianceModelsTableModel::setData(const QModelIndex & index, const QV
     const QStringList nuVals = {"1/2", "3/2", "5/2"};
     const int idx = nuVals.indexOf(value.toString());
     if (idx >= 0)
-      nuIndices_[row] = idx;
+      nuIndices_[row] = static_cast<NuType>(idx);
     emit dataChanged(index, index);
     return true;
   }
@@ -197,16 +197,16 @@ Collection<CovarianceModel> HSICCovarianceModelsTableModel::getCovarianceModels(
   {
     switch (modelIndices_[i])
     {
-    case 0: // Matérn
-      models.add(MaternModel(Point(1, 1.0), Point(1, 1.0), nuValues[nuIndices_[i]]));
+    case CovarianceModelType::Matern:
+      models.add(MaternModel(Point(1, 1.0), Point(1, 1.0), nuValues[static_cast<int>(nuIndices_[i])]));
       break;
-    case 1: // Squared exponential
+    case CovarianceModelType::SquaredExponential:
       models.add(SquaredExponential());
       break;
-    case 2: // Absolute exponential
+    case CovarianceModelType::AbsoluteExponential:
       models.add(AbsoluteExponential());
       break;
-    case 3: // Generalized exponential
+    case CovarianceModelType::GeneralizedExponential:
       models.add(GeneralizedExponential());
       break;
     default:
@@ -224,26 +224,26 @@ void HSICCovarianceModelsTableModel::setCovarianceModels(const Collection<Covari
     return;
 
   beginResetModel();
-  for (UnsignedInteger i = 0; i < models.getSize(); ++i)
+  for (int i = 0; i < (int) models.getSize(); ++i)
   {
     const String className = models[i].getImplementation()->getClassName();
     if (className == "MaternModel")
     {
-      modelIndices_[i] = 0;
+      modelIndices_[i] = CovarianceModelType::Matern;
       const double nu = dynamic_cast<const MaternModel *>(models[i].getImplementation().get())->getNu();
       if (nu <= 1.0)
-        nuIndices_[i] = 0;
+        nuIndices_[i] = NuType::OneHalf;
       else if (nu <= 2.0)
-        nuIndices_[i] = 1;
+        nuIndices_[i] = NuType::ThreeHalf;
       else
-        nuIndices_[i] = 2;
+        nuIndices_[i] = NuType::FiveHalf;
     }
     else if (className == "SquaredExponential")
-      modelIndices_[i] = 1;
+      modelIndices_[i] = CovarianceModelType::SquaredExponential;
     else if (className == "AbsoluteExponential")
-      modelIndices_[i] = 2;
+      modelIndices_[i] = CovarianceModelType::AbsoluteExponential;
     else if (className == "GeneralizedExponential")
-      modelIndices_[i] = 3;
+      modelIndices_[i] = CovarianceModelType::GeneralizedExponential;
   }
   endResetModel();
 }
