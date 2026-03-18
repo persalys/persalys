@@ -121,7 +121,6 @@ class PERSALYS_VIEW_API CalibrationParametersPage : public QWizardPage
   Q_OBJECT
 
 public:
-  enum OptimAlgo {CMinpackAlgo, CeresAlgo};
   explicit CalibrationParametersPage(QWidget* parent = nullptr);
   void initialize(const Analysis& analysis);
   void updateAnalysis(CalibrationAnalysis * analysis_ptr);
