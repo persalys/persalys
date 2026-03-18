@@ -8,12 +8,14 @@ name : str
     Name of the analysis.
 design : :class:`~persalys.DesignOfExperiment`
     Design of experiments to analyze.
-type : byte, optional
+type : int, optional
     Type of sensitivity analysis to perform, encoded in a byte with : 
-    - persalys.DataSensitivityAnalysis.RankSobol for Rank Sobol indices (bit 0, 0b00000001)
-    - persalys.DataSensitivityAnalysis.SRC for SRC indices (bit 1, 0b00000010)
-    - persalys.DataSensitivityAnalysis.GlobalHSIC for global HSIC indices (bit 2, 0b00000100)
-    The default value is 0b00000011 (Rank Sobol and SRC indices are computed by default).
+    - persalys.DataSensitivityAnalysisResult.RankSobol for Rank Sobol indices
+    - persalys.DataSensitivityAnalysisResult.SRC for SRC indices
+    - persalys.DataSensitivityAnalysisResult.GlobalHSIC for global HSIC indices
+    - persalys.DataSensitivityAnalysisResult.TargetHSIC for target HSIC indices
+    - persalys.DataSensitivityAnalysisResult.ConditionalHSIC for conditional HSIC indices
+    The default value is RankSobol | SRC (Rank Sobol and SRC indices are computed by default).
 covarianceModels : collection of :class:`~openturns.CovarianceModel`, optional
     Collection of covariance models to use for HSIC indices computation. 
     The size of the collection must be equal to the total number of input and output variables in the design of experiment.
@@ -49,7 +51,7 @@ Create the model:
 
 Create and run the analysis: 
 
->>> analysis = persalys.DataSensitivityAnalysis('sensitivity', model)
+>>> analysis = persalys.DataSensitivityAnalysis('sensitivity', model, persalys.DataSensitivityAnalysisResult.RankSobol | persalys.DataSensitivityAnalysisResult.SRC)
 >>> analysis.run()
 
 Get the result:
@@ -70,13 +72,13 @@ Get the result:
 
 Parameters
 ----------
-analysisType : byte
+analysisType : int
     Type of sensitivity analysis to perform, encoded in a byte with :
-- persalys.DataSensitivityAnalysis.RankSobol for Rank Sobol indices (bit 0, 0b00000001)
-- persalys.DataSensitivityAnalysis.SRC for SRC indices (bit 1, 0b00000010)
-- persalys.DataSensitivityAnalysis.GlobalHSIC for global HSIC indices (bit 2, 0b00000100)
-- persalys.DataSensitivityAnalysis.TargetHSIC for target HSIC indices (bit 3, 0b00001000)
-- persalys.DataSensitivityAnalysis.ConditionalHSIC for conditional HSIC indices (bit 4, 0b00010000)"
+- persalys.DataSensitivityAnalysis.RankSobol for Rank Sobol indices
+- persalys.DataSensitivityAnalysis.SRC for SRC indices
+- persalys.DataSensitivityAnalysis.GlobalHSIC for global HSIC indices
+- persalys.DataSensitivityAnalysis.TargetHSIC for target HSIC indices
+- persalys.DataSensitivityAnalysis.ConditionalHSIC for conditional HSIC indices"
 
 // ---------------------------------------------------------------------------
 
