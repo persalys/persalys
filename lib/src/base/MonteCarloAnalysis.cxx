@@ -62,6 +62,15 @@ MonteCarloAnalysis* MonteCarloAnalysis::clone() const
   return new MonteCarloAnalysis(*this);
 }
 
+void MonteCarloAnalysis::allowFailedEvaluations(const bool allow)
+{
+  allowFailedEvaluations_ = allow;
+}
+
+bool MonteCarloAnalysis::failedEvaluationsAllowed() const
+{
+  return allowFailedEvaluations_;
+}
 
 Scalar MonteCarloAnalysis::getMaximumConfidenceIntervalLength() const
 {
@@ -121,9 +130,13 @@ void MonteCarloAnalysis::launch()
 
   Sample effectiveInputSample(0, getPhysicalModel().getStochasticInputNames().getSize());
   effectiveInputSample.setDescription(getPhysicalModel().getStochasticInputNames());
-  Sample outputSample(0, getInterestVariables().getSize());
+  Sample outputSampleNoNaN(0, getInterestVariables().getSize());
+  Sample outputSample(0, getInterestVariables().getSize()); // used only if allowFailedEvaluations_ is true
   outputSample.setDescription(getInterestVariables());
+  outputSampleNoNaN.setDescription(getInterestVariables());
   Function function(getPhysicalModel().getRestrictedFunction(getInterestVariables()));
+
+  failedInputSample_ = Sample(0, getPhysicalModel().getStochasticInputNames().getSize());
 
   const bool maximumOuterSamplingSpecified = getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max();
   const UnsignedInteger maximumOuterSampling = maximumOuterSamplingSpecified ? static_cast<UnsignedInteger>(ceil(1.0 * getMaximumCalls() / getBlockSize())) : (UnsignedInteger)std::numeric_limits<int>::max();
@@ -143,6 +156,7 @@ void MonteCarloAnalysis::launch()
          && (confidenceInterval == -1.0 || confidenceInterval > getMaximumConfidenceIntervalLength())
          && (timeCriteria.getElapsedTime() < maxTime))
   {
+
     // progress
     if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
     {
@@ -167,41 +181,56 @@ void MonteCarloAnalysis::launch()
 
     // Perform a block of simulations
     Sample blockOutputSample;
+    Sample failedInputSample;
     try
     {
       blockOutputSample = function(blockInputSample);
     }
     catch (const std::exception & ex)
     {
-      failedInputSample_ = blockInputSample;
-      warningMessage_ = ex.what();
+      failedInputSample = blockInputSample;
+      if (!allowFailedEvaluations_)
+        warningMessage_ = ex.what();
     }
 
-    if (!failedInputSample_.getSize())
+    if (!failedInputSample.getSize())
     {
       // if succeed fill samples
-      outputSample.add(blockOutputSample);
+      outputSampleNoNaN.add(blockOutputSample);
       effectiveInputSample.add(blockInputSample);
+      if (allowFailedEvaluations_)
+        outputSample.add(blockOutputSample);
     }
     else
     {
-      // exit the while section. Stop the analysis
-      break;
+      if (!allowFailedEvaluations_)
+      {
+        // exit the while section. Stop the analysis
+        failedInputSample_ = failedInputSample;
+        break;
+      }
+      else
+      {
+        blockOutputSample = Sample(effectiveBlockSize, Point(blockInputSample.getDimension(), std::numeric_limits<Scalar>::quiet_NaN()));
+        outputSample.add(blockOutputSample);
+        failedInputSample_.add(failedInputSample);
+        effectiveInputSample.add(blockInputSample);
+      }
     }
 
     // stop criteria
     if (getBlockSize() != 1 || (getBlockSize() == 1 && outerSampling))
     {
-      const Point empiricalMean(outputSample.computeMean());
-      const Point empiricalStd(outputSample.computeStandardDeviation());
+      const Point empiricalMean(outputSampleNoNaN.computeMean());
+      const Point empiricalStd(outputSampleNoNaN.computeStandardDeviation());
 
       Scalar coefOfVar(0.);
       Scalar CI(0.);
-      for (UnsignedInteger i = 0; i < outputSample.getDimension(); ++i)
+      for (UnsignedInteger i = 0; i < outputSampleNoNaN.getDimension(); ++i)
       {
         if (std::abs(empiricalMean[i]) > SpecFunc::Precision)
         {
-          const Scalar sigma_i = empiricalStd[i] / sqrt(outputSample.getSize());
+          const Scalar sigma_i = empiricalStd[i] / sqrt(outputSampleNoNaN.getSize());
           coefOfVar = std::max(sigma_i / std::abs(empiricalMean[i]), coefOfVar);
           CI = 2.0 * sigma_i * DistFunc::qNormal(0.5 * (1 + levelConfidenceInterval_));
         }
@@ -219,12 +248,15 @@ void MonteCarloAnalysis::launch()
   }
 
   // check
-  if (!outputSample.getSize())
+  if (!outputSampleNoNaN.getSize())
     throw InvalidValueException(HERE) << "Monte Carlo Analysis failed. The output sample is empty. " << warningMessage_;
 
   // set design of experiments
   result_.designOfExperiment_.setInputSample(effectiveInputSample);
-  result_.designOfExperiment_.setOutputSample(outputSample);
+  if (allowFailedEvaluations_)
+    result_.designOfExperiment_.setOutputSample(outputSample);
+  else
+    result_.designOfExperiment_.setOutputSample(outputSampleNoNaN);
 
   // compute data analysis
   DataAnalysis dataAnalysis("", result_.designOfExperiment_);
@@ -238,6 +270,7 @@ void MonteCarloAnalysis::launch()
   result_.elapsedTime_ = timeCriteria.getElapsedTime();
   result_.designOfExperiment_.setType(DataModel::MC);
   result_.designOfExperiment_.setPhysicalModel(getPhysicalModel());
+  result_.allowFailedEvaluations_ = allowFailedEvaluations_;
 }
 
 
@@ -258,6 +291,7 @@ Parameters MonteCarloAnalysis::getParameters() const
   param.add(WithStopCriteriaAnalysis::getParameters());
   param.add("Maximum confidence interval length", getMaximumConfidenceIntervalLength());
   param.add(SimulationAnalysis::getParameters());
+  param.add("Allow failed evaluations", allowFailedEvaluations_ ? "Yes" : "No");
 
   return param;
 }
@@ -279,6 +313,7 @@ String MonteCarloAnalysis::getPythonScript() const
   oss << getName() << ".setMaximumElapsedTime(" << getMaximumElapsedTime() << ")\n";
   oss << getName() << ".setBlockSize(" << getBlockSize() << ")\n";
   oss << getName() << ".setSeed(" << getSeed() << ")\n";
+  oss << getName() << ".allowFailedEvaluations(" << (allowFailedEvaluations_ ? "True" : "False") << ")\n";
 
   return oss;
 }
@@ -329,6 +364,7 @@ void MonteCarloAnalysis::save(Advocate & adv) const
   adv.saveAttribute("isConfidenceIntervalRequired_", isConfidenceIntervalRequired_);
   adv.saveAttribute("levelConfidenceInterval_", levelConfidenceInterval_);
   adv.saveAttribute("result_", result_);
+  adv.saveAttribute("allowFailedEvaluations_", allowFailedEvaluations_);
 }
 
 
@@ -349,5 +385,7 @@ void MonteCarloAnalysis::load(Advocate & adv)
   }
   if (adv.hasAttribute("maximumConfidenceIntervalLength_"))
     adv.loadAttribute("maximumConfidenceIntervalLength_", maximumConfidenceIntervalLength_);
+  if (adv.hasAttribute("allowFailedEvaluations_"))
+    adv.loadAttribute("allowFailedEvaluations_", allowFailedEvaluations_);
 }
 }

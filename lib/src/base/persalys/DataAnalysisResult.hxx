@@ -63,6 +63,7 @@ public:
   PointCollection getOutliers() const;
   OT::Point getEffectiveSize() const;
   DesignOfExperiment getMultivariateDoE() const;
+  bool allowFailedEvaluations() const;
 
   DataSample::SampleCollection getPDF() const;
   DataSample::SampleCollection getCDF() const;
@@ -96,6 +97,7 @@ private:
   OT::PersistentCollection<OT::Sample> survFct_;
   OT::Point effectiveSize_;
   DesignOfExperiment multiVariateDoE_;
+  bool allowFailedEvaluations_ = false;
 };
 }
 #endif

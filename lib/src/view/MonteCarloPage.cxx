@@ -87,6 +87,10 @@ void MonteCarloPage::buildInterface()
   seedLabel->setBuddy(seedSpinbox_);
   advancedWidgetsLayout->addWidget(seedSpinbox_, 2, 1);
 
+  // allow failed evaluations
+  allowFailedEvaluationsCheckBox_ = new QCheckBox(tr("Allow failed evaluations"));
+  advancedWidgetsLayout->addWidget(allowFailedEvaluationsCheckBox_, 3, 0, 1, 2);
+
   pageLayout->addWidget(advancedParamGroupBox);
 
   pageLayout->addStretch();
@@ -119,6 +123,7 @@ void MonteCarloPage::initialize(const Analysis& analysis)
   levelConfidenceIntervalSpinbox_->setEnabled(analysis_ptr->isConfidenceIntervalRequired() ||
       analysis_ptr->getMaximumConfidenceIntervalLength() != -1);
   seedSpinbox_->setValue(analysis_ptr->getSeed());
+  allowFailedEvaluationsCheckBox_->setChecked(analysis_ptr->failedEvaluationsAllowed());
 }
 
 
@@ -133,6 +138,7 @@ Analysis MonteCarloPage::getAnalysis(const String& name, const PhysicalModel& ph
   analysis.setSeed(seedSpinbox_->value());
   analysis.setIsConfidenceIntervalRequired(confidenceIntervalCheckBox_->isChecked());
   analysis.setLevelConfidenceInterval(levelConfidenceIntervalSpinbox_->value());
+  analysis.allowFailedEvaluations(allowFailedEvaluationsCheckBox_->isChecked());
 
   return analysis;
 }

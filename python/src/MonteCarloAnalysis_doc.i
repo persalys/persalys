@@ -34,6 +34,16 @@ Get the result:
 
 // ---------------------------------------------------------------------
 
+%feature("docstring") PERSALYS::MonteCarloAnalysis::allowFailedEvaluations
+"Allow failed evaluations.
+
+Parameters
+----------
+allow : bool
+    Whether to allow failed evaluations. If set to true, the failed evaluations are added as NaN values in the output sample and the corresponding input samples are stored in the failedInputSample attribute of the result. By default, failed evaluations are not allowed and an error is raised when they occur."
+
+// ---------------------------------------------------------------------
+
 %feature("docstring") PERSALYS::MonteCarloAnalysis::getResult
 "Result accessor.
 

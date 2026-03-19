@@ -55,6 +55,7 @@ private:
   QCheckBox             * confidenceIntervalCheckBox_     = nullptr;
   DoubleSpinBox         * levelConfidenceIntervalSpinbox_ = nullptr;
   QSpinBox              * seedSpinbox_                    = nullptr;
+  QCheckBox             * allowFailedEvaluationsCheckBox_ = nullptr;
   ErrorWidget           * errorWidget_              = nullptr;
 };
 }

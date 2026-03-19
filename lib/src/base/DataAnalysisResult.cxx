@@ -139,6 +139,11 @@ DesignOfExperiment DataAnalysisResult::getMultivariateDoE() const
   return multiVariateDoE_;
 }
 
+bool DataAnalysisResult::allowFailedEvaluations() const
+{
+  return allowFailedEvaluations_;
+}
+
 
 DataSample::SampleCollection DataAnalysisResult::getPDF() const
 {
@@ -178,6 +183,7 @@ String DataAnalysisResult::__repr__() const
       << " meanConfidenceInterval=" << getMeanConfidenceInterval();
     if (effectiveSize_.getDimension())
       oss << " effectiveSize=" << getEffectiveSize().__str__();
+    oss << " allowFailedEvaluations=" << (allowFailedEvaluations() ? "True" : "False");
   return oss;
 }
 
@@ -204,6 +210,7 @@ void DataAnalysisResult::save(Advocate & adv) const
   adv.saveAttribute("survFct__", survFct_);
   adv.saveAttribute("effectiveSize_", effectiveSize_);
   adv.saveAttribute("multiVariateDoE_", multiVariateDoE_);
+  adv.saveAttribute("allowFailedEvaluations_", allowFailedEvaluations_);
 }
 
 
@@ -234,5 +241,7 @@ void DataAnalysisResult::load(Advocate & adv)
     adv.loadAttribute("multiVariateDoE_", multiVariateDoE_);
   else
     multiVariateDoE_ = designOfExperiment_;
+  if (adv.hasAttribute("allowFailedEvaluations_"))
+    adv.loadAttribute("allowFailedEvaluations_", allowFailedEvaluations_);
 }
 }

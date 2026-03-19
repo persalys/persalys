@@ -235,7 +235,11 @@ void DataAnalysisWindow::addSummaryTab()
   // - sample size
   namesList << sampleSizeTitle_;
 
-  const OT::UnsignedInteger totalSampleSize = designOfExperiment_.getSample().getSize() + failedInputSample_.getSize() + notEvaluatedInputSample_.getSize();
+  UnsignedInteger totalSampleSize;
+  if (result_.allowFailedEvaluations())
+    totalSampleSize = designOfExperiment_.getSample().getSize();
+  else
+    totalSampleSize = designOfExperiment_.getSample().getSize() + failedInputSample_.getSize() + notEvaluatedInputSample_.getSize();
 
   valuesList << QString::number(totalSampleSize);
 
@@ -243,7 +247,7 @@ void DataAnalysisWindow::addSummaryTab()
   // - elapsed time
   if (result_.getElapsedTime() > 0.)
   {
-    if (QString(metaObject()->className()) != "PERSALYS::MonteCarloResultWindow")
+    if (QString(metaObject()->className()) != "PERSALYS::MonteCarloResultWindow" || result_.allowFailedEvaluations())
     {
       namesList << tr("Evaluated samples") << tr("Failed samples");
       const OT::UnsignedInteger evaluatedSamples = totalSampleSize - notEvaluatedInputSample_.getSize();
