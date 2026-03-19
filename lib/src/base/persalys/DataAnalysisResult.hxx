@@ -60,7 +60,6 @@ public:
   PointCollection getFirstQuartile() const;
   PointCollection getThirdQuartile() const;
   OT::Interval getMeanConfidenceInterval() const;
-  //OT::Interval getStdConfidenceInterval() const;
   PointCollection getOutliers() const;
   OT::Point getEffectiveSize() const;
   DesignOfExperiment getMultivariateDoE() const;
@@ -91,7 +90,6 @@ private:
   OT::PersistentCollection<OT::Point> firstQuartile_;
   OT::PersistentCollection<OT::Point> thirdQuartile_;
   OT::Interval meanConfidenceInterval_;
-  //OT::Interval stdConfidenceInterval_;
   OT::PersistentCollection<OT::Point> outliers_;
   OT::PersistentCollection<OT::Sample> pdf_;
   OT::PersistentCollection<OT::Sample> cdf_;

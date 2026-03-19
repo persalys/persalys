@@ -124,13 +124,6 @@ Interval DataAnalysisResult::getMeanConfidenceInterval() const
   return meanConfidenceInterval_;
 }
 
-
-//Interval DataAnalysisResult::getStdConfidenceInterval() const
-//{
-//  return stdConfidenceInterval_;
-//}
-
-
 DataAnalysisResult::PointCollection DataAnalysisResult::getOutliers() const
 {
   return outliers_;
@@ -183,7 +176,6 @@ String DataAnalysisResult::__repr__() const
       << " firstQuartile=" << getFirstQuartile()
       << " thirdQuartile=" << getThirdQuartile()
       << " meanConfidenceInterval=" << getMeanConfidenceInterval();
-      //<< " stdConfidenceInterval=" << getStdConfidenceInterval();
     if (effectiveSize_.getDimension())
       oss << " effectiveSize=" << getEffectiveSize().__str__();
   return oss;
@@ -206,7 +198,6 @@ void DataAnalysisResult::save(Advocate & adv) const
   adv.saveAttribute("firstQuartile_", firstQuartile_);
   adv.saveAttribute("thirdQuartile_", thirdQuartile_);
   adv.saveAttribute("meanConfidenceInterval_", meanConfidenceInterval_);
-  //adv.saveAttribute("stdConfidenceInterval_", stdConfidenceInterval_);
   adv.saveAttribute("outliers_", outliers_);
   adv.saveAttribute("pdf_", pdf_);
   adv.saveAttribute("cdf_", cdf_);
@@ -232,7 +223,6 @@ void DataAnalysisResult::load(Advocate & adv)
   adv.loadAttribute("firstQuartile_", firstQuartile_);
   adv.loadAttribute("thirdQuartile_", thirdQuartile_);
   adv.loadAttribute("meanConfidenceInterval_", meanConfidenceInterval_);
-  //adv.loadAttribute("stdConfidenceInterval_", stdConfidenceInterval_);
   adv.loadAttribute("outliers_", outliers_);
   adv.loadAttribute("pdf_", pdf_);
   adv.loadAttribute("cdf_", cdf_);
