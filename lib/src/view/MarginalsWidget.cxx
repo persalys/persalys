@@ -38,6 +38,9 @@
 #include "persalys/ScreeningResultWizard.hxx"
 #endif
 
+#include "persalys/HSICResultWizard.hxx"
+#include "persalys/DataSensitivityAnalysis.hxx"
+
 #include <openturns/Normal.hxx>
 #include <openturns/TruncatedDistribution.hxx>
 #include <openturns/TruncatedNormal.hxx>
@@ -144,6 +147,14 @@ void MarginalsWidget::buildInterface()
     leftSideLayout->addWidget(importButton);
   }
 #endif
+
+  if (!failSoftMode_ && !physicalModel_.hasMesh())
+  {
+    // import HSIC result button
+    QPushButton * importHSICButton = new QPushButton(tr("Import HSIC result"));
+    connect(importHSICButton, &QPushButton::clicked, this, &MarginalsWidget::openWizardToChooseHSICResult);
+    leftSideLayout->addWidget(importHSICButton);
+  }
 
   hSplitter->addWidget(leftSideWidget);
 
@@ -926,6 +937,53 @@ void MarginalsWidget::openWizardToChooseScreeningResult()
   }
 }
 #endif
+
+
+void MarginalsWidget::openWizardToChooseHSICResult()
+{
+  bool studyHasHSICResults = false;
+  // we need at least one DataSensitivityAnalysis with global HSIC p-values
+  for (UnsignedInteger i = 0; i < study_.getAnalyses().getSize(); ++i)
+  {
+    if (study_.getAnalyses()[i].getImplementation()->getClassName() == "DataSensitivityAnalysis")
+    {
+      const auto * analysis = dynamic_cast<DataSensitivityAnalysis*>(study_.getAnalyses()[i].getImplementation().get());
+      if (analysis->hasValidResult()
+          && analysis->computeHSIC(DataSensitivityAnalysisResult::Global)
+          && (analysis->computeAsymptoticPValues(DataSensitivityAnalysisResult::Global)
+              || analysis->computePermutationPValues(DataSensitivityAnalysisResult::Global)))
+      {
+        studyHasHSICResults = true;
+        break;
+      }
+    }
+  }
+  // error message if no valid HSIC analyses
+  if (!studyHasHSICResults)
+  {
+    QMessageBox::critical(this, tr("Error"), tr("The current study has no global HSIC analysis result with p-values."));
+    return;
+  }
+  // open a wizard to choose a result
+  HSICResultWizard wizard(study_, physicalModel_, this);
+  if (wizard.exec())
+  {
+    // update the inputs
+    const Indices selectedInputs(wizard.getInputsSelection());
+    Q_ASSERT(selectedInputs.getSize() == physicalModel_.getInputDimension());
+    physicalModel_.blockNotification("ProbabilisticModelItem");
+    for (UnsignedInteger i = 0; i < physicalModel_.getInputDimension(); ++i)
+    {
+      const Input input(physicalModel_.getInputs()[i]);
+      if (selectedInputs[i] == 0 && input.isStochastic())
+      {
+        physicalModel_.setInputStochastic(input.getName(), false);
+      }
+    }
+    physicalModel_.blockNotification();
+    updateProbabilisticModel();
+  }
+}
 
 
 void MarginalsWidget::openValuesDefinitionWizard()
