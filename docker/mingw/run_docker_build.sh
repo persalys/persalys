@@ -47,17 +47,17 @@ cp /usr/${ARCH}-w64-mingw32/etc/openturns/openturns.conf Lib/site-packages/opent
 rm Lib/site-packages/openturns/{libvtk,libboost,Qt,python}*.dll
 cp -rv /usr/${ARCH}-w64-mingw32/Lib/site-packages/otmorris Lib/site-packages
 
-curl -fSsL https://anaconda.org/conda-forge/pyfmi/2.20.0/download/win-64/pyfmi-2.20.0-py314hc0c34d8_0.conda | bsdtar -x && tar -xf pkg-pyfmi-2.20.0-py314hc0c34d8_0.tar.zst
-curl -fSsL https://anaconda.org/conda-forge/assimulo/3.7.2/download/win-64/assimulo-3.7.2-py314h4128953_1.conda | bsdtar -x && tar -xf pkg-assimulo-3.7.2-py314h4128953_1.tar.zst
-curl -fSsL https://anaconda.org/conda-forge/sundials/7.4.0/download/win-64/sundials-7.4.0-h59e65cd_0.conda | bsdtar -x && tar -xf pkg-sundials-7.4.0-h59e65cd_0.tar.zst
+curl -fSsL https://anaconda.org/conda-forge/pyfmi/2.21.0/download/win-64/pyfmi-2.21.0-np2py314h4d390f2_0.conda | bsdtar -x && tar -xf pkg-pyfmi-2.21.0-np2py314h4d390f2_0.tar.zst
+curl -fSsL https://anaconda.org/conda-forge/assimulo/3.7.3/download/win-64/assimulo-3.7.3-np2py314h164fa03_0.conda | bsdtar -x && tar -xf pkg-assimulo-3.7.3-np2py314h164fa03_0.tar.zst
+curl -fSsL https://anaconda.org/conda-forge/sundials/7.6.0/download/win-64/sundials-7.6.0-h5352411_1.conda | bsdtar -x && tar -xf pkg-sundials-7.6.0-h5352411_1.tar.zst
 cp -r Library/bin/*.dll . && rm -r Library info pkg-*.zst info-*.zst
 
 cd Lib
-curl -fSsL https://anaconda.org/conda-forge/otfmi/0.17/download/noarch/otfmi-0.17-pyhd8ed1ab_0.conda | bsdtar -x && tar -xf pkg-otfmi-0.17-pyhd8ed1ab_0.tar.zst
+curl -fSsL https://anaconda.org/conda-forge/otfmi/0.17.1/download/noarch/otfmi-0.17.1-pyhcf101f3_0.conda | bsdtar -x && tar -xf pkg-otfmi-0.17.1-pyhcf101f3_0.tar.zst
 cd site-packages
 
 python -m pip install --target . --platform win_amd64 --python-version ${PYMAJMIN:0:1}.${PYMAJMIN:1} --only-binary=:all: \
-  pip scipy pandas openpyxl jinja2 pythonfmu paramiko
+  pip scipy pandas openpyxl jinja2 pythonfmu paramiko dill
 cd ../..
 mkdir Scripts && echo -e 'import sys\nfrom pip import main\nsys.exit(main())\n' > Scripts/pip.py && echo -e 'python %~dp0pip.py %*' > Scripts/pip.bat
 cd /tmp/build
