@@ -33,6 +33,7 @@
 #include <openturns/HSICUStat.hxx>
 #include <openturns/HSICVStat.hxx>
 #include <openturns/SymbolicFunction.hxx>
+#include <openturns/ParametricFunction.hxx>
 #include <openturns/OSS.hxx>
 
 using namespace OT;
@@ -106,9 +107,9 @@ void DataSensitivityAnalysis::setFilterAlphas(const OT::Point & filterAlphas)
   for (UnsignedInteger i = 0; i < filterAlphas_.getSize(); ++i)
   {
     const Scalar s = filterAlphas_[i] * stdDevs[i];
-    OSS formula;
-    formula << "exp(-x/" << s << ")";
-    filterFunctions_.add(SymbolicFunction(Description(1, "x"), Description(1, formula.str())));
+    const auto f = SymbolicFunction(Description({"x", "s"}), {"exp(-x/s)"});
+    const auto phi = ParametricFunction(f, {1}, {s});
+    filterFunctions_.add(phi);
   }
 
   userDefinedFilterFunctions_ = false;
@@ -124,9 +125,9 @@ void DataSensitivityAnalysis::setWeightAlphas(const OT::Point & weightAlphas)
   for (UnsignedInteger i = 0; i < weightAlphas_.getSize(); ++i)
   {
     const Scalar s = weightAlphas_[i] * stdDevs[i];
-    OSS formula;
-    formula << "exp(-x/" << s << ")";
-    weightFunctions_.add(SymbolicFunction(Description(1, "x"), Description(1, formula.str())));
+    const auto f = SymbolicFunction(Description({"x", "s"}), {"exp(-x/s)"});
+    const auto phi = ParametricFunction(f, {1}, {s});
+    weightFunctions_.add(phi);
   }
 
   userDefinedWeightFunctions_ = false;
