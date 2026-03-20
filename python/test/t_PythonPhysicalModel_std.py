@@ -81,3 +81,9 @@ y1 = f1([1.0, 2.0])
 f2 = model2.getFunction()
 y2 = f2([1.0])
 y1 = f1([2.0, 3.0])
+
+# gcc<16 big std::regex crash bug
+outvars = ["y" * 100 + str(i) for i in range(1000)]
+code = f"def _exec(x1, x2):\n    y = x1 + x2\n    return {', '.join(outvars)}\n"
+model_big = persalys.PythonPhysicalModel("model_big", [x1, x2], [], code)
+assert len(model_big.getOutputNames()) == 1000
