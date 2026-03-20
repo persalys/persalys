@@ -55,7 +55,14 @@ DataSensitivityAnalysis::DataSensitivityAnalysis(const String &name,
   if (interestVariables.isEmpty())
     interestVariables_ = design.getOutputSample().getDescription();
   else
+  {
+    for(const String & var : interestVariables)
+    {
+      if (!design.getOutputSample().getDescription().contains(var))
+        throw InvalidArgumentException(HERE) << "Interest variable '" << var << "' is not in the design of experiment output sample description";
+    }
     interestVariables_ = interestVariables;
+  }
 }
 
 DataSensitivityAnalysis * DataSensitivityAnalysis::clone() const
