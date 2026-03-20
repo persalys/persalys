@@ -617,3 +617,6 @@ assert (
     )
     > 0
 ), "Conditional HSIC should not be empty in combined test"
+
+script = myStudy.getPythonScript()
+exec(script)

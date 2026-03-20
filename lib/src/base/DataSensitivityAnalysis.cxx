@@ -725,29 +725,42 @@ String DataSensitivityAnalysis::getPythonScript() const
     throw InvalidArgumentException(HERE) << "Python script cannot be generated when user-defined filter or weight functions are used.";
   OSS oss;
   oss << getName() << " = persalys.DataSensitivityAnalysis('" << getName() << "', " << designOfExperiment_.getName() << ", " << type_ << ", " << Parameters::GetOTDescriptionStr(interestVariables_)  << ")\n";
-  oss << getName() << ".computeCovModelParameters(" << Parameters::GetOTBoolStr(computeCovModelParameters_) << ")\n";
-  oss << "globalCovModels = " << Parameters::GetOTCovModelCollectionStr(globalCovarianceModels_) << "\n";
-  oss << "targetCovModels = " << Parameters::GetOTCovModelCollectionStr(targetCovarianceModels_) << "\n";
-  oss << "conditionalCovModels = " << Parameters::GetOTCovModelCollectionStr(conditionalCovarianceModels_) << "\n";
-  for (UnsignedInteger i = 0 ; i < globalCovarianceModels_.getSize(); ++i)
+
+  if (type_.computeGlobalHSIC() || type_.computeTargetHSIC() || type_.computeConditionalHSIC())
+    oss << getName() << ".computeCovModelParameters(" << Parameters::GetOTBoolStr(computeCovModelParameters_) << ")\n";
+  
+  if (type_.computeGlobalHSIC())
   {
-    if (type_.computeGlobalHSIC())
+    oss << "globalCovModels = " << Parameters::GetOTCovModelCollectionStr(globalCovarianceModels_) << "\n";
+    for (UnsignedInteger i = 0 ; i < globalCovarianceModels_.getSize(); ++i)
+    {
       oss << "globalCovModels[" << i << "].setFullParameter(" << Parameters::GetOTPointStr(globalCovarianceModels_[i].getFullParameter()) << ")\n";
-    if (type_.computeTargetHSIC())
-      oss << "targetCovModels[" << i << "].setFullParameter(" << Parameters::GetOTPointStr(targetCovarianceModels_[i].getFullParameter()) << ")\n";
-    if (type_.computeConditionalHSIC())
-      oss << "conditionalCovModels[" << i << "].setFullParameter(" << Parameters::GetOTPointStr(conditionalCovarianceModels_[i].getFullParameter()) << ")\n";
+    }
+    oss << getName() << ".setCovarianceModels(ot.CovarianceModelCollection(globalCovModels), persalys.DataSensitivityAnalysisResult.Global)\n";
+    oss << getName() << ".setHSICParameters(" << Parameters::GetOTBoolStr(globalHSICParameters_.computePermutationPValues()) << ", " << Parameters::GetOTBoolStr(globalHSICParameters_.computeAsymptoticPValues()) << ", " << Parameters::GetOTBoolStr(globalHSICParameters_.useUStatistic()) << ", persalys.DataSensitivityAnalysisResult.Global)\n";
   }
-  oss << getName() << ".setCovarianceModels(ot.CovarianceModelCollection(globalCovModels), persalys.DataSensitivityAnalysisResult.Global)\n";
-  oss << getName() << ".setCovarianceModels(ot.CovarianceModelCollection(targetCovModels), persalys.DataSensitivityAnalysisResult.Target)\n";
-  oss << getName() << ".setCovarianceModels(ot.CovarianceModelCollection(conditionalCovModels), persalys.DataSensitivityAnalysisResult.Conditional)\n";
-
-  oss << getName() << ".setFilterAlphas(" << Parameters::GetOTPointStr(filterAlphas_) << ")\n";
-  oss << getName() << ".setWeightAlphas(" << Parameters::GetOTPointStr(weightAlphas_) << ")\n";
-
-  oss << getName() << ".setHSICParameters(" << Parameters::GetOTBoolStr(globalHSICParameters_.computePermutationPValues()) << ", " << Parameters::GetOTBoolStr(globalHSICParameters_.computeAsymptoticPValues()) << ", " << Parameters::GetOTBoolStr(globalHSICParameters_.useUStatistic()) << ", persalys.DataSensitivityAnalysisResult.Global)\n";
-  oss << getName() << ".setHSICParameters(" << Parameters::GetOTBoolStr(targetHSICParameters_.computePermutationPValues()) << ", " << Parameters::GetOTBoolStr(targetHSICParameters_.computeAsymptoticPValues()) << ", " << Parameters::GetOTBoolStr(targetHSICParameters_.useUStatistic()) << ", persalys.DataSensitivityAnalysisResult.Target)\n";
-  oss << getName() << ".setHSICParameters(" << Parameters::GetOTBoolStr(conditionalHSICParameters_.computePermutationPValues()) << ", " << Parameters::GetOTBoolStr(conditionalHSICParameters_.computeAsymptoticPValues()) << ", " << Parameters::GetOTBoolStr(conditionalHSICParameters_.useUStatistic()) << ", persalys.DataSensitivityAnalysisResult.Conditional)\n";
+  if (type_.computeTargetHSIC())
+  {
+    oss << "targetCovModels = " << Parameters::GetOTCovModelCollectionStr(targetCovarianceModels_) << "\n";
+    for (UnsignedInteger i = 0 ; i < targetCovarianceModels_.getSize(); ++i)
+    {
+      oss << "targetCovModels[" << i << "].setFullParameter(" << Parameters::GetOTPointStr(targetCovarianceModels_[i].getFullParameter()) << ")\n";
+    }
+    oss << getName() << ".setCovarianceModels(ot.CovarianceModelCollection(targetCovModels), persalys.DataSensitivityAnalysisResult.Target)\n";
+    oss << getName() << ".setHSICParameters(" << Parameters::GetOTBoolStr(targetHSICParameters_.computePermutationPValues()) << ", " << Parameters::GetOTBoolStr(targetHSICParameters_.computeAsymptoticPValues()) << ", " << Parameters::GetOTBoolStr(targetHSICParameters_.useUStatistic()) << ", persalys.DataSensitivityAnalysisResult.Target)\n";
+    oss << getName() << ".setFilterAlphas(" << Parameters::GetOTPointStr(filterAlphas_) << ")\n";
+  }
+  if (type_.computeConditionalHSIC())
+  {
+    oss << "conditionalCovModels = " << Parameters::GetOTCovModelCollectionStr(conditionalCovarianceModels_) << "\n";
+    for (UnsignedInteger i = 0 ; i < conditionalCovarianceModels_.getSize(); ++i)
+    {
+      oss << "conditionalCovModels[" << i << "].setFullParameter(" << Parameters::GetOTPointStr(conditionalCovarianceModels_[i].getFullParameter()) << ")\n";
+    }
+    oss << getName() << ".setCovarianceModels(ot.CovarianceModelCollection(conditionalCovModels), persalys.DataSensitivityAnalysisResult.Conditional)\n";
+    oss << getName() << ".setHSICParameters(" << Parameters::GetOTBoolStr(conditionalHSICParameters_.computePermutationPValues()) << ", " << Parameters::GetOTBoolStr(conditionalHSICParameters_.computeAsymptoticPValues()) << ", " << Parameters::GetOTBoolStr(conditionalHSICParameters_.useUStatistic()) << ", persalys.DataSensitivityAnalysisResult.Conditional)\n";
+    oss << getName() << ".setWeightAlphas(" << Parameters::GetOTPointStr(weightAlphas_) << ")\n";
+  }
 
   return oss;
 }
