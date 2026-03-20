@@ -517,7 +517,7 @@ void DataSensitivityAnalysis::computeGlobalHSICIndices()
 
   if (computeCovModelParameters_)
   {
-    Point stdDevs = sample.computeStandardDeviation();
+    const Point stdDevs = sample.computeStandardDeviation();
     for(UnsignedInteger i = 0; i < globalCovarianceModels_.getSize(); ++i)
     {
       if (stdDevs[i] == 0.)
@@ -584,7 +584,7 @@ void DataSensitivityAnalysis::computeTargetHSICIndices()
   
   if (computeCovModelParameters_)
   {
-    Point stdDevs = inSample.computeStandardDeviation();
+    const Point stdDevs = inSample.computeStandardDeviation();
     for(UnsignedInteger i = 0; i < nbInputs ; ++i)
     {
       if (stdDevs[i] == 0.)
@@ -655,7 +655,7 @@ void DataSensitivityAnalysis::computeConditionalHSICIndices()
   
   if (computeCovModelParameters_)
   {
-    Point stDevs = designOfExperiment_.getSample().computeStandardDeviation();
+    const Point stDevs = designOfExperiment_.getSample().computeStandardDeviation();
     for(UnsignedInteger i = 0; i < nbInputs + nbOutputs; ++i)
     {
       if (stDevs[i] == 0.)
