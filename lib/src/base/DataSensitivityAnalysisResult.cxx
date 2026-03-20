@@ -175,12 +175,10 @@ const Description& DataSensitivityAnalysisResult::getInterestVariables() const
   return interestVariables_;
 }
 
-#ifndef SWIG
 const DataSensitivityAnalysisResult::AnalysisType& DataSensitivityAnalysisResult::getAnalysisType() const
 {
   return analysisType_;
 }
-#endif
 
 bool DataSensitivityAnalysisResult::isIndependent() const
 {
