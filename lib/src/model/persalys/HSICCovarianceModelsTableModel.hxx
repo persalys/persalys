@@ -65,10 +65,13 @@ public:
   OT::Collection<OT::CovarianceModel> getCovarianceModels() const;
   void setCovarianceModels(const OT::Collection<OT::CovarianceModel> & models);
 
+  void applyToAll(int row);
+
 private:
   OT::Description variableNames_;
   QList<CovarianceModelType> modelIndices_;
   QList<NuType> nuIndices_;
+  QList<double> pValues_;
 };
 
 } // namespace PERSALYS

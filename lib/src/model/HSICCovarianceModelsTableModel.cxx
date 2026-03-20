@@ -39,6 +39,7 @@ HSICCovarianceModelsTableModel::HSICCovarianceModelsTableModel(const Description
   {
     modelIndices_ << CovarianceModelType::SquaredExponential;
     nuIndices_ << NuType::ThreeHalf;
+    pValues_ << 1.0;
   }
 }
 
@@ -48,10 +49,12 @@ void HSICCovarianceModelsTableModel::setVariablesNames(const Description & varia
   variableNames_ = variableNames;
   modelIndices_.clear();
   nuIndices_.clear();
+  pValues_.clear();
   for (UnsignedInteger i = 0; i < variableNames_.getSize(); ++i)
   {
     modelIndices_ << CovarianceModelType::SquaredExponential;
     nuIndices_ << NuType::ThreeHalf;
+    pValues_ << 1.0;
   }
   endResetModel();
 }
@@ -63,7 +66,7 @@ int HSICCovarianceModelsTableModel::rowCount(const QModelIndex & /*parent*/) con
 
 int HSICCovarianceModelsTableModel::columnCount(const QModelIndex & /*parent*/) const
 {
-  return 3; // variable name, covariance model, ν parameter
+  return 5; // variable name, covariance model, ν parameter, p parameter, apply-to-all button
 }
 
 QVariant HSICCovarianceModelsTableModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -78,6 +81,10 @@ QVariant HSICCovarianceModelsTableModel::headerData(int section, Qt::Orientation
       return tr("Covariance model");
     case 2:
       return QString::fromUtf8("\xce\xbd"); // ν
+    case 3:
+      return tr("p");
+    case 4:
+      return QVariant();
     default:
       return QVariant();
     }
@@ -105,6 +112,19 @@ Qt::ItemFlags HSICCovarianceModelsTableModel::flags(const QModelIndex & index) c
     else
       return result & ~Qt::ItemIsEnabled;
   }
+
+  // Column 3 (p): editable only for GeneralizedExponential
+  if (index.column() == 3)
+  {
+    if (modelIndices_[index.row()] == CovarianceModelType::GeneralizedExponential)
+      return result | Qt::ItemIsEditable;
+    else
+      return result & ~Qt::ItemIsEnabled;
+  }
+
+  // Column 4 (apply-to-all button): widget only, not editable
+  if (index.column() == 4)
+    return Qt::ItemIsEnabled;
 
   return result;
 }
@@ -137,6 +157,14 @@ QVariant HSICCovarianceModelsTableModel::data(const QModelIndex & index, int rol
       }
       return "-";
     }
+    case 3:
+    {
+      if (modelIndices_[row] == CovarianceModelType::GeneralizedExponential)
+        return pValues_[row];
+      return "-";
+    }
+    case 4:
+      return QVariant();
     default:
       return QVariant();
     }
@@ -169,8 +197,8 @@ bool HSICCovarianceModelsTableModel::setData(const QModelIndex & index, const QV
     const int idx = names.indexOf(value.toString());
     if (idx >= 0)
       modelIndices_[row] = static_cast<CovarianceModelType>(idx);
-    // Refresh ν column when model changes
-    emit dataChanged(this->index(row, 2), this->index(row, 2));
+    // Refresh ν and p columns when model changes
+    emit dataChanged(this->index(row, 2), this->index(row, 3));
     emit dataChanged(index, index);
     return true;
   }
@@ -183,6 +211,19 @@ bool HSICCovarianceModelsTableModel::setData(const QModelIndex & index, const QV
       nuIndices_[row] = static_cast<NuType>(idx);
     emit dataChanged(index, index);
     return true;
+  }
+
+  if (index.column() == 3)
+  {
+    bool ok;
+    const double p = value.toDouble(&ok);
+    if (ok && p > 0.0 && p <= 2.0)
+    {
+      pValues_[row] = p;
+      emit dataChanged(index, index);
+      return true;
+    }
+    return false;
   }
 
   return false;
@@ -207,7 +248,7 @@ Collection<CovarianceModel> HSICCovarianceModelsTableModel::getCovarianceModels(
       models.add(AbsoluteExponential());
       break;
     case CovarianceModelType::GeneralizedExponential:
-      models.add(GeneralizedExponential());
+      models.add(GeneralizedExponential(Point(1, 1.0), Point(1, 1.0), pValues_[i]));
       break;
     default:
       models.add(SquaredExponential());
@@ -243,9 +284,30 @@ void HSICCovarianceModelsTableModel::setCovarianceModels(const Collection<Covari
     else if (className == "AbsoluteExponential")
       modelIndices_[i] = CovarianceModelType::AbsoluteExponential;
     else if (className == "GeneralizedExponential")
+    {
       modelIndices_[i] = CovarianceModelType::GeneralizedExponential;
+      pValues_[i] = dynamic_cast<const GeneralizedExponential *>(models[i].getImplementation().get())->getP();
+    }
   }
   endResetModel();
+}
+
+void HSICCovarianceModelsTableModel::applyToAll(int sourceRow)
+{
+  if (sourceRow < 0 || sourceRow >= modelIndices_.size())
+    return;
+
+  const CovarianceModelType srcModel = modelIndices_[sourceRow];
+  const NuType srcNu = nuIndices_[sourceRow];
+  const double srcP = pValues_[sourceRow];
+
+  for (int i = 0; i < modelIndices_.size(); ++i)
+  {
+    modelIndices_[i] = srcModel;
+    nuIndices_[i] = srcNu;
+    pValues_[i] = srcP;
+  }
+  emit dataChanged(index(0, 1), index(rowCount() - 1, 3));
 }
 
 } // namespace PERSALYS

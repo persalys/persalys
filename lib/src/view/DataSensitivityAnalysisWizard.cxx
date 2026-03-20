@@ -29,6 +29,7 @@
 #include <QCheckBox>
 #include <QTableView>
 #include <QHeaderView>
+#include <QPushButton>
 
 using namespace OT;
 
@@ -382,8 +383,14 @@ DataSensitivityAnalysisHSICParametersPage::DataSensitivityAnalysisHSICParameters
   covarianceTableView_->setItemDelegateForColumn(1, new ComboBoxDelegate(covarianceTableView_));
   covarianceTableView_->setItemDelegateForColumn(2, new ComboBoxDelegate(covarianceTableView_));
   covarianceTableView_->verticalHeader()->hide();
-  covarianceTableView_->horizontalHeader()->setStretchLastSection(true);
-  covarianceTableView_->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+  covarianceTableView_->horizontalHeader()->setStretchLastSection(false);
+  covarianceTableView_->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
+  covarianceTableView_->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+  covarianceTableView_->horizontalHeader()->setMinimumSectionSize(40);
+  covarianceTableView_->horizontalHeader()->resizeSection(1, 190);
+  covarianceTableView_->horizontalHeader()->resizeSection(2, 65);
+  covarianceTableView_->horizontalHeader()->resizeSection(3, 55);
+  covarianceTableView_->horizontalHeader()->resizeSection(4, 110);
 
   // Open persistent editors so combo boxes are always active (single-click)
   auto openAllPersistentEditors = [this]() {
@@ -395,17 +402,33 @@ DataSensitivityAnalysisHSICParametersPage::DataSensitivityAnalysisHSICParameters
   };
   openAllPersistentEditors();
 
+  // Set up "Apply to all" buttons in column 4
+  auto setupButtonColumn = [this]() {
+    for (int row = 0; row < covarianceTableModel_->rowCount(); ++row)
+    {
+      auto * btn = new QPushButton(tr("Apply to all"), covarianceTableView_);
+      const int capturedRow = row;
+      connect(btn, &QPushButton::clicked, covarianceTableModel_, [this, capturedRow]() {
+        covarianceTableModel_->applyToAll(capturedRow);
+      });
+      covarianceTableView_->setIndexWidget(covarianceTableModel_->index(row, 4), btn);
+    }
+  };
+  setupButtonColumn();
+
   // Re-open persistent editors after a model reset (e.g. setCovarianceModels)
   connect(covarianceTableModel_, &QAbstractItemModel::modelReset, this, openAllPersistentEditors);
+  connect(covarianceTableModel_, &QAbstractItemModel::modelReset, this, setupButtonColumn);
 
-  // Refresh persistent editors on column 2 when the covariance model changes,
-  // since the ν combo is only enabled for Matérn
+  // Refresh the ν persistent editor widget's enabled state when the covariance model changes,
+  // without closing/reopening it (which would require two clicks to activate the new widget)
   connect(covarianceTableModel_, &QAbstractItemModel::dataChanged, covarianceTableView_, [this](const QModelIndex & topLeft, const QModelIndex & bottomRight) {
     for (int row = topLeft.row(); row <= bottomRight.row(); ++row)
     {
       const QModelIndex nuIdx = covarianceTableModel_->index(row, 2);
-      covarianceTableView_->closePersistentEditor(nuIdx);
-      covarianceTableView_->openPersistentEditor(nuIdx);
+      auto * widget = covarianceTableView_->indexWidget(nuIdx);
+      if (widget)
+        widget->setEnabled(covarianceTableModel_->flags(nuIdx) & Qt::ItemIsEnabled);
     }
   });
 
