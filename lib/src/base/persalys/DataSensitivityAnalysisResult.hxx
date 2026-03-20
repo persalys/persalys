@@ -71,6 +71,28 @@ private:
 
     std::byte getType() const { return type_; }
 
+    /* get Python representation */
+    friend OT::OSS& operator<<(OT::OSS& oss, const AnalysisType& analysisType)
+    {
+      std::ostringstream os;
+      if (analysisType.computeRankSobol())
+        os << "persalys.DataSensitivityAnalysisResult.RankSobol | ";
+      if (analysisType.computeSRC())
+        os << "persalys.DataSensitivityAnalysisResult.SRC | ";
+      if (analysisType.computeGlobalHSIC())
+        os << "persalys.DataSensitivityAnalysisResult.GlobalHSIC | ";
+      if (analysisType.computeTargetHSIC())
+        os << "persalys.DataSensitivityAnalysisResult.TargetHSIC | ";
+      if (analysisType.computeConditionalHSIC())
+        os << "persalys.DataSensitivityAnalysisResult.ConditionalHSIC | ";
+      
+      OT::String str = os.str();
+      str.erase(str.size() - 3); // remove last " | "
+      oss << str;
+      
+      return oss;
+    }
+
     private:
       std::byte type_;
   };

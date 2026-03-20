@@ -713,7 +713,7 @@ String DataSensitivityAnalysis::getPythonScript() const
   if (userDefinedFilterFunctions_ || userDefinedWeightFunctions_)
     throw InvalidArgumentException(HERE) << "Python script cannot be generated when user-defined filter or weight functions are used.";
   OSS oss;
-  oss << getName() << " = persalys.DataSensitivityAnalysis('" << getName() << "', " << designOfExperiment_.getName() << ", " << static_cast<unsigned char>(type_.getType()) << ", " << Parameters::GetOTDescriptionStr(interestVariables_)  << ", " << Parameters::GetOTBoolStr(computeCovModelParameters_) << ")\n";
+  oss << getName() << " = persalys.DataSensitivityAnalysis('" << getName() << "', " << designOfExperiment_.getName() << ", " << type_ << ", " << Parameters::GetOTDescriptionStr(interestVariables_)  << ", " << Parameters::GetOTBoolStr(computeCovModelParameters_) << ")\n";
   oss << "globalCovModels = " << Parameters::GetOTCovModelCollectionStr(globalCovarianceModels_) << "\n";
   oss << "targetCovModels = " << Parameters::GetOTCovModelCollectionStr(targetCovarianceModels_) << "\n";
   oss << "conditionalCovModels = " << Parameters::GetOTCovModelCollectionStr(conditionalCovarianceModels_) << "\n";
