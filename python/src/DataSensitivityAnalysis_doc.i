@@ -23,11 +23,6 @@ interestVariables : :class:`~openturns.Description`, optional
     Description of the variables of interest for the sensitivity analysis. 
     The variables of interest must be a subset of the output variables in the design of experiment. 
     If not provided, all output variables will be considered as variables of interest.
-estimateCovModelParameters : bool, optional
-    Whether to estimate the covariance model parameters from the samples. 
-    If false, the covariance models are used with their current parameters.
-    If true, the scale parameter of each covariance model is set to the standard deviation of the corresponding variable in the sample.
-    The default value is true.
 
 Examples
 --------
@@ -92,6 +87,16 @@ covarianceModels : collection of :class:`~openturns.CovarianceModel`
     The size of the collection must be equal to the total number of input and output variables in the design of experiment.
 hsicType : int
     Type of HSIC indices (Global, Target or Conditional)."
+
+// ---------------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::DataSensitivityAnalysis::computeCovModelParameters
+"Set whether the parameters of the covariance models should be estimated from the data.
+
+Parameters
+----------
+computeCovModelParameters : bool
+    If true, the scale parameters of the covariance models will be set to the standard deviation of the corresponding variable in the design of experiment. If false, the covariance models parameters will not be changed. True by default."
 
 // ---------------------------------------------------------------------------
 

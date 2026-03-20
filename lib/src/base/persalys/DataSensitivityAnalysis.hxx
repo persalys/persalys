@@ -67,8 +67,7 @@ public:
     const OT::String &name, 
     const DesignOfExperiment& design, 
     const unsigned char analysisType = Type::RankSobol | Type::SRC,
-    const OT::Description & interestVariables = OT::Description(),
-    bool computeCovModelParameters = true
+    const OT::Description & interestVariables = OT::Description()
   );
 
   /** Virtual constructor */
@@ -77,6 +76,7 @@ public:
   void setType(unsigned char analysisType);
 
   void setCovarianceModels(const CovarianceModelCollection &covarianceModels, HSICType hsicType);
+  void computeCovModelParameters(bool computeCovModelParameters);
 
   void setFilterAlphas(const OT::Point & filterAlphas);
   void setWeightAlphas(const OT::Point & weightAlphas);

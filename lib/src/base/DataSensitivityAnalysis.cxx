@@ -46,11 +46,9 @@ const static Factory<DataSensitivityAnalysis> Factory_DataSensitivityAnalysis;
 DataSensitivityAnalysis::DataSensitivityAnalysis(const String &name, 
   const DesignOfExperiment & design, 
   const unsigned char analysisType,
-  const OT::Description & interestVariables,
-  bool computeCovModelParameters)
+  const OT::Description & interestVariables)
   : DesignOfExperimentAnalysis(name, design)
   , type_(std::byte{analysisType})
-  , computeCovModelParameters_(computeCovModelParameters)
 {
   if (interestVariables.isEmpty())
     interestVariables_ = design.getOutputSample().getDescription();
@@ -91,6 +89,11 @@ void DataSensitivityAnalysis::setCovarianceModels(const OT::Collection<OT::Covar
     default:
       throw InvalidArgumentException(HERE) << "Invalid HSIC Type";
   }
+}
+
+void DataSensitivityAnalysis::computeCovModelParameters(bool computeCovModelParameters)
+{
+  computeCovModelParameters_ = computeCovModelParameters;
 }
 
 void DataSensitivityAnalysis::setFilterAlphas(const OT::Point & filterAlphas)
@@ -720,7 +723,8 @@ String DataSensitivityAnalysis::getPythonScript() const
   if (userDefinedFilterFunctions_ || userDefinedWeightFunctions_)
     throw InvalidArgumentException(HERE) << "Python script cannot be generated when user-defined filter or weight functions are used.";
   OSS oss;
-  oss << getName() << " = persalys.DataSensitivityAnalysis('" << getName() << "', " << designOfExperiment_.getName() << ", " << type_ << ", " << Parameters::GetOTDescriptionStr(interestVariables_)  << ", " << Parameters::GetOTBoolStr(computeCovModelParameters_) << ")\n";
+  oss << getName() << " = persalys.DataSensitivityAnalysis('" << getName() << "', " << designOfExperiment_.getName() << ", " << type_ << ", " << Parameters::GetOTDescriptionStr(interestVariables_)  << ")\n";
+  oss << getName() << ".computeCovModelParameters(" << Parameters::GetOTBoolStr(computeCovModelParameters_) << ")\n";
   oss << "globalCovModels = " << Parameters::GetOTCovModelCollectionStr(globalCovarianceModels_) << "\n";
   oss << "targetCovModels = " << Parameters::GetOTCovModelCollectionStr(targetCovarianceModels_) << "\n";
   oss << "conditionalCovModels = " << Parameters::GetOTCovModelCollectionStr(conditionalCovarianceModels_) << "\n";
