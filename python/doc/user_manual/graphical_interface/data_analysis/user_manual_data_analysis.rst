@@ -216,26 +216,38 @@ The wizard allows one to configure the sensitivity analysis:
   - If any HSIC method is checked (Global, Target, or Conditional), the wizard
     will show additional pages to configure their parameters.
 
-- **HSIC parameters pages** (one per selected HSIC type):
+- **Global HSIC parameters page** (if Global HSIC is selected):
 
-  Each HSIC parameters page allows one to configure:
-
-  - **Statistic type** (Global and Target HSIC only): Choose between V-statistic
-    (biased but faster, asymptotically unbiased) and U-statistic (unbiased but
-    more computationally expensive).
-  - **P-values computation**:
-
-    - Permutation p-values (available for all HSIC types).
-    - Asymptotic p-values (available for Global and Target HSIC only).
-
+  - **Statistic type**: Choose between V-statistic (biased but faster, asymptotically
+    unbiased) and U-statistic (unbiased but more computationally expensive).
+  - **P-values computation**: Permutation p-values and/or asymptotic p-values.
   - **Covariance models**: A table listing the covariance model for each input and
     output variable. The default is the Squared Exponential model.
-  - **Filter functions** (Target HSIC only): An alpha parameter table for each output
-    variable of interest. The filter function is constructed as
-    :math:`x \mapsto \exp\left(-x / (\alpha_i \cdot \sigma_i)\right)` where :math:`\sigma_i`
-    is the standard deviation of the :math:`i`-th output variable.
-  - **Weight functions** (Conditional HSIC only): An alpha parameter table for each
-    output variable of interest, with the same functional form as the filter functions.
+
+- **Critical domain page** (if Target or Conditional HSIC is selected):
+
+  This page defines a critical domain on the output space and the filter/weight
+  function parameters shared by the Target and Conditional HSIC methods.
+
+  - **Critical domain**: A table to define the lower and upper bounds on each output
+    variable of interest, specifying the region of interest in the output space.
+  - **Filter/weight functions**: An alpha parameter table for each output variable of
+    interest. The filter/weight function is constructed as
+    :math:`\varphi(x) = \exp\left(-d(x, D) / (\alpha_i \cdot \sigma_i)\right)` where
+    :math:`D` is the critical domain, :math:`\alpha_i` is a tuning parameter and
+    :math:`\sigma_i` is the standard deviation of the :math:`i`-th output variable.
+
+- **Target HSIC parameters page** (if Target HSIC is selected):
+
+  - **Statistic type**: Choose between V-statistic and U-statistic.
+  - **P-values computation**: Permutation p-values and/or asymptotic p-values.
+  - **Covariance models**: A table listing the covariance model for each variable.
+
+- **Conditional HSIC parameters page** (if Conditional HSIC is selected):
+
+  - **P-values computation**: Permutation p-values only (asymptotic p-values and
+    U-statistic are not available for Conditional HSIC).
+  - **Covariance models**: A table listing the covariance model for each variable.
 
 .. _datasensitivityanalysisresult:
 

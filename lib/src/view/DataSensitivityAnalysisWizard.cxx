@@ -22,11 +22,14 @@
 #include "persalys/DataSensitivityAnalysisWizard.hxx"
 #include "persalys/HSICCovarianceModelsTableModel.hxx"
 #include "persalys/HSICAlphaTableModel.hxx"
+#include "persalys/CriticalDomainTableModel.hxx"
 #include "persalys/ComboBoxDelegate.hxx"
+#include "persalys/SpinBoxDelegate.hxx"
 
 #include <QVBoxLayout>
 #include <QGroupBox>
 #include <QCheckBox>
+#include <QLabel>
 #include <QTableView>
 #include <QHeaderView>
 #include <QPushButton>
@@ -72,6 +75,18 @@ DataSensitivityAnalysisWizard::DataSensitivityAnalysisWizard(const Analysis& ana
     globalHSICParametersPage_->initialize(draft_analysis_ptr);
   });
 
+  // Critical domain page (shared by target and conditional HSIC)
+  criticalDomainPage_ = new DataSensitivityAnalysisCriticalDomainPage;
+  setPage(Page::CriticalDomain, criticalDomainPage_);
+
+  connect(introPage_, &DataSensitivityAnalysisIntroPage::pageValidated, this, [this, draft_analysis_ptr]() {
+    criticalDomainPage_->initialize(draft_analysis_ptr);
+  });
+
+  connect(globalHSICParametersPage_, &DataSensitivityAnalysisHSICParametersPage::pageValidated, this, [this, draft_analysis_ptr]() {
+    criticalDomainPage_->initialize(draft_analysis_ptr);
+  });
+
   // Target HSIC parameters page
   targetHSICParametersPage_ = new DataSensitivityAnalysisHSICParametersPage(
     doe.getSample().getSize(), 
@@ -89,6 +104,10 @@ DataSensitivityAnalysisWizard::DataSensitivityAnalysisWizard(const Analysis& ana
     targetHSICParametersPage_->initialize(draft_analysis_ptr);
   });
 
+  connect(criticalDomainPage_, &DataSensitivityAnalysisCriticalDomainPage::pageValidated, this, [this, draft_analysis_ptr]() {
+    targetHSICParametersPage_->initialize(draft_analysis_ptr);
+  });
+
   // Conditional HSIC parameters page
   conditionalHSICParametersPage_ = new DataSensitivityAnalysisHSICParametersPage(
     doe.getSample().getSize(), 
@@ -103,6 +122,10 @@ DataSensitivityAnalysisWizard::DataSensitivityAnalysisWizard(const Analysis& ana
   });
 
   connect(globalHSICParametersPage_, &DataSensitivityAnalysisHSICParametersPage::pageValidated, this, [this, draft_analysis_ptr]() {
+    conditionalHSICParametersPage_->initialize(draft_analysis_ptr);
+  });
+
+  connect(criticalDomainPage_, &DataSensitivityAnalysisCriticalDomainPage::pageValidated, this, [this, draft_analysis_ptr]() {
     conditionalHSICParametersPage_->initialize(draft_analysis_ptr);
   });
 
@@ -139,11 +162,17 @@ Analysis DataSensitivityAnalysisWizard::getAnalysis() const
         HSICType
       );
       analysis.setCovarianceModels(page->getCovarianceModels(), HSICType);
-      if (HSICType == DataSensitivityAnalysisResult::HSICType::Target)
-        analysis.setFilterAlphas(page->getAlphas());
-      else if (HSICType == DataSensitivityAnalysisResult::HSICType::Conditional)
-        analysis.setWeightAlphas(page->getAlphas());
     }
+  }
+
+  if ((type & DataSensitivityAnalysis::Type::TargetHSIC) || (type & DataSensitivityAnalysis::Type::ConditionalHSIC))
+  {
+    auto criticalDomain = criticalDomainPage_->getCriticalDomain();
+    const Point alphas = criticalDomainPage_->getAlphas();
+    if (type & DataSensitivityAnalysis::Type::TargetHSIC)
+      analysis.setFilterAlphas(alphas, criticalDomain);
+    if (type & DataSensitivityAnalysis::Type::ConditionalHSIC)
+      analysis.setWeightAlphas(alphas, criticalDomain);
   }
 
   analysis.setInterestVariables(introPage_->getInterestVariables());
@@ -159,6 +188,8 @@ int DataSensitivityAnalysisWizard::nextId() const
       return introPage_->nextId();
     case Page::GlobalHSICParameters:
       return globalHSICParametersPage_->nextId();
+    case Page::CriticalDomain:
+      return criticalDomainPage_->nextId();
     case Page::TargetHSICParameters:
       return targetHSICParametersPage_->nextId();
     case Page::ConditionalHSICParameters:
@@ -298,10 +329,9 @@ int DataSensitivityAnalysisIntroPage::nextId() const
 {
   if (methodGroup_->button(DataSensitivityAnalysisResult::GlobalHSIC) -> isChecked())
     return DataSensitivityAnalysisWizard::Page::GlobalHSICParameters;
-  if (methodGroup_->button(DataSensitivityAnalysisResult::TargetHSIC) -> isChecked())
-    return DataSensitivityAnalysisWizard::Page::TargetHSICParameters;
-  if (methodGroup_->button(DataSensitivityAnalysisResult::ConditionalHSIC) -> isChecked())
-    return DataSensitivityAnalysisWizard::Page::ConditionalHSICParameters;
+  if (methodGroup_->button(DataSensitivityAnalysisResult::TargetHSIC) -> isChecked()
+      || methodGroup_->button(DataSensitivityAnalysisResult::ConditionalHSIC) -> isChecked())
+    return DataSensitivityAnalysisWizard::Page::CriticalDomain;
   else
     return -1;
 }
@@ -320,6 +350,137 @@ bool DataSensitivityAnalysisIntroPage::validatePage()
     return false;
   }
 
+  emit pageValidated();
+  return QWizardPage::validatePage();
+}
+
+/************************* Critical Domain page *******************************/
+
+DataSensitivityAnalysisCriticalDomainPage::DataSensitivityAnalysisCriticalDomainPage(QWidget* parent)
+: QWizardPage(parent)
+{
+  setTitle(tr("Critical domain and filter/weight parameters"));
+
+  auto * pageLayout = new QVBoxLayout(this);
+
+  // Critical domain table
+  auto * domainGroupBox = new QGroupBox(tr("Critical domain"));
+  auto * domainLayout = new QVBoxLayout(domainGroupBox);
+
+  criticalDomainTableView_ = new QTableView;
+  criticalDomainTableView_->setEditTriggers(QTableView::AllEditTriggers);
+  criticalDomainTableView_->verticalHeader()->hide();
+  criticalDomainTableView_->horizontalHeader()->setStretchLastSection(true);
+  criticalDomainTableView_->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+  domainLayout->addWidget(criticalDomainTableView_);
+  pageLayout->addWidget(domainGroupBox);
+
+  // Formula display
+  auto * formulaLabel = new QLabel(
+    tr("Filter/weight function: <i>\xcf\x86</i>(x) = exp( \xe2\x88\x92 d(x, D) / (\xce\xb1 \xc2\xb7 \xcf\x83) )   "
+       "where D is the critical domain, \xce\xb1 is a tuning parameter and \xcf\x83 the standard deviation."));
+  formulaLabel->setWordWrap(true);
+  pageLayout->addWidget(formulaLabel);
+
+  // Alpha table for filter/weight functions
+  auto * alphaGroupBox = new QGroupBox(tr("Filter/weight functions"));
+  auto * alphaLayout = new QVBoxLayout(alphaGroupBox);
+
+  alphaTableView_ = new QTableView;
+  alphaTableView_->setEditTriggers(QTableView::AllEditTriggers);
+  alphaTableView_->verticalHeader()->hide();
+  alphaTableView_->horizontalHeader()->setStretchLastSection(true);
+  alphaTableView_->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+  alphaLayout->addWidget(alphaTableView_);
+  pageLayout->addWidget(alphaGroupBox);
+
+  // Error widget
+  errorWidget_ = new ErrorWidget;
+  pageLayout->addStretch();
+  pageLayout->addWidget(errorWidget_);
+}
+
+void DataSensitivityAnalysisCriticalDomainPage::initialize(DataSensitivityAnalysis * analysis_ptr)
+{
+  if (!analysis_ptr)
+    return;
+
+  analysis_ptr_ = analysis_ptr;
+
+  const Description interestVariables = analysis_ptr->getInterestVariables();
+
+  // Critical domain table
+  criticalDomainTableModel_ = new CriticalDomainTableModel(interestVariables, this);
+  connect(criticalDomainTableModel_, &CriticalDomainTableModel::errorMessageChanged,
+          errorWidget_, &ErrorWidget::setTemporaryFramelessErrorMessage);
+  criticalDomainTableView_->setModel(criticalDomainTableModel_);
+
+  // Set spinbox delegates for bound columns
+  auto * lowerDelegate = new SpinBoxDelegate(criticalDomainTableView_);
+  lowerDelegate->setSpinBoxType(SpinBoxDelegate::doubleValue);
+  criticalDomainTableView_->setItemDelegateForColumn(1, lowerDelegate);
+
+  auto * upperDelegate = new SpinBoxDelegate(criticalDomainTableView_);
+  upperDelegate->setSpinBoxType(SpinBoxDelegate::doubleValue);
+  criticalDomainTableView_->setItemDelegateForColumn(2, upperDelegate);
+
+  if (analysis_ptr->getTargetCriticalDomain().getDimension() == interestVariables.getSize())
+    criticalDomainTableModel_->setInterval(analysis_ptr->getTargetCriticalDomain());
+  else if (analysis_ptr->getConditionalCriticalDomain().getDimension() == interestVariables.getSize())
+    criticalDomainTableModel_->setInterval(analysis_ptr->getConditionalCriticalDomain());
+
+  // Alpha table
+  alphaTableModel_ = new HSICAlphaTableModel(interestVariables, this);
+  connect(alphaTableModel_, &HSICAlphaTableModel::errorMessageChanged,
+          errorWidget_, &ErrorWidget::setTemporaryFramelessErrorMessage);
+  alphaTableView_->setModel(alphaTableModel_);
+
+  // Use filter alphas if available, otherwise weight alphas
+  if (!analysis_ptr->getFilterAlphas().isEmpty())
+    alphaTableModel_->setAlphas(analysis_ptr->getFilterAlphas());
+  else if (!analysis_ptr->getWeightAlphas().isEmpty())
+    alphaTableModel_->setAlphas(analysis_ptr->getWeightAlphas());
+
+  setFinalPage(nextId() == -1);
+}
+
+OT::Interval DataSensitivityAnalysisCriticalDomainPage::getCriticalDomain() const
+{
+  if (criticalDomainTableModel_)
+    return criticalDomainTableModel_->getInterval();
+  return OT::Interval();
+}
+
+OT::Point DataSensitivityAnalysisCriticalDomainPage::getAlphas() const
+{
+  if (alphaTableModel_)
+    return alphaTableModel_->getAlphas();
+  return OT::Point();
+}
+
+int DataSensitivityAnalysisCriticalDomainPage::nextId() const
+{
+  if (analysis_ptr_->computeHSIC(DataSensitivityAnalysis::HSICType::Target))
+    return DataSensitivityAnalysisWizard::Page::TargetHSICParameters;
+  if (analysis_ptr_->computeHSIC(DataSensitivityAnalysis::HSICType::Conditional))
+    return DataSensitivityAnalysisWizard::Page::ConditionalHSICParameters;
+  return -1;
+}
+
+bool DataSensitivityAnalysisCriticalDomainPage::validatePage()
+{
+  if (criticalDomainTableModel_ && criticalDomainTableModel_->hasErrors())
+  {
+    errorWidget_->setTemporaryFramelessErrorMessage(tr("Lower bound must be less than or equal to upper bound"));
+    return false;
+  }
+  if (alphaTableModel_ && alphaTableModel_->hasErrors())
+  {
+    errorWidget_->setTemporaryFramelessErrorMessage(tr("Alpha must be strictly positive"));
+    return false;
+  }
   emit pageValidated();
   return QWizardPage::validatePage();
 }
@@ -435,24 +596,12 @@ DataSensitivityAnalysisHSICParametersPage::DataSensitivityAnalysisHSICParameters
   covLayout->addWidget(covarianceTableView_);
   pageLayout->addWidget(covGroupBox);
 
-  // Alpha table for filter/weight functions
-  if (type == DataSensitivityAnalysis::HSICType::Target
-      || type == DataSensitivityAnalysis::HSICType::Conditional)
-  {
-    const QString groupTitle = (type == DataSensitivityAnalysis::HSICType::Target)
-      ? tr("Filter functions")
-      : tr("Weight functions");
-    auto * alphaGroupBox = new QGroupBox(groupTitle);
-    auto * alphaLayout = new QVBoxLayout(alphaGroupBox);
-
-    alphaTableView_ = new QTableView;
-    alphaTableView_->verticalHeader()->hide();
-    alphaTableView_->horizontalHeader()->setStretchLastSection(true);
-    alphaTableView_->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-
-    alphaLayout->addWidget(alphaTableView_);
-    pageLayout->addWidget(alphaGroupBox);
-  }
+  // Error widget
+  errorWidget_ = new ErrorWidget;
+  connect(covarianceTableModel_, &HSICCovarianceModelsTableModel::errorMessageChanged,
+          errorWidget_, &ErrorWidget::setTemporaryFramelessErrorMessage);
+  pageLayout->addStretch();
+  pageLayout->addWidget(errorWidget_);
 }
 
 void DataSensitivityAnalysisHSICParametersPage::initialize(DataSensitivityAnalysis * analysis_ptr)
@@ -488,20 +637,6 @@ void DataSensitivityAnalysisHSICParametersPage::initialize(DataSensitivityAnalys
     covarianceTableModel_->setCovarianceModels(analysis_ptr->getCovarianceModels(DataSensitivityAnalysis::HSICType::Global));
   }
 
-  if (alphaTableView_)
-  {
-    alphaTableModel_ = new HSICAlphaTableModel(interestVariables, this);
-    alphaTableView_->setModel(alphaTableModel_);
-    if (type_ == DataSensitivityAnalysis::HSICType::Target && !analysis_ptr->getFilterAlphas().isEmpty())
-    {
-      alphaTableModel_->setAlphas(analysis_ptr->getFilterAlphas());
-    }
-    else if (type_ == DataSensitivityAnalysis::HSICType::Conditional && !analysis_ptr->getWeightAlphas().isEmpty())
-    {
-      alphaTableModel_->setAlphas(analysis_ptr->getWeightAlphas());
-    }
-  }
-
   setFinalPage(nextId() == -1);
 }
 
@@ -525,22 +660,14 @@ OT::Collection<OT::CovarianceModel> DataSensitivityAnalysisHSICParametersPage::g
   return covarianceTableModel_->getCovarianceModels();
 }
 
-OT::Point DataSensitivityAnalysisHSICParametersPage::getAlphas() const
-{
-  if (alphaTableModel_)
-    return alphaTableModel_->getAlphas();
-  return OT::Point();
-}
-
 int DataSensitivityAnalysisHSICParametersPage::nextId() const
 {
   switch (type_)
   {
     case DataSensitivityAnalysis::HSICType::Global:
-      if (analysis_ptr_->computeHSIC(DataSensitivityAnalysis::HSICType::Target))
-        return DataSensitivityAnalysisWizard::Page::TargetHSICParameters;
-      if (analysis_ptr_->computeHSIC(DataSensitivityAnalysis::HSICType::Conditional))
-        return DataSensitivityAnalysisWizard::Page::ConditionalHSICParameters;
+      if (analysis_ptr_->computeHSIC(DataSensitivityAnalysis::HSICType::Target)
+          || analysis_ptr_->computeHSIC(DataSensitivityAnalysis::HSICType::Conditional))
+        return DataSensitivityAnalysisWizard::Page::CriticalDomain;
       return -1;
     case DataSensitivityAnalysis::HSICType::Target:
       if (analysis_ptr_->computeHSIC(DataSensitivityAnalysis::HSICType::Conditional))
@@ -555,9 +682,15 @@ int DataSensitivityAnalysisHSICParametersPage::nextId() const
 
 bool DataSensitivityAnalysisHSICParametersPage::validatePage()
 {
+  if (covarianceTableModel_->hasErrors())
+  {
+    errorWidget_->setTemporaryFramelessErrorMessage(tr("p must be in (0, 2]"));
+    return false;
+  }
   analysis_ptr_->setCovarianceModels(getCovarianceModels(), type_);
   emit pageValidated();
   return QWizardPage::validatePage();
 }
+
 
 } // namespace PERSALYS

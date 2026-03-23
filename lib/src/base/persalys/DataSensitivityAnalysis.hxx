@@ -24,6 +24,7 @@
 
 #include <openturns/CovarianceModel.hxx>
 #include <openturns/Function.hxx>
+#include <openturns/Interval.hxx>
 
 #ifndef PERSALYS_DATASENSITIVITYANALYSIS_HXX
 #define PERSALYS_DATASENSITIVITYANALYSIS_HXX
@@ -78,8 +79,8 @@ public:
   void setCovarianceModels(const CovarianceModelCollection &covarianceModels, HSICType hsicType);
   void computeCovModelParameters(bool computeCovModelParameters);
 
-  void setFilterAlphas(const OT::Point & filterAlphas);
-  void setWeightAlphas(const OT::Point & weightAlphas);
+  void setFilterAlphas(const OT::Point & filterAlphas, const OT::Interval & criticalDomain);
+  void setWeightAlphas(const OT::Point & weightAlphas, const OT::Interval & criticalDomain);
   void setFilterFunctions(const OT::Collection<OT::Function> &filterFunctions);
   void setWeightFunctions(const OT::Collection<OT::Function> &weightFunctions);
 
@@ -107,6 +108,8 @@ public:
   OT::Point getWeightAlphas() const;
   OT::Collection<OT::Function> getFilterFunctions() const;
   OT::Collection<OT::Function> getWeightFunctions() const;
+  OT::Interval getTargetCriticalDomain() const;
+  OT::Interval getConditionalCriticalDomain() const;
 
   bool defaultHSICParametersChanged() const;
 
@@ -152,6 +155,8 @@ private:
   OT::Point weightAlphas_;
   OT::Bool userDefinedFilterFunctions_ = false;
   OT::Bool userDefinedWeightFunctions_ = false;
+  OT::Interval targetCriticalDomain_;
+  OT::Interval conditionalCriticalDomain_;
 
 };
 

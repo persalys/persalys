@@ -34,6 +34,8 @@
 #include <openturns/HSICVStat.hxx>
 #include <openturns/SymbolicFunction.hxx>
 #include <openturns/ParametricFunction.hxx>
+#include <openturns/ComposedFunction.hxx>
+#include <openturns/DistanceToDomainFunction.hxx>
 #include <openturns/OSS.hxx>
 
 using namespace OT;
@@ -97,37 +99,58 @@ void DataSensitivityAnalysis::computeCovModelParameters(bool computeCovModelPara
   computeCovModelParameters_ = computeCovModelParameters;
 }
 
-void DataSensitivityAnalysis::setFilterAlphas(const OT::Point & filterAlphas)
+void DataSensitivityAnalysis::setFilterAlphas(const OT::Point & filterAlphas, const OT::Interval & criticalDomain)
 {
+  Sample outSample = designOfExperiment_.getOutputSample().getMarginal(interestVariables_);
+
+  if (criticalDomain.getDimension() != outSample.getDimension())
+    throw InvalidArgumentException(HERE) << "The dimension of the critical domain must be equal to the number of output variables.";
+  
+  if (filterAlphas.getSize() != outSample.getDimension())
+    throw InvalidArgumentException(HERE) << "The size of filter alphas must be equal to the number of output variables.";
+
   filterAlphas_ = filterAlphas;
+  targetCriticalDomain_ = criticalDomain;
 
   filterFunctions_.clear();
-  Sample outSample = designOfExperiment_.getOutputSample().getMarginal(interestVariables_);
   const Point stdDevs = outSample.computeStandardDeviation();
   for (UnsignedInteger i = 0; i < filterAlphas_.getSize(); ++i)
   {
     const Scalar s = filterAlphas_[i] * stdDevs[i];
     const auto f = SymbolicFunction(Description({"x", "s"}), {"exp(-x/s)"});
     const auto phi = ParametricFunction(f, {1}, {s});
-    filterFunctions_.add(phi);
+    const auto distFunc = DistanceToDomainFunction(targetCriticalDomain_.getMarginal(i));
+
+    filterFunctions_.add(ComposedFunction(phi, distFunc));
+
   }
 
   userDefinedFilterFunctions_ = false;
 }
 
-void DataSensitivityAnalysis::setWeightAlphas(const OT::Point & weightAlphas)
+void DataSensitivityAnalysis::setWeightAlphas(const OT::Point & weightAlphas, const OT::Interval & criticalDomain)
 {
+  Sample outSample = designOfExperiment_.getOutputSample().getMarginal(interestVariables_);
+
+  if (criticalDomain.getDimension() != outSample.getDimension())
+    throw InvalidArgumentException(HERE) << "The dimension of the critical domain must be equal to the number of output variables.";
+
+  if (weightAlphas.getSize() != outSample.getDimension())
+    throw InvalidArgumentException(HERE) << "The size of weight alphas must be equal to the number of output variables.";
+
   weightAlphas_ = weightAlphas;
+  conditionalCriticalDomain_ = criticalDomain;
 
   weightFunctions_.clear();
-  Sample outSample = designOfExperiment_.getOutputSample().getMarginal(interestVariables_);
   const Point stdDevs = outSample.computeStandardDeviation();
   for (UnsignedInteger i = 0; i < weightAlphas_.getSize(); ++i)
   {
     const Scalar s = weightAlphas_[i] * stdDevs[i];
     const auto f = SymbolicFunction(Description({"x", "s"}), {"exp(-x/s)"});
     const auto phi = ParametricFunction(f, {1}, {s});
-    weightFunctions_.add(phi);
+    const auto distFunc = DistanceToDomainFunction(conditionalCriticalDomain_.getMarginal(i));
+
+    weightFunctions_.add(ComposedFunction(phi, distFunc));
   }
 
   userDefinedWeightFunctions_ = false;
@@ -314,6 +337,16 @@ Collection<Function> DataSensitivityAnalysis::getFilterFunctions() const
 Collection<Function> DataSensitivityAnalysis::getWeightFunctions() const
 {
   return weightFunctions_;
+}
+
+OT::Interval DataSensitivityAnalysis::getTargetCriticalDomain() const
+{
+  return targetCriticalDomain_;
+}
+
+OT::Interval DataSensitivityAnalysis::getConditionalCriticalDomain() const
+{
+  return conditionalCriticalDomain_;
 }
 
 bool DataSensitivityAnalysis::defaultHSICParametersChanged() const
@@ -723,6 +756,7 @@ String DataSensitivityAnalysis::getPythonScript() const
 {
   if (userDefinedFilterFunctions_ || userDefinedWeightFunctions_)
     throw InvalidArgumentException(HERE) << "Python script cannot be generated when user-defined filter or weight functions are used.";
+  
   OSS oss;
   oss << getName() << " = persalys.DataSensitivityAnalysis('" << getName() << "', " << designOfExperiment_.getName() << ", " << type_ << ", " << Parameters::GetOTDescriptionStr(interestVariables_)  << ")\n";
 
@@ -748,7 +782,7 @@ String DataSensitivityAnalysis::getPythonScript() const
     }
     oss << getName() << ".setCovarianceModels(ot.CovarianceModelCollection(targetCovModels), persalys.DataSensitivityAnalysisResult.Target)\n";
     oss << getName() << ".setHSICParameters(" << Parameters::GetOTBoolStr(targetHSICParameters_.computePermutationPValues()) << ", " << Parameters::GetOTBoolStr(targetHSICParameters_.computeAsymptoticPValues()) << ", " << Parameters::GetOTBoolStr(targetHSICParameters_.useUStatistic()) << ", persalys.DataSensitivityAnalysisResult.Target)\n";
-    oss << getName() << ".setFilterAlphas(" << Parameters::GetOTPointStr(filterAlphas_) << ")\n";
+    oss << getName() << ".setFilterAlphas(" << Parameters::GetOTPointStr(filterAlphas_) << ", ot.Interval(" << Parameters::GetOTPointStr(targetCriticalDomain_.getLowerBound()) << ", " << Parameters::GetOTPointStr(targetCriticalDomain_.getUpperBound()) << "))\n";
   }
   if (type_.computeConditionalHSIC())
   {
@@ -759,7 +793,7 @@ String DataSensitivityAnalysis::getPythonScript() const
     }
     oss << getName() << ".setCovarianceModels(ot.CovarianceModelCollection(conditionalCovModels), persalys.DataSensitivityAnalysisResult.Conditional)\n";
     oss << getName() << ".setHSICParameters(" << Parameters::GetOTBoolStr(conditionalHSICParameters_.computePermutationPValues()) << ", " << Parameters::GetOTBoolStr(conditionalHSICParameters_.computeAsymptoticPValues()) << ", " << Parameters::GetOTBoolStr(conditionalHSICParameters_.useUStatistic()) << ", persalys.DataSensitivityAnalysisResult.Conditional)\n";
-    oss << getName() << ".setWeightAlphas(" << Parameters::GetOTPointStr(weightAlphas_) << ")\n";
+    oss << getName() << ".setWeightAlphas(" << Parameters::GetOTPointStr(weightAlphas_) << ", ot.Interval(" << Parameters::GetOTPointStr(conditionalCriticalDomain_.getLowerBound()) << ", " << Parameters::GetOTPointStr(conditionalCriticalDomain_.getUpperBound()) << "))\n";
   }
 
   return oss;
@@ -798,6 +832,8 @@ void DataSensitivityAnalysis::save(OT::Advocate & adv) const
   adv.saveAttribute("weightAlphas_", weightAlphas_);
   adv.saveAttribute("userDefinedFilterFunctions_", userDefinedFilterFunctions_);
   adv.saveAttribute("userDefinedWeightFunctions_", userDefinedWeightFunctions_);
+  adv.saveAttribute("targetCriticalDomain_", targetCriticalDomain_);
+  adv.saveAttribute("conditionalCriticalDomain_", conditionalCriticalDomain_);
 }
 
 void DataSensitivityAnalysis::load(OT::Advocate & adv)
@@ -830,6 +866,8 @@ void DataSensitivityAnalysis::load(OT::Advocate & adv)
     adv.loadAttribute("weightAlphas_", weightAlphas_);
     adv.loadAttribute("userDefinedFilterFunctions_", userDefinedFilterFunctions_);
     adv.loadAttribute("userDefinedWeightFunctions_", userDefinedWeightFunctions_);
+    adv.loadAttribute("targetCriticalDomain_", targetCriticalDomain_);
+    adv.loadAttribute("conditionalCriticalDomain_", conditionalCriticalDomain_);
   }
 }
 

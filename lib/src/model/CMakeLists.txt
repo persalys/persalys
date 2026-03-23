@@ -52,6 +52,7 @@ ot_add_source_file ( AnsysVariableTableModel.cxx )
 ot_add_source_file ( QtTools.cxx )
 ot_add_source_file ( HSICCovarianceModelsTableModel.cxx )
 ot_add_source_file ( HSICAlphaTableModel.cxx )
+ot_add_source_file ( CriticalDomainTableModel.cxx )
 
 if (OTMORRIS_FOUND)
   ot_add_source_file ( MorrisTableModel.cxx )
@@ -104,6 +105,7 @@ ot_install_header_file ( AnsysVariableTableModel.hxx )
 ot_install_header_file ( QtTools.hxx )
 ot_install_header_file ( HSICCovarianceModelsTableModel.hxx )
 ot_install_header_file ( HSICAlphaTableModel.hxx )
+ot_install_header_file ( CriticalDomainTableModel.hxx )
 if (OTMORRIS_FOUND)
 ot_install_header_file ( MorrisTableModel.hxx )
 ot_install_header_file ( MorrisResultTableModel.hxx )
@@ -158,6 +160,7 @@ qt_wrap_cpp ( PERSALYS_MODEL_MOC_SRCS persalys/InputTableModel.hxx
                                     persalys/FileTools.hxx
                                     persalys/HSICCovarianceModelsTableModel.hxx
                                     persalys/HSICAlphaTableModel.hxx
+                                    persalys/CriticalDomainTableModel.hxx
                                     )
 
 if (OTMORRIS_FOUND)

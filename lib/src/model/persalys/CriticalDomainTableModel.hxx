@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QAbstractTableModel to configure alpha parameter for HSIC filter/weight functions
+ *  @brief QAbstractTableModel to define the critical domain bounds for ROSA
  *
  *  Copyright 2015-2025 EDF-Phimeca
  *
@@ -19,26 +19,26 @@
  *
  */
 
-#ifndef PERSALYS_HSICALPHATABLEMODEL_HXX
-#define PERSALYS_HSICALPHATABLEMODEL_HXX
+#ifndef PERSALYS_CRITICALDOMAINTABLEMODEL_HXX
+#define PERSALYS_CRITICALDOMAINTABLEMODEL_HXX
 
 #include "persalys/PersalysPrivate.hxx"
 
 #include <QAbstractTableModel>
 #include <QSet>
 
-#include <openturns/Point.hxx>
+#include <openturns/Interval.hxx>
 #include <openturns/Description.hxx>
 
 namespace PERSALYS
 {
-class PERSALYS_MODEL_API HSICAlphaTableModel : public QAbstractTableModel
+class PERSALYS_MODEL_API CriticalDomainTableModel : public QAbstractTableModel
 {
   Q_OBJECT
 
 public:
-  explicit HSICAlphaTableModel(const OT::Description & variableNames,
-                               QObject *parent = nullptr);
+  explicit CriticalDomainTableModel(const OT::Description & variableNames,
+                                    QObject *parent = nullptr);
 
   int columnCount(const QModelIndex & parent = QModelIndex()) const override;
   int rowCount(const QModelIndex & parent = QModelIndex()) const override;
@@ -47,19 +47,22 @@ public:
   bool setData(const QModelIndex & index, const QVariant & value, int role = Qt::EditRole) override;
   Qt::ItemFlags flags(const QModelIndex & index) const override;
 
-  void setAlphas(const OT::Point & alphas);
-  OT::Point getAlphas() const;
+  void setInterval(const OT::Interval & interval);
+  OT::Interval getInterval() const;
   bool hasErrors() const;
 
 signals:
   void errorMessageChanged(QString);
 
 private:
+  void updateErrors();
+
   OT::Description variableNames_;
-  QList<double> alphaValues_;
+  QList<double> lowerBounds_;
+  QList<double> upperBounds_;
   QSet<int> errorRows_;
 };
 
 } // namespace PERSALYS
 
-#endif // PERSALYS_HSICALPHATABLEMODEL_HXX
+#endif // PERSALYS_CRITICALDOMAINTABLEMODEL_HXX

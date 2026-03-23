@@ -16,9 +16,6 @@ type : int, optional
     - persalys.DataSensitivityAnalysisResult.TargetHSIC for target HSIC indices
     - persalys.DataSensitivityAnalysisResult.ConditionalHSIC for conditional HSIC indices
     The default value is RankSobol | SRC (Rank Sobol and SRC indices are computed by default).
-covarianceModels : collection of :class:`~openturns.CovarianceModel`, optional
-    Collection of covariance models to use for HSIC indices computation. 
-    The size of the collection must be equal to the total number of input and output variables in the design of experiment.
 interestVariables : :class:`~openturns.Description`, optional
     Description of the variables of interest for the sensitivity analysis. 
     The variables of interest must be a subset of the output variables in the design of experiment. 
@@ -100,53 +97,56 @@ computeCovModelParameters : bool
 
 // ---------------------------------------------------------------------------
 
+%feature("docstring") PERSALYS::DataSensitivityAnalysis::getTargetCriticalDomain
+"Get the critical domain for target HSIC sensitivity analyses.
+
+Returns
+-------
+criticalDomain : :class:`~openturns.Interval`
+    The critical domain interval. Empty if no critical domain has been set."
+
+// ---------------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::DataSensitivityAnalysis::getConditionalCriticalDomain
+"Get the critical domain for conditional HSIC sensitivity analyses.
+
+Returns
+-------
+criticalDomain : :class:`~openturns.Interval`
+    The critical domain interval. Empty if no critical domain has been set."
+
+// ---------------------------------------------------------------------------
+
 %feature("docstring") PERSALYS::DataSensitivityAnalysis::setFilterAlphas
 "Set the alpha parameters for the target HSIC filter functions.
 
-The filter functions are constructed at launch time as :math:`x \\mapsto \\exp(-x / (\\alpha_i \\cdot \\sigma_i))`
-where :math:`\\alpha_i` is the alpha parameter and :math:`\\sigma_i` is the standard deviation of the
-i-th output variable. Setting alphas clears any previously set filter functions.
+The filter functions are constructed as  :math:`y \\mapsto \\exp(-d(y, D) / (\\alpha_i \\cdot \\sigma_i))` where :math:`\\alpha_i` is the alpha parameter, :math:`\\sigma_i` is the standard deviation of the i-th output variable and :math:`d(y, D)` is the distance from y to the critical domain D.
+Setting alphas clears any previously set filter functions.
 
 Parameters
 ----------
 filterAlphas : :class:`~openturns.Point`
     Alpha parameters for each output variable of interest.
-    The size must be equal to the number of output variables of interest."
+    The size must be equal to the number of output variables of interest.
+criticalDomain : :class:`~openturns.Interval`
+    Critical domain for the sensitivity analysis. The distance to this domain will be used to construct the filter functions. The dimension of the interval must be equal to the number of output variables of interest."
 
 // ---------------------------------------------------------------------------
 
 %feature("docstring") PERSALYS::DataSensitivityAnalysis::setWeightAlphas
 "Set the alpha parameters for the conditional HSIC weight functions.
 
-The weight functions are constructed at launch time as :math:`x \\mapsto \\exp(-x / (\\alpha_i \\cdot \\sigma_i))`
-where :math:`\\alpha_i` is the alpha parameter and :math:`\\sigma_i` is the standard deviation of the
-i-th output variable. Setting alphas clears any previously set weight functions.
+The weight functions are constructed as  :math:`y \\mapsto \\exp(-d(y, D) / (\\alpha_i \\cdot \\sigma_i))` where :math:`\\alpha_i` is the alpha parameter, :math:`\\sigma_i` is the standard deviation of the i-th output variable and :math:`d(y, D)` is the distance from y to the critical domain D.
+Setting alphas clears any previously set weight functions.
 
 Parameters
 ----------
 weightAlphas : :class:`~openturns.Point`
     Alpha parameters for each output variable of interest.
-    The size must be equal to the number of output variables of interest."
+    The size must be equal to the number of output variables of interest.
+criticalDomain : :class:`~openturns.Interval`
+    Critical domain for the sensitivity analysis. The distance to this domain will be used to construct the weight functions. The dimension of the interval must be equal to the number of output variables of interest."
 
-// ---------------------------------------------------------------------------
-
-%feature("docstring") PERSALYS::DataSensitivityAnalysis::getFilterAlphas
-"Get the alpha parameters for the target HSIC filter functions.
-
-Returns
--------
-filterAlphas : :class:`~openturns.Point`
-    Alpha parameters for each output variable of interest. Empty if filter functions were set directly."
-
-// ---------------------------------------------------------------------------
-
-%feature("docstring") PERSALYS::DataSensitivityAnalysis::getWeightAlphas
-"Get the alpha parameters for the conditional HSIC weight functions.
-
-Returns
--------
-weightAlphas : :class:`~openturns.Point`
-    Alpha parameters for each output variable of interest. Empty if weight functions were set directly."
 
 // ---------------------------------------------------------------------------
 
@@ -163,16 +163,6 @@ filterFunctions : collection of :class:`~openturns.Function`
     Collection of filter functions to use for the computation of target HSIC indices.
     The size of the collection must be equal to the number of output variables of interest."
 
-// ---------------------------------------------------------------------------
-
-%feature("docstring") PERSALYS::DataSensitivityAnalysis::getFilterFunctions
-"Get the filter functions for the target HSIC indices computation.
-
-Returns
--------
-filterFunctions : collection of :class:`~openturns.Function`
-    Collection of filter functions. May be empty if filter alphas were set
-    and the analysis has not been launched yet."
 
 // ---------------------------------------------------------------------------
 
@@ -189,16 +179,6 @@ weightFunctions : collection of :class:`~openturns.Function`
     Collection of weight functions to use for the computation of conditional HSIC indices.
     The size of the collection must be equal to the number of output variables of interest."
 
-// ---------------------------------------------------------------------------
-
-%feature("docstring") PERSALYS::DataSensitivityAnalysis::getWeightFunctions
-"Get the weight functions for the conditional HSIC indices computation.
-
-Returns
--------
-weightFunctions : collection of :class:`~openturns.Function`
-    Collection of weight functions. May be empty if weight alphas were set
-    and the analysis has not been launched yet."
 
 // ---------------------------------------------------------------------------
 
@@ -321,6 +301,48 @@ Returns
 -------
 covarianceModels : collection of :class:`~openturns.CovarianceModel`
     Collection of covariance models used for the computation of HSIC indices."
+
+// ---------------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::DataSensitivityAnalysis::getFilterAlphas
+"Get the alpha parameters for the target HSIC filter functions.
+
+Returns
+-------
+filterAlphas : :class:`~openturns.Point`
+    Alpha parameters for each output variable of interest. Empty if filter functions were set directly."
+
+// ---------------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::DataSensitivityAnalysis::getWeightAlphas
+"Get the alpha parameters for the conditional HSIC weight functions.
+
+Returns
+-------
+weightAlphas : :class:`~openturns.Point`
+    Alpha parameters for each output variable of interest. Empty if weight functions were set directly."
+
+// ---------------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::DataSensitivityAnalysis::getFilterFunctions
+"Get the filter functions for the target HSIC indices computation.
+
+Returns
+-------
+filterFunctions : collection of :class:`~openturns.Function`
+    Collection of filter functions. May be empty if filter alphas were set
+    and the analysis has not been launched yet."
+
+// ---------------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::DataSensitivityAnalysis::getWeightFunctions
+"Get the weight functions for the conditional HSIC indices computation.
+
+Returns
+-------
+weightFunctions : collection of :class:`~openturns.Function`
+    Collection of weight functions. May be empty if weight alphas were set
+    and the analysis has not been launched yet."
 
 // ---------------------------------------------------------------------------
 

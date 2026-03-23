@@ -26,6 +26,8 @@
 #include <openturns/AbsoluteExponential.hxx>
 #include <openturns/GeneralizedExponential.hxx>
 
+#include <QColor>
+
 using namespace OT;
 
 namespace PERSALYS
@@ -50,6 +52,7 @@ void HSICCovarianceModelsTableModel::setVariablesNames(const Description & varia
   modelIndices_.clear();
   nuIndices_.clear();
   pValues_.clear();
+  pErrorRows_.clear();
   for (UnsignedInteger i = 0; i < variableNames_.getSize(); ++i)
   {
     modelIndices_ << CovarianceModelType::SquaredExponential;
@@ -180,6 +183,12 @@ QVariant HSICCovarianceModelsTableModel::data(const QModelIndex & index, int rol
       return QStringList() << "1/2" << "3/2" << "5/2";
   }
 
+  if (role == Qt::ForegroundRole)
+  {
+    if (index.column() == 3 && pErrorRows_.contains(row))
+      return QColor(Qt::red);
+  }
+
   return QVariant();
 }
 
@@ -197,6 +206,14 @@ bool HSICCovarianceModelsTableModel::setData(const QModelIndex & index, const QV
     const int idx = names.indexOf(value.toString());
     if (idx >= 0)
       modelIndices_[row] = static_cast<CovarianceModelType>(idx);
+    // Clear p error when switching away from GeneralizedExponential
+    if (modelIndices_[row] != CovarianceModelType::GeneralizedExponential)
+    {
+      pErrorRows_.remove(row);
+      pValues_[row] = 1.0;
+      if (pErrorRows_.isEmpty())
+        emit errorMessageChanged("");
+    }
     // Refresh ν and p columns when model changes
     emit dataChanged(this->index(row, 2), this->index(row, 3));
     emit dataChanged(index, index);
@@ -217,13 +234,25 @@ bool HSICCovarianceModelsTableModel::setData(const QModelIndex & index, const QV
   {
     bool ok;
     const double p = value.toDouble(&ok);
-    if (ok && p > 0.0 && p <= 2.0)
+    if (!ok)
+      return false;
+
+    pValues_[row] = p;
+    emit dataChanged(index, index);
+
+    if (p <= 0.0 || p > 2.0)
     {
-      pValues_[row] = p;
-      emit dataChanged(index, index);
-      return true;
+      pErrorRows_.insert(row);
+      emit errorMessageChanged(tr("p must be in (0, 2]"));
     }
-    return false;
+    else
+    {
+      pErrorRows_.remove(row);
+      if (pErrorRows_.isEmpty())
+        emit errorMessageChanged("");
+    }
+    emit dataChanged(index, index);
+    return true;
   }
 
   return false;
@@ -308,6 +337,11 @@ void HSICCovarianceModelsTableModel::applyToAll(int sourceRow)
     pValues_[i] = srcP;
   }
   emit dataChanged(index(0, 1), index(rowCount() - 1, 3));
+}
+
+bool HSICCovarianceModelsTableModel::hasErrors() const
+{
+  return !pErrorRows_.isEmpty();
 }
 
 } // namespace PERSALYS

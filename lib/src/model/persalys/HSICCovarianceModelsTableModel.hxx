@@ -25,6 +25,7 @@
 #include "persalys/PersalysPrivate.hxx"
 
 #include <QAbstractTableModel>
+#include <QSet>
 
 #include <openturns/Collection.hxx>
 #include <openturns/CovarianceModel.hxx>
@@ -66,12 +67,17 @@ public:
   void setCovarianceModels(const OT::Collection<OT::CovarianceModel> & models);
 
   void applyToAll(int row);
+  bool hasErrors() const;
+
+signals:
+  void errorMessageChanged(QString);
 
 private:
   OT::Description variableNames_;
   QList<CovarianceModelType> modelIndices_;
   QList<NuType> nuIndices_;
   QList<double> pValues_;
+  QSet<int> pErrorRows_;
 };
 
 } // namespace PERSALYS

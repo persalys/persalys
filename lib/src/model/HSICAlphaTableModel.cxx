@@ -21,6 +21,8 @@
 
 #include "persalys/HSICAlphaTableModel.hxx"
 
+#include <QColor>
+
 using namespace OT;
 
 namespace PERSALYS
@@ -92,6 +94,12 @@ QVariant HSICAlphaTableModel::data(const QModelIndex & index, int role) const
     }
   }
 
+  if (role == Qt::ForegroundRole)
+  {
+    if (index.column() == 1 && errorRows_.contains(row))
+      return QColor(Qt::red);
+  }
+
   return QVariant();
 }
 
@@ -104,12 +112,26 @@ bool HSICAlphaTableModel::setData(const QModelIndex & index, const QVariant & va
   {
     bool ok;
     const double alpha = value.toDouble(&ok);
-    if (ok && alpha > 0.0)
+    if (!ok)
+      return false;
+
+    alphaValues_[index.row()] = alpha;
+    emit dataChanged(index, index);
+
+    if (alpha <= 0.0)
     {
-      alphaValues_[index.row()] = alpha;
-      emit dataChanged(index, index);
-      return true;
+      errorRows_.insert(index.row());
+      emit errorMessageChanged(tr("Alpha must be strictly positive"));
     }
+    else
+    {
+      errorRows_.remove(index.row());
+      if (errorRows_.isEmpty())
+        emit errorMessageChanged("");
+    }
+    // Refresh foreground color
+    emit dataChanged(index, index);
+    return true;
   }
 
   return false;
@@ -129,6 +151,11 @@ Point HSICAlphaTableModel::getAlphas() const
   for (int i = 0; i < alphaValues_.size(); ++i)
     alphas[i] = alphaValues_[i];
   return alphas;
+}
+
+bool HSICAlphaTableModel::hasErrors() const
+{
+  return !errorRows_.isEmpty();
 }
 
 } // namespace PERSALYS

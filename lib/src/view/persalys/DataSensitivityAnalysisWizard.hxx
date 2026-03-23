@@ -64,6 +64,7 @@ private:
 
 class HSICCovarianceModelsTableModel;
 class HSICAlphaTableModel;
+class CriticalDomainTableModel;
 
 class PERSALYS_VIEW_API DataSensitivityAnalysisHSICParametersPage : public QWizardPage
 {
@@ -83,7 +84,6 @@ public:
   bool computePermutationPValues() const;
   bool useUStatistic() const;
   OT::Collection<OT::CovarianceModel> getCovarianceModels() const;
-  OT::Point getAlphas() const;
 
   int nextId() const override;
   bool validatePage() override;
@@ -98,8 +98,34 @@ private:
     QComboBox                         * useUStatisticComboBox_              = nullptr;
     HSICCovarianceModelsTableModel    * covarianceTableModel_               = nullptr;
     QTableView                        * covarianceTableView_                = nullptr;
+    ErrorWidget                       * errorWidget_                        = nullptr;
+    DataSensitivityAnalysis           * analysis_ptr_                       = nullptr;
+};
+
+class PERSALYS_VIEW_API DataSensitivityAnalysisCriticalDomainPage : public QWizardPage
+{
+  Q_OBJECT
+
+public:
+  explicit DataSensitivityAnalysisCriticalDomainPage(QWidget* parent = nullptr);
+
+  void initialize(DataSensitivityAnalysis * analysis_ptr);
+
+  OT::Interval getCriticalDomain() const;
+  OT::Point getAlphas() const;
+
+  int nextId() const override;
+  bool validatePage() override;
+
+signals:
+  void pageValidated();
+
+private:
+    CriticalDomainTableModel          * criticalDomainTableModel_           = nullptr;
+    QTableView                        * criticalDomainTableView_            = nullptr;
     HSICAlphaTableModel               * alphaTableModel_                    = nullptr;
     QTableView                        * alphaTableView_                     = nullptr;
+    ErrorWidget                       * errorWidget_                        = nullptr;
     DataSensitivityAnalysis           * analysis_ptr_                       = nullptr;
 };
 
@@ -110,7 +136,7 @@ class PERSALYS_VIEW_API DataSensitivityAnalysisWizard : public AnalysisWizard
   friend class TestDataSensitivityAnalysisWizard;
 
 public:
-  enum Page {Intro, GlobalHSICParameters, TargetHSICParameters, ConditionalHSICParameters};
+  enum Page {Intro, GlobalHSICParameters, CriticalDomain, TargetHSICParameters, ConditionalHSICParameters};
 
   explicit DataSensitivityAnalysisWizard(const Analysis& analysis, QWidget* parent = nullptr);
 
@@ -118,11 +144,12 @@ public:
   int nextId() const override;
 
 private:
-  DataSensitivityAnalysisIntroPage          * introPage_                      = nullptr;
-  DataSensitivityAnalysisHSICParametersPage * globalHSICParametersPage_       = nullptr;
-  DataSensitivityAnalysisHSICParametersPage * targetHSICParametersPage_       = nullptr;
-  DataSensitivityAnalysisHSICParametersPage * conditionalHSICParametersPage_  = nullptr;
-  const DataSensitivityAnalysis             * analysis_ptr_                   = nullptr;
+  DataSensitivityAnalysisIntroPage              * introPage_                      = nullptr;
+  DataSensitivityAnalysisHSICParametersPage     * globalHSICParametersPage_       = nullptr;
+  DataSensitivityAnalysisCriticalDomainPage     * criticalDomainPage_             = nullptr;
+  DataSensitivityAnalysisHSICParametersPage     * targetHSICParametersPage_       = nullptr;
+  DataSensitivityAnalysisHSICParametersPage     * conditionalHSICParametersPage_  = nullptr;
+  const DataSensitivityAnalysis                 * analysis_ptr_                   = nullptr;
 
 };
 

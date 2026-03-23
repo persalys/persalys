@@ -386,7 +386,7 @@ analysis3_target_v = persalys.DataSensitivityAnalysis(
 analysis3_target_v.setCovarianceModels(
     covModels3, persalys.DataSensitivityAnalysisResult.Target
 )
-analysis3_target_v.setFilterAlphas(ot.Point([2.0]))
+analysis3_target_v.setFilterAlphas(ot.Point([2.0]), ot.Interval([-1.0], [1.0]))
 analysis3_target_v.setHSICParameters(
     False, True, False, persalys.DataSensitivityAnalysisResult.Target
 )  # asymptotic only, V-stat
@@ -446,7 +446,7 @@ analysis3_target_u = persalys.DataSensitivityAnalysis(
 analysis3_target_u.setCovarianceModels(
     covModels3, persalys.DataSensitivityAnalysisResult.Target
 )
-analysis3_target_u.setFilterAlphas(ot.Point([2.0]))
+analysis3_target_u.setFilterAlphas(ot.Point([2.0]), ot.Interval([-1.0], [1.0]))
 analysis3_target_u.setHSICParameters(
     True, True, True, persalys.DataSensitivityAnalysisResult.Target
 )  # permutation + asymptotic, U-stat
@@ -478,7 +478,7 @@ analysis3_cond = persalys.DataSensitivityAnalysis(
 analysis3_cond.setCovarianceModels(
     covModels3, persalys.DataSensitivityAnalysisResult.Conditional
 )
-analysis3_cond.setWeightAlphas(ot.Point([2.0]))
+analysis3_cond.setWeightAlphas(ot.Point([2.0]), ot.Interval([-1.0], [1.0]))
 analysis3_cond.setHSICParameters(
     True, False, False, persalys.DataSensitivityAnalysisResult.Conditional
 )  # permutation only (no asymptotic/U-stat for conditional)
@@ -538,7 +538,7 @@ analysis3_cond_noperm = persalys.DataSensitivityAnalysis(
 analysis3_cond_noperm.setCovarianceModels(
     covModels3, persalys.DataSensitivityAnalysisResult.Conditional
 )
-analysis3_cond_noperm.setWeightAlphas(ot.Point([2.0]))
+analysis3_cond_noperm.setWeightAlphas(ot.Point([2.0]), ot.Interval([-1.0], [1.0]))
 myStudy.add(analysis3_cond_noperm)
 analysis3_cond_noperm.run()
 result3_cond_noperm = analysis3_cond_noperm.getResult()
@@ -575,8 +575,8 @@ analysis3_all2.setCovarianceModels(
 analysis3_all2.setCovarianceModels(
     covModels3, persalys.DataSensitivityAnalysisResult.Conditional
 )
-analysis3_all2.setFilterAlphas(ot.Point([2.0]))
-analysis3_all2.setWeightAlphas(ot.Point([2.0]))
+analysis3_all2.setFilterAlphas(ot.Point([2.0]), ot.Interval([-1.0], [1.0]))
+analysis3_all2.setWeightAlphas(ot.Point([2.0]), ot.Interval([-1.0], [1.0]))
 analysis3_all2.setHSICParameters(
     False, True, False, persalys.DataSensitivityAnalysisResult.Global
 )
