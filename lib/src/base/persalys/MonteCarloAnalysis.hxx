@@ -40,8 +40,8 @@ public:
   /** Virtual constructor */
   MonteCarloAnalysis * clone() const override;
 
-  void allowFailedEvaluations(const bool allow);
-  bool failedEvaluationsAllowed() const;
+  void setAllowFailedEvaluations(const bool allow);
+  bool getAllowFailedEvaluations() const;
 
   OT::Scalar getMaximumConfidenceIntervalLength() const;
   void setMaximumConfidenceIntervalLength(const OT::Scalar length);

@@ -21,11 +21,13 @@
 #include "persalys/MonteCarloAnalysis.hxx"
 #include "persalys/DataAnalysis.hxx"
 #include "persalys/DataModel.hxx"
+#include "persalys/BaseTools.hxx"
 
 #include <openturns/RandomGenerator.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/SpecFunc.hxx>
 #include <openturns/DistFunc.hxx>
+#include <openturns/BatchFailedException.hxx>
 
 #include <limits>
 
@@ -62,12 +64,12 @@ MonteCarloAnalysis* MonteCarloAnalysis::clone() const
   return new MonteCarloAnalysis(*this);
 }
 
-void MonteCarloAnalysis::allowFailedEvaluations(const bool allow)
+void MonteCarloAnalysis::setAllowFailedEvaluations(const bool allow)
 {
   allowFailedEvaluations_ = allow;
 }
 
-bool MonteCarloAnalysis::failedEvaluationsAllowed() const
+bool MonteCarloAnalysis::getAllowFailedEvaluations() const
 {
   return allowFailedEvaluations_;
 }
@@ -130,13 +132,12 @@ void MonteCarloAnalysis::launch()
 
   Sample effectiveInputSample(0, getPhysicalModel().getStochasticInputNames().getSize());
   effectiveInputSample.setDescription(getPhysicalModel().getStochasticInputNames());
-  Sample outputSampleNoNaN(0, getInterestVariables().getSize());
-  Sample outputSample(0, getInterestVariables().getSize()); // used only if allowFailedEvaluations_ is true
+  Sample outputSample(0, getInterestVariables().getSize());
   outputSample.setDescription(getInterestVariables());
-  outputSampleNoNaN.setDescription(getInterestVariables());
   Function function(getPhysicalModel().getRestrictedFunction(getInterestVariables()));
 
   failedInputSample_ = Sample(0, getPhysicalModel().getStochasticInputNames().getSize());
+  failedInputSample_.setDescription(getPhysicalModel().getStochasticInputNames());
 
   const bool maximumOuterSamplingSpecified = getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max();
   const UnsignedInteger maximumOuterSampling = maximumOuterSamplingSpecified ? static_cast<UnsignedInteger>(ceil(1.0 * getMaximumCalls() / getBlockSize())) : (UnsignedInteger)std::numeric_limits<int>::max();
@@ -177,60 +178,59 @@ void MonteCarloAnalysis::launch()
     const UnsignedInteger effectiveBlockSize = outerSampling < (maximumOuterSampling - 1) ? getBlockSize() : lastBlockSize;
 
     // get block input sample
-    const Sample blockInputSample(generateInputSample(effectiveBlockSize));
+    Sample blockInputSample(generateInputSample(effectiveBlockSize));
 
     // Perform a block of simulations
     Sample blockOutputSample;
-    Sample failedInputSample;
+    Sample failedSample;
+    Description errorDesc;
     try
     {
       blockOutputSample = function(blockInputSample);
     }
+    catch (const OT::BatchFailedException & ex)
+    {
+      warningMessage_ = ex.what();
+      failedSample = blockInputSample.select(ex.getFailedIndices());
+      errorDesc = EscapeNewLines(ex.getErrorDescription());
+      blockOutputSample = ex.getOutputSample();
+      blockOutputSample.setDescription(getInterestVariables());
+      blockOutputSample = blockOutputSample.getMarginal(getInterestVariables());
+      blockInputSample = blockInputSample.select(ex.getSucceededIndices());
+    }
     catch (const std::exception & ex)
     {
-      failedInputSample = blockInputSample;
-      if (!allowFailedEvaluations_)
-        warningMessage_ = ex.what();
+      failedSample = blockInputSample;
+      errorDesc = EscapeNewLines(Description(blockInputSample.getSize(), ex.what()));
+      warningMessage_ = ex.what();
     }
 
-    if (!failedInputSample.getSize())
+    if (blockOutputSample.getSize())
     {
-      // if succeed fill samples
-      outputSampleNoNaN.add(blockOutputSample);
+      outputSample.add(blockOutputSample);
       effectiveInputSample.add(blockInputSample);
-      if (allowFailedEvaluations_)
-        outputSample.add(blockOutputSample);
     }
-    else
+    if (failedSample.getSize())
     {
+      failedInputSample_.add(failedSample);
+      errorDescription_.add(errorDesc);
       if (!allowFailedEvaluations_)
-      {
-        // exit the while section. Stop the analysis
-        failedInputSample_ = failedInputSample;
         break;
-      }
-      else
-      {
-        blockOutputSample = Sample(effectiveBlockSize, Point(blockInputSample.getDimension(), std::numeric_limits<Scalar>::quiet_NaN()));
-        outputSample.add(blockOutputSample);
-        failedInputSample_.add(failedInputSample);
-        effectiveInputSample.add(blockInputSample);
-      }
     }
 
     // stop criteria
     if (getBlockSize() != 1 || (getBlockSize() == 1 && outerSampling))
     {
-      const Point empiricalMean(outputSampleNoNaN.computeMean());
-      const Point empiricalStd(outputSampleNoNaN.computeStandardDeviation());
+      const Point empiricalMean(outputSample.computeMean());
+      const Point empiricalStd(outputSample.computeStandardDeviation());
 
       Scalar coefOfVar(0.);
       Scalar CI(0.);
-      for (UnsignedInteger i = 0; i < outputSampleNoNaN.getDimension(); ++i)
+      for (UnsignedInteger i = 0; i < outputSample.getDimension(); ++i)
       {
         if (std::abs(empiricalMean[i]) > SpecFunc::Precision)
         {
-          const Scalar sigma_i = empiricalStd[i] / sqrt(outputSampleNoNaN.getSize());
+          const Scalar sigma_i = empiricalStd[i] / sqrt(outputSample.getSize());
           coefOfVar = std::max(sigma_i / std::abs(empiricalMean[i]), coefOfVar);
           CI = 2.0 * sigma_i * DistFunc::qNormal(0.5 * (1 + levelConfidenceInterval_));
         }
@@ -248,15 +248,12 @@ void MonteCarloAnalysis::launch()
   }
 
   // check
-  if (!outputSampleNoNaN.getSize())
+  if (!outputSample.getSize())
     throw InvalidValueException(HERE) << "Monte Carlo Analysis failed. The output sample is empty. " << warningMessage_;
 
   // set design of experiments
   result_.designOfExperiment_.setInputSample(effectiveInputSample);
-  if (allowFailedEvaluations_)
-    result_.designOfExperiment_.setOutputSample(outputSample);
-  else
-    result_.designOfExperiment_.setOutputSample(outputSampleNoNaN);
+  result_.designOfExperiment_.setOutputSample(outputSample);
 
   // compute data analysis
   DataAnalysis dataAnalysis("", result_.designOfExperiment_);
@@ -313,7 +310,7 @@ String MonteCarloAnalysis::getPythonScript() const
   oss << getName() << ".setMaximumElapsedTime(" << getMaximumElapsedTime() << ")\n";
   oss << getName() << ".setBlockSize(" << getBlockSize() << ")\n";
   oss << getName() << ".setSeed(" << getSeed() << ")\n";
-  oss << getName() << ".allowFailedEvaluations(" << (allowFailedEvaluations_ ? "True" : "False") << ")\n";
+  oss << getName() << ".setAllowFailedEvaluations(" << (allowFailedEvaluations_ ? "True" : "False") << ")\n";
 
   return oss;
 }

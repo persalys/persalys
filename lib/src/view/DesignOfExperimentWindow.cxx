@@ -41,7 +41,7 @@ void DesignOfExperimentWindow::initialize(const AnalysisItem* item)
   DesignOfExperimentEvaluation analysis(*dynamic_cast<DesignOfExperimentEvaluation*>(item->getAnalysis().getImplementation().get()));
 
   result_ = analysis.getResult();
-  designOfExperiment_ = analysis.getResult().getDesignOfExperiment();
+  designOfExperiment_ = result_.getDesignOfExperiment();
   failedInputSample_ = analysis.getFailedInputSample();
   errorDescription_ = analysis.getErrorDescription();
   notEvaluatedInputSample_ = analysis.getNotEvaluatedInputSample();

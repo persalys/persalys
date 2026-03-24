@@ -88,36 +88,38 @@ void DataAnalysisResultWindow::addSummaryTab()
   QStringList namesList;
   QStringList valuesList;
 
-  const OT::UnsignedInteger totalSampleSize = designOfExperiment_.getSample().getSize() + failedInputSample_.getSize() + notEvaluatedInputSample_.getSize();
+  const OT::UnsignedInteger totalSampleSize = designOfExperiment_.getSample().getSize();
+  const Point effetiveSize = result_.getEffectiveSize();
 
-  // if there are NaNs
-  if (result_.getEffectiveSize().getDimension())
+  summaryValuesListSampleSizeIndex_ = valuesList.size();
+  const UnsignedInteger multivariateSampleSize = result_.getMultivariateDoE().getSample().getSize();
+
+  if (effetiveSize.getDimension())
   {
     namesList << tr("Sample size");
-    valuesList << QString::number(designOfExperiment_.getSample().getSize());
+    valuesList << QString::number(totalSampleSize);
+
     namesList << tr("Valid marginal size");
-    summaryValuesListSampleSizeIndex_ = valuesList.size();
-    valuesList << QString::number(result_.getEffectiveSize()[variablesListWidget_->item(0)->data(Qt::UserRole).toInt()]);
+    valuesList << QString::number(effetiveSize[variablesListWidget_->item(0)->data(Qt::UserRole).toInt()]);
+
+    namesList << tr("Valid multivariate size");
+    valuesList << QString::number(multivariateSampleSize);
+    doMultivariate_ = multivariateSampleSize > 0;
   }
-  else
+  else // when displaying analysis in studies saved with a version of Persalys < 19.0
   {
     namesList << sampleSizeTitle_;
     valuesList << QString::number(totalSampleSize);
   }
-  
-  namesList << tr("Valid multivariate size");
-  const UnsignedInteger multivariateSampleSize = result_.getMultivariateDoE().getSample().getSize();
-  doMultivariate_ = multivariateSampleSize > 0;
-  valuesList << QString::number(multivariateSampleSize);
 
   auto * table = new ParametersTableView(namesList, valuesList, true, true);
   auto updateEffectiveSize = [this, table, totalSampleSize] (int index) {
     int realIndex = variablesListWidget_->item(index)->data(Qt::UserRole).toInt();
-    const UnsignedInteger effectiveSize = static_cast<UnsignedInteger>(result_.getEffectiveSize()[realIndex]);
+    const auto effectiveSize = static_cast<UnsignedInteger>(result_.getEffectiveSize()[realIndex]);
     const QColor color = effectiveSize != totalSampleSize ? QColor("orange") : QColor();
     table->setValueAt(summaryValuesListSampleSizeIndex_, QString::number(effectiveSize), color);
   };
-  if (result_.getEffectiveSize().getDimension())
+  if (effetiveSize.getDimension())
   {
     updateEffectiveSize(0);
     connect (variablesListWidget_, &VariablesListWidget::currentRowChanged, updateEffectiveSize);

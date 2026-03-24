@@ -123,7 +123,7 @@ void MonteCarloPage::initialize(const Analysis& analysis)
   levelConfidenceIntervalSpinbox_->setEnabled(analysis_ptr->isConfidenceIntervalRequired() ||
       analysis_ptr->getMaximumConfidenceIntervalLength() != -1);
   seedSpinbox_->setValue(analysis_ptr->getSeed());
-  allowFailedEvaluationsCheckBox_->setChecked(analysis_ptr->failedEvaluationsAllowed());
+  allowFailedEvaluationsCheckBox_->setChecked(analysis_ptr->getAllowFailedEvaluations());
 }
 
 
@@ -138,7 +138,7 @@ Analysis MonteCarloPage::getAnalysis(const String& name, const PhysicalModel& ph
   analysis.setSeed(seedSpinbox_->value());
   analysis.setIsConfidenceIntervalRequired(confidenceIntervalCheckBox_->isChecked());
   analysis.setLevelConfidenceInterval(levelConfidenceIntervalSpinbox_->value());
-  analysis.allowFailedEvaluations(allowFailedEvaluationsCheckBox_->isChecked());
+  analysis.setAllowFailedEvaluations(allowFailedEvaluationsCheckBox_->isChecked());
 
   return analysis;
 }
