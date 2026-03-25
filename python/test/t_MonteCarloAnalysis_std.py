@@ -91,6 +91,49 @@ analysis4.run()
 result4 = analysis4.getResult()
 print("result=", result4)
 
+# Monte Carlo - test allowFailedEvaluations ##
+
+X3 = persalys.Input("X3", ot.Normal(1, 1))
+Y3 = persalys.Output("Y3")
+
+failCode = """def _exec(X3):
+    if X3 < 0.5:
+        raise ValueError('X3 is too small')
+    Y3 = X3
+    return Y3
+"""
+failModel = persalys.PythonPhysicalModel("failModel", [X3], [Y3], failCode)
+
+# allowFailedEvaluations=False: analysis stops at first error
+analysis5 = persalys.MonteCarloAnalysis("myMonteCarlo5", failModel)
+analysis5.setMaximumCalls(1000)
+analysis5.setMaximumCoefficientOfVariation(-1)
+analysis5.setSeed(0)
+analysis5.setAllowFailedEvaluations(False)
+
+analysis5.run()
+
+# only 1 failed point was recorded (stopped at first failure)
+print("failed (no allow):", analysis5.getFailedInputSample().getSize() == 1)
+# less evaluations than requested
+print("early stop:", analysis5.getResult().getDesignOfExperiment().getSample().getSize() < 1000)
+
+# allowFailedEvaluations=True: analysis continues past errors
+analysis6 = persalys.MonteCarloAnalysis("myMonteCarlo6", failModel)
+analysis6.setMaximumCalls(1000)
+analysis6.setMaximumCoefficientOfVariation(-1)
+analysis6.setSeed(0)
+analysis6.setAllowFailedEvaluations(True)
+
+analysis6.run()
+
+# multiple failed points recorded
+print("failed (allow):", analysis6.getFailedInputSample().getSize() > 1)
+# total evaluations = successful + failed = 1000
+nSuccess = analysis6.getResult().getDesignOfExperiment().getSample().getSize()
+nFailed = analysis6.getFailedInputSample().getSize()
+print("total evals:", nSuccess + nFailed == 1000)
+
 # script
 script = myStudy.getPythonScript()
 print(script)
