@@ -60,10 +60,10 @@ public:
   PointCollection getFirstQuartile() const;
   PointCollection getThirdQuartile() const;
   OT::Interval getMeanConfidenceInterval() const;
-  //OT::Interval getStdConfidenceInterval() const;
   PointCollection getOutliers() const;
   OT::Point getEffectiveSize() const;
   DesignOfExperiment getMultivariateDoE() const;
+  bool allowFailedEvaluations() const;
 
   DataSample::SampleCollection getPDF() const;
   DataSample::SampleCollection getCDF() const;
@@ -79,25 +79,25 @@ public:
   void load(OT::Advocate & adv) override;
 
 private:
-  OT::PersistentCollection<OT::Point> min_;
-  OT::PersistentCollection<OT::Point> max_;
-  OT::PersistentCollection<OT::Point> mean_;
-  OT::PersistentCollection<OT::Point> coefficientOfVariation_;
-  OT::PersistentCollection<OT::Point> median_;
-  OT::PersistentCollection<OT::Point> standardDeviation_;
-  OT::PersistentCollection<OT::Point> variance_;
-  OT::PersistentCollection<OT::Point> skewness_;
-  OT::PersistentCollection<OT::Point> kurtosis_;
-  OT::PersistentCollection<OT::Point> firstQuartile_;
-  OT::PersistentCollection<OT::Point> thirdQuartile_;
-  OT::Interval meanConfidenceInterval_;
-  //OT::Interval stdConfidenceInterval_;
-  OT::PersistentCollection<OT::Point> outliers_;
-  OT::PersistentCollection<OT::Sample> pdf_;
-  OT::PersistentCollection<OT::Sample> cdf_;
-  OT::PersistentCollection<OT::Sample> survFct_;
-  OT::Point effectiveSize_;
-  DesignOfExperiment multiVariateDoE_;
+  OT::PersistentCollection<OT::Point>   min_;
+  OT::PersistentCollection<OT::Point>   max_;
+  OT::PersistentCollection<OT::Point>   mean_;
+  OT::PersistentCollection<OT::Point>   coefficientOfVariation_;
+  OT::PersistentCollection<OT::Point>   median_;
+  OT::PersistentCollection<OT::Point>   standardDeviation_;
+  OT::PersistentCollection<OT::Point>   variance_;
+  OT::PersistentCollection<OT::Point>   skewness_;
+  OT::PersistentCollection<OT::Point>   kurtosis_;
+  OT::PersistentCollection<OT::Point>   firstQuartile_;
+  OT::PersistentCollection<OT::Point>   thirdQuartile_;
+  OT::Interval                          meanConfidenceInterval_;
+  OT::PersistentCollection<OT::Point>   outliers_;
+  OT::PersistentCollection<OT::Sample>  pdf_;
+  OT::PersistentCollection<OT::Sample>  cdf_;
+  OT::PersistentCollection<OT::Sample>  survFct_;
+  OT::Point                             effectiveSize_;
+  DesignOfExperiment                    multiVariateDoE_;
+  bool                                  allowFailedEvaluations_     = false;
 };
 }
 #endif

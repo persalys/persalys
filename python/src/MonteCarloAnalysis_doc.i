@@ -34,6 +34,24 @@ Get the result:
 
 // ---------------------------------------------------------------------
 
+%feature("docstring") PERSALYS::MonteCarloAnalysis::setAllowFailedEvaluations
+"Allow failed evaluations.
+
+Parameters
+----------
+allow : bool
+    Whether to allow failed evaluations. By default, failed evaluations are not allowed."
+
+%feature("docstring") PERSALYS::MonteCarloAnalysis::getAllowFailedEvaluations
+"Allow failed evaluations accessor.
+
+Returns
+-------
+allow : bool
+    Whether to allow failed evaluations. By default, failed evaluations are not allowed."
+
+// ---------------------------------------------------------------------
+
 %feature("docstring") PERSALYS::MonteCarloAnalysis::getResult
 "Result accessor.
 

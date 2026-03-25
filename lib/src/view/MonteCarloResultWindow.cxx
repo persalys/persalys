@@ -51,17 +51,17 @@ void MonteCarloResultWindow::initialize(const AnalysisItem* item)
   result_ = analysis.getResult();
   designOfExperiment_ = result_.getDesignOfExperiment();
   failedInputSample_ = analysis.getFailedInputSample();
+  errorDescription_ = analysis.getErrorDescription();
   isConfidenceIntervalRequired_ = analysis.isConfidenceIntervalRequired();
   levelConfidenceInterval_ = analysis.getLevelConfidenceInterval();
 
   // set stop criteria message
-  if (result_.getElapsedTime() >= analysis.getMaximumElapsedTime())
+  const Scalar maxElapsedTime = analysis.getMaximumElapsedTime();
+  if (maxElapsedTime > 0 && result_.getElapsedTime() >= maxElapsedTime)
     analysisStopCriteriaMessage_ = tr("Maximum elapsed time reached");
-  if (designOfExperiment_.getOutputSample().getSize() == analysis.getMaximumCalls())
+  else if (designOfExperiment_.getOutputSample().getSize() + failedInputSample_.getSize() == analysis.getMaximumCalls())
     analysisStopCriteriaMessage_ = tr("Maximum calls reached");
-  if (!analysis.getWarningMessage().empty())
-    analysisStopCriteriaMessage_ = tr("An error has occurred during the execution of the analysis");
-  if (designOfExperiment_.getInputSample().getSize() > 1)
+  else if (designOfExperiment_.getInputSample().getSize() > 1)
   {
     const UnsignedInteger nbInputs =  designOfExperiment_.getInputSample().getDimension();
     const Scalar sqrtSampleSize = sqrt(designOfExperiment_.getInputSample().getSize());
@@ -75,12 +75,14 @@ void MonteCarloResultWindow::initialize(const AnalysisItem* item)
         analysisStopCriteriaMessage_ = tr("Maximum confidence interval length reached");
     }
   }
-
-  // if not one of the previous criteria
+  if (analysisStopCriteriaMessage_.isEmpty() && !analysis.getWarningMessage().empty())
+    analysisStopCriteriaMessage_ = tr("An error has occurred during the execution of the analysis");
+  
   if (analysisStopCriteriaMessage_.isEmpty())
     analysisStopCriteriaMessage_ = tr("Stop requested");
 
-  analysisErrorMessage_ = analysis.getWarningMessage().c_str();
+  if (!analysis.getAllowFailedEvaluations())
+    analysisErrorMessage_ = analysis.getWarningMessage().c_str();
 
   sampleSizeTitle_ = tr("Number of calls") + " ";
 

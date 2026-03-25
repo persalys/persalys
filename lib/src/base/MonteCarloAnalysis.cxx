@@ -21,11 +21,13 @@
 #include "persalys/MonteCarloAnalysis.hxx"
 #include "persalys/DataAnalysis.hxx"
 #include "persalys/DataModel.hxx"
+#include "persalys/BaseTools.hxx"
 
 #include <openturns/RandomGenerator.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
 #include <openturns/SpecFunc.hxx>
 #include <openturns/DistFunc.hxx>
+#include <openturns/BatchFailedException.hxx>
 
 #include <limits>
 
@@ -62,6 +64,15 @@ MonteCarloAnalysis* MonteCarloAnalysis::clone() const
   return new MonteCarloAnalysis(*this);
 }
 
+void MonteCarloAnalysis::setAllowFailedEvaluations(const bool allow)
+{
+  allowFailedEvaluations_ = allow;
+}
+
+bool MonteCarloAnalysis::getAllowFailedEvaluations() const
+{
+  return allowFailedEvaluations_;
+}
 
 Scalar MonteCarloAnalysis::getMaximumConfidenceIntervalLength() const
 {
@@ -125,6 +136,9 @@ void MonteCarloAnalysis::launch()
   outputSample.setDescription(getInterestVariables());
   Function function(getPhysicalModel().getRestrictedFunction(getInterestVariables()));
 
+  failedInputSample_ = Sample(0, getPhysicalModel().getStochasticInputNames().getSize());
+  failedInputSample_.setDescription(getPhysicalModel().getStochasticInputNames());
+
   const bool maximumOuterSamplingSpecified = getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max();
   const UnsignedInteger maximumOuterSampling = maximumOuterSamplingSpecified ? static_cast<UnsignedInteger>(ceil(1.0 * getMaximumCalls() / getBlockSize())) : (UnsignedInteger)std::numeric_limits<int>::max();
   const UnsignedInteger modulo = maximumOuterSamplingSpecified ? getMaximumCalls() % getBlockSize() : 0;
@@ -143,6 +157,7 @@ void MonteCarloAnalysis::launch()
          && (confidenceInterval == -1.0 || confidenceInterval > getMaximumConfidenceIntervalLength())
          && (timeCriteria.getElapsedTime() < maxTime))
   {
+
     // progress
     if (getMaximumCalls() < (UnsignedInteger)std::numeric_limits<int>::max())
     {
@@ -163,30 +178,44 @@ void MonteCarloAnalysis::launch()
     const UnsignedInteger effectiveBlockSize = outerSampling < (maximumOuterSampling - 1) ? getBlockSize() : lastBlockSize;
 
     // get block input sample
-    const Sample blockInputSample(generateInputSample(effectiveBlockSize));
+    Sample blockInputSample(generateInputSample(effectiveBlockSize));
 
     // Perform a block of simulations
     Sample blockOutputSample;
+    Sample failedSample;
+    Description errorDesc;
     try
     {
       blockOutputSample = function(blockInputSample);
     }
+    catch (const OT::BatchFailedException & ex)
+    {
+      warningMessage_ = ex.what();
+      failedSample = blockInputSample.select(ex.getFailedIndices());
+      errorDesc = EscapeNewLines(ex.getErrorDescription());
+      blockOutputSample = ex.getOutputSample();
+      blockOutputSample.setDescription(getInterestVariables());
+      blockOutputSample = blockOutputSample.getMarginal(getInterestVariables());
+      blockInputSample = blockInputSample.select(ex.getSucceededIndices());
+    }
     catch (const std::exception & ex)
     {
-      failedInputSample_ = blockInputSample;
+      failedSample = blockInputSample;
+      errorDesc = EscapeNewLines(Description(blockInputSample.getSize(), ex.what()));
       warningMessage_ = ex.what();
     }
 
-    if (!failedInputSample_.getSize())
+    if (blockOutputSample.getSize())
     {
-      // if succeed fill samples
       outputSample.add(blockOutputSample);
       effectiveInputSample.add(blockInputSample);
     }
-    else
+    if (failedSample.getSize())
     {
-      // exit the while section. Stop the analysis
-      break;
+      failedInputSample_.add(failedSample);
+      errorDescription_.add(errorDesc);
+      if (!allowFailedEvaluations_)
+        break;
     }
 
     // stop criteria
@@ -238,6 +267,7 @@ void MonteCarloAnalysis::launch()
   result_.elapsedTime_ = timeCriteria.getElapsedTime();
   result_.designOfExperiment_.setType(DataModel::MC);
   result_.designOfExperiment_.setPhysicalModel(getPhysicalModel());
+  result_.allowFailedEvaluations_ = allowFailedEvaluations_;
 }
 
 
@@ -258,6 +288,7 @@ Parameters MonteCarloAnalysis::getParameters() const
   param.add(WithStopCriteriaAnalysis::getParameters());
   param.add("Maximum confidence interval length", getMaximumConfidenceIntervalLength());
   param.add(SimulationAnalysis::getParameters());
+  param.add("Allow failed evaluations", allowFailedEvaluations_ ? "Yes" : "No");
 
   return param;
 }
@@ -279,6 +310,7 @@ String MonteCarloAnalysis::getPythonScript() const
   oss << getName() << ".setMaximumElapsedTime(" << getMaximumElapsedTime() << ")\n";
   oss << getName() << ".setBlockSize(" << getBlockSize() << ")\n";
   oss << getName() << ".setSeed(" << getSeed() << ")\n";
+  oss << getName() << ".setAllowFailedEvaluations(" << (allowFailedEvaluations_ ? "True" : "False") << ")\n";
 
   return oss;
 }
@@ -329,6 +361,7 @@ void MonteCarloAnalysis::save(Advocate & adv) const
   adv.saveAttribute("isConfidenceIntervalRequired_", isConfidenceIntervalRequired_);
   adv.saveAttribute("levelConfidenceInterval_", levelConfidenceInterval_);
   adv.saveAttribute("result_", result_);
+  adv.saveAttribute("allowFailedEvaluations_", allowFailedEvaluations_);
 }
 
 
@@ -349,5 +382,7 @@ void MonteCarloAnalysis::load(Advocate & adv)
   }
   if (adv.hasAttribute("maximumConfidenceIntervalLength_"))
     adv.loadAttribute("maximumConfidenceIntervalLength_", maximumConfidenceIntervalLength_);
+  if (adv.hasAttribute("allowFailedEvaluations_"))
+    adv.loadAttribute("allowFailedEvaluations_", allowFailedEvaluations_);
 }
 }

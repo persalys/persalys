@@ -1,7 +1,7 @@
 class=DataModel name=myDataModel importedDataset= fileName=data.csv inputColumns=[0,2] outputColumns=[] physicalModel=false inputNames=[X0,X2] outputNames=[] type=MC
 inputNames= [X0,X2]
 outputNames= []
-result= class=DataAnalysisResult name=Unnamed min=[[-2.29006],[-1.31178]] max=[[1.78236],[0.810668]] mean=[[0.201254],[-0.143151]] median=[[0.459701],[0.0607826]] standardDeviation=[[1.12247],[0.678845]] coefficientOfVariation=[[5.57739],[4.74217]] variance=[[1.25994],[0.460831]] skewness=[[-1.06322],[-0.430218]] kurtosis=[[5.03838],[2.07116]] firstQuartile=[[-0.355007],[-0.781366]] thirdQuartile=[[0.793156],[0.350042]] meanConfidenceInterval=class=Interval name=Unnamed dimension=2 lower bound=class=Point name=Unnamed dimension=2 values=[-0.494448,-0.563896] upper bound=class=Point name=Unnamed dimension=2 values=[0.896956,0.277594] finite lower bound=[1,1] finite upper bound=[1,1] effectiveSize=[10,10]
+result= class=DataAnalysisResult name=Unnamed min=[[-2.29006],[-1.31178]] max=[[1.78236],[0.810668]] mean=[[0.201254],[-0.143151]] median=[[0.459701],[0.0607826]] standardDeviation=[[1.12247],[0.678845]] coefficientOfVariation=[[5.57739],[4.74217]] variance=[[1.25994],[0.460831]] skewness=[[-1.06322],[-0.430218]] kurtosis=[[5.03838],[2.07116]] firstQuartile=[[-0.355007],[-0.781366]] thirdQuartile=[[0.793156],[0.350042]] meanConfidenceInterval=class=Interval name=Unnamed dimension=2 lower bound=class=Point name=Unnamed dimension=2 values=[-0.494448,-0.563896] upper bound=class=Point name=Unnamed dimension=2 values=[0.896956,0.277594] finite lower bound=[1,1] finite upper bound=[1,1] effectiveSize=[10,10] allowFailedEvaluations=False
 PDF= [  0 : [ -4.21702      0.000969752 ]
   1 : [ -4.14787      0.00129605  ]
   2 : [ -4.07872      0.00171387  ]

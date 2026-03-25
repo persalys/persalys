@@ -186,9 +186,6 @@ void DataAnalysis::launch()
     result_.meanConfidenceInterval_ = Interval(nbAnalysedVar);
     result_.meanConfidenceInterval_.setFiniteLowerBound(Interval::BoolCollection(nbAnalysedVar, false));
     result_.meanConfidenceInterval_.setFiniteUpperBound(Interval::BoolCollection(nbAnalysedVar, false));
-    //result_.stdConfidenceInterval_ = Interval(nbAnalysedVar);
-    //result_.stdConfidenceInterval_.setFiniteLowerBound(Interval::BoolCollection(nbAnalysedVar, false));
-    //result_.stdConfidenceInterval_.setFiniteUpperBound(Interval::BoolCollection(nbAnalysedVar, false));
   }
 
   if (nbAnalysedVar == sample.getDimension())

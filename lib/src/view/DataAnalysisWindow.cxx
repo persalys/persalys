@@ -235,7 +235,7 @@ void DataAnalysisWindow::addSummaryTab()
   // - sample size
   namesList << sampleSizeTitle_;
 
-  const OT::UnsignedInteger totalSampleSize = designOfExperiment_.getSample().getSize() + failedInputSample_.getSize() + notEvaluatedInputSample_.getSize();
+  const UnsignedInteger totalSampleSize = designOfExperiment_.getSample().getSize() + failedInputSample_.getSize() + notEvaluatedInputSample_.getSize();
 
   valuesList << QString::number(totalSampleSize);
 
@@ -243,8 +243,6 @@ void DataAnalysisWindow::addSummaryTab()
   // - elapsed time
   if (result_.getElapsedTime() > 0.)
   {
-    if (QString(metaObject()->className()) != "PERSALYS::MonteCarloResultWindow")
-    {
       namesList << tr("Evaluated samples") << tr("Failed samples");
       const OT::UnsignedInteger evaluatedSamples = totalSampleSize - notEvaluatedInputSample_.getSize();
       const OT::UnsignedInteger failedSamples = failedInputSample_.getSize();
@@ -257,7 +255,6 @@ void DataAnalysisWindow::addSummaryTab()
 
       valuesList << QString("%1 (%2%)").arg(evaluatedSamples).arg(QString::number(evaluatedPercent, 'f', 2));
       valuesList << QString("%1 (%2%)").arg(failedSamples).arg(QString::number(failedPercent, 'f', 2));
-    }
 
 
     namesList << tr("Elapsed time");
