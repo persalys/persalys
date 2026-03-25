@@ -55,7 +55,13 @@ class PERSALYS_VIEW_API SensitivityResultWidget : public QWidget
   Q_OBJECT
 
 public:
-  enum Type {Sobol, SRC};
+  enum Type {
+    Sobol, 
+    SRC, 
+    GlobalHSICIndices, GlobalHSICR2Indices, GlobalHSICPValuesPermutation, GlobalHSICPValuesAsymptotic, 
+    TargetHSICIndices, TargetHSICR2Indices, TargetHSICPValuesPermutation, TargetHSICPValuesAsymptotic, 
+    ConditionalHSICIndices, ConditionalHSICR2Indices, ConditionalHSICPValuesPermutation, ConditionalHSICPValuesAsymptotic
+  };
 
   enum ColumnRole {
     InputColumn = 0,

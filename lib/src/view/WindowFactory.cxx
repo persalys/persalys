@@ -87,6 +87,7 @@
 #include "persalys/CopulaInferenceWizard.hxx"
 #include "persalys/CalibrationAnalysisWizard.hxx"
 #include "persalys/QuantileAnalysisWizard.hxx"
+#include "persalys/DataSensitivityAnalysisWizard.hxx"
 
 #include <QDebug>
 
@@ -307,6 +308,10 @@ AnalysisWizard* WindowFactory::GetAnalysisWizard(const Analysis& analysis, const
   else if (analysisType == "QuantileAnalysis")
   {
     wizard = new QuantileAnalysisWizard(analysis, parent);
+  }
+  else if (analysisType == "DataSensitivityAnalysis")
+  {
+    wizard = new DataSensitivityAnalysisWizard(analysis, parent);
   }
   else
   {

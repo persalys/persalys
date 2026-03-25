@@ -40,8 +40,6 @@ SensitivityIndicesPlot::SensitivityIndicesPlot(const QString &plotTypeName,
     QWidget *parent)
   : PlotWidget(plotTypeName, true, parent)
   , legendNames_(legendNames)
-  , yMin_(0.)
-  , yMax_(0.)
 {
   Q_ASSERT(legendNames.size() == 2);
 
@@ -61,8 +59,15 @@ SensitivityIndicesPlot::SensitivityIndicesPlot(const QString &plotTypeName,
   setAxisMaxMinor(QwtPlot::xBottom, 0);
 
   // rescale to avoid to cut points
-  yMin_ = yMin_ - (std::abs(0.05 * yMin_) < 0.01 ? 0.05 : std::abs(0.05 * yMin_));
-  yMax_ = yMax_ + std::abs(0.05 * yMax_);
+  yMin_ -= 0.05 * (yMax_ - yMin_);
+  yMax_ += 0.05 * (yMax_ - yMin_);
+
+  if (yMin_ == 0. && yMax_ == 0.)
+  {
+    yMin_ = -0.05;
+    yMax_ = 0.05;
+  }
+  
   setAxisScale(QwtPlot::yLeft, yMin_, yMax_);
 
   // add horizontal line y = 0

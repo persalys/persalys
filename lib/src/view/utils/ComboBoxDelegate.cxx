@@ -20,6 +20,7 @@
  */
 #include "persalys/ComboBoxDelegate.hxx"
 
+#include <QApplication>
 #include <QWheelEvent>
 #include <QLineEdit>
 #include <QComboBox>
@@ -167,6 +168,29 @@ void ComboBoxDelegate::addSeparatorIndex(const int index, const QString &text)
 }
 
 
+void ComboBoxDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
+{
+  if (cell_ != QPair<int, int>()
+      && (index.row() != cell_.first || index.column() != cell_.second))
+    return QItemDelegate::paint(painter, option, index);
+
+  // Only draw combo box style if the cell has combo items and is enabled
+  const QStringList items = index.model()->data(index, Qt::UserRole + 1).toStringList();
+  if (items.isEmpty() || !(index.flags() & Qt::ItemIsEditable))
+    return QItemDelegate::paint(painter, option, index);
+
+  QStyleOptionComboBox comboOpt;
+  comboOpt.rect = option.rect;
+  comboOpt.state = option.state | QStyle::State_Enabled;
+  comboOpt.frame = true;
+  comboOpt.subControls = QStyle::SC_ComboBoxFrame | QStyle::SC_ComboBoxArrow | QStyle::SC_ComboBoxEditField;
+  comboOpt.currentText = index.data(Qt::DisplayRole).toString();
+
+  QApplication::style()->drawComplexControl(QStyle::CC_ComboBox, &comboOpt, painter);
+  QApplication::style()->drawControl(QStyle::CE_ComboBoxLabel, &comboOpt, painter);
+}
+
+
 QWidget *ComboBoxDelegate::createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const
 {
   if (cell_ != QPair<int, int>())
@@ -183,8 +207,9 @@ QWidget *ComboBoxDelegate::createEditor(QWidget * parent, const QStyleOptionView
   editor->lineEdit()->setAlignment(Qt::AlignCenter);
   editor->lineEdit()->setReadOnly(true);
   // set Background color
-  const QString defaultColor = index.model()->data(index, Qt::BackgroundRole).value<QColor>().name();
-  editor->lineEdit()->setStyleSheet("QLineEdit {background: " + defaultColor + ";}");
+  const QColor defaultColor = index.model()->data(index, Qt::BackgroundRole).value<QColor>();
+  if (defaultColor.isValid())
+    editor->lineEdit()->setStyleSheet("QLineEdit {background: " + defaultColor.name() + ";}");
   connect(editor, SIGNAL(textActivated(QString)), this, SLOT(emitCommitData()));
   return editor;
 }
@@ -232,6 +257,7 @@ void ComboBoxDelegate::updateEditorGeometry(QWidget * editor, const QStyleOption
 
 void ComboBoxDelegate::emitCommitData()
 {
-  emit closeEditor(qobject_cast<QWidget *>(sender()));
+  QWidget *editor = qobject_cast<QWidget *>(sender());
+  emit commitData(editor);
 }
 }

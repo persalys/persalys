@@ -161,6 +161,14 @@ String Parameters::GetOTPointStr(const Point& values, const String& separator, b
   return GetStr(values, separator, useBrackets, false);
 }
 
+String Parameters::GetOTPointPythonStr(const Point& values)
+{
+  String str = GetStr(values, ", ", true, false);
+  // replace inf with python syntax
+  str = std::regex_replace(str, std::regex("-?inf"), "float('$&')");
+  return str;
+}
+
 String Parameters::GetOTPointWithDescriptionStr(const PointWithDescription& values)
 {
   return GetStr(values, ", ", false, false);
@@ -248,6 +256,27 @@ Description Parameters::GetOTIntervalDescription(const Interval& interval)
     resu[i] = intervalStr_i;
   }
   return resu;
+}
+
+String Parameters::GetOTCovModelCollectionStr(const Collection<CovarianceModel>& covarianceModels)
+{
+  OSS oss;
+  oss << "[";
+  for (UnsignedInteger i = 0; i < covarianceModels.getSize(); ++i)
+  {
+    const String className = covarianceModels[i].getImplementation()->getClassName();
+    oss << "ot." << className << "()";
+
+    if (i < covarianceModels.getSize() - 1)
+      oss << ", ";
+  }
+  oss << "]";
+  return oss.str();
+}
+
+OT::String Parameters::GetOTBoolStr(const OT::Bool value)
+{
+  return value ? "True" : "False";
 }
 
 // ------------------------ Tools --------------------------------------

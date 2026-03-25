@@ -28,7 +28,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_BASE_API ImportedDataset final : public OT::PersistentObject
+class PERSALYS_BASE_API ImportedDataset : public OT::PersistentObject
 {
   CLASSNAME
 

@@ -22,6 +22,10 @@
 #include "DesignOfExperimentAnalysis.hxx"
 #include "DataSensitivityAnalysisResult.hxx"
 
+#include <openturns/CovarianceModel.hxx>
+#include <openturns/Function.hxx>
+#include <openturns/Interval.hxx>
+
 #ifndef PERSALYS_DATASENSITIVITYANALYSIS_HXX
 #define PERSALYS_DATASENSITIVITYANALYSIS_HXX
 
@@ -30,20 +34,86 @@
 class PERSALYS_BASE_API DataSensitivityAnalysis : public DesignOfExperimentAnalysis
 {
   CLASSNAME
+
+#ifndef SWIG
+  struct HSICParameters
+  {
+    HSICParameters(bool computePermutationPValues = false, bool computeAsymptoticPValues = false, bool useUStatistic = false)
+      : computePermutationPValues_(computePermutationPValues)
+      , computeAsymptoticPValues_(computeAsymptoticPValues)
+      , useUStatistic_(useUStatistic)
+    {}
+
+    bool computePermutationPValues()  const { return computePermutationPValues_; }
+    bool computeAsymptoticPValues()   const { return computeAsymptoticPValues_; }
+    bool useUStatistic()              const { return useUStatistic_; }
+
+    bool computePermutationPValues_ = false;
+    bool computeAsymptoticPValues_ = false;
+    bool useUStatistic_ = false;
+  };
+#endif
+
 public:
+  using Type = DataSensitivityAnalysisResult::Type;
+  using HSICType = DataSensitivityAnalysisResult::HSICType;
+
+  typedef OT::Collection<OT::CovarianceModel> CovarianceModelCollection;
+
   /** constructors */
-  DataSensitivityAnalysis();
+  DataSensitivityAnalysis() = default;
 
   /** Constructor with parameters */
-  explicit DataSensitivityAnalysis(const OT::String &name, const DesignOfExperiment& design);
+  DataSensitivityAnalysis(
+    const OT::String &name, 
+    const DesignOfExperiment& design, 
+    const unsigned char analysisType = Type::RankSobol | Type::SRC,
+    const OT::Description & interestVariables = OT::Description()
+  );
 
   /** Virtual constructor */
   DataSensitivityAnalysis * clone() const override;
+
+  void setType(unsigned char analysisType);
+
+  void setCovarianceModels(const CovarianceModelCollection &covarianceModels, HSICType hsicType);
+  void computeCovModelParameters(bool computeCovModelParameters);
+
+  void setFilterAlphas(const OT::Point & filterAlphas, const OT::Interval & criticalDomain);
+  void setWeightAlphas(const OT::Point & weightAlphas, const OT::Interval & criticalDomain);
+  void setFilterFunctions(const OT::Collection<OT::Function> &filterFunctions);
+  void setWeightFunctions(const OT::Collection<OT::Function> &weightFunctions);
+
+  void setHSICParameters(bool computePermutationPValues, bool computeAsymptoticPValues, bool useUStatistic, HSICType hsicType);
 
   bool canBeLaunched(OT::String &errorMessage) const override;
   bool hasValidResult() const override;
 
   const DataSensitivityAnalysisResult& getResult() const;
+
+  static bool CanBeLaunched(OT::String &errorMessage, const DesignOfExperiment &doe);
+  Parameters getParameters() const override;
+
+  bool computeRankSobol() const;
+  bool computeSRC() const;
+  bool computeHSIC(HSICType hsicType) const;
+
+  bool computeAsymptoticPValues(HSICType hsicType) const;
+  bool computePermutationPValues(HSICType hsicType) const;
+  bool useUStatistic(HSICType hsicType) const;
+
+  OT::Collection<OT::CovarianceModel> getCovarianceModels(HSICType hsicType) const;
+
+  OT::Point getFilterAlphas() const;
+  OT::Point getWeightAlphas() const;
+  OT::Collection<OT::Function> getFilterFunctions() const;
+  OT::Collection<OT::Function> getWeightFunctions() const;
+  OT::Interval getTargetCriticalDomain() const;
+  OT::Interval getConditionalCriticalDomain() const;
+
+  bool defaultHSICParametersChanged() const;
+
+  OT::String getPythonScript() const override;
 
   /** String converter */
   OT::String __repr__() const override;
@@ -54,8 +124,6 @@ public:
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv) override;
 
-  static bool CanBeLaunched(OT::String &errorMessage, const DesignOfExperiment &doe);
-
 protected:
   void initialize() override;
   void launch() override;
@@ -63,10 +131,33 @@ protected:
 private:
   void computeSobolIndices();
   void computeSRCIndices();
+  void computeGlobalHSICIndices();
+  void computeTargetHSICIndices();
+  void computeConditionalHSICIndices();
+  
   void checkIndependance();
 
 private:
   DataSensitivityAnalysisResult result_;
+  DataSensitivityAnalysisResult::AnalysisType type_ = std::byte{0b0011};
+  OT::PersistentCollection<OT::CovarianceModel> globalCovarianceModels_;
+  OT::PersistentCollection<OT::CovarianceModel> targetCovarianceModels_;
+  OT::PersistentCollection<OT::CovarianceModel> conditionalCovarianceModels_;
+  HSICParameters globalHSICParameters_;
+  HSICParameters targetHSICParameters_;
+  HSICParameters conditionalHSICParameters_;
+  OT::PersistentCollection<OT::Function> filterFunctions_;
+  OT::PersistentCollection<OT::Function> weightFunctions_;
+  OT::Bool computeCovModelParameters_ = true;
+  OT::Bool defaultHSICParametersChanged_ = false;
+  OT::Description interestVariables_;
+  OT::Point filterAlphas_;
+  OT::Point weightAlphas_;
+  OT::Bool userDefinedFilterFunctions_ = false;
+  OT::Bool userDefinedWeightFunctions_ = false;
+  OT::Interval targetCriticalDomain_;
+  OT::Interval conditionalCriticalDomain_;
+
 };
 
 } // namespace PERSALYS

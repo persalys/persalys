@@ -68,6 +68,7 @@ public slots:
 #ifdef PERSALYS_HAVE_OTMORRIS
   void openWizardToChooseScreeningResult();
 #endif
+  void openWizardToChooseHSICResult();
   void openValuesDefinitionWizard();
 signals:
   void updateDependenciesRequested();

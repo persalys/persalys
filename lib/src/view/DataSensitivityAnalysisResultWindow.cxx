@@ -24,6 +24,7 @@
 #include "persalys/SensitivityResultWidget.hxx"
 #include "persalys/ParametersTableView.hxx"
 #include "persalys/ErrorWidget.hxx"
+#include "persalys/HSICTab.hxx"
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -75,6 +76,10 @@ void DataSensitivityAnalysisResultWindow::initializeVariablesNames()
   // outputs
   if (designOfExperiment_.getOutputSample().getSize())
   {
+    if (result_.getInterestVariables().isEmpty())
+      outputNames_ = QtOT::DescriptionToStringList(designOfExperiment_.getOutputSample().getDescription());
+    else
+      outputNames_ = QtOT::DescriptionToStringList(result_.getInterestVariables());
     outputNames_ = QtOT::DescriptionToStringList(designOfExperiment_.getOutputSample().getDescription());
     if (hasPhysicalModel)
     {
@@ -111,10 +116,20 @@ void DataSensitivityAnalysisResultWindow::buildInterface()
 
   auto tabWidget = new QTabWidget;
 
-  if (designOfExperiment_.getType() == DesignOfExperiment::Type::MC)
+  if (result_.getAnalysisType().computeRankSobol())
     addSobolTab(tabWidget);
   
-  addSRCTab(tabWidget);
+  if (result_.getAnalysisType().computeSRC())
+    addSRCTab(tabWidget);
+
+  if (result_.getAnalysisType().computeGlobalHSIC())
+    addHSICTab(tabWidget, DataSensitivityAnalysis::HSICType::Global);
+  
+  if (result_.getAnalysisType().computeTargetHSIC())
+    addHSICTab(tabWidget, DataSensitivityAnalysis::HSICType::Target);
+  
+  if (result_.getAnalysisType().computeConditionalHSIC())
+    addHSICTab(tabWidget, DataSensitivityAnalysis::HSICType::Conditional);
 
   auto * widget = new QWidget;
   auto * vbox = new QVBoxLayout(widget);
@@ -170,8 +185,6 @@ void DataSensitivityAnalysisResultWindow::addSobolTab(QTabWidget * tabWidget)
 /*adapted from SRCResultWindow::buildInterface*/
 void DataSensitivityAnalysisResultWindow::addSRCTab(QTabWidget * tabWidget)
 {
-  const UnsignedInteger nbOutputs = designOfExperiment_.getOutputSample().getDimension();
-
   // - indices graph and table
   auto * stackedWidget = new ResizableStackedWidget;
   connect(outputsListWidget_, &VariablesListWidget::currentRowChanged, stackedWidget, &ResizableStackedWidget::setCurrentIndex);
@@ -181,6 +194,8 @@ void DataSensitivityAnalysisResultWindow::addSRCTab(QTabWidget * tabWidget)
   const auto signedSRCIndicesInterval = result_.getSignedSRCIndicesInterval();
   const auto SRCIndicesInterval = result_.getSRCIndicesInterval();
   const Point r2 = result_.getR2();
+
+  const UnsignedInteger nbOutputs = SRCIndices.getSize();
 
   for (UnsignedInteger i = 0; i < nbOutputs; ++i)
   {
@@ -205,9 +220,10 @@ void DataSensitivityAnalysisResultWindow::addSRCTab(QTabWidget * tabWidget)
       if (r2[i] < 0.8)
       {
         auto * warningWidget = new ErrorWidget();
-        warningWidget->setMessage(tr("Warning: low coefficient of determination. The model might not be linear enough to use SRC indices."), ErrorWidget::Warning);
+        warningWidget->setMessage(tr("Warning: low coefficient of determination. The model might not be linear enough to use SRC indices."), ErrorWidget::Warning, false, false);
         r2Layout->addWidget(warningWidget);
       }
+      r2Layout->addStretch();
       indicesLayout->addWidget(r2Widget);
     }
 
@@ -228,6 +244,25 @@ void DataSensitivityAnalysisResultWindow::addSRCTab(QTabWidget * tabWidget)
   }
 
   tabWidget->addTab(stackedWidget, tr("SRC"));
+}
+
+void DataSensitivityAnalysisResultWindow::addHSICTab(QTabWidget * tabWidget, DataSensitivityAnalysis::HSICType type)
+{
+  auto * hsicTab = new HSICTab(result_, designOfExperiment_, outputsListWidget_, type, this);
+  QString tabTitle;
+  switch (type)
+  {
+    case DataSensitivityAnalysis::HSICType::Global:
+      tabTitle = tr("Global HSIC");
+      break;
+    case DataSensitivityAnalysis::HSICType::Target:
+      tabTitle = tr("Target HSIC");
+      break;
+    case DataSensitivityAnalysis::HSICType::Conditional:
+      tabTitle = tr("Conditional HSIC");
+      break;
+  }
+  tabWidget->addTab(hsicTab, tabTitle);
 }
 
 } // namespace PERSALYS

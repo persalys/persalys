@@ -1,6 +1,6 @@
 //                                               -*- C++ -*-
 /**
- *  @brief QMdiSubWindow for the sensitivity analysis of a data model
+ *  @brief HSIC tab of the DataSensitivityAnalysisResultWindow
  *
  *  Copyright 2015-2025 EDF-Phimeca
  *
@@ -19,43 +19,42 @@
  *
  */
 
-#ifndef PERSALYS_DATASENSITIVITYANALYSISRESULTWINDOW_HXX
-#define PERSALYS_DATASENSITIVITYANALYSISRESULTWINDOW_HXX
+#ifndef PERSALYS_HSICTAB_HXX
+#define PERSALYS_HSICTAB_HXX
 
-#include "persalys/ResultWindow.hxx"
 #include "persalys/DataSensitivityAnalysisResult.hxx"
+#include "persalys/DesignOfExperiment.hxx"
+#include "persalys/ResultWindow.hxx"
+#include "persalys/SensitivityResultWidget.hxx"
 
 #include <QTabWidget>
 
 namespace PERSALYS
 {
-class PERSALYS_VIEW_API DataSensitivityAnalysisResultWindow : public ResultWindow
+class PERSALYS_VIEW_API HSICTab : public QTabWidget
 {
   Q_OBJECT
 
 public:
-  explicit DataSensitivityAnalysisResultWindow(AnalysisItem * item, QWidget *parent = nullptr);
 
-protected:
-  void initialize(const AnalysisItem* item);
-  void initializeVariablesNames();
-  void buildInterface();
+  HSICTab(
+    const DataSensitivityAnalysisResult & result, 
+    const DesignOfExperiment & design, 
+    VariablesListWidget * outputsListWidget,
+    DataSensitivityAnalysisResult::HSICType type, 
+    QWidget * parent = nullptr
+  );
 
 private:
-  void addSobolTab(QTabWidget * tabWidget);
-  void addSRCTab(QTabWidget * tabWidget);
-  void addHSICTab(QTabWidget * tabWidget, DataSensitivityAnalysisResult::HSICType type);
+  void addSubTab(const OT::Collection<OT::Point> & values, const QString & title, int widgetType);
 
-protected:
-  DataSensitivityAnalysisResult result_;
+private:
   DesignOfExperiment designOfExperiment_;
-  QStringList inputNames_;
-  QStringList inAxisTitles_;
-  QStringList outAxisTitles_;
-  QStringList outputNames_;
   VariablesListWidget * outputsListWidget_ = nullptr;
+  QStringList inputNames_;
+  QStringList outputNames_;
 };
 
-} // namespace PERSALYS
+} //namespace PERSALYS
 
-#endif // PERSALYS_DATASENSITIVITYANALYSISWINDOW_HXX
+#endif // PERSALYS_HSICTAB_HXX

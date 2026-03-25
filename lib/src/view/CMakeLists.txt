@@ -128,9 +128,12 @@ ot_add_source_file ( CouplingModelWindow.cxx )
 ot_add_source_file ( DataCleaningWizard.cxx )
 ot_add_source_file ( AnsysWizard.cxx )
 ot_add_source_file (DataSensitivityAnalysisResultWindow.cxx )
+ot_add_source_file (DataSensitivityAnalysisWizard.cxx )
 ot_add_source_file ( ImportEvaluationsWizard.cxx )
 ot_add_source_file ( ImportMeshWidget.cxx )
 ot_add_source_file ( DesignOfExperimentExportWizard.cxx )
+ot_add_source_file (HSICTab.cxx)
+ot_add_source_file (HSICResultWizard.cxx)
 if (OTMORRIS_FOUND)
   ot_add_source_file ( ScreeningIntroPage.cxx )
   ot_add_source_file ( MorrisPage.cxx )
@@ -261,6 +264,7 @@ ot_install_header_file ( CouplingModelWindow.hxx )
 ot_install_header_file ( DataCleaningWizard.hxx )
 ot_install_header_file ( AnsysWizard.hxx )
 ot_install_header_file ( DataSensitivityAnalysisResultWindow.hxx )
+ot_install_header_file ( DataSensitivityAnalysisWizard.hxx )
 ot_install_header_file ( ImportEvaluationsWizard.hxx )
 ot_install_header_file ( ImportMeshWidget.hxx)
 ot_install_header_file ( DesignOfExperimentExportWizard.hxx )
@@ -272,6 +276,8 @@ if (OTMORRIS_FOUND)
   ot_install_header_file ( MorrisResultWindow.hxx )
   ot_install_header_file ( ScreeningResultWizard.hxx )
 endif ()
+ot_install_header_file ( HSICTab.hxx )
+ot_install_header_file ( HSICResultWizard.hxx )
 
 qt_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MainWindow.hxx
                                   persalys/MainWidget.hxx
@@ -390,9 +396,12 @@ qt_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MainWindow.hxx
                                   persalys/DataCleaningWizard.hxx
                                   persalys/AnsysWizard.hxx
                                   persalys/DataSensitivityAnalysisResultWindow.hxx
+                                  persalys/DataSensitivityAnalysisWizard.hxx
                                   persalys/ImportEvaluationsWizard.hxx
                                   persalys/ImportMeshWidget.hxx
                                   persalys/DesignOfExperimentExportWizard.hxx
+                                  persalys/HSICTab.hxx
+                                  persalys/HSICResultWizard.hxx
                                   )
 
 

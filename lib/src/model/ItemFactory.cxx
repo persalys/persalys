@@ -361,7 +361,7 @@ QAction * ItemFactory::createAction(const QString &analysisName, const DesignOfE
     action->setStatusTip(tr("compute Rank Sobol' indices"));
     connect(action, &QAction::triggered, [ this, doe ]()
     {
-      emit analysisRequested(getParentStudyItem(),
+      emit wizardRequested(getParentStudyItem(),
                            DataSensitivityAnalysis(availableAnalysisName(tr("dataSensitivity_")), doe));
     });
   }

@@ -75,6 +75,106 @@ r2_values : sequence of float
 
 // ---------------------------------------------------------------------
 
+%feature("docstring") PERSALYS::DataSensitivityAnalysisResult::getHSICIndices
+"Get the HSIC indices of the given type.
+
+Parameters
+----------
+hsicType : int
+    Type of HSIC indices (Global, Target or Conditional).
+
+Returns
+-------
+indices : sequence of :py:class:`openturns.Point`
+    HSIC indices for each output."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::DataSensitivityAnalysisResult::getR2HSICIndices
+"Get the R2-HSIC indices of the given type.
+
+Parameters
+----------
+hsicType : int
+    Type of HSIC indices (Global, Target or Conditional).
+
+Returns
+-------
+indices : sequence of :py:class:`openturns.Point`
+    R2-HSIC indices for each output."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::DataSensitivityAnalysisResult::getPValuesAsymptotic
+"Get the asymptotic p-values for the HSIC indices of the given type.
+
+Parameters
+----------
+hsicType : int
+    Type of HSIC indices (Global or Target).
+
+Returns
+-------
+p_values : sequence of :py:class:`openturns.Point`
+    Asymptotic p-values for the HSIC indices."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::DataSensitivityAnalysisResult::getPValuesPermutation
+"Get the permutation p-values for the HSIC indices of the given type.
+
+Parameters
+----------
+hsicType : int
+    Type of HSIC indices (Global, Target or Conditional).
+
+Returns
+-------
+p_values : sequence of :py:class:`openturns.Point`
+    Permutation p-values for the HSIC indices."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::DataSensitivityAnalysisResult::computeHSICPValuesAsymptotic
+"Whether asymptotic p-values for HSIC indices of the given type were computed.
+
+Parameters
+----------
+hsicType : int
+    Type of HSIC indices (Global, Target or Conditional).
+
+Returns
+-------
+compute : bool
+    True if asymptotic p-values were computed, false otherwise."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::DataSensitivityAnalysisResult::computeHSICPValuesPermutation
+"Whether permutation p-values for HSIC indices of the given type were computed.
+
+Parameters
+----------
+hsicType : int
+    Type of HSIC indices (Global, Target or Conditional).
+
+Returns
+-------
+compute : bool
+    True if permutation p-values were computed, false otherwise."
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::DataSensitivityAnalysisResult::getInterestVariables
+"Get the variables of interest for the sensitivity analysis.
+
+Returns
+-------
+interest_variables : sequence of str
+    Variables of interest for the sensitivity analysis."
+
+// ---------------------------------------------------------------------
+
 %feature("docstring") PERSALYS::DataSensitivityAnalysisResult::isIndependent
 "Performs Spearman test to check if the input variables are independent.
 

@@ -2292,6 +2292,84 @@ Data set
 - save the current study, reopen
     - in the window of the 'Definition' item of the data set: click on the reload button
 
+- click on 'Sensitivity analysis' button of the diagram
+
+    - a wizard appears with the title "Data sensitivity analysis"
+
+    - **First page (Methods)**:
+
+      - there is an "Variable(s) of interest" group box with a combo box to select outputs
+      - there is a "Global sensitivity analysis methods" group box with three checkboxes:
+
+        - "Sobol indices (rank sobol algorithm)" — checked by default
+        - "Standard regression coefficients" — checked by default
+        - "Global HSIC" — unchecked by default
+
+      - there is a "Reliability oriented sensitivity analysis methods" group box with two checkboxes:
+
+        - "Target HSIC" — unchecked by default
+        - "Conditional HSIC" — unchecked by default
+
+      - uncheck all methods: click Finish: an error message "Please select at least one method" appears
+      - check "Standard regression coefficients" only: the wizard shows Finish (no HSIC pages)
+      - check "Global HSIC": the wizard shows Next (HSIC parameters page will follow)
+      - uncheck "Global HSIC", check "Target HSIC": the wizard shows Next
+      - uncheck "Target HSIC", check "Conditional HSIC": the wizard shows Next
+      - check all three HSIC methods: the wizard shows Next
+      - click Next
+
+    - **Global HSIC parameters page**:
+
+      - there is a combo box to choose V-statistic or U-statistic
+      - there is a "Compute permutation p-values" checkbox
+      - there is a "Compute asymptotic p-values" checkbox
+      - there is a "Covariance models" table with one row per variable (inputs + outputs)
+      - click Next
+
+    - **Target HSIC parameters page**:
+
+      - there is a combo box to choose V-statistic or U-statistic
+      - there is a "Compute permutation p-values" checkbox
+      - there is a "Compute asymptotic p-values" checkbox
+      - there is a "Covariance models" table
+      - there is a "Filter functions" table with alpha parameters for each output variable
+      - click Next
+
+    - **Conditional HSIC parameters page**:
+
+      - there is NO combo box for V/U-statistic (conditional HSIC does not support it)
+      - there is a "Compute permutation p-values" checkbox
+      - there is NO "Compute asymptotic p-values" checkbox (conditional HSIC does not support it)
+      - there is a "Covariance models" table
+      - there is a "Weight functions" table with alpha parameters for each output variable
+      - click Finish
+
+    - an item 'Sensitivity' appears in the tree view
+    - a window appears with a progress bar and 2 buttons 'Run' and 'Stop'
+    - click on the 'Run' button
+
+    - check result window:
+
+      - left side: output variables in the list view
+      - right side, tabs: Rank Sobol' - SRC - Global HSIC - Target HSIC - Conditional HSIC
+        (one tab per selected method)
+      - when changing the output variable, all tabs are updated
+      - Rank Sobol' tab: graph and table of first order Sobol' indices, sortable by column
+      - SRC tab: R2 coefficient at top, signed and squared SRC indices graph and table
+      - Global HSIC tab: sub-tabs for HSIC Indices, R2-HSIC Indices, permutation p-values (if computed),
+        asymptotic p-values (if computed)
+      - Target HSIC tab: same sub-tabs as Global HSIC
+      - Conditional HSIC tab: sub-tabs for HSIC Indices, R2-HSIC Indices, permutation p-values (if computed)
+        (no asymptotic p-values sub-tab)
+      - if Spearman test detects dependence, a warning is shown at the bottom of the window
+
+    - right click on the sensitivity analysis item, choose Modify:
+
+      - the wizard reopens with the previously selected methods and parameters
+      - the HSIC checkboxes reflect the previous selection
+      - change some settings and click Finish
+      - re-run the analysis and verify the results are updated
+
 Field data set
 ''''''''''''''''
 

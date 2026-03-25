@@ -61,8 +61,10 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
   QString defaultFileName;
   QStringList legendNames;
   QStringList tableTitles(tr("Input"));
-  if (type == SensitivityResultWidget::Sobol)
+
+  switch (type)
   {
+  case Sobol:
     graphTitle = tr("Sobol sensitivity indices:");
     defaultFileName = tr("sensitivitySobol");
     legendNames << tr("First order index");
@@ -80,9 +82,9 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
         tableTitles << tr("Total index\nconfidence interval");
       }
     }
-  }
-  else if (type == SensitivityResultWidget::SRC)
-  {
+    break;
+
+  case SRC:
     graphTitle = tr("SRC sensitivity indices:");
     defaultFileName = tr("sensitivitySRC");
     legendNames << tr("Squared SRC") << tr("SRC");
@@ -95,7 +97,93 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
       if (totalIndicesIntervals.getDimension() == totalIndices.getSize() && isMCDoE)
         tableTitles << tr("SRC\nconfidence interval");
     }
+    break;
+
+  case GlobalHSICIndices:
+    graphTitle = tr("Global HSIC indices:");
+    defaultFileName = tr("sensitivityGlobalHSIC");
+    legendNames << tr("Global HSIC index");
+    tableTitles << tr("Global HSIC index");
+    break;
+    
+  case GlobalHSICR2Indices:
+    graphTitle = tr("Global R2-HSIC indices:");
+    defaultFileName = tr("sensitivityGlobalHSICR2");
+    legendNames << tr("Global R2-HSIC index");
+    tableTitles << tr("Global R2-HSIC index");
+    break;
+  
+  case GlobalHSICPValuesAsymptotic:
+    graphTitle = tr("Global HSIC p-values (asymptotic):");
+    defaultFileName = tr("sensitivityGlobalHSICPValuesAsymptotic");
+    legendNames << tr("Global HSIC p-value (asymptotic)");
+    tableTitles << tr("Global HSIC p-value (asymptotic)");
+    break;
+  
+  case GlobalHSICPValuesPermutation:
+    graphTitle = tr("Global HSIC p-values (permutation):");
+    defaultFileName = tr("sensitivityGlobalHSICPValuesPermutation");
+    legendNames << tr("Global HSIC p-value (permutation)");
+    tableTitles << tr("Global HSIC p-value (permutation)");
+    break;
+  
+  case TargetHSICIndices:
+    graphTitle = tr("Target HSIC indices:");
+    defaultFileName = tr("sensitivityTargetHSIC");
+    legendNames << tr("Target HSIC index");
+    tableTitles << tr("Target HSIC index");
+    break;
+  
+  case TargetHSICR2Indices:
+    graphTitle = tr("Target R2-HSIC indices:");
+    defaultFileName = tr("sensitivityTargetHSICR2");
+    legendNames << tr("Target R2-HSIC index");
+    tableTitles << tr("Target R2-HSIC index");
+    break;
+  
+  case TargetHSICPValuesAsymptotic:
+    graphTitle = tr("Target HSIC p-values (asymptotic):");
+    defaultFileName = tr("sensitivityTargetHSICPValuesAsymptotic");
+    legendNames << tr("Target HSIC p-value (asymptotic)");
+    tableTitles << tr("Target HSIC p-value (asymptotic)");
+    break;
+  
+  case TargetHSICPValuesPermutation:
+    graphTitle = tr("Target HSIC p-values (permutation):");
+    defaultFileName = tr("sensitivityTargetHSICPValuesPermutation");
+    legendNames << tr("Target HSIC p-value (permutation)");
+    tableTitles << tr("Target HSIC p-value (permutation)");
+    break;
+  
+  case ConditionalHSICIndices:
+    graphTitle = tr("Conditional HSIC indices:");
+    defaultFileName = tr("sensitivityConditionalHSIC");
+    legendNames << tr("Conditional HSIC index");
+    tableTitles << tr("Conditional HSIC index");
+    break;
+  
+  case ConditionalHSICR2Indices:
+    graphTitle = tr("Conditional R2-HSIC indices:");
+    defaultFileName = tr("sensitivityConditionalHSICR2");
+    legendNames << tr("Conditional R2-HSIC index");
+    tableTitles << tr("Conditional R2-HSIC index");
+    break;
+  
+  case ConditionalHSICPValuesAsymptotic:
+    graphTitle = tr("Conditional HSIC p-values (asymptotic):");
+    defaultFileName = tr("sensitivityConditionalHSICPValuesAsymptotic");
+    legendNames << tr("Conditional HSIC p-value (asymptotic)");
+    tableTitles << tr("Conditional HSIC p-value (asymptotic)");
+    break;
+  
+  case ConditionalHSICPValuesPermutation:
+    graphTitle = tr("Conditional HSIC p-values (permutation):");
+    defaultFileName = tr("sensitivityConditionalHSICPValuesPermutation");
+    legendNames << tr("Conditional HSIC p-value (permutation)");
+    tableTitles << tr("Conditional HSIC p-value (permutation)");
+    break;
   }
+    
   // plot
   QScrollArea * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
@@ -166,7 +254,7 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
       indicesTableModel->setData(indicesTableModel->index(j, col), true, Qt::UserRole);
       indicesTableModel->setData(indicesTableModel->index(j, col), totalIndices[j], Qt::UserRole + 1);
 
-      if (type != SensitivityResultWidget::SRC && totalIndices[j] < firstIndices[j])
+      if (type == Sobol && totalIndices[j] < firstIndices[j])
       {
         indicesTableModel->setData(indicesTableModel->index(j, col), tr("Warning: The total index is less than the first order index."), Qt::ToolTipRole);
         indicesTableModel->setData(indicesTableModel->index(j, col), QIcon(":/images/task-attention.png"), Qt::DecorationRole);
@@ -201,7 +289,7 @@ SensitivityResultWidget::SensitivityResultWidget(const Point& firstIndices,
   connect(tableView->horizontalHeader(), &QHeaderView::sortIndicatorChanged, this, &SensitivityResultWidget::updateIndicesPlot);
 
   // Interactions widgets
-  if (totalIndices.getSize() && type != SensitivityResultWidget::SRC)
+  if (totalIndices.getSize() && type == Sobol)
   {
     QWidget * interactionWidget = new QWidget;
     QHBoxLayout * hbox = new QHBoxLayout(interactionWidget);
