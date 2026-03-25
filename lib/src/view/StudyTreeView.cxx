@@ -113,6 +113,12 @@ public:
     }
 
     const String newName(lineEdit->text().toStdString());
+    const String currentName(baseItem->text().toStdString());
+    if (newName == currentName)
+    {
+      LineEditWithQValidatorDelegate::setModelData(editor, model, index);
+      return;
+    }
     const Study study(baseItem->getParentStudyItem()->getStudy());
     bool nameTaken = false;
     
