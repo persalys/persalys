@@ -437,6 +437,11 @@ void DataSensitivityAnalysisCriticalDomainPage::initialize(DataSensitivityAnalys
           errorWidget_, &ErrorWidget::setTemporaryFramelessErrorMessage);
   alphaTableView_->setModel(alphaTableModel_);
 
+  // Set spinbox delegate for alpha column
+  auto * alphaDelegate = new SpinBoxDelegate(alphaTableView_);
+  alphaDelegate->setSpinBoxType(SpinBoxDelegate::doubleValue);
+  alphaTableView_->setItemDelegateForColumn(1, alphaDelegate);
+
   // Use filter alphas if available, otherwise weight alphas
   if (!analysis_ptr->getFilterAlphas().isEmpty())
     alphaTableModel_->setAlphas(analysis_ptr->getFilterAlphas());
@@ -543,6 +548,10 @@ DataSensitivityAnalysisHSICParametersPage::DataSensitivityAnalysisHSICParameters
   covarianceTableView_->setModel(covarianceTableModel_);
   covarianceTableView_->setItemDelegateForColumn(1, new ComboBoxDelegate(covarianceTableView_));
   covarianceTableView_->setItemDelegateForColumn(2, new ComboBoxDelegate(covarianceTableView_));
+  // Set spinbox delegate for p parameter column
+  auto * pDelegate = new SpinBoxDelegate(covarianceTableView_);
+  pDelegate->setSpinBoxType(SpinBoxDelegate::doubleValue);
+  covarianceTableView_->setItemDelegateForColumn(3, pDelegate);
   covarianceTableView_->verticalHeader()->hide();
   covarianceTableView_->horizontalHeader()->setStretchLastSection(false);
   covarianceTableView_->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);

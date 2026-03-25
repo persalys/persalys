@@ -21,6 +21,8 @@
 
 #include "persalys/CriticalDomainTableModel.hxx"
 
+#include "persalys/StudyTreeViewModel.hxx"
+
 #include <limits>
 #include <QColor>
 
@@ -94,9 +96,15 @@ QVariant CriticalDomainTableModel::data(const QModelIndex & index, int role) con
     case 0:
       return QString::fromStdString(variableNames_[row]);
     case 1:
-      return lowerBounds_[row];
+      if (role == Qt::DisplayRole)
+        return QString::number(lowerBounds_[row], 'g', StudyTreeViewModel::DefaultSignificantDigits);
+      else
+        return lowerBounds_[row];
     case 2:
-      return upperBounds_[row];
+      if (role == Qt::DisplayRole)
+        return QString::number(upperBounds_[row], 'g', StudyTreeViewModel::DefaultSignificantDigits);
+      else
+        return upperBounds_[row];
     default:
       return QVariant();
     }

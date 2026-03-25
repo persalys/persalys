@@ -21,6 +21,8 @@
 
 #include "persalys/HSICAlphaTableModel.hxx"
 
+#include "persalys/StudyTreeViewModel.hxx"
+
 #include <QColor>
 
 using namespace OT;
@@ -88,7 +90,10 @@ QVariant HSICAlphaTableModel::data(const QModelIndex & index, int role) const
     case 0:
       return QString::fromStdString(variableNames_[row]);
     case 1:
-      return alphaValues_[row];
+      if (role == Qt::DisplayRole)
+        return QString::number(alphaValues_[row], 'g', StudyTreeViewModel::DefaultSignificantDigits);
+      else
+        return alphaValues_[row];
     default:
       return QVariant();
     }

@@ -21,6 +21,8 @@
 
 #include "persalys/HSICCovarianceModelsTableModel.hxx"
 
+#include "persalys/StudyTreeViewModel.hxx"
+
 #include <openturns/MaternModel.hxx>
 #include <openturns/SquaredExponential.hxx>
 #include <openturns/AbsoluteExponential.hxx>
@@ -163,7 +165,12 @@ QVariant HSICCovarianceModelsTableModel::data(const QModelIndex & index, int rol
     case 3:
     {
       if (modelIndices_[row] == CovarianceModelType::GeneralizedExponential)
-        return pValues_[row];
+      {
+        if (role == Qt::DisplayRole)
+          return QString::number(pValues_[row], 'g', StudyTreeViewModel::DefaultSignificantDigits);
+        else
+          return pValues_[row];
+      }
       return "-";
     }
     case 4:
