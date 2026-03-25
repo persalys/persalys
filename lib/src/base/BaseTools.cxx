@@ -161,6 +161,14 @@ String Parameters::GetOTPointStr(const Point& values, const String& separator, b
   return GetStr(values, separator, useBrackets, false);
 }
 
+String Parameters::GetOTPointPythonStr(const Point& values)
+{
+  String str = GetStr(values, ", ", true, false);
+  // replace inf with python syntax
+  str = std::regex_replace(str, std::regex("-?inf"), "float('$&')");
+  return str;
+}
+
 String Parameters::GetOTPointWithDescriptionStr(const PointWithDescription& values)
 {
   return GetStr(values, ", ", false, false);

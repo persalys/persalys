@@ -55,6 +55,7 @@ public:
   static OT::String GetOTSampleStr(const OT::Sample& values);
   static OT::String GetOTSampleCollectionStr(const OT::ProcessSample& processSample);
   static OT::String GetOTPointStr(const OT::Point& values, const OT::String& separator = ", ", const bool useBrackets = true);
+  static OT::String GetOTPointPythonStr(const OT::Point& values);
   static OT::String GetOTPointWithDescriptionStr(const OT::PointWithDescription& values);
   static OT::String GetOTDescriptionStr(const OT::Description& values, const bool quote = true, const bool useBrackets = true);
   static OT::String GetOTIndicesStr(const OT::Indices& values);

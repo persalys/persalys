@@ -782,7 +782,7 @@ String DataSensitivityAnalysis::getPythonScript() const
     }
     oss << getName() << ".setCovarianceModels(ot.CovarianceModelCollection(targetCovModels), persalys.DataSensitivityAnalysisResult.Target)\n";
     oss << getName() << ".setHSICParameters(" << Parameters::GetOTBoolStr(targetHSICParameters_.computePermutationPValues()) << ", " << Parameters::GetOTBoolStr(targetHSICParameters_.computeAsymptoticPValues()) << ", " << Parameters::GetOTBoolStr(targetHSICParameters_.useUStatistic()) << ", persalys.DataSensitivityAnalysisResult.Target)\n";
-    oss << getName() << ".setFilterAlphas(" << Parameters::GetOTPointStr(filterAlphas_) << ", ot.Interval(" << Parameters::GetOTPointStr(targetCriticalDomain_.getLowerBound()) << ", " << Parameters::GetOTPointStr(targetCriticalDomain_.getUpperBound()) << "))\n";
+    oss << getName() << ".setFilterAlphas(" << Parameters::GetOTPointStr(filterAlphas_) << ", ot.Interval(" << Parameters::GetOTPointPythonStr(targetCriticalDomain_.getLowerBound()) << ", " << Parameters::GetOTPointPythonStr(targetCriticalDomain_.getUpperBound()) << "))\n";
   }
   if (type_.computeConditionalHSIC())
   {
