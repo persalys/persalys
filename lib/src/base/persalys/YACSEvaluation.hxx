@@ -79,6 +79,9 @@ public:
   ydefx::JobParametersProxy& jobParameters();
   const ydefx::JobParametersProxy& jobParameters() const;
 
+  /** Generate script for JobParametersProxy */
+  OT::String getJobParamsPythonScript(const OT::String & name) const;
+
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const override;
 

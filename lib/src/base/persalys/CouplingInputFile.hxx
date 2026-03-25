@@ -39,11 +39,11 @@ public:
   /** Virtual constructor */
   CouplingInputFile * clone() const override;
 
-  /** Path accessor */
+  /** Template path accessor */
   void setPath(const OT::String & templatePath);
   OT::String getPath() const;
 
-  /** Template path accessor */
+  /** Configured path accessor */
   void setConfiguredPath(const OT::String & configuredPath);
   OT::String getConfiguredPath() const;
 

@@ -77,7 +77,6 @@ public:
 
 protected:
   OT::Function generateFunction(const OT::Description & outputNames) const override;
-  virtual OT::String getJobParamsPythonScript() const;
 
 private:
   mutable YACSEvaluation evaluation_;
