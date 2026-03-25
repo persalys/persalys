@@ -112,7 +112,6 @@ private:
   OT::Description inDescription_;
   OT::Description outDescription_;
   ydefx::JobParametersProxy jobParams_;
-  mutable OT::String defaultWorkDirectory_;
   OT::String code_ = "";
   py2cpp::PyPtr jobModel_;
   std::pair< StopCallback, void *> stopCallback_;

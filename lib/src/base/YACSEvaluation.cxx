@@ -44,8 +44,6 @@ YACSEvaluation::YACSEvaluation(const String & script)
 {
   jobParams_ = ydefx::JobParametersProxy();
   jobParams_.configureResource("localhost");
-  defaultWorkDirectory_ = jobParams_.work_directory();
-
   if (!script.empty())
     setCode(script);
 }
@@ -144,7 +142,13 @@ Sample YACSEvaluation::operator() (const Sample & inS) const
   std::unique_ptr<ydefx::Job> myJob;
   if (!isRunning_)
   {
-    myJob.reset(l.submitPyStudyJob(modelToUse, studyFunction, jobSample, jobParams_));
+    // actually run in subdir
+    ydefx::JobParametersProxy jobParams2(jobParams_);
+    OSS oss;
+    oss << jobParams_.work_directory() << "/persalys_" << std::to_string(std::hash<std::string> {}(getCode()));
+    jobParams2.work_directory(oss.str());
+
+    myJob.reset(l.submitPyStudyJob(modelToUse, studyFunction, jobSample, jobParams2));
     setIsRunning(true);
   }
   else
@@ -419,9 +423,6 @@ void YACSEvaluation::setCode(const OT::String & code)
   inDescription_.clear();
   outDescription_.clear();
 
-  std::stringstream ss;
-  ss << defaultWorkDirectory_ << "/persalys_" << std::to_string(std::hash<std::string> {}(code));
-  jobParams_.work_directory(ss.str());
   jobParams_.createTmpResultDirectory();
 
   ydefx::PyStudyFunction studyFunction;
