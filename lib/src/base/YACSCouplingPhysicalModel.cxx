@@ -114,6 +114,13 @@ void YACSCouplingPhysicalModel::setCode(const String & script)
 }
 
 
+void YACSCouplingPhysicalModel::updateCode()
+{
+  CouplingPhysicalModel::updateCode();
+  evaluation_.setCode(getCode());
+}
+
+
 Function YACSCouplingPhysicalModel::generateFunction(const Description & outputNames) const
 {
   YACSEvaluation evaluation(evaluation_);

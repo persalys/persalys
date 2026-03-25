@@ -81,7 +81,7 @@ protected:
   OT::Function generateFunction(const OT::Description & outputNames) const override;
 
   /** Update python code if advanced config has changed **/
-  void updateCode();
+  virtual void updateCode();
 
   OT::String getStepsMacro(const OT::String & offset = "") const;
 
