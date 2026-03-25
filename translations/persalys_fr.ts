@@ -1518,7 +1518,7 @@ bayésien (BIC)</translation>
     <message>
         <location filename="../lib/src/view/CouplingModelWindow.cxx" line="878"/>
         <source>Template file (absolute)</source>
-        <translation>Fichier modèle (absolue)</translation>
+        <translation>Fichier modèle (absolu)</translation>
     </message>
     <message>
         <location filename="../lib/src/view/CouplingModelWindow.cxx" line="886"/>
