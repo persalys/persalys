@@ -2478,6 +2478,25 @@ Python model on cluster
 
   - the DoE gets evaluated almost instantly
 
+Coupling model on cluster
+'''''''''''''''''''''''''
+
+- create a new study and add a Coupling physical model
+
+- right-click for HPC parameters, select cronos cluster, click default parameters button
+
+- command: "python3 external_program.py input.txt", tick shell box
+
+- input: input_template.txt / input.txt, with X0, X1, X2 default variables
+
+- resources: external_program.py
+
+- output: output.txt with Y0, Y1 default variables
+
+- in summary tab set X0=1, X1=2, X2=3
+
+- click evaluate: Y0=6 Y1=7
+
 SSH Coupling
 ''''''''''''
 

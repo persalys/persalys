@@ -22,7 +22,7 @@ CouplingStep, CouplingResourceFile, CouplingOutputFile"
 
 Parameters
 ----------
-path : str
+template_path : str
     Path to the template input file, preferably absolute."
 
 // ---------------------------------------------------------------------
@@ -32,7 +32,7 @@ path : str
 
 Returns
 -------
-path : str
+template_path : str
     Path to the template input file, preferably absolute."
 
 // ---------------------------------------------------------------------
@@ -49,7 +49,7 @@ configured_path : str
 // ---------------------------------------------------------------------
 
 %feature("docstring") PERSALYS::CouplingInputFile::getConfiguredPath
-"Template path accessor.
+"Configured path accessor.
 
 Returns
 -------

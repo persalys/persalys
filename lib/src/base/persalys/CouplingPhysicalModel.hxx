@@ -90,11 +90,9 @@ protected:
 
   OT::String writeCode(const OT::Description &inputNames, const OT::Description &outputNames) const;
 
-private:
   OT::String pythonImports() const;
   OT::String pythonFunctions() const;
 
-private:
   // list of steps
   OT::String SSHHostname_;
   OT::PersistentCollection<CouplingStep> steps_;
@@ -102,6 +100,9 @@ private:
   OT::FileName cacheInputFile_;
   OT::FileName cacheOutputFile_;
   OT::FileName workDir_;
+
+  // when resources are copied to a distant work dir and cannot be resolved in the local FS
+  OT::Bool resourcesCopiedToWorkdir_ = false;
 };
 }
 #endif

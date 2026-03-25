@@ -92,23 +92,19 @@ public:
   typedef  OT::Bool (*StopCallback)(void * state);
   virtual void setStopCallback(StopCallback callBack, void * state = nullptr);
 
-  void setIsRunning(const OT::Bool & isRunning) const
-  {
-    isRunning_ = isRunning;
-  };
-  const OT::Bool getIsRunning()
-  {
-    return isRunning_;
-  };
+  /** Running flag accessor */
+  void setIsRunning(const OT::Bool isRunning) const;
+  OT::Bool getIsRunning() const;
 
-  void setDump(const std::string & dump) const
-  {
-    dump_ = dump;
-  };
-  const std::string getDump()
-  {
-    return dump_;
-  };
+  /** Id dump accessor */
+  void setDump(const OT::String & dump) const;
+  OT::String getDump() const;
+
+  /** Additional files to copy */
+  void setExtraInputFiles(const OT::Description & extraInputFiles);
+
+  /** Subdir accessor */
+  void setWorkSubDir(const OT::String & workSubDir);
 
 private:
   OT::Point inputValues_;
@@ -120,6 +116,12 @@ private:
   std::pair< StopCallback, void *> stopCallback_;
   mutable OT::Bool isRunning_ = false;
   mutable OT::String dump_;
+
+  // subdirectory identifying the model to copy coupling files
+  OT::String workSubDir_;
+
+  // extra files to copy to the remote node
+  OT::Description extraInputFiles_;
 };
 }
 #endif

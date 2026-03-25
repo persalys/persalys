@@ -44,9 +44,11 @@ public:
 
   void setCode(const OT::String & code) override;
 
-  /** Accesor to launching resource properties */
+  /** Accessor to launching resource properties */
   ydefx::JobParametersProxy& jobParameters();
   const ydefx::JobParametersProxy& jobParameters() const;
+
+  void setParallel(const OT::Bool flag) override;
 
   OT::String getPythonScript() const override;
 

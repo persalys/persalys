@@ -39,9 +39,11 @@ static Factory<YACSCouplingPhysicalModel> Factory_YACSCouplingPhysicalModel;
 YACSCouplingPhysicalModel::YACSCouplingPhysicalModel(const String & name,
     const CouplingStepCollection & steps)
   : CouplingPhysicalModel(name, steps)
-  , evaluation_()
 {
-  setCode(getCode());
+  // with YACS resources are copied to the salome workdir and cannot be resolved in the local FS
+  // use this flag to fetch them relatively to the salome work dir
+  resourcesCopiedToWorkdir_ = true;
+  updateCode();
 }
 
 /* Default constructor */
@@ -50,9 +52,9 @@ YACSCouplingPhysicalModel::YACSCouplingPhysicalModel(const String & name,
     const OutputCollection & outputs,
     const CouplingStepCollection & steps)
   : CouplingPhysicalModel(name, inputs, outputs, steps)
-  , evaluation_()
 {
-  setCode(getCode());
+  resourcesCopiedToWorkdir_ = true;
+  updateCode();
 }
 
 /* Virtual constructor */
@@ -73,6 +75,14 @@ const ydefx::JobParametersProxy& YACSCouplingPhysicalModel::jobParameters() cons
 }
 
 
+void YACSCouplingPhysicalModel::setParallel(const Bool flag)
+{
+  // just to trigger updateCode via PythonPhysicalModelPropertiesDialog for jobParameters
+  CouplingPhysicalModel::setParallel(flag);
+  updateCode();
+}
+
+
 void YACSCouplingPhysicalModel::setCode(const String & script)
 {
   CouplingPhysicalModel::setCode(script);
@@ -84,32 +94,38 @@ void YACSCouplingPhysicalModel::setCode(const String & script)
   {
     throw InvalidArgumentException(HERE) << "Error in the script:\n" << ex.what();
   }
+  updateCode();
+}
+
+
+void YACSCouplingPhysicalModel::updateCode()
+{
+  // coupling runs in a subdir of the salome work dir so that resource files can be found relatively to workdir
+  const String workSubDir = "/persalys_" + std::to_string(std::hash<std::string> {}(getPythonScript())); // identifies the model
+  evaluation_.setWorkSubDir(workSubDir);
+  workDir_ = jobParameters().work_directory() + workSubDir; // must be set before updateCode
+
+  CouplingPhysicalModel::updateCode();
+  evaluation_.setCode(getCode());
 
   // add data files to job parameters
-  std::list<std::string> inFiles;
+  Description extraInputFiles;
   for (const CouplingStep & step : getSteps())
   {
     for (const CouplingInputFile & inputFile : step.getInputFiles())
     {
       if (!inputFile.getPath().empty())
         // yacs wants absolute paths
-        inFiles.push_back(std::filesystem::absolute(inputFile.getPath()).string());
+        extraInputFiles.add(std::filesystem::absolute(inputFile.getPath()).string());
     }
     for (const CouplingResourceFile & resourceFile : step.getResourceFiles())
     {
       if (!resourceFile.getPath().empty())
         // yacs wants absolute paths
-        inFiles.push_back(std::filesystem::absolute(resourceFile.getPath()).string());
+        extraInputFiles.add(std::filesystem::absolute(resourceFile.getPath()).string());
     }
   }
-  jobParameters().in_files(inFiles);
-}
-
-
-void YACSCouplingPhysicalModel::updateCode()
-{
-  CouplingPhysicalModel::updateCode();
-  evaluation_.setCode(getCode());
+  evaluation_.setExtraInputFiles(extraInputFiles);
 }
 
 

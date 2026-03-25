@@ -144,9 +144,14 @@ Sample YACSEvaluation::operator() (const Sample & inS) const
   {
     // actually run in subdir
     ydefx::JobParametersProxy jobParams2(jobParams_);
-    OSS oss;
-    oss << jobParams_.work_directory() << "/persalys_" << std::to_string(std::hash<std::string> {}(getCode()));
-    jobParams2.work_directory(oss.str());
+    const String workSubDir = workSubDir_.empty() ? ("/persalys_" + std::to_string(std::hash<std::string> {}(getCode()))) : workSubDir_;
+    jobParams2.work_directory(jobParams_.work_directory() + workSubDir);
+
+    // add resource files
+    std::list<std::string> inFiles;
+    for (const String & extraInputFile : extraInputFiles_)
+      inFiles.push_back(extraInputFile);
+    jobParams2.add_in_files(inFiles);
 
     myJob.reset(l.submitPyStudyJob(modelToUse, studyFunction, jobSample, jobParams2));
     setIsRunning(true);
@@ -220,6 +225,15 @@ Sample YACSEvaluation::operator() (const Sample & inS) const
   return result;
 }
 
+void YACSEvaluation::setExtraInputFiles(const Description & extraInputFiles)
+{
+  extraInputFiles_ = extraInputFiles;
+}
+
+void YACSEvaluation::setWorkSubDir(const OT::String & workSubDir)
+{
+  workSubDir_ = workSubDir;
+}
 
 /* Accessor for input values */
 Point YACSEvaluation::getInputValues() const
@@ -278,6 +292,25 @@ const ydefx::JobParametersProxy& YACSEvaluation::jobParameters() const
   return jobParams_;
 }
 
+void YACSEvaluation::setDump(const OT::String & dump) const
+{
+  dump_ = dump;
+}
+
+OT::String YACSEvaluation::getDump() const
+{
+  return dump_;
+}
+
+void YACSEvaluation::setIsRunning(const Bool isRunning) const
+{
+  isRunning_ = isRunning;
+}
+
+Bool YACSEvaluation::getIsRunning() const
+{
+  return isRunning_;
+}
 
 void YACSEvaluation::setStopCallback(StopCallback callBack, void * state)
 {
@@ -291,6 +324,10 @@ void YACSEvaluation::save(Advocate & adv) const
   adv.saveAttribute("code_", code_);
   adv.saveAttribute("dump_", dump_);
   adv.saveAttribute("isRunning_", isRunning_);
+  adv.saveAttribute("workSubDir_", workSubDir_);
+  adv.saveAttribute("extraInputFiles_", extraInputFiles_);
+
+  // jobParams_
   Description listInputFiles;
   std::list<std::string> inFiles = jobParams_.in_files();
   for(const std::string& f : inFiles)
@@ -334,6 +371,12 @@ void YACSEvaluation::load(Advocate & adv)
     adv.loadAttribute("dump_", dump_);
   if (adv.hasAttribute("isRunning_"))
     adv.loadAttribute("isRunning_", isRunning_);
+  if (adv.hasAttribute("workSubDir_"))
+    adv.loadAttribute("workSubDir_", workSubDir_);
+  if (adv.hasAttribute("extraInputFiles_"))
+    adv.loadAttribute("extraInputFiles_", extraInputFiles_);
+
+  // jobParams_
   Description listInputFiles;
   adv.loadAttribute("inputFiles_", listInputFiles);
   std::list<std::string> inFiles;

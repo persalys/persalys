@@ -330,13 +330,19 @@ String CouplingPhysicalModel::writeCode(const Description &inputNames, const Des
   code << "        for input_file in step.getInputFiles():\n";
   code << "            if not input_file.getPath():\n";
   code << "                continue\n";
+  code << "            src_path = Path(input_file.getPath())\n";
+  // when resources are copied to a distant work dir and cannot be resolved in the local FS
+  if (resourcesCopiedToWorkdir_)
+    code << "            src_path = workdir / '..' / src_path.name\n";
+  code << "            if not src_path.is_file():\n";
+  code << "                raise FileNotFoundError(str(src_path))\n";
   code << "            input_values = [_require_var(varname) for varname in input_file.getVariableNames()]\n";
   code << "            formats = input_file.getFormats()\n";
   code << "            if formats.isBlank():\n";
   code << "                formats = None\n";
   code << "            target = workdir / input_file.getConfiguredPath()\n";
   code << "            target.parent.mkdir(parents=True, exist_ok=True)\n";
-  code << "            otct.replace(input_file.getPath(), str(target), input_file.getTokens(), input_values, formats=formats, encoding=step.getEncoding())\n";
+  code << "            otct.replace(str(src_path), str(target), input_file.getTokens(), input_values, formats=formats, encoding=step.getEncoding())\n";
   code << "\n";
   if(!SSHHostname_.empty())
   {
@@ -355,6 +361,9 @@ String CouplingPhysicalModel::writeCode(const Description &inputNames, const Des
   code << "            if not resource_file.getPath():\n";
   code << "                continue\n";
   code << "            src_path = Path(resource_file.getPath())\n";
+  // when resources are copied to a distant work dir and cannot be resolved in the local FS
+  if (resourcesCopiedToWorkdir_)
+    code << "            src_path = workdir / '..' / src_path.name\n";
   code << "            \n";
   code << "            if src_path.is_file():\n";
   if(SSHHostname_.empty())
@@ -396,7 +405,7 @@ String CouplingPhysicalModel::writeCode(const Description &inputNames, const Des
   code << "                        sftp.chmod(str(remote_f), local_mode)\n";
   }
   code << "            else:\n";
-  code << "                raise FileNotFoundError(resource_file.getPath())\n";
+  code << "                raise FileNotFoundError(str(src_path))\n";
   code << "        \n";
   code << "        if len(step.getCommand()) > 0:\n";
   code << "            timeout = step.getTimeOut()\n";
