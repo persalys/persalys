@@ -53,6 +53,7 @@
 #include <QMessageBox>
 #include <QDesktopServices>
 #include <QDebug>
+#include <QPointer>
 
 using namespace OT;
 
@@ -882,16 +883,22 @@ void MarginalsWidget::openWizardToChooseInferenceResult(const QModelIndex& input
     return;
   }
   // open a wizard to choose a result
-  InferenceResultWizard wizard(study_, this);
-  if (wizard.exec())
+  QPointer<InferenceResultWizard> wizard(new InferenceResultWizard(study_, this));
+
+  if (wizard)
   {
-    // update the input
-    const Input input(physicalModel_.getInputs()[inputIndex.row()]);
-    physicalModel_.blockNotification("ProbabilisticModelItem");
-    physicalModel_.setDistribution(input.getName(), wizard.getDistribution());
-    physicalModel_.setDistributionParametersType(input.getName(), 0);
-    physicalModel_.blockNotification();
-    updateDistributionWidgets(inputIndex);
+    wizard->setAttribute(Qt::WA_DeleteOnClose);
+    connect(wizard, &QDialog::accepted, [this, inputIndex, wizard]() {
+      // update the input
+      const Input input(physicalModel_.getInputs()[inputIndex.row()]);
+      physicalModel_.blockNotification("ProbabilisticModelItem");
+      physicalModel_.setDistribution(input.getName(), wizard->getDistribution());
+      physicalModel_.setDistributionParametersType(input.getName(), 0);
+      physicalModel_.blockNotification();
+      updateDistributionWidgets(inputIndex);
+    });
+
+    wizard->open();
   }
 }
 
