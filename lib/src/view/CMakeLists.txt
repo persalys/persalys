@@ -71,7 +71,6 @@ ot_add_source_file ( TaylorExpansionMomentsResultWindow.cxx )
 ot_add_source_file ( SensitivityResultWidget.cxx )
 ot_add_source_file ( SobolResultWindow.cxx )
 ot_add_source_file ( SRCResultWindow.cxx )
-ot_add_source_file ( SensitivityIntroPage.cxx )
 ot_add_source_file ( SobolPage.cxx )
 ot_add_source_file ( SensitivityAnalysisWizard.cxx )
 ot_add_source_file ( LimitStateWindow.cxx )
@@ -180,7 +179,6 @@ ot_install_header_file ( CentralTendencyIntroPage.hxx )
 ot_install_header_file ( MonteCarloPage.hxx )
 ot_install_header_file ( CentralTendencyWizard.hxx )
 ot_install_header_file ( QuantileAnalysisWizard.hxx )
-ot_install_header_file ( SensitivityIntroPage.hxx )
 ot_install_header_file ( SobolPage.hxx )
 ot_install_header_file ( SensitivityAnalysisWizard.hxx )
 ot_install_header_file ( LimitStateWindow.hxx )
@@ -336,7 +334,6 @@ qt_wrap_cpp (PERSALYS_VIEW_MOC_SRCS persalys/MainWindow.hxx
                                   persalys/SensitivityResultWidget.hxx
                                   persalys/SobolResultWindow.hxx
                                   persalys/SRCResultWindow.hxx
-                                  persalys/SensitivityIntroPage.hxx
                                   persalys/SobolPage.hxx
                                   persalys/SensitivityAnalysisWizard.hxx
                                   persalys/LimitStateWindow.hxx
