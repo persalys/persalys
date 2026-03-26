@@ -75,6 +75,8 @@ DesignOfExperiment::DesignOfExperiment(DataModel* p_implementation)
 DesignOfExperiment::DesignOfExperiment(const DesignOfExperimentEvaluation & eval)
   : DesignOfExperiment(eval.getResult().getDesignOfExperiment().getImplementation()->clone())
 {
+  if (!eval.hasValidResult())
+    throw InvalidArgumentException(HERE) << "The given DesignOfExperimentEvaluation does not have a valid result.";
 }
 
 Bool DesignOfExperiment::operator ==(const DesignOfExperiment & other) const
