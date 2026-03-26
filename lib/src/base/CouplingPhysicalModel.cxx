@@ -677,6 +677,7 @@ void CouplingPhysicalModel::save(Advocate & adv) const
   adv.saveAttribute("cacheOutputFile_", cacheOutputFile_);
   adv.saveAttribute("workDir_", workDir_);
   adv.saveAttribute("SSHHostname_", SSHHostname_);
+  adv.saveAttribute("resourcesCopiedToWorkdir_", resourcesCopiedToWorkdir_);
 }
 
 
@@ -691,6 +692,8 @@ void CouplingPhysicalModel::load(Advocate & adv)
   adv.loadAttribute("workDir_", workDir_);
   if (adv.hasAttribute("SSHHostname_"))
     adv.loadAttribute("SSHHostname_", SSHHostname_);
+  if (adv.hasAttribute("resourcesCopiedToWorkdir_"))
+    adv.loadAttribute("resourcesCopiedToWorkdir_", resourcesCopiedToWorkdir_);
 }
 
 
