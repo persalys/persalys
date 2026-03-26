@@ -121,6 +121,9 @@ void InferenceResultWizard::updateInferenceResultWidget(int index)
   const QString variableName = variablesComboBox_->itemText(index);
   clearErrorMessage();
 
+  if (variableName.isEmpty())
+    return;
+
   if (inferenceResultsComboBox_->count())
   {
     const int analysisIndex = inferenceResultsComboBox_->itemData(inferenceResultsComboBox_->currentIndex()).toInt();

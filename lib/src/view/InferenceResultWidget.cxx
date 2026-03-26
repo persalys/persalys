@@ -203,15 +203,14 @@ void InferenceResultWidget::buildInterface()
 
 void InferenceResultWidget::updateDistributionTable(const double level, const InferenceResult& result, const QString& variableName)
 {
-  
-  sizeTable_->setValueAt(0, QString::number(result.getOriginalSampleSize()));
-  sizeTable_->setValueAt(1, QString::number(result.getFittingTestResultForVariable(variableName.toStdString()).getValues().getSize()));
-
   // check
   if (!(distTableModel_ && distTableView_))
     return;
   if (variableName.isEmpty())
     return;
+
+  sizeTable_->setValueAt(0, QString::number(result.getOriginalSampleSize()));
+  sizeTable_->setValueAt(1, QString::number(result.getFittingTestResultForVariable(variableName.toStdString()).getValues().getSize()));
 
   // reset
   distTableModel_->clear();
