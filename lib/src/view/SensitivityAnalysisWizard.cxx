@@ -21,11 +21,67 @@
 #include "persalys/SensitivityAnalysisWizard.hxx"
 
 #include "persalys/PhysicalModelAnalysis.hxx"
+#include "persalys/QtTools.hxx"
+
+#include <QVBoxLayout>
+#include <QRadioButton>
 
 using namespace OT;
 
 namespace PERSALYS
 {
+
+  SensitivityIntroPage::SensitivityIntroPage(QWidget* parent)
+  : QWizardPage(parent)
+{
+  setTitle(tr("Outputs selection"));
+
+  QVBoxLayout * pageLayout = new QVBoxLayout(this);
+
+  // output selection
+  outputsSelectionGroupBox_ = new OutputsSelectionGroupBox(this);
+  pageLayout->addWidget(outputsSelectionGroupBox_);
+
+  // error message
+  errorWidget_ = new ErrorWidget;
+  connect(outputsSelectionGroupBox_, SIGNAL(outputsSelectionChanged(QStringList)), errorWidget_, SLOT(reset()));
+
+  pageLayout->addStretch();
+  pageLayout->addWidget(errorWidget_);
+}
+
+
+void SensitivityIntroPage::initialize(const Analysis& analysis)
+{
+  if (!dynamic_cast<const PhysicalModelAnalysis*>(analysis.getImplementation().get()))
+    return;
+
+  // update outputs list
+  PhysicalModel model = dynamic_cast<const PhysicalModelAnalysis*>(analysis.getImplementation().get())->getPhysicalModel();
+  outputsSelectionGroupBox_->updateComboBoxModel(model.getSelectedOutputsNames(), analysis.getImplementation()->getInterestVariables());
+}
+
+
+int SensitivityIntroPage::nextId() const
+{
+  return SensitivityAnalysisWizard::Page_Sobol;
+}
+
+
+Description SensitivityIntroPage::getInterestVariables() const
+{
+  return QtOT::StringListToDescription(outputsSelectionGroupBox_->getSelectedOutputsNames());
+}
+
+bool SensitivityIntroPage::validatePage()
+{
+  if (!outputsSelectionGroupBox_->getSelectedOutputsNames().size())
+  {
+    errorWidget_->setFramelessErrorMessage(tr("At least one output must be selected"));
+    return false;
+  }
+  return QWizardPage::validatePage();
+}
 
 SensitivityAnalysisWizard::SensitivityAnalysisWizard(const Analysis& analysis, QWidget* parent)
   : AnalysisWizard(analysis, parent)

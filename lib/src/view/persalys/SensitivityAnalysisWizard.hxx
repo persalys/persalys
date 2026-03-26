@@ -21,12 +21,37 @@
 #ifndef PERSALYS_SENSITIVITYANALYSISWIZARD_HXX
 #define PERSALYS_SENSITIVITYANALYSISWIZARD_HXX
 
+#include "persalys/Analysis.hxx"
+#include "persalys/OutputsSelectionGroupBox.hxx"
+#include "persalys/ErrorWidget.hxx"
 #include "persalys/AnalysisWizard.hxx"
-#include "persalys/SensitivityIntroPage.hxx"
 #include "persalys/SobolPage.hxx"
+
+#include <QWizardPage>
+#include <QButtonGroup>
 
 namespace PERSALYS
 {
+
+class PERSALYS_VIEW_API SensitivityIntroPage : public QWizardPage
+{
+  Q_OBJECT
+
+public:
+  explicit SensitivityIntroPage(QWidget* parent = nullptr);
+
+  void initialize(const Analysis& analysis);
+  OT::Description getInterestVariables() const;
+
+  int nextId() const override;
+  bool validatePage() override;
+
+private:
+  OutputsSelectionGroupBox * outputsSelectionGroupBox_ = nullptr;
+  QButtonGroup * methodGroup_ = nullptr;
+  ErrorWidget * errorWidget_ = nullptr;
+};
+
 class PERSALYS_VIEW_API SensitivityAnalysisWizard : public AnalysisWizard
 {
   Q_OBJECT
