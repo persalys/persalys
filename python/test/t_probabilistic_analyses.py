@@ -54,8 +54,6 @@ values = [[0.5 + i * 1.5 for i in range(7)], [0.5 + i * 1.5 for i in range(7)], 
 design_2 = persalys.GridDesignOfExperiment("design_2", model1, values)
 myStudy.add(design_2)
 
-dataSet2 = myStudy.addDoEAsDataSet(design_2)
-
 # design 4 ##
 probaDesign = persalys.ProbabilisticDesignOfExperiment(
     "probaDesign", model1, 100, "MONTE_CARLO"
@@ -89,12 +87,6 @@ chaos1.setTestSampleValidation(True)
 chaos1.setKFoldValidation(True)
 chaos1.setInterestVariables(["y1"])
 myStudy.add(chaos1)
-
-# 1-c Chaos ##
-chaos2 = persalys.FunctionalChaosAnalysis("chaos_2", dataSet2)
-chaos2.setChaosDegree(2)
-chaos2.setSparseChaos(True)
-myStudy.add(chaos2)
 
 # 1-d linear regression #
 linreg = persalys.PolynomialRegressionAnalysis("linreg", probaDataSet)
