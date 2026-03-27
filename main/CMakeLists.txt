@@ -49,7 +49,7 @@ endif ()
 
 # launcher
 if (PERSALYS_BUILD_NSIS)
-  add_executable (persalys_launcher launcher.cxx)
+  add_executable (persalys_launcher WIN32 launcher.cxx)
   target_link_libraries (persalys_launcher PRIVATE Boost::program_options ws2_32)
   if (TARGET Boost::process)
     target_link_libraries (persalys_launcher PRIVATE Boost::process)
