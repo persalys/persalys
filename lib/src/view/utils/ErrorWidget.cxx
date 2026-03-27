@@ -91,6 +91,7 @@ void ErrorWidget::setMessage(const QString& message, MessageType type, bool temp
 
   if (!userFixedHeight_)
     setFixedHeight(computeHeight());
+  centerContentVertically();
 
   if (temporary)
   {
@@ -154,7 +155,7 @@ int ErrorWidget::computeHeight() const
           + 2 * frameWidth();
   
   if (usePadding_)
-    h += 10; // padding top + bottom
+    h += 10; // padding top + bottom (CSS padding: 5px)
 
   return h;
 }
@@ -191,6 +192,29 @@ void ErrorWidget::resizeEvent(QResizeEvent *event)
   QPlainTextEdit::resizeEvent(event);
   if (!userFixedHeight_)
     setFixedHeight(computeHeight());
+  centerContentVertically();
+}
+
+void ErrorWidget::centerContentVertically()
+{
+  if (centering_)
+    return;
+  centering_ = true;
+
+  // Compute available height inside the viewport
+  int available = viewport()->height();
+
+  // Compute content height
+  QFontMetrics fm{font()};
+  int lineHeight = fm.lineSpacing();
+  int docLines = document()->lineCount();
+  int contentHeight = docLines * lineHeight
+                      + 2 * static_cast<int>(std::ceil(document()->documentMargin()));
+
+  int topMargin = qMax(0, (available - contentHeight) / 2);
+  setViewportMargins(0, topMargin, 0, 0);
+
+  centering_ = false;
 }
 
 void ErrorWidget::reInitErrorMessage(QTimeLine::State state)

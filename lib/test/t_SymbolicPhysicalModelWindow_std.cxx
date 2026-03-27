@@ -21,24 +21,25 @@ class TestSymbolicPhysicalModelWindow : public QObject
   Q_OBJECT
 
 private slots:
-  void TestModificationFromWidgets()
+  void TestModificationFromWidgets() const
   {
+     // create the model
     // create the item
-    PhysicalModelDefinitionItem * item = new PhysicalModelDefinitionItem(SymbolicPhysicalModel());
+    auto * item = new PhysicalModelDefinitionItem(SymbolicPhysicalModel());
 
     // create the window
     SymbolicPhysicalModelWindow window(item);
     window.show();
 
     // get widgets
-    PhysicalModelWindowWidget * mainWidget = window.findChild<PhysicalModelWindowWidget*>();
+    const auto * mainWidget = window.findChild<PhysicalModelWindowWidget*>();
     QList<CopyableTableView*> listTables = mainWidget->findChildren<CopyableTableView*>();
-    ErrorWidget * errorLabel = window.findChild<CheckModelButtonGroup*>()->findChild<ErrorWidget*>();
+    const auto * errorLabel = window.findChild<CheckModelButtonGroup*>()->findChild<ErrorWidget*>();
     QList<QPushButton*> pushButtons = window.findChildren<QPushButton*>();
-    CopyableTableView * inTable = 0;
-    CopyableTableView * outTable = 0;
-    CopyableTableView * diffTable = 0;
-    CopyableTableView * gradTable = 0;
+    CopyableTableView * inTable = nullptr;
+    CopyableTableView * outTable = nullptr;
+    const CopyableTableView * diffTable = nullptr;
+    const CopyableTableView * gradTable = nullptr;
     for (int i = 0; i < listTables.size(); ++i)
     {
       if (dynamic_cast<DifferentiationTableModel*>(listTables[i]->model()))
@@ -50,9 +51,9 @@ private slots:
       else
         inTable = listTables[i];
     }
-    DifferentiationTableModel * diffTableModel = dynamic_cast<DifferentiationTableModel*>(diffTable->model());
-    QPushButton * evaluateButton = 0;
-    QPushButton * evaluateGradButton = 0;
+    auto * diffTableModel = dynamic_cast<DifferentiationTableModel*>(diffTable->model());
+    QPushButton * evaluateButton = nullptr;
+    QPushButton * evaluateGradButton = nullptr;
     for (int i = 0; i < pushButtons.size(); ++i)
     {
       if (pushButtons[i]->text() == "Evaluate model")
@@ -192,7 +193,7 @@ private slots:
   }
 
 
-  void TestModificationFromModel()
+  void TestModificationFromModel() const
   {
     // create the model
     Input Q("Q", 10200, OT::Normal(10200, 100), "Primary energy");
@@ -206,21 +207,21 @@ private slots:
     OutputCollection outputCollection(1, Ep);
 
     OT::Description formula(1, "1-(Q/((E/((1-0.05)*0.54))+(C/0.8)))");
-    SymbolicPhysicalModel * model = new SymbolicPhysicalModel("model", inputCollection, outputCollection, formula);
+    auto * model = new SymbolicPhysicalModel("model", inputCollection, outputCollection, formula);
 
     // create the item
-    PhysicalModelDefinitionItem * item = new PhysicalModelDefinitionItem(PhysicalModel(model));
+    auto * item = new PhysicalModelDefinitionItem(PhysicalModel(model));
 
     // create the window
     SymbolicPhysicalModelWindow window(item);
     window.show();
 
     // get widgets
-    PhysicalModelWindowWidget * mainWidget = window.findChild<PhysicalModelWindowWidget*>();
+    const auto * mainWidget = window.findChild<PhysicalModelWindowWidget*>();
     QList<CopyableTableView*> listTables = mainWidget->findChildren<CopyableTableView*>();
-    CopyableTableView * inTable = 0;
-    CopyableTableView * outTable = 0;
-    CopyableTableView * diffTable = 0;
+    const CopyableTableView * inTable = nullptr;
+    const CopyableTableView * outTable = nullptr;
+    const CopyableTableView * diffTable = nullptr;
     for (int i = 0; i < listTables.size(); ++i)
     {
       if (listTables[i]->model()->columnCount() == 2)

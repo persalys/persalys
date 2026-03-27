@@ -57,6 +57,7 @@ protected:
 private:
   int computeHeight() const;
   void applyStyle(MessageType type, bool useFrame);
+  void centerContentVertically();
 
 private slots:
   void reInitErrorMessage(QTimeLine::State);
@@ -67,6 +68,7 @@ private:
   bool  userFixedHeight_  = false;
   bool  forcedVisible_    = false;
   bool  usePadding_       = true;
+  bool  centering_        = false;
 
 };
 } // namespace PERSALYS
