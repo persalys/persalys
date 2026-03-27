@@ -154,7 +154,6 @@ int main(int argc, char *argv[])
 
     // main window
     MainWindow window;
-    window.resize(1024, 768);
     window.show();
 
     return app.exec();

@@ -73,6 +73,13 @@ MainWindow::MainWindow()
 #endif
 
   buildInterface();
+
+  QSettings settings;
+  QByteArray geometry = settings.value("geometry").toByteArray();
+  if (geometry.isEmpty())
+    resize(1280, 1024);
+  else
+    restoreGeometry(geometry);
 }
 
 
@@ -156,6 +163,10 @@ void MainWindow::closeEvent(QCloseEvent * event)
   if (manager_->closeAll())
   {
     event->accept();
+
+    QSettings settings;
+    settings.setValue("geometry", saveGeometry());
+
     QMainWindow::closeEvent(event);
   }
   else
