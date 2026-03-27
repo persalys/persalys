@@ -290,6 +290,7 @@ Python Console
 
   - console hidden
 - check that Tools>Install package is working properly on Linux
+
   - remove the directory ~/.persalys_base
   - click Menu->Tools->Install a package
   - enter a package name (e.g. coolprop) and click Install
@@ -390,13 +391,13 @@ Save/open Study
 
 - save myOTStudy with Menu->File->save, close with Menu->File->close, reopen with Menu->File->open
 
-- right click on myOTStudy, choose Rename, rename myOTStudy by myOTStudy1,
+- right click on myOTStudy, choose Rename, rename myOTStudy to myOTStudy1,
   save myOTStudy1 with the icon of the tool bar, close with right click + close,
   reopen with the icon of the tool bar
 
-- rename myOTStudy1 by myOTStudy2, save myOTStudy2 in pressing CTRL + S, close with right click + close, reopen with press keys CTRL + O
+- rename myOTStudy1 to myOTStudy2, save myOTStudy2 in pressing CTRL + S, close with right click + close, reopen with press keys CTRL + O
 
-- rename myOTStudy2 by myOTStudy3, save myOTStudy3 with right click + save, close with right click + close, reopen with press keys CTRL + O
+- rename myOTStudy2 to myOTStudy3, save myOTStudy3 with right click + save, close with right click + close, reopen with press keys CTRL + O
 
 Export/Import Study
 `````````````````````
@@ -1342,7 +1343,7 @@ Probabilistic analyses
           :align: center
 
       - left side: 4 variables in the list view
-      - right side, tabs: Summary - PDF/CDF - Box plots - Table - Parallel coordinates plot - Plot matrix - Scatter plots - Parameters - Model
+      - right side, tabs: Summary - PDF/CDF - Box plots - Dependance - Table - Parallel coordinates plot - Plot matrix - Scatter plots - Parameters - Model
       - when changing the variable, the tabs are updated
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
       - check the tabs (Table - Parallel coordinates plot - Plot matrix - Scatter plots) are linked:
@@ -1576,7 +1577,6 @@ Probabilistic analyses
           :align: center
 
       - selected outputs: y0 and y1
-      - method: Sobol
       - continue
 
     - Second page check the values:
@@ -1603,7 +1603,7 @@ Probabilistic analyses
       .. image:: /developer_manual/validation/sobol_result.png
           :align: center
 
-      - left side: 2 variables in the list view
+      - top combo box: 2 variables available
       - right side, tabs: Indices - Aggregated Indices - Stopping criteria - Parameters - Model
       - when changing the variable, the Indices tab is updated
       - when indices plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
@@ -1621,28 +1621,7 @@ Probabilistic analyses
 
   - SRC: SRC item
 
-    - First page check the values:
-
-      .. image:: /developer_manual/validation/src_wizard_1st_page.png
-          :align: center
-
-      - selected outputs: y0 and y1
-      - method: SRC
-      - continue
-
-    - Second page check the values:
-
-      .. image:: /developer_manual/validation/src_wizard_2nd_page.png
-          :align: center
-
-      - sample size: 200
-      - block size: 1
-      - seed: 2
-
-    - click on the Finish button
-
-      - a window appears with a table of parameters, a progress bar and 2 buttons 'Run' and 'Stop'
-      - click on the 'Run' button
+    - do not click modify, directly click on the 'Run' button
 
     - check result window:
 
@@ -1790,7 +1769,7 @@ Probabilistic analyses
       - change the value of x2 to 1.6
       - click on the Evaluate model button
 
-    - right click on the sub-item of design_3 named 'Evaluation' and choose New metamodel
+    - right click on the sub-item of design_3 named 'Evaluation' and choose convert into data model. Then, from the new data model item, open the metamodel creation wizard.
 
       - choose the Gaussian Process method, select all the output variables, continue:
 
@@ -1812,7 +1791,7 @@ Probabilistic analyses
       .. image:: /developer_manual/validation/chaos_1_wizard_1st_page.png
           :align: center
 
-      - design of experiments: probaDesign
+      - design of experiments: probaDesign_0
       - selected outputs: y1
       - method: Functional chaos
       - continue
@@ -1855,19 +1834,18 @@ Probabilistic analyses
 
   - chaos_2
 
-    - click on the 'Run' button
-    - error message: 'No results are available...'
     - right click on the item design_2 and choose Evaluate
-    - a wizard appears, deselect fake_y0, click one the Finish button
+    - a wizard appears, deselect fake_y0, click on the Finish button
     - a window appears, click on the 'Run' button
-    - right click on the item chaos_2 and click on Modify
+    - export the evaluation as data model
+    - open the metamodel creation wizard and apply the following values
 
     .. image:: /developer_manual/validation/chaos_2_wizard.png
         :align: center
 
-    - First page check the values:
+    - First page:
 
-      - design of experiments: design_2
+      - design of experiments: design_2_0
       - selected outputs: y0, y1
       - method: Functional chaos
 
@@ -2021,7 +1999,7 @@ Probabilistic analyses
       .. image:: /developer_manual/validation/copula_inference_result.png
           :align: center
 
-      - left side: 1 set of variables in the list view
+      - left side: 2 sets of variables in the list view
       - right side, 1 tab: Summary
       - the right side of the window contains 2 parts: a copulas list and 3 tabs: PDF/CDF - Kendall Plot - Parameters
       - when selecting a copula, the tab widget is updated
@@ -2065,7 +2043,7 @@ Designs of experiments
           :align: center
 
       - Monte Carlo selected
-      - A warning appears under LHS: LHS is designed for independent variables.
+      - A warning appears under LHS and QMC: designed for independent variables.
       - sample size: 100
       - seed: 0
       - cancel
@@ -2164,7 +2142,7 @@ Field analyses
 
     - Result has 5 sub-tabs: Trajectories, Mean trajectory, Functionnal bag chart, Bag chart, Table
 
-      - Check that the slection is syncrhonized betwwen the sub-tabs
+      - Check that the selection is synchronized between the sub-tabs
 
     - Decomposition has 3 sub-tabs: Modes, Eigenvalues, xi (with 2 sub-sub-tabs: PDF, Plot matrix)
 
@@ -2199,7 +2177,7 @@ Physical model
 
 - open the interface
 - create a new Study
-- click on 'Symbolic model' button of the window of myOTStudy
+- click on 'Symbolic model' button of the window of Study_0
     - the item SymbolicModel_0 appears in the tree view
     - a new Physical model diagram window appears in the mid Area, check its behavior (cursor, arrow colors, buttons availability, messages text)
     - only the 'Model definition' button is enabled
@@ -2215,7 +2193,7 @@ Physical model
     - a wizard appears, click on Cancel
 
 - In the model window: add a second input
-    - the 'Morris' and 'Observations' buttons of the diagram is enabled
+    - the 'Morris' and 'Observations' buttons of the diagram are enabled
 
 - In the model window: add a second output
     - the 'Multi-objective optimization' button is enabled
@@ -2272,8 +2250,8 @@ Physical model
 Data set
 ''''''''''
 
-- click on 'Data set' button of the window of myOTStudy
-    - the item dataSet_0 appears in the tree view
+- click on 'Data set' button of the window of Study_0
+    - the item DataSet_0 appears in the tree view
     - a new Data set diagram window appears in the midArea, check its behavior (cursor, arrow colors, buttons availability, messages text)
     - only the 'Model definition' button is enabled
 
@@ -2283,6 +2261,8 @@ Data set
 - click on 'Model definition' button of the diagram: an item 'Definition' appears
     - click on the '...' button, import the file data.csv
     - the first three columns are inputs and the last one is an output
+    - 'Sensitivity analysis', 'Quantile analysis' and 'export as data model' are disabled in the diagram
+    - in the definition tab, set the type to Monte Carlo
     - all the buttons are enabled in the diagram except 'export as model'
     - check that 'Sensitivity analysis' button is enabled only if there are at least two inputs and one output
     - check that 'Dependence inference' button is enabled only if there are more than one variable
@@ -2296,9 +2276,9 @@ Data set
 
     - a wizard appears with the title "Data sensitivity analysis"
 
-    - **First page (Methods)**:
+    - First page (Methods):
 
-      - there is an "Variable(s) of interest" group box with a combo box to select outputs
+      - there is a "Variable(s) of interest" group box with a combo box to select outputs
       - there is a "Global sensitivity analysis methods" group box with three checkboxes:
 
         - "Sobol indices (rank sobol algorithm)" — checked by default
@@ -2312,13 +2292,13 @@ Data set
 
       - uncheck all methods: click Finish: an error message "Please select at least one method" appears
       - check "Standard regression coefficients" only: the wizard shows Finish (no HSIC pages)
-      - check "Global HSIC": the wizard shows Next (HSIC parameters page will follow)
-      - uncheck "Global HSIC", check "Target HSIC": the wizard shows Next
-      - uncheck "Target HSIC", check "Conditional HSIC": the wizard shows Next
-      - check all three HSIC methods: the wizard shows Next
+      - check "Global HSIC": the wizard shows Continue (HSIC parameters page will follow)
+      - uncheck "Global HSIC", check "Target HSIC": the wizard shows Continue
+      - uncheck "Target HSIC", check "Conditional HSIC": the wizard shows Continue
+      - check all three HSIC methods: the wizard shows Continue
       - click Next
 
-    - **Global HSIC parameters page**:
+    - Global HSIC parameters page:
 
       - there is a combo box to choose V-statistic or U-statistic
       - there is a "Compute permutation p-values" checkbox
@@ -2326,22 +2306,25 @@ Data set
       - there is a "Covariance models" table with one row per variable (inputs + outputs)
       - click Next
 
-    - **Target HSIC parameters page**:
+    - Critical domain page
+      - there is a "Critical domain" table with one row per output variable
+      - define the critical domain for Y0 as [8;inf)
+      - there is a "Filter/weight functions" table with alpha parameters for each output variable
+
+    - Target HSIC parameters page:
 
       - there is a combo box to choose V-statistic or U-statistic
       - there is a "Compute permutation p-values" checkbox
       - there is a "Compute asymptotic p-values" checkbox
       - there is a "Covariance models" table
-      - there is a "Filter functions" table with alpha parameters for each output variable
       - click Next
 
-    - **Conditional HSIC parameters page**:
+    - Conditional HSIC parameters page:
 
       - there is NO combo box for V/U-statistic (conditional HSIC does not support it)
       - there is a "Compute permutation p-values" checkbox
       - there is NO "Compute asymptotic p-values" checkbox (conditional HSIC does not support it)
       - there is a "Covariance models" table
-      - there is a "Weight functions" table with alpha parameters for each output variable
       - click Finish
 
     - an item 'Sensitivity' appears in the tree view
