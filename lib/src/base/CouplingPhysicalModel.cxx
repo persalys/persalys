@@ -379,7 +379,7 @@ String CouplingPhysicalModel::writeCode(const Description &inputNames, const Des
   code << "                remote_res = remote_workdir / src_path.name\n";
   code << "                remote_mkdir_p(remote_res.parent, ssh)\n";
   code << "                sftp.put(str(local_res), str(remote_res))\n";
-  code << "                if os.name == 'posix'\n";
+  code << "                if os.name == 'posix':\n";
   code << "                    # Preserve file permissions\n";
   code << "                    local_mode = src_path.stat().st_mode & 0o777\n";
   code << "                else:\n";
