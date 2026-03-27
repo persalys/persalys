@@ -77,7 +77,7 @@ MainWindow::MainWindow()
   QSettings settings;
   QByteArray geometry = settings.value("geometry").toByteArray();
   if (geometry.isEmpty())
-    resize(1280, 1024);
+    resize(3840, 2160);
   else
     restoreGeometry(geometry);
 }
