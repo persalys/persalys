@@ -67,14 +67,13 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
     updateStepTabWidget(item);
   });
 
-  QGridLayout * mainLayout = new QGridLayout(this);
+  auto * mainLayout = new QVBoxLayout(this);
   QString docLink("user_manual/graphical_interface/physical_model/user_manual_physical_model.html#coupling-model-define-a-physical-model-to-wrap-an-external-code-using-file-exchange");
 
   mainLayout->addWidget(new TitleLabel(tr("Coupling model"), docLink));
 
   QTabWidget * mainTabWidget = new QTabWidget;
-  mainLayout->addWidget(mainTabWidget, 1, 0, 1, 2);
-  mainLayout->setColumnStretch(0, 1);
+  mainLayout->addWidget(mainTabWidget, 1);
 
   QWidget * tab = new QWidget;
   QGridLayout * tabLayout = new QGridLayout(tab);
@@ -225,7 +224,6 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
   });
 
   QLabel * timeInfo = new QLabel();
-  mainLayout->addWidget(timeInfo, 2, 0);
 
   // Tab : Finite difference step definition
   tab = new QWidget;
@@ -286,6 +284,7 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
   connect(buttons, &CheckModelButtonGroup::evaluateOutputsRequested, [this, timeInfo, mainTabWidget] ()
   {
     timeInfo->clear();
+    QApplication::processEvents();
     evaluateOutputs();
     mainTabWidget->setCurrentIndex(2);
     if(model_->getEvalTime() > 0)
@@ -293,15 +292,23 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
                         + QtOT::FormatDuration(model_->getEvalTime()));
   });
 
-  connect(buttons, &CheckModelButtonGroup::evaluateGradientRequested, [this, gradientTableModel, mainTabWidget] ()
+  connect(buttons, &CheckModelButtonGroup::evaluateGradientRequested, [this, gradientTableModel, mainTabWidget, timeInfo] ()
   {
+    timeInfo->clear();
+    QApplication::processEvents();
     gradientTableModel->evaluateGradient();
     mainTabWidget->setCurrentIndex(1);
     if (!gradientTableModel->getErrorMessage().isEmpty())
       errorMessageWidget_->setMessage(gradientTableModel->getErrorMessage());
+    if(gradientTableModel->getEvalTime() > 0)
+      timeInfo->setText(tr("Elapsed time") + ": "
+                      + QtOT::FormatDuration(gradientTableModel->getEvalTime()));
   });
 
-  mainLayout->addWidget(buttons, 2, 0, 1, 2);
+  auto * bottomLayout = new QHBoxLayout;
+  bottomLayout->addWidget(timeInfo);
+  bottomLayout->addWidget(buttons, 1);
+  mainLayout->addLayout(bottomLayout);
 }
 
 void CouplingModelWindow::updateStepTabWidget(PhysicalModelItem *item)

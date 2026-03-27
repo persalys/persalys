@@ -48,6 +48,10 @@ public:
   {
     return errorMessage_;
   };
+  OT::Scalar getEvalTime() const
+  {
+    return evalTime_;
+  };
 
 public slots:
   void updateData();
@@ -60,6 +64,7 @@ private:
   PhysicalModel physicalModel_;
   OT::Matrix gradient_;
   QString errorMessage_;
+  OT::Scalar evalTime_ = 0.;
 };
 }
 #endif
