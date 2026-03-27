@@ -50,7 +50,7 @@ namespace PERSALYS
 
 MainWindow::MainWindow()
   : QMainWindow()
-  , manager_(0)
+  , manager_(nullptr)
   , pythonConsole_(new PyConsole_Console(this))
 {
   setWindowTitle("Persalys");
@@ -77,7 +77,7 @@ MainWindow::MainWindow()
   QSettings settings;
   QByteArray geometry = settings.value("geometry").toByteArray();
   if (geometry.isEmpty())
-    resize(3840, 2160);
+    showMaximized();
   else
     restoreGeometry(geometry);
 }
@@ -107,7 +107,7 @@ void MainWindow::buildInterface()
   CustomDockWidget * pythonConsoleDock = new CustomDockWidget(tr("Python Console"));
   pythonConsoleDock->setWidget(pythonConsole_);
   pythonConsoleDock->setFeatures(QDockWidget::DockWidgetClosable);
-  pythonConsoleDock->setVisible(QSettings().value("pythonConsoleVisibility", true).toBool());
+  pythonConsoleDock->setVisible(QSettings().value("pythonConsoleVisibility", false).toBool());
   mainSplitter->addWidget(pythonConsoleDock);
   mainSplitter->setStretchFactor(1, 1);
 
