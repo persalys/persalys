@@ -128,7 +128,9 @@ void GradientTableModel::evaluateGradient()
 
   if (!eval.getErrorMessage().empty())
   {
-    emit errorMessageChanged(QString(eval.getErrorMessage().c_str()));
+    errorMessage_ = QString(eval.getErrorMessage().c_str());
+    evalTime_ = 0.;
+    emit errorMessageChanged(errorMessage_);
     return;
   }
 
@@ -136,11 +138,14 @@ void GradientTableModel::evaluateGradient()
   {
     Function func = physicalModel_.getFunction(physicalModel_.getSelectedOutputsNames());
     gradient_ = func.gradient(eval.getOriginalInputSample()[0]);
+    evalTime_ = eval.getElapsedTime();
     emit dataChanged(this->index(0, 0), this->index(rowCount(), columnCount()));
   }
   catch (const std::exception & ex)
   {
-    emit errorMessageChanged(tr("Not possible to evaluate the gradient: %1").arg(ex.what()));
+    errorMessage_ = tr("Not possible to evaluate the gradient: %1").arg(ex.what());
+    evalTime_ = 0.;
+    emit errorMessageChanged(errorMessage_);
     gradient_ = Matrix();
     return;
   }
