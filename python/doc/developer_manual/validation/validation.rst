@@ -1282,7 +1282,9 @@ Designs of experiments
       - finish
       - check the evaluation is done and y0 has been evaluated
 
-- save the study, close it, reopen it, check all windows are correctly build, close the study.
+- save the study, close it, reopen it, check all windows are correctly built
+- verify that you can close every analysis
+- close the study
 
 Probabilistic analyses
 ``````````````````````
