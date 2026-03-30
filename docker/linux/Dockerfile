@@ -5,7 +5,7 @@ RUN yum -y install almalinux-release-devel epel-release && yum config-manager --
   pcre-devel pcre2-devel blas-devel lapack-devel atlas-devel libxml2-devel libmpc-devel mpfr-devel libtree-ldd texinfo \
   zlib-devel bzip2-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel libpcap-devel libffi-devel openssl-devel \
   freetype-devel libjpeg-turbo-devel fontconfig-devel xz-devel dbus-devel java-11-openjdk libicu-devel curl-devel \
-  libX11-devel libXt-devel libXext-devel libXrender-devel libSM-devel libICE-devel libXrandr-devel \
+  libX11-devel libXt-devel libXext-devel libXrender-devel libSM-devel libICE-devel libXrandr-devel libXcursor-devel \
   xorg-x11-server-Xvfb xorg-x11-util-macros libxkbcommon-x11-devel \
   mesa-libGL-devel mesa-libEGL-devel mesa-libGLU-devel mesa-libGLw-devel mesa-dri-drivers \
   xcb-util-devel xcb-util-renderutil-devel xcb-util-keysyms-devel xcb-util-image-devel xcb-util-wm-devel xcb-util-cursor-devel \
