@@ -57,7 +57,7 @@ curl -fSsL https://anaconda.org/conda-forge/otfmi/0.17.1/download/noarch/otfmi-0
 cd site-packages
 
 python -m pip install --target . --platform win_amd64 --python-version ${PYMAJMIN:0:1}.${PYMAJMIN:1} --only-binary=:all: \
-  pip scipy pandas openpyxl jinja2 pythonfmu paramiko dill
+  pip "numpy<2.5" "scipy<1.18" pandas openpyxl jinja2 pythonfmu paramiko dill
 cd ../..
 mkdir Scripts && echo -e 'import sys\nfrom pip import main\nsys.exit(main())\n' > Scripts/pip.py && echo -e 'python %~dp0pip.py %*' > Scripts/pip.bat
 cd /tmp/build

@@ -20,7 +20,7 @@ WORKDIR /usr/local/src
 RUN curl -fsSL https://ftp.gnu.org/gnu/bison/bison-3.8.2.tar.gz | tar xz && cd bison* && ./configure && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r bison*
 
 # swig
-RUN curl -fsSL https://github.com/swig/swig/archive/v4.4.0.tar.gz | tar xz && cd swig* \
+RUN curl -fsSL https://github.com/swig/swig/archive/v4.4.1.tar.gz | tar xz && cd swig* \
  && cmake . && make install > /dev/null 2>&1 && swig -version && cd - && rm -r swig*
 
 # ipopt
@@ -50,7 +50,7 @@ RUN curl -fsSL https://github.com/stevengj/nlopt/archive/v2.10.1.tar.gz | tar xz
  && cmake -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_UNITY_BUILD=ON -DNLOPT_PYTHON=OFF -DNLOPT_OCTAVE=OFF -DNLOPT_GUILE=OFF -DNLOPT_JAVA=OFF . && make install > /dev/null 2>&1 && cd - && rm -r nlopt*
 
 # hdf5
-RUN curl -fsSL https://github.com/HDFGroup/hdf5/archive/refs/tags/2.0.0.tar.gz | tar xz && cd hdf5* && cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DHDF5_BUILD_CPP_LIB=ON -DBUILD_TESTING=OFF -DHDF5_BUILD_TOOLS=OFF -DHDF5_BUILD_EXAMPLES=OFF -DHDF5_BUILD_UTILS=OFF -DBUILD_STATIC_LIBS=OFF -DHDF5_ENABLE_ZLIB_SUPPORT=ON -B build . && cd build && make install > /dev/null 2>&1 && cd ../.. && rm -r hdf5*
+RUN curl -fsSL https://github.com/HDFGroup/hdf5/archive/refs/tags/2.1.1.tar.gz | tar xz && cd hdf5* && cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DHDF5_BUILD_CPP_LIB=ON -DBUILD_TESTING=OFF -DHDF5_BUILD_TOOLS=OFF -DHDF5_BUILD_EXAMPLES=OFF -DHDF5_BUILD_UTILS=OFF -DBUILD_STATIC_LIBS=OFF -DHDF5_ENABLE_ZLIB_SUPPORT=ON -B build . && cd build && make install > /dev/null 2>&1 && cd ../.. && rm -r hdf5*
 
 # nanoflann
 RUN curl -fsSL https://github.com/jlblancoc/nanoflann/archive/refs/tags/v1.9.0.tar.gz | tar xz && cd nanoflann* && cmake -DNANOFLANN_BUILD_EXAMPLES=OFF -DNANOFLANN_BUILD_TESTS=OFF . && make install && cd - && rm -r nanoflann*
@@ -96,7 +96,7 @@ RUN curl -fsSL https://www.python.org/ftp/python/3.14.3/Python-3.14.3.tgz | tar 
  && python3 -V && python3 -c "import ssl; import ctypes" && cd - && rm -r Python*
 
 # pip
-RUN pip3 install "numpy<2.4" "scipy<1.17" matplotlib ipython sphinx numpydoc dill meson flake8 doc8 openpyxl cython setuptools paramiko --upgrade --quiet
+RUN pip3 install "numpy<2.5" "scipy<1.18" matplotlib ipython sphinx numpydoc dill meson flake8 doc8 openpyxl cython setuptools paramiko --upgrade --quiet
 
 # superlu
 RUN git clone -b v4.0.1 --depth 1 https://github.com/xiaoyeli/superlu_mt.git && cd superlu_mt \
@@ -105,13 +105,14 @@ RUN git clone -b v4.0.1 --depth 1 https://github.com/xiaoyeli/superlu_mt.git && 
  && make install > /dev/null 2>&1 && cd - && rm -r superlu_mt
 
 # sundials
-RUN curl -fsSL https://github.com/LLNL/sundials/archive/v7.6.0.tar.gz | tar xz && cd sundials* \
- && cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=OFF -DEXAMPLES_INSTALL=OFF \
-    -DENABLE_LAPACK=ON -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON -DSUNDIALS_INDEX_SIZE=32 -DCMAKE_INSTALL_LIBDIR=lib \
-    -DENABLE_SUPERLUMT=ON -DSUPERLUMT_THREAD_TYPE=OPENMP -DSUPERLUMT_INCLUDE_DIR="/usr/local/include" -DSUPERLUMT_WORKS=ON \
-    -DSUPERLUMT_LIBRARY=libsuperlu_mt_OPENMP.a -DSUPERLUMT_LIBRARIES="/usr/local/lib/libsuperlu_mt_OPENMP.a;blas" \
+RUN curl -fsSL https://github.com/LLNL/sundials/archive/v7.7.0.tar.gz | tar xz && cd sundials* \
+ && cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=OFF -DSUNDIALS_ENABLE_C_EXAMPLES=OFF \
+    -DSUNDIALS_ENABLE_LAPACK=ON -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON -DSUNDIALS_INDEX_SIZE=32 -DCMAKE_INSTALL_LIBDIR=lib \
+    -DSUNDIALS_ENABLE_SUPERLUMT=ON -DSUPERLUMT_THREAD_TYPE=OPENMP -DSUPERLUMT_INCLUDE_DIR="/usr/local/include" \
+    -DSUNDIALS_ENABLE_SUPERLUMT_CHECKS=ON -DSUPERLUMT_LIBRARY=libsuperlu_mt_OPENMP.a \
+    -DSUPERLUMT_LIBRARIES="/usr/local/lib/libsuperlu_mt_OPENMP.a;blas" \
     -B build . \
- && cd build && make install > /dev/null 2>&1 && cd ../.. && rm -r sundials*
+ && make install -C build > /dev/null 2>&1 && cd - && rm -r sundials*
 
 # fmilib
 RUN curl -fsSL https://github.com/modelon-community/fmi-library/archive/3.0.4.tar.gz | tar xz && cd fmi-library* \
@@ -133,7 +134,7 @@ RUN git clone --depth 1 https://github.com/ianlancetaylor/libbacktrace.git && cd
  && autoreconf -fi && ./configure --enable-shared --disable-static && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r libbacktrace*
 
 # boost
-RUN curl -fsSL https://archives.boost.io/release/1.89.0/source/boost_1_89_0.tar.bz2 | tar xj && cd boost* \
+RUN curl -fsSL https://archives.boost.io/release/1.90.0/source/boost_1_90_0.tar.bz2 | tar xj && cd boost* \
  && ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/local/bin/python3 \
  && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system ${MAKEFLAGS} install --with-graph --with-chrono --with-serialization --with-program_options --with-filesystem --with-regex > /dev/null 2>&1 && cd - && rm -r boost*
 
@@ -161,7 +162,7 @@ RUN curl -fsSL https://downloads.sourceforge.net/qwt/qwt-6.3.0.tar.bz2 | tar xj 
  && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qwt*
 
 # paraview
-RUN curl -fsSL https://paraview.org/files/v6.0/ParaView-v6.0.1.tar.xz | tar xJ && cd ParaView* \
+RUN curl -fsSL https://paraview.org/files/v6.1/ParaView-v6.1.0.tar.xz | tar xJ && cd ParaView* \
  && cmake -DCMAKE_BUILD_TYPE=Release \
   -DPARAVIEW_ENABLE_EMBEDDED_DOCUMENTATION=OFF -DPARAVIEW_PLUGIN_DISABLE_XML_DOCUMENTATION=ON \
   -DPARAVIEW_USE_VISKORES=OFF -DPARAVIEW_USE_FORTRAN=OFF -DPARAVIEW_ENABLE_XDMF2=OFF \
