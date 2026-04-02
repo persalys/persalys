@@ -2488,3 +2488,10 @@ SSH Coupling
 In CouplingPhysicalModel_std and CouplingPhysicalModel_logistic python tests,
 change the ssh_hostname variable to the name of a server you can connect to by ssh without password (using ssh keys).
 Then run the tests to validate the SSH coupling feature.
+
+Translations
+''''''''''''
+
+After the translations have been updated, open the previous studies,
+go through the analyses and check that all the messages, labels, buttons, etc.
+are well translated and there is no text overflow.
