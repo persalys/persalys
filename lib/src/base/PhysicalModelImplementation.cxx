@@ -154,11 +154,6 @@ void PhysicalModelImplementation::setInputs(const InputCollection & inputs)
 
   inputs_ = inputs;
 
-  // update blockIndependentCopula_
-  blockIndependentCopula_ = BlockIndependentCopula();
-  // by default a BlockIndependentCopula contain an IndependentCopula with the description ("X0","X1")
-  blockIndependentCopula_.setDescription(Description::BuildDefault(2, "_dummy_var_name"));
-
   inputsChanged();
 }
 

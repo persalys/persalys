@@ -142,6 +142,7 @@ bool CorrelationTableModel::setData(const QModelIndex & index, const QVariant & 
       }
       copula_.setDescription(oldDescription);
       physicalModel_.setCopula(oldDescription, copula_);
+      physicalModel_.blockNotification();
       emit dataChanged(index, index);
       emit dataUpdated(copula_);
       return true;
