@@ -1618,7 +1618,7 @@ bayésien (BIC)</translation>
         <location filename="../lib/src/view/CouplingModelWindow.cxx" line="144"/>
         <location filename="../lib/src/view/CouplingModelWindow.cxx" line="321"/>
         <source>Step</source>
-        <translation>Pas</translation>
+        <translation>Etape</translation>
     </message>
     <message>
         <location filename="../lib/src/view/CouplingModelWindow.cxx" line="253"/>
@@ -5315,7 +5315,8 @@ des paramètres</translation>
         <location filename="../lib/src/view/InstallPackageDialog.cxx" line="48"/>
         <source>Install a Python package into the Persalys environment using pip.
 The installation progress will be shown in the Python Console.</source>
-        <translation>Installer un paquet Python dans l&apos;environnement Persalys avec pip.\nL&apos;avancement de l&apos;installation sera affiché dans la console Python.</translation>
+        <translation>Installer un paquet Python dans l&apos;environnement Persalys avec pip.
+L&apos;avancement de l&apos;installation sera affiché dans la console Python.</translation>
     </message>
     <message>
         <location filename="../lib/src/view/InstallPackageDialog.cxx" line="57"/>
@@ -8225,7 +8226,9 @@ d&apos;expériences</translation>
         <source>Design of
 experiments
 export</source>
-        <translation>Export du\nplan\nd&apos;expérience</translation>
+        <translation>Export du
+plan
+d&apos;expérience</translation>
     </message>
     <message>
         <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="120"/>
@@ -8282,7 +8285,8 @@ centrale</translation>
         <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="135"/>
         <source>Sobol
 Sensitivity</source>
-        <translation>Sensibilité\nde Sobol</translation>
+        <translation>Sensibilité
+de Sobol</translation>
     </message>
     <message>
         <location filename="../lib/src/view/PhysicalModelDiagramWindow.cxx" line="144"/>
