@@ -22,9 +22,9 @@ Requirements:
   - X11/Wayland with OpenGL >=3.2
   - FUSE userspace filesystem
 
-The AppImage binary requires the libfuse2 package to run which might not be installed by default, for example on Ubuntu::
+The AppImage binary requires the libfuse3 package to run which might not be installed by default, for example on Ubuntu::
 
-    $ sudo apt install libfuse2t64
+    $ sudo apt install libfuse3-3
 
 No installation is required, set the executable bit if needed and just run the .AppImage as follows::
 
