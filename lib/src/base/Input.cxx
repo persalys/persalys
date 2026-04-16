@@ -26,7 +26,7 @@
 #include <openturns/TruncatedDistribution.hxx>
 #include <openturns/Dirac.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
-#include <openturns/UserDefined.hxx>
+#include <openturns/FiniteDiscreteDistribution.hxx>
 #include <openturns/Histogram.hxx>
 
 using namespace OT;
@@ -190,14 +190,14 @@ String Input::getDistributionPythonScript() const
     else  // both sides truncation
       oss << "ot.Interval(" << bounds.getLowerBound()[0] << ", " << bounds.getUpperBound()[0] << "))\n";
   }
-  else if (distributionName == "UserDefined")
+  else if (distributionName == "FiniteDiscreteDistribution")
   {
-    const UserDefined distribution = *dynamic_cast<UserDefined*>(distribution_.getImplementation().get());
+    const FiniteDiscreteDistribution distribution = *dynamic_cast<FiniteDiscreteDistribution*>(distribution_.getImplementation().get());
     const String valuesVarName = "values_" + getName();
     const String weightsVarName = "weights_" + getName();
     oss << valuesVarName << " = " << Parameters::GetOTSampleStr(distribution.getX());
     oss << weightsVarName << " = " << Parameters::GetOTPointStr(distribution.getP()) << "\n";
-    oss << "dist_" << getName() << " = ot.UserDefined(" << valuesVarName << ", " << weightsVarName << ")\n"; 
+    oss << "dist_" << getName() << " = ot.FiniteDiscreteDistribution(" << valuesVarName << ", " << weightsVarName << ")\n"; 
   }
   else if (distributionName == "Histogram")
   {

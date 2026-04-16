@@ -44,7 +44,7 @@
 #include <openturns/Normal.hxx>
 #include <openturns/TruncatedDistribution.hxx>
 #include <openturns/TruncatedNormal.hxx>
-#include <openturns/UserDefined.hxx>
+#include <openturns/FiniteDiscreteDistribution.hxx>
 #include <openturns/Histogram.hxx>
 
 #include <QSplitter>
@@ -452,7 +452,7 @@ void MarginalsWidget::updateDistributionParametersWidgets(const QModelIndex& ind
       parameterValuesLabel_[i]->setText(TranslationManager::GetTranslatedDistributionParameterName(parametersName[i]));
       parameterValuesLabel_[i]->show();
       editButton_->hide();
-      if (distName == "UserDefined")
+      if (distName == "FiniteDiscreteDistribution")
       {
         QString text;
         const int nbValues = inputDist.getParametersCollection()[0].getSize();
@@ -577,8 +577,8 @@ void MarginalsWidget::distributionParametersChanged()
   const String distName = inputDist.getImplementation()->getClassName();
   const UnsignedInteger parametersType = input.getDistributionParametersType();
 
-  // do nothing if UserDefined : parameters are read only
-  if (distName == "UserDefined")
+  // do nothing if FiniteDiscreteDistribution : parameters are read only
+  if (distName == "FiniteDiscreteDistribution")
     return;
 
   if (distName == "TruncatedDistribution")

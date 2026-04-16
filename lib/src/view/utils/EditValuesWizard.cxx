@@ -20,7 +20,7 @@
  */
 #include "persalys/EditValuesWizard.hxx"
 
-#include <openturns/UserDefined.hxx>
+#include <openturns/FiniteDiscreteDistribution.hxx>
 #include <openturns/Histogram.hxx>
 
 #include "persalys/DoubleSpinBox.hxx"
@@ -347,7 +347,7 @@ void UserDefinedWizard::addValue(Scalar)
 
 Distribution UserDefinedWizard::getDistribution() const
 {
-  return UserDefined(model_->getSample().getMarginal(0), getValues(1));
+  return FiniteDiscreteDistribution(model_->getSample().getMarginal(0), getValues(1));
 }
 
 HistogramWizard::HistogramWizard(Scalar first, const Point &widths, const Point &heights, QWidget *parent): 

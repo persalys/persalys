@@ -30,7 +30,7 @@
 #include "persalys/FileTools.hxx"
 
 #include <openturns/VisualTest.hxx>
-#include <openturns/UserDefined.hxx>
+#include <openturns/FiniteDiscreteDistribution.hxx>
 #include <openturns/Histogram.hxx>
 
 #include <QVBoxLayout>
@@ -541,7 +541,7 @@ void InferenceResultWidget::updateGraphs(QModelIndex current)
   const Sample sample(currentFittingTestResult_.getValues());
   const Scalar xmin = sample.getMin()[0] - 1.0;
   const Scalar xmax = sample.getMax()[0] + 1.0;
-  UserDefined u(sample);
+  FiniteDiscreteDistribution u(sample);
   const Sample F_nxOT(u.drawCDF(xmin, xmax).getDrawable(0).getData());
 
   Sample F_nx(0, 2);
