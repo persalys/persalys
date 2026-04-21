@@ -45,7 +45,7 @@ DataSensitivityAnalysisWizard::DataSensitivityAnalysisWizard(const Analysis& ana
 : AnalysisWizard(analysis, parent)
 {
   setWindowTitle(tr("Data sensitivity analysis"));
-  docLink_ = "user_manual/graphical_interface/data_analysis/user_manual_data_analysis.html#sensitivityAnalysis";
+  docLink_ = "user_manual/graphical_interface/data_analysis/user_manual_data_analysis.html#sensitivity-analysis";
 
   analysis_ptr_ = dynamic_cast<const DataSensitivityAnalysis *>(analysis.getImplementation().get());
 
