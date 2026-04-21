@@ -246,7 +246,8 @@ The wizard allows one to configure the sensitivity analysis:
   - **Filter/weight functions**: An alpha parameter table for each output variable of
     interest. The filter/weight function is constructed as
     :math:`\varphi(x) = \exp\left(-d(x, D) / (\alpha_i \cdot \sigma_i)\right)` where
-    :math:`D` is the critical domain, :math:`\alpha_i` is a tuning parameter and
+    :math:`D` is the critical domain, :math:`\alpha_i` is a tuning parameter,
+    :math:`d(x, D)` is the distance from the point :math:`x` to the critical domain, and
     :math:`\sigma_i` is the standard deviation of the :math:`i`-th output variable.
 
 
