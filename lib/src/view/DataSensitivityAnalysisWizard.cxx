@@ -413,8 +413,6 @@ void DataSensitivityAnalysisCriticalDomainPage::initialize(DataSensitivityAnalys
 
   // Critical domain table
   criticalDomainTableModel_ = new CriticalDomainTableModel(interestVariables, this);
-  connect(criticalDomainTableModel_, &CriticalDomainTableModel::errorMessageChanged,
-          errorWidget_, &ErrorWidget::setTemporaryFramelessErrorMessage);
   criticalDomainTableView_->setModel(criticalDomainTableModel_);
 
   // Set spinbox delegates for bound columns
@@ -425,6 +423,15 @@ void DataSensitivityAnalysisCriticalDomainPage::initialize(DataSensitivityAnalys
   auto * upperDelegate = new SpinBoxDelegate(criticalDomainTableView_);
   upperDelegate->setSpinBoxType(SpinBoxDelegate::doubleValue);
   criticalDomainTableView_->setItemDelegateForColumn(2, upperDelegate);
+
+  // Always seed quantile defaults so unchecking shows a meaningful value
+  {
+    const Sample outputSample = analysis_ptr->getDesignOfExperiment().getOutputSample();
+    const Sample marginalSample = outputSample.getMarginal(interestVariables);
+    const Point lowerQ = marginalSample.computeQuantilePerComponent(0.95);
+    const Point upperQ = marginalSample.computeQuantilePerComponent(0.05);
+    criticalDomainTableModel_->setDefaultBounds(lowerQ, upperQ);
+  }
 
   if (analysis_ptr->getTargetCriticalDomain().getDimension() == interestVariables.getSize())
     criticalDomainTableModel_->setInterval(analysis_ptr->getTargetCriticalDomain());
@@ -476,10 +483,39 @@ int DataSensitivityAnalysisCriticalDomainPage::nextId() const
 
 bool DataSensitivityAnalysisCriticalDomainPage::validatePage()
 {
-  if (criticalDomainTableModel_ && criticalDomainTableModel_->hasErrors())
+  if (criticalDomainTableModel_ && analysis_ptr_)
   {
-    errorWidget_->setTemporaryFramelessErrorMessage(tr("Lower bound must be less than or equal to upper bound"));
-    return false;
+    const Interval interval = criticalDomainTableModel_->getInterval();
+    const Description interestVariables = analysis_ptr_->getInterestVariables();
+    const Sample outputSample = analysis_ptr_->getDesignOfExperiment().getOutputSample();
+    const Sample marginalSample = outputSample.getMarginal(interestVariables);
+    const Point sampleMin = marginalSample.getMin();
+    const Point sampleMax = marginalSample.getMax();
+    for (UnsignedInteger i = 0; i < interestVariables.getSize(); ++i)
+    {
+      if (interval.getFiniteLowerBound()[i] && interval.getFiniteUpperBound()[i]
+          && interval.getLowerBound()[i] > interval.getUpperBound()[i])
+      {
+        errorWidget_->setTemporaryFramelessErrorMessage(
+          tr("Lower bound must be less than or equal to upper bound for variable '%1'")
+          .arg(QString::fromStdString(interestVariables[i])));
+        return false;
+      }
+      if ((!interval.getFiniteLowerBound()[i] && !interval.getFiniteUpperBound()[i])
+          || (!interval.getFiniteLowerBound()[i] && interval.getFiniteUpperBound()[i]
+              && interval.getUpperBound()[i] >= sampleMax[i])
+          || (!interval.getFiniteUpperBound()[i] && interval.getFiniteLowerBound()[i]
+              && interval.getLowerBound()[i] <= sampleMin[i])
+          || (interval.getFiniteLowerBound()[i] && interval.getFiniteUpperBound()[i]
+          && interval.getLowerBound()[i] <= sampleMin[i]
+          && interval.getUpperBound()[i] >= sampleMax[i]))
+      {
+        errorWidget_->setTemporaryFramelessErrorMessage(
+          tr("The critical domain cannot include the whole sample for variable '%1'")
+          .arg(QString::fromStdString(interestVariables[i])));
+        return false;
+      }
+    }
   }
   if (alphaTableModel_ && alphaTableModel_->hasErrors())
   {

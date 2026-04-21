@@ -24,7 +24,6 @@
 #include "persalys/StudyTreeViewModel.hxx"
 
 #include <limits>
-#include <QColor>
 
 using namespace OT;
 
@@ -38,8 +37,10 @@ CriticalDomainTableModel::CriticalDomainTableModel(const Description & variableN
 {
   for (UnsignedInteger i = 0; i < variableNames_.getSize(); ++i)
   {
-    lowerBounds_ << -std::numeric_limits<double>::infinity();
-    upperBounds_ << std::numeric_limits<double>::infinity();
+    lowerBounds_ << 0.0;
+    upperBounds_ << 0.0;
+    finiteLowerBounds_ << false;
+    finiteUpperBounds_ << false;
   }
 }
 
@@ -77,7 +78,12 @@ Qt::ItemFlags CriticalDomainTableModel::flags(const QModelIndex & index) const
   Qt::ItemFlags result = QAbstractTableModel::flags(index);
 
   if (index.column() == 1 || index.column() == 2)
-    return result | Qt::ItemIsEditable;
+  {
+    result |= Qt::ItemIsUserCheckable;
+    if ((index.column() == 1 && finiteLowerBounds_[index.row()]) ||
+        (index.column() == 2 && finiteUpperBounds_[index.row()]))
+      result |= Qt::ItemIsEditable;
+  }
 
   return result;
 }
@@ -96,24 +102,31 @@ QVariant CriticalDomainTableModel::data(const QModelIndex & index, int role) con
     case 0:
       return QString::fromStdString(variableNames_[row]);
     case 1:
-      if (role == Qt::DisplayRole)
+      if (finiteLowerBounds_[row] || role == Qt::EditRole)
         return QString::number(lowerBounds_[row], 'g', StudyTreeViewModel::DefaultSignificantDigits);
       else
-        return lowerBounds_[row];
+        return QString("-\xe2\x88\x9e");
     case 2:
-      if (role == Qt::DisplayRole)
+      if (finiteUpperBounds_[row] || role == Qt::EditRole)
         return QString::number(upperBounds_[row], 'g', StudyTreeViewModel::DefaultSignificantDigits);
       else
-        return upperBounds_[row];
+        return QString("+\xe2\x88\x9e");
     default:
       return QVariant();
     }
   }
 
-  if (role == Qt::ForegroundRole)
+  if (role == Qt::CheckStateRole)
   {
-    if ((index.column() == 1 || index.column() == 2) && errorRows_.contains(row))
-      return QColor(Qt::red);
+    switch (index.column())
+    {
+    case 1:
+      return finiteLowerBounds_[row] ? Qt::Checked : Qt::Unchecked;
+    case 2:
+      return finiteUpperBounds_[row] ? Qt::Checked : Qt::Unchecked;
+    default:
+      return QVariant();
+    }
   }
 
   return QVariant();
@@ -121,32 +134,65 @@ QVariant CriticalDomainTableModel::data(const QModelIndex & index, int role) con
 
 bool CriticalDomainTableModel::setData(const QModelIndex & index, const QVariant & value, int role)
 {
-  if (!index.isValid() || role != Qt::EditRole)
-    return false;
-
-  bool ok;
-  const double val = value.toDouble(&ok);
-  if (!ok)
+  if (!index.isValid())
     return false;
 
   const int row = index.row();
 
-  if (index.column() == 1)
+  if (role == Qt::EditRole)
   {
-    lowerBounds_[row] = val;
-    emit dataChanged(index, index);
-    updateErrors();
-    return true;
+    bool ok;
+    const double val = value.toDouble(&ok);
+    if (!ok)
+      return false;
+
+    if (index.column() == 1)
+    {
+      lowerBounds_[row] = val;
+      emit dataChanged(index, index);
+      return true;
+    }
+    else if (index.column() == 2)
+    {
+      upperBounds_[row] = val;
+      emit dataChanged(index, index);
+      return true;
+    }
   }
-  else if (index.column() == 2)
+  else if (role == Qt::CheckStateRole)
   {
-    upperBounds_[row] = val;
-    emit dataChanged(index, index);
-    updateErrors();
-    return true;
+    const bool finite = value.toBool();
+    if (index.column() == 1)
+    {
+      if (finiteLowerBounds_[row] == finite)
+        return false;
+      finiteLowerBounds_[row] = finite;
+      emit dataChanged(index, index);
+      return true;
+    }
+    else if (index.column() == 2)
+    {
+      if (finiteUpperBounds_[row] == finite)
+        return false;
+      finiteUpperBounds_[row] = finite;
+      emit dataChanged(index, index);
+      return true;
+    }
   }
 
   return false;
+}
+
+void CriticalDomainTableModel::setDefaultBounds(const Point & lower, const Point & upper)
+{
+  if (lower.getSize() != variableNames_.getSize() || upper.getSize() != variableNames_.getSize())
+    return;
+  for (int i = 0; i < static_cast<int>(lower.getSize()); ++i)
+  {
+    lowerBounds_[i] = lower[i];
+    upperBounds_[i] = upper[i];
+    // finiteLowerBounds_ and finiteUpperBounds_ remain false
+  }
 }
 
 void CriticalDomainTableModel::setInterval(const Interval & interval)
@@ -157,8 +203,14 @@ void CriticalDomainTableModel::setInterval(const Interval & interval)
   beginResetModel();
   for (int i = 0; i < static_cast<int>(interval.getDimension()); ++i)
   {
-    lowerBounds_[i] = interval.getLowerBound()[i];
-    upperBounds_[i] = interval.getUpperBound()[i];
+    finiteLowerBounds_[i] = interval.getFiniteLowerBound()[i];
+    finiteUpperBounds_[i] = interval.getFiniteUpperBound()[i];
+    if (interval.getFiniteLowerBound()[i])
+      lowerBounds_[i] = interval.getLowerBound()[i];
+    // else: keep existing lowerBounds_[i] (quantile default or last user value)
+    if (interval.getFiniteUpperBound()[i])
+      upperBounds_[i] = interval.getUpperBound()[i];
+    // else: keep existing upperBounds_[i]
   }
   endResetModel();
 }
@@ -168,36 +220,19 @@ Interval CriticalDomainTableModel::getInterval() const
   const UnsignedInteger dim = variableNames_.getSize();
   Point lower(dim);
   Point upper(dim);
+  Interval::BoolCollection finiteLower(dim);
+  Interval::BoolCollection finiteUpper(dim);
   for (UnsignedInteger i = 0; i < dim; ++i)
   {
-    lower[i] = lowerBounds_[i];
-    upper[i] = upperBounds_[i];
+    finiteLower[i] = finiteLowerBounds_[i];
+    finiteUpper[i] = finiteUpperBounds_[i];
+    lower[i] = finiteLowerBounds_[i] ? lowerBounds_[i] : -std::numeric_limits<double>::infinity();
+    upper[i] = finiteUpperBounds_[i] ? upperBounds_[i] :  std::numeric_limits<double>::infinity();
   }
-  return Interval(lower, upper);
-}
-
-void CriticalDomainTableModel::updateErrors()
-{
-  errorRows_.clear();
-  for (int i = 0; i < lowerBounds_.size(); ++i)
-  {
-    if (lowerBounds_[i] > upperBounds_[i])
-      errorRows_.insert(i);
-  }
-
-  if (!errorRows_.isEmpty())
-    emit errorMessageChanged(tr("Lower bound must be less than or equal to upper bound"));
-  else
-    emit errorMessageChanged("");
-
-  // Refresh all bound cells to update foreground color
-  if (rowCount() > 0)
-    emit dataChanged(index(0, 1), index(rowCount() - 1, 2));
-}
-
-bool CriticalDomainTableModel::hasErrors() const
-{
-  return !errorRows_.isEmpty();
+  Interval result(lower, upper);
+  result.setFiniteLowerBound(finiteLower);
+  result.setFiniteUpperBound(finiteUpper);
+  return result;
 }
 
 } // namespace PERSALYS

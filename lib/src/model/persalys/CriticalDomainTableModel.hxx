@@ -25,7 +25,6 @@
 #include "persalys/PersalysPrivate.hxx"
 
 #include <QAbstractTableModel>
-#include <QSet>
 
 #include <openturns/Interval.hxx>
 #include <openturns/Description.hxx>
@@ -48,19 +47,15 @@ public:
   Qt::ItemFlags flags(const QModelIndex & index) const override;
 
   void setInterval(const OT::Interval & interval);
+  void setDefaultBounds(const OT::Point & lower, const OT::Point & upper);
   OT::Interval getInterval() const;
-  bool hasErrors() const;
-
-signals:
-  void errorMessageChanged(QString);
 
 private:
-  void updateErrors();
-
   OT::Description variableNames_;
   QList<double> lowerBounds_;
   QList<double> upperBounds_;
-  QSet<int> errorRows_;
+  QList<bool> finiteLowerBounds_;
+  QList<bool> finiteUpperBounds_;
 };
 
 } // namespace PERSALYS
