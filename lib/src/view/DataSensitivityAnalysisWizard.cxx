@@ -53,13 +53,12 @@ DataSensitivityAnalysisWizard::DataSensitivityAnalysisWizard(const Analysis& ana
     throw InvalidArgumentException(HERE) << "DataSensitivityAnalysisWizard received an analysis of type " << analysis.getClassName();
   
   auto * draft_analysis_ptr = analysis_ptr_->clone();
+  const auto doe = analysis_ptr_->getDesignOfExperiment();
 
   // Intro page
-  introPage_ = new DataSensitivityAnalysisIntroPage(analysis_ptr_->getDesignOfExperiment().getType());
+  introPage_ = new DataSensitivityAnalysisIntroPage(doe.getType());
   introPage_->initialize(draft_analysis_ptr);
-  setPage(Page::Intro, introPage_);
-
-  const auto doe            = analysis_ptr_->getDesignOfExperiment();
+  setPage(Page::Intro, introPage_);  
   
   // Global HSIC parameters page
   globalHSICParametersPage_ = new DataSensitivityAnalysisHSICParametersPage(
@@ -73,18 +72,6 @@ DataSensitivityAnalysisWizard::DataSensitivityAnalysisWizard(const Analysis& ana
   connect (introPage_, &DataSensitivityAnalysisIntroPage::pageValidated, this, [this, draft_analysis_ptr]() {
     draft_analysis_ptr->setType(introPage_->getType());
     globalHSICParametersPage_->initialize(draft_analysis_ptr);
-  });
-
-  // Critical domain page (shared by target and conditional HSIC)
-  criticalDomainPage_ = new DataSensitivityAnalysisCriticalDomainPage;
-  setPage(Page::CriticalDomain, criticalDomainPage_);
-
-  connect(introPage_, &DataSensitivityAnalysisIntroPage::pageValidated, this, [this, draft_analysis_ptr]() {
-    criticalDomainPage_->initialize(draft_analysis_ptr);
-  });
-
-  connect(globalHSICParametersPage_, &DataSensitivityAnalysisHSICParametersPage::pageValidated, this, [this, draft_analysis_ptr]() {
-    criticalDomainPage_->initialize(draft_analysis_ptr);
   });
 
   // Target HSIC parameters page
@@ -101,10 +88,6 @@ DataSensitivityAnalysisWizard::DataSensitivityAnalysisWizard(const Analysis& ana
   });
 
   connect(globalHSICParametersPage_, &DataSensitivityAnalysisHSICParametersPage::pageValidated, this, [this, draft_analysis_ptr]() {
-    targetHSICParametersPage_->initialize(draft_analysis_ptr);
-  });
-
-  connect(criticalDomainPage_, &DataSensitivityAnalysisCriticalDomainPage::pageValidated, this, [this, draft_analysis_ptr]() {
     targetHSICParametersPage_->initialize(draft_analysis_ptr);
   });
 
@@ -125,12 +108,28 @@ DataSensitivityAnalysisWizard::DataSensitivityAnalysisWizard(const Analysis& ana
     conditionalHSICParametersPage_->initialize(draft_analysis_ptr);
   });
 
-  connect(criticalDomainPage_, &DataSensitivityAnalysisCriticalDomainPage::pageValidated, this, [this, draft_analysis_ptr]() {
+  connect(targetHSICParametersPage_, &DataSensitivityAnalysisHSICParametersPage::pageValidated, this, [this, draft_analysis_ptr]() {
     conditionalHSICParametersPage_->initialize(draft_analysis_ptr);
   });
 
+  // Critical domain page (shared by target and conditional HSIC)
+  criticalDomainPage_ = new DataSensitivityAnalysisCriticalDomainPage;
+  setPage(Page::CriticalDomain, criticalDomainPage_);
+
+  connect(introPage_, &DataSensitivityAnalysisIntroPage::pageValidated, this, [this, draft_analysis_ptr]() {
+    criticalDomainPage_->initialize(draft_analysis_ptr);
+  });
+
+  connect(globalHSICParametersPage_, &DataSensitivityAnalysisHSICParametersPage::pageValidated, this, [this, draft_analysis_ptr]() {
+    criticalDomainPage_->initialize(draft_analysis_ptr);
+  });
+
   connect(targetHSICParametersPage_, &DataSensitivityAnalysisHSICParametersPage::pageValidated, this, [this, draft_analysis_ptr]() {
-    conditionalHSICParametersPage_->initialize(draft_analysis_ptr);
+    criticalDomainPage_->initialize(draft_analysis_ptr);
+  });
+
+  connect(conditionalHSICParametersPage_, &DataSensitivityAnalysisHSICParametersPage::pageValidated, this, [this, draft_analysis_ptr]() {
+    criticalDomainPage_->initialize(draft_analysis_ptr);
   });
 }
 
@@ -188,11 +187,11 @@ int DataSensitivityAnalysisWizard::nextId() const
       return introPage_->nextId();
     case Page::GlobalHSICParameters:
       return globalHSICParametersPage_->nextId();
-    case Page::CriticalDomain:
-      return criticalDomainPage_->nextId();
     case Page::TargetHSICParameters:
       return targetHSICParametersPage_->nextId();
     case Page::ConditionalHSICParameters:
+      return conditionalHSICParametersPage_->nextId();
+    case Page::CriticalDomain:
       return -1;
     default:
       return -1;
@@ -329,9 +328,10 @@ int DataSensitivityAnalysisIntroPage::nextId() const
 {
   if (methodGroup_->button(DataSensitivityAnalysisResult::GlobalHSIC) -> isChecked())
     return DataSensitivityAnalysisWizard::Page::GlobalHSICParameters;
-  if (methodGroup_->button(DataSensitivityAnalysisResult::TargetHSIC) -> isChecked()
-      || methodGroup_->button(DataSensitivityAnalysisResult::ConditionalHSIC) -> isChecked())
-    return DataSensitivityAnalysisWizard::Page::CriticalDomain;
+  if (methodGroup_->button(DataSensitivityAnalysisResult::TargetHSIC) -> isChecked())
+    return DataSensitivityAnalysisWizard::Page::TargetHSICParameters;
+  if (methodGroup_->button(DataSensitivityAnalysisResult::ConditionalHSIC) -> isChecked())
+    return DataSensitivityAnalysisWizard::Page::ConditionalHSICParameters;
   else
     return -1;
 }
@@ -674,16 +674,17 @@ int DataSensitivityAnalysisHSICParametersPage::nextId() const
   switch (type_)
   {
     case DataSensitivityAnalysis::HSICType::Global:
-      if (analysis_ptr_->computeHSIC(DataSensitivityAnalysis::HSICType::Target)
-          || analysis_ptr_->computeHSIC(DataSensitivityAnalysis::HSICType::Conditional))
-        return DataSensitivityAnalysisWizard::Page::CriticalDomain;
+      if (analysis_ptr_->computeHSIC(DataSensitivityAnalysis::HSICType::Target))
+        return DataSensitivityAnalysisWizard::Page::TargetHSICParameters;
+      if (analysis_ptr_->computeHSIC(DataSensitivityAnalysis::HSICType::Conditional))
+        return DataSensitivityAnalysisWizard::Page::ConditionalHSICParameters;
       return -1;
     case DataSensitivityAnalysis::HSICType::Target:
       if (analysis_ptr_->computeHSIC(DataSensitivityAnalysis::HSICType::Conditional))
         return DataSensitivityAnalysisWizard::Page::ConditionalHSICParameters;
-      return -1;
+      return DataSensitivityAnalysisWizard::Page::CriticalDomain;
     case DataSensitivityAnalysis::HSICType::Conditional:
-      return -1;
+      return DataSensitivityAnalysisWizard::Page::CriticalDomain;
     default:
       return -1;
   }

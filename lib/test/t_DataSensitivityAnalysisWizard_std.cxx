@@ -247,21 +247,9 @@ private slots:
     QVERIFY2(targetCB != nullptr, "Target HSIC button should exist");
     targetCB->setChecked(true);
 
-    // Next from intro should go to Critical Domain page first
-    QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::CriticalDomain,
-             "Next page should be Critical Domain when Target HSIC is checked");
-
-    // Navigate to Critical Domain page
-    wizard.next();
-    QVERIFY2(wizard.currentId() == DataSensitivityAnalysisWizard::Page::CriticalDomain,
-             "Current page should be Critical Domain page");
-
-    // Validate Critical Domain page
-    QVERIFY2(wizard.validateCurrentPage(), "Critical Domain page must be valid");
-
-    // Next from Critical Domain should go to Target HSIC parameters page
+    // Next from intro should go to Target HSIC parameters page
     QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::TargetHSICParameters,
-             "Next page should be Target HSIC parameters from Critical Domain");
+             "Next page should be Target HSIC parameters when Target HSIC is checked");
 
     // Navigate to Target HSIC page
     wizard.next();
@@ -271,8 +259,20 @@ private slots:
     // Validate Target HSIC parameters page
     QVERIFY2(wizard.validateCurrentPage(), "Target HSIC parameters page must be valid");
 
-    // Next from Target HSIC page should be -1 (finish, no Conditional)
-    QVERIFY2(wizard.nextId() == -1, "Next page after Target HSIC parameters should be -1");
+    // Next from Target HSIC page should go to Critical Domain (no Conditional)
+    QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::CriticalDomain,
+             "Next page after Target HSIC parameters should be Critical Domain");
+
+    // Navigate to Critical Domain page
+    wizard.next();
+    QVERIFY2(wizard.currentId() == DataSensitivityAnalysisWizard::Page::CriticalDomain,
+             "Current page should be Critical Domain page");
+
+    // Validate Critical Domain page
+    QVERIFY2(wizard.validateCurrentPage(), "Critical Domain page must be valid");
+
+    // Next from Critical Domain should be -1 (finish)
+    QVERIFY2(wizard.nextId() == -1, "Next page after Critical Domain should be -1");
   }
 
 
@@ -289,21 +289,9 @@ private slots:
     QVERIFY2(condCB != nullptr, "Conditional HSIC button should exist");
     condCB->setChecked(true);
 
-    // Next from intro should go to Critical Domain page first
-    QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::CriticalDomain,
-             "Next page should be Critical Domain when Conditional HSIC is checked");
-
-    // Navigate to Critical Domain page
-    wizard.next();
-    QVERIFY2(wizard.currentId() == DataSensitivityAnalysisWizard::Page::CriticalDomain,
-             "Current page should be Critical Domain page");
-
-    // Validate Critical Domain page
-    QVERIFY2(wizard.validateCurrentPage(), "Critical Domain page must be valid");
-
-    // Next from Critical Domain should go to Conditional HSIC parameters page
+    // Next from intro should go to Conditional HSIC parameters page
     QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::ConditionalHSICParameters,
-             "Next page should be Conditional HSIC parameters from Critical Domain");
+             "Next page should be Conditional HSIC parameters when Conditional HSIC is checked");
 
     // Navigate to Conditional HSIC page
     wizard.next();
@@ -313,8 +301,20 @@ private slots:
     // Validate Conditional HSIC parameters page
     QVERIFY2(wizard.validateCurrentPage(), "Conditional HSIC parameters page must be valid");
 
-    // Next from Conditional HSIC page should always be -1 (it's the last)
-    QVERIFY2(wizard.nextId() == -1, "Next page after Conditional HSIC parameters should be -1");
+    // Next from Conditional HSIC should go to Critical Domain
+    QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::CriticalDomain,
+             "Next page after Conditional HSIC parameters should be Critical Domain");
+
+    // Navigate to Critical Domain page
+    wizard.next();
+    QVERIFY2(wizard.currentId() == DataSensitivityAnalysisWizard::Page::CriticalDomain,
+             "Current page should be Critical Domain page");
+
+    // Validate Critical Domain page
+    QVERIFY2(wizard.validateCurrentPage(), "Critical Domain page must be valid");
+
+    // Next from Critical Domain should be -1 (finish)
+    QVERIFY2(wizard.nextId() == -1, "Next page after Critical Domain should be -1");
   }
 
 
@@ -344,20 +344,11 @@ private slots:
     QVERIFY2(wizard.currentId() == DataSensitivityAnalysisWizard::Page::GlobalHSICParameters,
              "Should be on Global HSIC page");
 
-    // From Global, should go to Critical Domain
-    QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::CriticalDomain,
-             "From Global HSIC, next should be Critical Domain");
-
-    // Navigate: Global HSIC -> Critical Domain
-    wizard.next();
-    QVERIFY2(wizard.currentId() == DataSensitivityAnalysisWizard::Page::CriticalDomain,
-             "Should be on Critical Domain page");
-
-    // From Critical Domain, should go to Target HSIC
+    // From Global, should go to Target HSIC
     QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::TargetHSICParameters,
-             "From Critical Domain, next should be Target HSIC");
+             "From Global HSIC, next should be Target HSIC");
 
-    // Navigate: Critical Domain -> Target HSIC
+    // Navigate: Global HSIC -> Target HSIC
     wizard.next();
     QVERIFY2(wizard.currentId() == DataSensitivityAnalysisWizard::Page::TargetHSICParameters,
              "Should be on Target HSIC page");
@@ -371,8 +362,17 @@ private slots:
     QVERIFY2(wizard.currentId() == DataSensitivityAnalysisWizard::Page::ConditionalHSICParameters,
              "Should be on Conditional HSIC page");
 
-    // From Conditional, should finish
-    QVERIFY2(wizard.nextId() == -1, "From Conditional HSIC, should finish");
+    // From Conditional, should go to Critical Domain
+    QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::CriticalDomain,
+             "From Conditional HSIC, next should be Critical Domain");
+
+    // Navigate: Conditional HSIC -> Critical Domain
+    wizard.next();
+    QVERIFY2(wizard.currentId() == DataSensitivityAnalysisWizard::Page::CriticalDomain,
+             "Should be on Critical Domain page");
+
+    // From Critical Domain, should finish
+    QVERIFY2(wizard.nextId() == -1, "From Critical Domain, should finish");
   }
 
 
@@ -504,18 +504,18 @@ private slots:
 
     // Turn Target on only
     targetCB->setChecked(true);
-    QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::CriticalDomain,
-             "Should navigate to Critical Domain when only Target is enabled");
+    QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::TargetHSICParameters,
+             "Should navigate to Target HSIC parameters when only Target is enabled");
 
     // Turn Conditional on too
     condCB->setChecked(true);
-    QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::CriticalDomain,
-             "Should still navigate to Critical Domain when both are enabled");
+    QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::TargetHSICParameters,
+             "Should navigate to Target HSIC parameters when both are enabled");
 
     // Turn Target off, only Conditional remains
     targetCB->setChecked(false);
-    QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::CriticalDomain,
-             "Should navigate to Critical Domain when only Conditional is enabled");
+    QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::ConditionalHSICParameters,
+             "Should navigate to Conditional HSIC parameters when only Conditional is enabled");
 
     // Turn Conditional off
     condCB->setChecked(false);
