@@ -33,7 +33,7 @@ DoubleSpinBox::DoubleSpinBox(QWidget * parent)
   , dispDecimals(0)
   , delimiter(' ')
   , thousand(' ')
-  , v(0)
+  , v(nullptr)
 {
   initLocalValues(parent);
 
