@@ -101,7 +101,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
 
   DiagramPushButton * doeCreationButton = new DiagramPushButton;
   doeCreationButton->setText(tr("Design of\nexperiments\ncreation"));
-  doeCreationButton->setWhatsThis(tr("Create manually a design of experiments or import one"));
+  doeCreationButton->setWhatsThis(tr("Create a design of experiments manually or import an existing one"));
   connect(doeCreationButton, SIGNAL(clicked(bool)), physicalModelDiagramItem->newDesignOfExperiment_, SIGNAL(triggered()));
   connect(physicalModelDiagramItem, SIGNAL(inputNumberValidityChanged(bool, QString)), doeCreationButton, SLOT(setEnabled(bool, QString)));
 

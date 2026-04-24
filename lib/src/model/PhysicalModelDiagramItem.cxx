@@ -237,8 +237,8 @@ void PhysicalModelDiagramItem::requestDesignOfExperimentEvaluation()
   Study study(getParentStudyItem()->getStudy());
   for (UnsignedInteger i = 0; i < study.getAnalyses().getSize(); ++i)
   {
-    DesignOfExperimentEvaluation * doeEval = dynamic_cast<DesignOfExperimentEvaluation *>(study.getAnalyses()[i].getImplementation().get());
-    ModelEvaluation * modelEval = dynamic_cast<ModelEvaluation *>(study.getAnalyses()[i].getImplementation().get());
+    const auto * doeEval = dynamic_cast<DesignOfExperimentEvaluation *>(study.getAnalyses()[i].getImplementation().get());
+    const auto * modelEval = dynamic_cast<ModelEvaluation *>(study.getAnalyses()[i].getImplementation().get());
     if (doeEval && !modelEval && doeEval->getPhysicalModel() == getPhysicalModel())
     {
       emit doeEvaluationWizardRequested(study.getAnalyses()[i], true);

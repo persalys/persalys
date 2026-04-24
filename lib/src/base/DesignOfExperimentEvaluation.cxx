@@ -308,6 +308,8 @@ bool DesignOfExperimentEvaluation::CanBeLaunched(String &errorMessage, const Phy
   // pm must have inputs
   if (!physicalModel.getInputDimension())
     errorMessage = "The physical model must have inputs.";
+  if (!physicalModel.getOutputDimension())
+    errorMessage = "The physical model must have outputs.";
   return errorMessage.empty();
 }
 
