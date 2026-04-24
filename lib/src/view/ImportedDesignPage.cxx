@@ -110,11 +110,59 @@ void ImportedDesignPage::setTable(const QString& fileName)
     emit showTime();
   }
 
-  Description variableDescription{importedDoE_.getPhysicalModel().getInputNames()};
-  variableDescription.add(importedDoE_.getPhysicalModel().getSelectedOutputsNames());
+  const UnsignedInteger fileDim   = importedDoE_.getImportedDataset().getSampleFromFile().getDimension();
+  const Description inputNames    = importedDoE_.getPhysicalModel().getInputNames();
+  const Description outputNames   = importedDoE_.getPhysicalModel().getSelectedOutputsNames();
+  const UnsignedInteger inputDim  = inputNames.getSize();
+  const UnsignedInteger outputDim = outputNames.getSize();
 
-  Indices variableColumns{importedDoE_.getImportedDataset().getInputColumns()};
-  variableColumns.add(importedDoE_.getImportedDataset().getOutputColumns());
+  const Indices savedInputCols  = importedDoE_.getImportedDataset().getInputColumns();
+  const Indices savedOutputCols = importedDoE_.getImportedDataset().getOutputColumns();
+
+  // Use saved column mappings when they are consistent with the physical model and
+  // the file (e.g. reopening an existing DoE). Fall back to the positional heuristic
+  // when the file is new or the saved mapping does not match the model dimensions.
+  //
+  // A mapping is "valid" when:
+  //   - input column count matches the model's input dimension and all indices fit
+  //     within the file;
+  //   - output columns are either absent (outputs are optional for DoE) OR their
+  //     count matches the model's selected-output dimension and all indices fit.
+  const bool hasValidMappings =
+      savedInputCols.getSize() == inputDim &&
+      savedInputCols.check(fileDim) &&
+      (savedOutputCols.isEmpty() ||
+       (savedOutputCols.getSize() == outputDim && savedOutputCols.check(fileDim)));
+
+  Description variableDescription;
+  Indices variableColumns;
+
+  if (hasValidMappings)
+  {
+    // Preserve the saved assignment (non-consecutive column order is possible).
+    variableDescription.add(inputNames);
+    variableColumns.add(savedInputCols);
+    if (!savedOutputCols.isEmpty())
+    {
+      variableDescription.add(outputNames);
+      variableColumns.add(savedOutputCols);
+    }
+  }
+  else
+  {
+    // No valid saved mapping: assign the first min(inputDim, fileDim) columns to
+    // inputs, then the next outputDim columns to outputs — if the file is wide enough.
+    const UnsignedInteger nInputCols = inputDim < fileDim ? inputDim : fileDim;
+    variableDescription = inputNames;
+    for (UnsignedInteger i = 0; i < nInputCols; ++i)
+      variableColumns.add(i);
+    if (outputDim > 0 && fileDim >= nInputCols + outputDim)
+    {
+      variableDescription.add(outputNames);
+      for (UnsignedInteger i = 0; i < outputDim; ++i)
+        variableColumns.add(nInputCols + i);
+    }
+  }
   
   sampleWidget_->updateWidgets(importedDoE_.getImportedDataset().getSampleFromFile(),
                                variableDescription,

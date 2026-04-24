@@ -364,6 +364,196 @@ private slots:
     analysisEquality = wizard.getAnalysis().getParameters() == ImportedDesignOfExperiment("analysis", model_).getParameters();
     QVERIFY2(analysisEquality, "The two ImportedDesignOfExperiment must be equal");
   }
+
+
+  // ---- Edge case tests for the Import page ----
+
+  void TestImportEdgeCase_ExactInputsCols() const
+  {
+    // Model: 3 inputs (Q,E,C) + 1 output (Ep). CSV has exactly 3 columns.
+    // All 3 input columns must be pre-assigned; output column is unavailable.
+    // Wizard must still be valid because output columns are optional for a DoE.
+    const String filename = "edge_3cols.csv";
+    Normal(3).getSample(10).exportToCSVFile(filename);
+    Indices inputCols(3);
+    inputCols.fill();  // [0,1,2]
+    ImportedDesignOfExperiment doe("analysis", model_, filename, inputCols);
+
+    DesignOfExperimentWizard wizard(doe);
+    wizard.show();
+    wizard.next();
+
+    QVERIFY2(wizard.currentId() == 3, "Current page ID must be 3");
+    const ErrorWidget * errorWidget = wizard.importPage_->findChild<ErrorWidget*>();
+    QVERIFY2(wizard.validateCurrentPage(), "Page must be valid: 3 input cols match 3-input model");
+    QVERIFY2(errorWidget->toPlainText().isEmpty(), "No error expected");
+
+    // Columns 0,1,2 → Q,E,C; "Ep" must not appear anywhere.
+    const auto * tableModel = wizard.importPage_->findChild<SampleTableModel*>();
+    QVERIFY2(tableModel->columnCount() == 3, "Table should have 3 columns");
+    const QStringList expectedAssignments = {"Q", "E", "C"};
+    for (int i = 0; i < tableModel->columnCount(); ++i)
+      QVERIFY2(tableModel->headerData(i, Qt::Horizontal).toString() == expectedAssignments[i],
+               qPrintable("Column " + QString::number(i) + " has wrong assignment"));
+
+    remove(filename.c_str());
+  }
+
+
+  void TestImportEdgeCase_ExactInputsAndOutputCols() const
+  {
+    // Model: 3 inputs + 1 output. CSV has exactly 4 columns (3 + 1).
+    // All 4 model variables must be pre-assigned; wizard must be valid.
+    const String filename = "edge_4cols.csv";
+    Normal(4).getSample(10).exportToCSVFile(filename);
+    Indices inputCols(3);
+    inputCols.fill();  // [0,1,2]
+    Indices outputCols(1, 3);  // [3]
+    ImportedDesignOfExperiment doe("analysis", model_, filename, inputCols, outputCols);
+
+    DesignOfExperimentWizard wizard(doe);
+    wizard.show();
+    wizard.next();
+
+    QVERIFY2(wizard.currentId() == 3, "Current page ID must be 3");
+    const ErrorWidget * errorWidget = wizard.importPage_->findChild<ErrorWidget*>();
+    QVERIFY2(wizard.validateCurrentPage(), "Page must be valid: 4 cols match 3-input 1-output model");
+    QVERIFY2(errorWidget->toPlainText().isEmpty(), "No error expected");
+
+    const auto * tableModel = wizard.importPage_->findChild<SampleTableModel*>();
+    QVERIFY2(tableModel->columnCount() == 4, "Table should have 4 columns");
+    const QStringList expectedAssignments = {"Q", "E", "C", "Ep"};
+    for (int i = 0; i < tableModel->columnCount(); ++i)
+      QVERIFY2(tableModel->headerData(i, Qt::Horizontal).toString() == expectedAssignments[i],
+               qPrintable("Column " + QString::number(i) + " has wrong assignment"));
+
+    remove(filename.c_str());
+  }
+
+
+  void TestImportEdgeCase_ExtraColumns() const
+  {
+    // Model: 3 inputs + 1 output. CSV has 6 columns (more than the 4 needed).
+    // First 3 → inputs, 4th → output, columns 4-5 must remain unassigned.
+    // Wizard must be valid.
+    const String filename = "edge_6cols.csv";
+    Normal(6).getSample(10).exportToCSVFile(filename);
+    Indices inputCols(3);
+    inputCols.fill();  // [0,1,2]
+    Indices outputCols(1, 3);  // [3]
+    ImportedDesignOfExperiment doe("analysis", model_, filename, inputCols, outputCols);
+
+    DesignOfExperimentWizard wizard(doe);
+    wizard.show();
+    wizard.next();
+
+    QVERIFY2(wizard.currentId() == 3, "Current page ID must be 3");
+    const ErrorWidget * errorWidget = wizard.importPage_->findChild<ErrorWidget*>();
+    QVERIFY2(wizard.validateCurrentPage(), "Page must be valid: model vars fit within 6-col CSV");
+    QVERIFY2(errorWidget->toPlainText().isEmpty(), "No error expected");
+
+    const auto * tableModel = wizard.importPage_->findChild<SampleTableModel*>();
+    QVERIFY2(tableModel->columnCount() == 6, "Table should have 6 columns");
+    const QStringList expectedAssignments = {"Q", "E", "C", "Ep", "", ""};
+    for (int i = 0; i < tableModel->columnCount(); ++i)
+      QVERIFY2(tableModel->headerData(i, Qt::Horizontal).toString() == expectedAssignments[i],
+               qPrintable("Column " + QString::number(i) + " has wrong assignment"));
+
+    remove(filename.c_str());
+  }
+
+
+  void TestImportEdgeCase_TooFewColumns() const
+  {
+    // Model: 3 inputs + 1 output. CSV has only 2 columns — not enough for all inputs.
+    // Wizard must be invalid and display an error message.
+    const String filename = "edge_2cols.csv";
+    Normal(2).getSample(10).exportToCSVFile(filename);
+
+    // Create the DoE without explicit column mapping; setFileName stores the default
+    // last-column-as-output heuristic columns but does not throw.
+    ImportedDesignOfExperiment doe("analysis", model_);
+    doe.setFileName(filename);
+
+    DesignOfExperimentWizard wizard(doe);
+    wizard.show();
+    wizard.next();
+
+    QVERIFY2(wizard.currentId() == 3, "Current page ID must be 3");
+    const ErrorWidget * errorWidget = wizard.importPage_->findChild<ErrorWidget*>();
+    QVERIFY2(!wizard.validateCurrentPage(), "Page must be invalid: 2 cols < 3 inputs required");
+    QVERIFY2(!errorWidget->toPlainText().isEmpty(), "Error message must be shown");
+
+    remove(filename.c_str());
+  }
+
+
+  void TestImportEdgeCase_NoOutputModel() const
+  {
+    // Model has 3 inputs and no outputs.
+    // Sub-case A: CSV with exactly 3 columns → wizard valid, all cols assigned.
+    // Sub-case B: CSV with 4 columns → wizard valid, first 3 assigned, 4th unassigned.
+    Input a("a", 1.0);
+    Input b("b", 2.0);
+    Input c("c", 3.0);
+    InputCollection inputs3(3);
+    inputs3[0] = a; inputs3[1] = b; inputs3[2] = c;
+    SymbolicPhysicalModel modelNoOut("modelNoOut", inputs3, OutputCollection(), Description());
+
+    // --- Sub-case A: exactly 3 columns ---
+    {
+      const String filename = "edge_noout_3cols.csv";
+      Normal(3).getSample(10).exportToCSVFile(filename);
+      Indices inputCols(3);
+      inputCols.fill();  // [0,1,2]
+      ImportedDesignOfExperiment doe("analysis", modelNoOut, filename, inputCols);
+
+      DesignOfExperimentWizard wizard(doe);
+      wizard.show();
+      wizard.next();
+
+      QVERIFY2(wizard.currentId() == 3, "Current page ID must be 3");
+      const ErrorWidget * errorWidget = wizard.importPage_->findChild<ErrorWidget*>();
+      QVERIFY2(wizard.validateCurrentPage(), "Page must be valid: 3 cols match 3-input no-output model");
+      QVERIFY2(errorWidget->toPlainText().isEmpty(), "No error expected");
+
+      const auto * tableModel = wizard.importPage_->findChild<SampleTableModel*>();
+      QVERIFY2(tableModel->columnCount() == 3, "Table should have 3 columns");
+      const QStringList expectedAssignments = {"a", "b", "c"};
+      for (int i = 0; i < tableModel->columnCount(); ++i)
+        QVERIFY2(tableModel->headerData(i, Qt::Horizontal).toString() == expectedAssignments[i],
+                 qPrintable("Column " + QString::number(i) + " has wrong assignment"));
+
+      remove(filename.c_str());
+    }
+
+    // --- Sub-case B: 4 columns (one extra, must remain unassigned) ---
+    {
+      const String filename = "edge_noout_4cols.csv";
+      Normal(4).getSample(10).exportToCSVFile(filename);
+      Indices inputCols(3);
+      inputCols.fill();  // [0,1,2]
+      ImportedDesignOfExperiment doe("analysis", modelNoOut, filename, inputCols);
+
+      DesignOfExperimentWizard wizard(doe);
+      wizard.show();
+      wizard.next();
+
+      QVERIFY2(wizard.currentId() == 3, "Current page ID must be 3");
+      const ErrorWidget * errorWidget = wizard.importPage_->findChild<ErrorWidget*>();
+      QVERIFY2(wizard.validateCurrentPage(), "Page must be valid: 4-col CSV, no-output model, last col unassigned");
+      QVERIFY2(errorWidget->toPlainText().isEmpty(), "No error expected");
+
+      const auto * tableModel = wizard.importPage_->findChild<SampleTableModel*>();
+      QVERIFY2(tableModel->columnCount() == 4, "Table should have 4 columns");
+      const QStringList expectedAssignments = {"a", "b", "c", ""};
+      for (int i = 0; i < tableModel->columnCount(); ++i)
+        QVERIFY2(tableModel->headerData(i, Qt::Horizontal).toString() == expectedAssignments[i],
+                 qPrintable("Column " + QString::number(i) + " has wrong assignment"));
+
+      remove(filename.c_str());
+    }
+  }
 };
 }
 

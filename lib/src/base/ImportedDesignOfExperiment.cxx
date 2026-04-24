@@ -95,8 +95,17 @@ void ImportedDesignOfExperiment::setColumns(const Indices &inputColumns, const I
 
 void ImportedDesignOfExperiment::saveImportedSampleToResult()
 {
-  // if outputColumns, consider the DoE already evaluated, set result
-  if(importedDataset_.getOutputColumns().getSize())
+  // Only treat the DoE as already evaluated when both column counts actually match
+  // the physical model dimensions. A mismatch happens e.g. when ImportedDataset
+  // applies its default column heuristic (last column = output) to a file that
+  // contains only inputs.
+  const bool inputColumnsMatch =
+      importedDataset_.getInputColumns().getSize() == getPhysicalModel().getInputDimension();
+  const bool outputColumnsMatch =
+      !importedDataset_.getOutputColumns().isEmpty() &&
+      importedDataset_.getOutputColumns().getSize() == getPhysicalModel().getSelectedOutputsNames().getSize();
+
+  if (inputColumnsMatch && outputColumnsMatch)
   {
     Sample inS = importedDataset_.getSampleFromFile().getMarginal(importedDataset_.getInputColumns());
     inS.setDescription(getPhysicalModel().getInputNames());

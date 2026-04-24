@@ -157,7 +157,6 @@ void ImportSampleWidget::setData(const QString& fileName)
   {
     errorWidget_->reset();
     emit updateTableRequested(fileName);
-    tableValidity_ = true;
   }
   catch (const std::exception & ex)
   {

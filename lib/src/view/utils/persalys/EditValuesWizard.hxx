@@ -42,8 +42,8 @@ class PERSALYS_UTILS_API EditValuesWizard : public QWizard
   Q_OBJECT
 
 public:
-  EditValuesWizard(QWidget *parent = nullptr, OT::UnsignedInteger nMinValues = 2, OT::Scalar factor = 1.);
-  EditValuesWizard(const OT::Sample &values, QWidget *parent = nullptr, OT::UnsignedInteger nMinValues = 2, OT::Scalar factor = 1.);
+  explicit EditValuesWizard(QWidget *parent = nullptr, OT::UnsignedInteger nMinValues = 2, OT::Scalar factor = 1.);
+  explicit EditValuesWizard(const OT::Sample &values, QWidget *parent = nullptr, OT::UnsignedInteger nMinValues = 2, OT::Scalar factor = 1.);
   EditValuesWizard(const QString &variableName, const OT::Point &values, QWidget *parent = nullptr, OT::UnsignedInteger nMinValues = 2, OT::Scalar factor = 1.);
 
   OT::Point getValues(const OT::UnsignedInteger index = 0) const;
@@ -82,7 +82,7 @@ class PERSALYS_UTILS_API UserDefinedWizard : public EditValuesWizard
   Q_OBJECT
 
 public:
-  UserDefinedWizard(const OT::Distribution::PointWithDescriptionCollection &parameters, QWidget *parent = nullptr);
+  explicit UserDefinedWizard(const OT::Distribution::PointWithDescriptionCollection &parameters, QWidget *parent = nullptr);
 
   OT::Distribution getDistribution() const override;
 
@@ -162,7 +162,7 @@ class PERSALYS_UTILS_API ImportedDistributionPage : public QWizardPage
   Q_OBJECT
 
 public:
-  ImportedDistributionPage(QWidget *parent = nullptr);
+  explicit ImportedDistributionPage(QWidget *parent = nullptr);
   bool validatePage() override;
   OT::Sample getData() const
   {
