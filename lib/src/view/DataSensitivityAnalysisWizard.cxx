@@ -501,14 +501,9 @@ bool DataSensitivityAnalysisCriticalDomainPage::validatePage()
           .arg(QString::fromStdString(interestVariables[i])));
         return false;
       }
-      if ((!interval.getFiniteLowerBound()[i] && !interval.getFiniteUpperBound()[i])
-          || (!interval.getFiniteLowerBound()[i] && interval.getFiniteUpperBound()[i]
-              && interval.getUpperBound()[i] >= sampleMax[i])
-          || (!interval.getFiniteUpperBound()[i] && interval.getFiniteLowerBound()[i]
-              && interval.getLowerBound()[i] <= sampleMin[i])
-          || (interval.getFiniteLowerBound()[i] && interval.getFiniteUpperBound()[i]
-          && interval.getLowerBound()[i] <= sampleMin[i]
-          && interval.getUpperBound()[i] >= sampleMax[i]))
+      const Interval sampleInterval(sampleMin, sampleMax);
+      const Interval intersection = interval.intersect(sampleInterval);
+      if (intersection == sampleInterval)
       {
         errorWidget_->setTemporaryFramelessErrorMessage(
           tr("The critical domain cannot include the whole sample for variable '%1'")
