@@ -501,8 +501,8 @@ bool DataSensitivityAnalysisCriticalDomainPage::validatePage()
           .arg(QString::fromStdString(interestVariables[i])));
         return false;
       }
-      const Interval sampleInterval(sampleMin, sampleMax);
-      const Interval intersection = interval.intersect(sampleInterval);
+      const Interval sampleInterval(sampleMin[i], sampleMax[i]);
+      const Interval intersection = interval.getMarginal(i).intersect(sampleInterval);
       if (intersection == sampleInterval)
       {
         errorWidget_->setTemporaryFramelessErrorMessage(
