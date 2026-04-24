@@ -40,7 +40,7 @@ private:
   SymbolicPhysicalModel model_;
 
 private slots:
-  void TestUnevaluatedNotVisible()
+  void TestUnevaluatedNotVisible() const
   {
     // A DOE that has not been run should not appear in the combobox
     Study aStudy;
@@ -69,7 +69,7 @@ private slots:
   }
 
 
-  void TestSelectMultipleDOEs()
+  void TestSelectMultipleDOEs() const
   {
     // Check that several evaluated DOEs can be selected one by one
     Study aStudy;
@@ -106,7 +106,7 @@ private slots:
   }
 
 
-  void TestExportedType()
+  void TestExportedType() const
   {
     // Check that each DOE is exported with the expected type information
     Study aStudy;
@@ -135,9 +135,9 @@ private slots:
     {
       const Analysis analysis = wizard.getAnalysis();
       const Parameters params = analysis.getImplementation().get()->getParameters();
-      const String designName = params.get("Design name");
-      QVERIFY2(designName == "Monte Carlo",
-               qPrintable(QString("MC DOE design name must be 'Monte Carlo', got: '%1'").arg(QString::fromStdString(designName))));
+      const String designType = params.get("Design type");
+      QVERIFY2(designType == "Monte Carlo",
+               qPrintable(QString("MC DOE design type must be 'Monte Carlo', got: '%1'").arg(QString::fromStdString(designType))));
     }
 
     // Select Grid DOE and check parameters contain "Grid"
@@ -152,7 +152,7 @@ private slots:
   }
 
 
-  void TestMixEvaluatedAndUnevaluated()
+  void TestMixEvaluatedAndUnevaluated() const
   {
     // Mix of evaluated and unevaluated DOEs: only evaluated ones appear
     Study aStudy;
@@ -196,7 +196,7 @@ private slots:
     // Check MC type
     {
       const Parameters params = wizard.getAnalysis().getImplementation().get()->getParameters();
-      QVERIFY2(params.get("Design name") == "Monte Carlo", "MC DOE must have design name 'Monte Carlo'");
+      QVERIFY2(params.get("Design type") == "Monte Carlo", "MC DOE must have design type 'Monte Carlo'");
     }
 
     wizard.doeComboBox_->setCurrentIndex(1);

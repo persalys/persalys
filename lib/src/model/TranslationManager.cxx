@@ -111,7 +111,7 @@ void TranslationManager::InitializeParametersNames()
   ParametersNames_.insert("Maximum elapsed time", tr("Maximum elapsed time"));
   ParametersNames_.insert("Maximum calls", tr("Maximum calls"));
   ParametersNames_.insert("Block size", tr("Block size"));
-  ParametersNames_.insert("Design name", tr("Design name"));
+  ParametersNames_.insert("Design type", tr("Design type"));
   ParametersNames_.insert("Monte Carlo", tr("Monte Carlo"));
   ParametersNames_.insert("Quasi-Monte Carlo", tr("Quasi-Monte Carlo"));
   ParametersNames_.insert("Covariance model", tr("Covariance model"));

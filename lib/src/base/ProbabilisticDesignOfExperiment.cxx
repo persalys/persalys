@@ -266,7 +266,7 @@ Parameters ProbabilisticDesignOfExperiment::getParameters() const
     designName = "Monte Carlo";
   else if (getDesignName() == "QUASI_MONTE_CARLO")
     designName = "Quasi-Monte Carlo";
-  param.add("Design name", designName);
+  param.add("Design type", designName);
 
   if (getDesignName() == "SALHS" || getDesignName() == "MCLHS")
   {
