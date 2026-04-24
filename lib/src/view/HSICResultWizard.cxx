@@ -82,15 +82,28 @@ void HSICResultWizard::buildInterface()
 
   tableModel_ = new QStandardItemModel(tableView_);
   tableView_->setModel(tableModel_);
-  updateTable(0);
+
+  // p-value threshold
+  thresholdSpinBox_ = new DoubleSpinBox;
+  thresholdSpinBox_->setRange(0.0, 1.0);
+  thresholdSpinBox_->setSingleStep(0.01);
+  thresholdSpinBox_->setDecimals(4);
+  thresholdSpinBox_->setValue(0.05);
+  mainLayout->addWidget(new QLabel(tr("p-value threshold")), 3, 0);
+  mainLayout->addWidget(thresholdSpinBox_, 3, 1);
 
   // error message
   errorWidget_ = new ErrorWidget;
-  mainLayout->addWidget(errorWidget_, 3, 0, 1, 2);
+  mainLayout->addWidget(errorWidget_, 4, 0, 1, 2);
 
   // connections
   connect(variablesComboBox_, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HSICResultWizard::updateTable);
   connect(analysisComboBox_, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &HSICResultWizard::updateVariablesComboBox);
+  connect(thresholdSpinBox_, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, [this](double) {
+    updateTable(variablesComboBox_ ? variablesComboBox_->currentIndex() : 0);
+  });
+
+  updateTable(0);
 
   addPage(page);
 }
@@ -190,8 +203,8 @@ void HSICResultWizard::updateTable(int index)
       if (pval < minPValue) minPValue = pval;
     }
 
-    // selected: p-value < 0.05 means the variable is significant (should remain stochastic)
-    const bool isSignificant = (minPValue < 0.05);
+    // selected: p-value below threshold means the variable is significant (should remain stochastic)
+    const bool isSignificant = (minPValue < thresholdSpinBox_->value());
     auto * selectedItem = new QStandardItem(isSignificant ? tr("Yes") : tr("No"));
     row << selectedItem;
 
@@ -238,12 +251,13 @@ Indices HSICResultWizard::getInputsSelection() const
     if (hasPermutation && outputIndex < pValuesPermutation.getSize())
       minPValue = std::min(minPValue, pValuesPermutation[outputIndex][i]);
 
+    const double threshold = thresholdSpinBox_ ? thresholdSpinBox_->value() : 0.05;
     // find the matching model input by name
     for (UnsignedInteger j = 0; j < modelInputNames.getSize(); ++j)
     {
       if (modelInputNames[j] == analysisInputNames[i])
       {
-        selection[j] = (minPValue < 0.05) ? 1 : 0;
+        selection[j] = (minPValue < threshold) ? 1 : 0;
         break;
       }
     }

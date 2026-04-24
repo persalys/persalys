@@ -3,6 +3,7 @@
 #include "persalys/DataModel.hxx"
 #include "persalys/ErrorWidget.hxx"
 #include "persalys/OutputsSelectionGroupBox.hxx"
+#include "persalys/CriticalDomainTableModel.hxx"
 
 #include <openturns/OTtypes.hxx>
 #include <openturns/Normal.hxx>
@@ -247,21 +248,9 @@ private slots:
     QVERIFY2(targetCB != nullptr, "Target HSIC button should exist");
     targetCB->setChecked(true);
 
-    // Next from intro should go to Critical Domain page first
-    QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::CriticalDomain,
-             "Next page should be Critical Domain when Target HSIC is checked");
-
-    // Navigate to Critical Domain page
-    wizard.next();
-    QVERIFY2(wizard.currentId() == DataSensitivityAnalysisWizard::Page::CriticalDomain,
-             "Current page should be Critical Domain page");
-
-    // Validate Critical Domain page
-    QVERIFY2(wizard.validateCurrentPage(), "Critical Domain page must be valid");
-
-    // Next from Critical Domain should go to Target HSIC parameters page
+    // Next from intro should go to Target HSIC parameters page
     QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::TargetHSICParameters,
-             "Next page should be Target HSIC parameters from Critical Domain");
+             "Next page should be Target HSIC parameters when Target HSIC is checked");
 
     // Navigate to Target HSIC page
     wizard.next();
@@ -271,8 +260,20 @@ private slots:
     // Validate Target HSIC parameters page
     QVERIFY2(wizard.validateCurrentPage(), "Target HSIC parameters page must be valid");
 
-    // Next from Target HSIC page should be -1 (finish, no Conditional)
-    QVERIFY2(wizard.nextId() == -1, "Next page after Target HSIC parameters should be -1");
+    // Next from Target HSIC page should go to Critical Domain (no Conditional)
+    QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::CriticalDomain,
+             "Next page after Target HSIC parameters should be Critical Domain");
+
+    // Navigate to Critical Domain page
+    wizard.next();
+    QVERIFY2(wizard.currentId() == DataSensitivityAnalysisWizard::Page::CriticalDomain,
+             "Current page should be Critical Domain page");
+
+    // Validate Critical Domain page
+    QVERIFY2(!wizard.validateCurrentPage(), "Critical Domain page must not be valid");
+
+    // Next from Critical Domain should be -1 (finish)
+    QVERIFY2(wizard.nextId() == -1, "Next page after Critical Domain should be -1");
   }
 
 
@@ -289,21 +290,9 @@ private slots:
     QVERIFY2(condCB != nullptr, "Conditional HSIC button should exist");
     condCB->setChecked(true);
 
-    // Next from intro should go to Critical Domain page first
-    QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::CriticalDomain,
-             "Next page should be Critical Domain when Conditional HSIC is checked");
-
-    // Navigate to Critical Domain page
-    wizard.next();
-    QVERIFY2(wizard.currentId() == DataSensitivityAnalysisWizard::Page::CriticalDomain,
-             "Current page should be Critical Domain page");
-
-    // Validate Critical Domain page
-    QVERIFY2(wizard.validateCurrentPage(), "Critical Domain page must be valid");
-
-    // Next from Critical Domain should go to Conditional HSIC parameters page
+    // Next from intro should go to Conditional HSIC parameters page
     QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::ConditionalHSICParameters,
-             "Next page should be Conditional HSIC parameters from Critical Domain");
+             "Next page should be Conditional HSIC parameters when Conditional HSIC is checked");
 
     // Navigate to Conditional HSIC page
     wizard.next();
@@ -313,8 +302,20 @@ private slots:
     // Validate Conditional HSIC parameters page
     QVERIFY2(wizard.validateCurrentPage(), "Conditional HSIC parameters page must be valid");
 
-    // Next from Conditional HSIC page should always be -1 (it's the last)
-    QVERIFY2(wizard.nextId() == -1, "Next page after Conditional HSIC parameters should be -1");
+    // Next from Conditional HSIC should go to Critical Domain
+    QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::CriticalDomain,
+             "Next page after Conditional HSIC parameters should be Critical Domain");
+
+    // Navigate to Critical Domain page
+    wizard.next();
+    QVERIFY2(wizard.currentId() == DataSensitivityAnalysisWizard::Page::CriticalDomain,
+             "Current page should be Critical Domain page");
+
+    // Validate Critical Domain page
+    QVERIFY2(!wizard.validateCurrentPage(), "Critical Domain page must not be valid");
+
+    // Next from Critical Domain should be -1 (finish)
+    QVERIFY2(wizard.nextId() == -1, "Next page after Critical Domain should be -1");
   }
 
 
@@ -344,20 +345,11 @@ private slots:
     QVERIFY2(wizard.currentId() == DataSensitivityAnalysisWizard::Page::GlobalHSICParameters,
              "Should be on Global HSIC page");
 
-    // From Global, should go to Critical Domain
-    QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::CriticalDomain,
-             "From Global HSIC, next should be Critical Domain");
-
-    // Navigate: Global HSIC -> Critical Domain
-    wizard.next();
-    QVERIFY2(wizard.currentId() == DataSensitivityAnalysisWizard::Page::CriticalDomain,
-             "Should be on Critical Domain page");
-
-    // From Critical Domain, should go to Target HSIC
+    // From Global, should go to Target HSIC
     QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::TargetHSICParameters,
-             "From Critical Domain, next should be Target HSIC");
+             "From Global HSIC, next should be Target HSIC");
 
-    // Navigate: Critical Domain -> Target HSIC
+    // Navigate: Global HSIC -> Target HSIC
     wizard.next();
     QVERIFY2(wizard.currentId() == DataSensitivityAnalysisWizard::Page::TargetHSICParameters,
              "Should be on Target HSIC page");
@@ -371,8 +363,17 @@ private slots:
     QVERIFY2(wizard.currentId() == DataSensitivityAnalysisWizard::Page::ConditionalHSICParameters,
              "Should be on Conditional HSIC page");
 
-    // From Conditional, should finish
-    QVERIFY2(wizard.nextId() == -1, "From Conditional HSIC, should finish");
+    // From Conditional, should go to Critical Domain
+    QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::CriticalDomain,
+             "From Conditional HSIC, next should be Critical Domain");
+
+    // Navigate: Conditional HSIC -> Critical Domain
+    wizard.next();
+    QVERIFY2(wizard.currentId() == DataSensitivityAnalysisWizard::Page::CriticalDomain,
+             "Should be on Critical Domain page");
+
+    // From Critical Domain, should finish
+    QVERIFY2(wizard.nextId() == -1, "From Critical Domain, should finish");
   }
 
 
@@ -504,22 +505,124 @@ private slots:
 
     // Turn Target on only
     targetCB->setChecked(true);
-    QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::CriticalDomain,
-             "Should navigate to Critical Domain when only Target is enabled");
+    QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::TargetHSICParameters,
+             "Should navigate to Target HSIC parameters when only Target is enabled");
 
     // Turn Conditional on too
     condCB->setChecked(true);
-    QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::CriticalDomain,
-             "Should still navigate to Critical Domain when both are enabled");
+    QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::TargetHSICParameters,
+             "Should navigate to Target HSIC parameters when both are enabled");
 
     // Turn Target off, only Conditional remains
     targetCB->setChecked(false);
-    QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::CriticalDomain,
-             "Should navigate to Critical Domain when only Conditional is enabled");
+    QVERIFY2(wizard.nextId() == DataSensitivityAnalysisWizard::Page::ConditionalHSICParameters,
+             "Should navigate to Conditional HSIC parameters when only Conditional is enabled");
 
     // Turn Conditional off
     condCB->setChecked(false);
     QVERIFY2(wizard.nextId() == -1, "Should finish when no HSIC is checked");
+  }
+
+
+  // Helper: navigate to the Critical Domain page with Target HSIC enabled
+  CriticalDomainTableModel * navigateToCriticalDomain(DataSensitivityAnalysisWizard & wizard) const
+  {
+    const auto * methodGroup = wizard.introPage_->findChild<QButtonGroup*>();
+    auto * targetCB = qobject_cast<QCheckBox*>(methodGroup->button(DataSensitivityAnalysisResult::TargetHSIC));
+    targetCB->setChecked(true);
+    wizard.next(); // intro -> target HSIC parameters
+    wizard.next(); // target HSIC parameters -> critical domain
+    const auto tableViews = wizard.criticalDomainPage_->findChildren<QTableView*>();
+    if (tableViews.isEmpty())
+      return nullptr;
+    return qobject_cast<CriticalDomainTableModel*>(tableViews.first()->model());
+  }
+
+
+  void TestCriticalDomainDefaultState() const
+  {
+    DataSensitivityAnalysis analysis("analysis", model_);
+    DataSensitivityAnalysisWizard wizard(analysis);
+    wizard.show();
+
+    const auto * model = navigateToCriticalDomain(wizard);
+    QVERIFY2(wizard.currentId() == DataSensitivityAnalysisWizard::Page::CriticalDomain,
+             "Should be on Critical Domain page");
+    QVERIFY2(model != nullptr, "First table should use CriticalDomainTableModel");
+    QVERIFY2(model->rowCount() == 1, "Table should have one row (one interest variable: Y0)");
+
+    // By default, all checkboxes unchecked: displayed values cannot be parsed as numbers (∞)
+    for (int row = 0; row < model->rowCount(); ++row)
+    {
+      QVERIFY2(model->data(model->index(row, 1), Qt::CheckStateRole).toInt() == Qt::Unchecked,
+               "Lower bound checkbox should be unchecked by default");
+      QVERIFY2(model->data(model->index(row, 2), Qt::CheckStateRole).toInt() == Qt::Unchecked,
+               "Upper bound checkbox should be unchecked by default");
+      bool ok = false;
+      model->data(model->index(row, 1)).toString().toDouble(&ok);
+      QVERIFY2(!ok, "Lower bound display should not be numeric when unchecked (shows -∞)");
+      ok = false;
+      model->data(model->index(row, 2)).toString().toDouble(&ok);
+      QVERIFY2(!ok, "Upper bound display should not be numeric when unchecked (shows +∞)");
+    }
+  }
+
+
+  void TestCriticalDomainCheckboxActivation() const
+  {
+    DataSensitivityAnalysis analysis("analysis", model_);
+    DataSensitivityAnalysisWizard wizard(analysis);
+    wizard.show();
+
+    auto * model = navigateToCriticalDomain(wizard);
+    QVERIFY2(model != nullptr, "Table model should be CriticalDomainTableModel");
+
+    // Checking lower bound shows a numeric value (the q95% default)
+    model->setData(model->index(0, 1), Qt::Checked, Qt::CheckStateRole);
+    QVERIFY2(model->data(model->index(0, 1), Qt::CheckStateRole).toInt() == Qt::Checked,
+             "Lower bound checkbox should be checked after activation");
+    bool ok = false;
+    model->data(model->index(0, 1)).toString().toDouble(&ok);
+    QVERIFY2(ok, "Lower bound should display a numeric value (q95% default) when checked");
+
+    // Unchecking restores the ∞ symbol
+    model->setData(model->index(0, 1), Qt::Unchecked, Qt::CheckStateRole);
+    QVERIFY2(model->data(model->index(0, 1), Qt::CheckStateRole).toInt() == Qt::Unchecked,
+             "Lower bound checkbox should be unchecked after deactivation");
+    ok = false;
+    model->data(model->index(0, 1)).toString().toDouble(&ok);
+    QVERIFY2(!ok, "Lower bound should display -∞ again after unchecking");
+  }
+
+
+  void TestCriticalDomainValidation() const
+  {
+    DataSensitivityAnalysis analysis("analysis", model_);
+    DataSensitivityAnalysisWizard wizard(analysis);
+    wizard.show();
+
+    auto * model = navigateToCriticalDomain(wizard);
+    QVERIFY2(model != nullptr, "Table model should be CriticalDomainTableModel");
+
+    // All infinite bounds → invalid
+    QVERIFY2(!wizard.validateCurrentPage(), "Page should be invalid with all infinite bounds");
+
+    // Check both bounds for row 0, set lower > upper → invalid
+    model->setData(model->index(0, 1), Qt::Checked, Qt::CheckStateRole);
+    model->setData(model->index(0, 2), Qt::Checked, Qt::CheckStateRole);
+    model->setData(model->index(0, 1), 10.0, Qt::EditRole);
+    model->setData(model->index(0, 2), 1.0, Qt::EditRole);
+    QVERIFY2(!wizard.validateCurrentPage(), "Page should not be valid when lower bound > upper bound");
+
+    // Interval containing the entire sample → invalid
+    model->setData(model->index(0, 1), -1e10, Qt::EditRole);
+    model->setData(model->index(0, 2), 1e10, Qt::EditRole);
+    QVERIFY2(!wizard.validateCurrentPage(), "Page should not be valid when interval contains the entire sample");
+
+    // Partial interval within sample range → valid
+    model->setData(model->index(0, 1), 0.0, Qt::EditRole);
+    model->setData(model->index(0, 2), 1.0, Qt::EditRole);
+    QVERIFY2(wizard.validateCurrentPage(), "Page should be valid with a partial interval inside the sample");
   }
 };
 }

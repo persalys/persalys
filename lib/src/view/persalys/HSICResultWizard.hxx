@@ -24,6 +24,7 @@
 #include "persalys/Wizard.hxx"
 #include "persalys/Study.hxx"
 #include "persalys/ErrorWidget.hxx"
+#include "persalys/DoubleSpinBox.hxx"
 
 #include <QComboBox>
 #include <QLabel>
@@ -56,6 +57,7 @@ private:
   PhysicalModel        model_;
   QComboBox            * analysisComboBox_  = nullptr;
   QComboBox            * variablesComboBox_ = nullptr;
+  DoubleSpinBox        * thresholdSpinBox_  = nullptr;
   QStandardItemModel   * tableModel_        = nullptr;
   QTableView           * tableView_         = nullptr;
   ErrorWidget          * errorWidget_       = nullptr;

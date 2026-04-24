@@ -35,7 +35,7 @@ class PERSALYS_UTILS_API DoubleSpinBox : public QDoubleSpinBox
   Q_OBJECT
 
 public:
-  DoubleSpinBox(QWidget *parent = nullptr);
+  explicit DoubleSpinBox(QWidget *parent = nullptr);
 
   int decimals() const;
   void setDecimals(int value);

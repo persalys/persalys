@@ -53,15 +53,15 @@ HSICTab::HSICTab(
       widgetType = SensitivityResultWidget::ConditionalHSICIndices;
   }
 
-  addSubTab(result.getHSICIndices(type), tr("HSIC Indices"), widgetType);
-  ++widgetType;
-  addSubTab(result.getR2HSICIndices(type), tr("R2-HSIC Indices"), widgetType);
-  ++widgetType;
   if (result.computeHSICPValuesPermutation(type))
     addSubTab(result.getPValuesPermutation(type), tr("HSIC permutations p-values"), widgetType);
   ++widgetType;
   if (result.computeHSICPValuesAsymptotic(type))
     addSubTab(result.getPValuesAsymptotic(type), tr("HSIC asymptotic p-values"), widgetType);
+  addSubTab(result.getR2HSICIndices(type), tr("R2-HSIC Indices"), widgetType);
+  ++widgetType;
+  addSubTab(result.getHSICIndices(type), tr("HSIC Indices"), widgetType);
+  ++widgetType;
 }
 
 void HSICTab::addSubTab(const Collection<Point> & values, const QString & title, int widgetType)

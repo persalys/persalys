@@ -136,7 +136,7 @@ class PERSALYS_VIEW_API DataSensitivityAnalysisWizard : public AnalysisWizard
   friend class TestDataSensitivityAnalysisWizard;
 
 public:
-  enum Page {Intro, GlobalHSICParameters, CriticalDomain, TargetHSICParameters, ConditionalHSICParameters};
+  enum Page {Intro, GlobalHSICParameters, TargetHSICParameters, ConditionalHSICParameters, CriticalDomain};
 
   explicit DataSensitivityAnalysisWizard(const Analysis& analysis, QWidget* parent = nullptr);
 
