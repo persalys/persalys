@@ -58,7 +58,9 @@ public:
 
   OT::UnsignedInteger getInputDimension() const;
   InputCollection getInputs() const;
+#ifndef SWIG
   Input & getInputByName(const OT::String & inputName);
+#endif
   Input getInputByName(const OT::String & inputName) const;
   virtual void setInputs(const InputCollection & inputs);
   virtual void setInputName(const OT::String & inputName, const OT::String & newName);
@@ -78,7 +80,9 @@ public:
 
   OT::UnsignedInteger getOutputDimension() const;
   OutputCollection getOutputs() const;
+#ifndef SWIG
   Output & getOutputByName(const OT::String & outputName);
+#endif
   Output getOutputByName(const OT::String & outputName) const;
   virtual void setOutputs(const OutputCollection & outputs);
   virtual void setOutputName(const OT::String & outputName, const OT::String & newName);

@@ -1008,7 +1008,7 @@ void MarginalsWidget::openValuesDefinitionWizard()
   }
   else
   {
-    wizard = new UserDefinedWizard(inputDist.getParametersCollection(), this);
+    wizard = new FiniteDiscreteDistributionWizard(inputDist.getParametersCollection(), this);
   }
   if (wizard->exec())
   {

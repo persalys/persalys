@@ -45,9 +45,10 @@ namespace PERSALYS
     DataFieldModel(const DataFieldModelImplementation& implementation);
     /** Constructor from implementation */
     DataFieldModel(const Implementation & p_implementation);
+#ifndef SWIG
     /** Constructor from implementation pointer */
     DataFieldModel(DataFieldModelImplementation * p_implementation);
-
+#endif
     /** Comparison operator */
     OT::Bool operator ==(const DataFieldModel & other) const;
     OT::Bool operator !=(const DataFieldModel & other) const;

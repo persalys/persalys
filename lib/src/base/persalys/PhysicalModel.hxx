@@ -38,9 +38,10 @@ public:
   PhysicalModel(const PhysicalModelImplementation & implementation);
   /** Constructor from implementation */
   PhysicalModel(const Implementation & p_implementation);
+#ifndef SWIG
   /** Constructor from implementation pointer */
   PhysicalModel(PhysicalModelImplementation * p_implementation);
-
+#endif
   /** Virtual constructor */
   virtual PhysicalModel * clone() const;
 
@@ -55,7 +56,9 @@ public:
 
   OT::UnsignedInteger getInputDimension() const;
   InputCollection getInputs() const;
+#ifndef SWIG
   Input & getInputByName(const OT::String & inputName);
+#endif
   Input getInputByName(const OT::String & inputName) const;
   void setInputs(const InputCollection & inputs);
   void setInputName(const OT::String & inputName, const OT::String & newName);
@@ -74,7 +77,9 @@ public:
 
   OT::UnsignedInteger getOutputDimension() const;
   OutputCollection getOutputs() const;
+#ifndef SWIG
   Output & getOutputByName(const OT::String & outputName);
+#endif
   Output getOutputByName(const OT::String & outputName) const;
   void setOutputs(const OutputCollection & outputs);
   void setOutputName(const OT::String & outputName, const OT::String & newName);

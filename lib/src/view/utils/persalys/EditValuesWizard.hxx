@@ -77,12 +77,12 @@ private:
 };
 
 
-class PERSALYS_UTILS_API UserDefinedWizard : public EditValuesWizard
+class PERSALYS_UTILS_API FiniteDiscreteDistributionWizard : public EditValuesWizard
 {
   Q_OBJECT
 
 public:
-  explicit UserDefinedWizard(const OT::Distribution::PointWithDescriptionCollection &parameters, QWidget *parent = nullptr);
+  explicit FiniteDiscreteDistributionWizard(const OT::Distribution::PointWithDescriptionCollection &parameters, QWidget *parent = nullptr);
 
   OT::Distribution getDistribution() const override;
 

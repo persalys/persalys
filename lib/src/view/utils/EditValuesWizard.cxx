@@ -285,7 +285,7 @@ Distribution EditValuesWizard::getDistribution() const
 }
 
 
-UserDefinedWizard::UserDefinedWizard(const Distribution::PointWithDescriptionCollection &parameters, QWidget *parent)
+FiniteDiscreteDistributionWizard::FiniteDiscreteDistributionWizard(const Distribution::PointWithDescriptionCollection &parameters, QWidget *parent)
   : EditValuesWizard(parent)
 {
   Q_ASSERT(parameters.getSize() == 2);
@@ -312,7 +312,7 @@ UserDefinedWizard::UserDefinedWizard(const Distribution::PointWithDescriptionCol
 }
 
 
-void UserDefinedWizard::addValue(Scalar)
+void FiniteDiscreteDistributionWizard::addValue(Scalar)
 {
   if (proxy_->rowCount() && model_->columnCount())
   {
@@ -345,7 +345,7 @@ void UserDefinedWizard::addValue(Scalar)
 }
 
 
-Distribution UserDefinedWizard::getDistribution() const
+Distribution FiniteDiscreteDistributionWizard::getDistribution() const
 {
   return FiniteDiscreteDistribution(model_->getSample().getMarginal(0), getValues(1));
 }

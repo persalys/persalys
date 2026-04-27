@@ -31,7 +31,7 @@ class PERSALYS_BASE_API AlgorithmProperty
 {
 public:
   enum Locality {Local, Global, AnyL};
-  enum Derivative {None, First, AnyD};
+  enum Derivative {NONE, First, AnyD};
   enum Priority {Low, Medium, High};
   AlgorithmProperty() {};
   AlgorithmProperty(Locality locality, Derivative derivative, OT::String doc, Priority priority = Low)

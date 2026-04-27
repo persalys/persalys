@@ -38,8 +38,10 @@ public:
   MeshModel(const MeshModelImplementation & implementation);
   /** Constructor from implementation */
   MeshModel(const Implementation & p_implementation);
+#ifndef SWIG
   /** Constructor from implementation pointer */
   MeshModel(MeshModelImplementation * p_implementation);
+#endif
 
   OT::Mesh getMesh() const;
 
