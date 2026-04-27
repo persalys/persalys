@@ -37,7 +37,7 @@ namespace PERSALYS
 
 CLASSNAMEINIT(SobolAnalysis)
 
-static Factory<SobolAnalysis> Factory_SobolAnalysis;
+const static Factory<SobolAnalysis> Factory_SobolAnalysis;
 
 /* Default constructor */
 SobolAnalysis::SobolAnalysis()
@@ -221,7 +221,21 @@ void SobolAnalysis::launch()
   algo.setProgressCallback(&UpdateProgressValue, &analysisStruc);
 
   // run algo
-  algo.run();
+  bool computeIndices = true;
+  try
+  {
+    algo.run();
+  }
+  catch (const std::exception& ex)
+  {
+    warningMessage_ = ex.what();
+    computeIndices = false;
+    if (!function.getInputHistory().getSize())
+    {
+      // if no evaluation has been done, nothing can be displayed, so we throw the exception
+      throw;
+    }
+  }
 
   // set results
   result_.outputNames_ = getInterestVariables();
@@ -232,71 +246,74 @@ void SobolAnalysis::launch()
   result_.firstOrderIndices_.setDescription(getPhysicalModel().getStochasticInputNames());
   result_.totalIndices_ = Sample(0, nbInputs);
 
-  SobolSimulationResult sobolResult(algo.getResult());
-  const UnsignedInteger outerSampling = sobolResult.getOuterSampling();
-
-  Scalar foCILength = 0.;
-  Scalar toCILength = 0.;
-  for (UnsignedInteger i = 0; i < nbInputs; ++i)
+  if (computeIndices)
   {
-    const Distribution distFO(sobolResult.getFirstOrderIndicesDistribution().getMarginal(i));
-    foCILength = std::max(foCILength, distFO.computeScalarQuantile(level, true) - distFO.computeScalarQuantile(level));
+    SobolSimulationResult sobolResult(algo.getResult());
+    const UnsignedInteger outerSampling = sobolResult.getOuterSampling();
 
-    const Distribution distTO(sobolResult.getTotalOrderIndicesDistribution().getMarginal(i));
-    toCILength = std::max(toCILength, distTO.computeScalarQuantile(level, true) - distTO.computeScalarQuantile(level));
-  }
-  result_.confidenceIntervalLength_ = std::max(foCILength, toCILength);
-
-  // compute indices
-
-  // if one output
-  if (nbOutputs == 1)
-  {
-    result_.firstOrderIndices_.add(sobolResult.getFirstOrderIndicesEstimate());
-    result_.totalIndices_.add(sobolResult.getTotalOrderIndicesEstimate());
-    result_.firstOrderIndicesInterval_.add(sobolResult.getFirstOrderIndicesDistribution().computeBilateralConfidenceInterval(getConfidenceLevel()));
-    result_.totalIndicesInterval_.add(sobolResult.getTotalOrderIndicesDistribution().computeBilateralConfidenceInterval(getConfidenceLevel()));
-  }
-  // if more than 1 output
-  else
-  {
-    // for each output, relaunch the algo to get the indices
-    // (we do not want the aggregated indices)
-    // We use DatabaseFunction because no more evaluations are needed
-    for (UnsignedInteger i = 0; i < nbOutputs; ++i)
+    Scalar foCILength = 0.;
+    Scalar toCILength = 0.;
+    for (UnsignedInteger i = 0; i < nbInputs; ++i)
     {
-      informationMessage_ = OSS() << "Indices computation in progress for the output " << getInterestVariables()[i];
-      notifyMessageUpdated();
+      const Distribution distFO(sobolResult.getFirstOrderIndicesDistribution().getMarginal(i));
+      foCILength = std::max(foCILength, distFO.computeScalarQuantile(level, true) - distFO.computeScalarQuantile(level));
 
-      // initialization
-      RandomGenerator::SetSeed(getSeed());
-
-      MartinezSensitivityAlgorithm estimator_i;
-      estimator_i.setUseAsymptoticDistribution(true);
-      SobolSimulationAlgorithm algo_i(getPhysicalModel().getDistribution(),
-                                      DatabaseFunction(function.getInputHistory(), function.getOutputHistory().getMarginal(i)),
-                                      estimator_i);
-
-      algo_i.setMaximumOuterSampling(outerSampling);
-      algo_i.setExperimentSize(getReplicationSize());
-      algo_i.setBlockSize(getBlockSize());
-      algo_i.setIndexQuantileEpsilon(-1.0);
-      algo_i.setIndexQuantileLevel(1.0 - getConfidenceLevel());
-
-      // run algo
-      algo_i.run();
-
-      // set results
-      SobolSimulationResult sobolResult_i(algo_i.getResult());
-      result_.firstOrderIndices_.add(sobolResult_i.getFirstOrderIndicesEstimate());
-      result_.totalIndices_.add(sobolResult_i.getTotalOrderIndicesEstimate());
-      result_.firstOrderIndicesInterval_.add(sobolResult_i.getFirstOrderIndicesDistribution().computeBilateralConfidenceInterval(getConfidenceLevel()));
-      result_.totalIndicesInterval_.add(sobolResult_i.getTotalOrderIndicesDistribution().computeBilateralConfidenceInterval(getConfidenceLevel()));
+      const Distribution distTO(sobolResult.getTotalOrderIndicesDistribution().getMarginal(i));
+      toCILength = std::max(toCILength, distTO.computeScalarQuantile(level, true) - distTO.computeScalarQuantile(level));
     }
-    result_.aggregatedFirstOrderIndices_ = sobolResult.getFirstOrderIndicesEstimate();
-    result_.aggregatedTotalIndices_ = sobolResult.getTotalOrderIndicesEstimate();
-    result_.aggregatedFirstOrderIndicesInterval_ = sobolResult.getFirstOrderIndicesDistribution().computeBilateralConfidenceInterval(getConfidenceLevel());
-    result_.aggregatedTotalIndicesInterval_ = sobolResult.getTotalOrderIndicesDistribution().computeBilateralConfidenceInterval(getConfidenceLevel());
+    result_.confidenceIntervalLength_ = std::max(foCILength, toCILength);
+
+    // compute indices
+
+    // if one output
+    if (nbOutputs == 1)
+    {
+      result_.firstOrderIndices_.add(sobolResult.getFirstOrderIndicesEstimate());
+      result_.totalIndices_.add(sobolResult.getTotalOrderIndicesEstimate());
+      result_.firstOrderIndicesInterval_.add(sobolResult.getFirstOrderIndicesDistribution().computeBilateralConfidenceInterval(getConfidenceLevel()));
+      result_.totalIndicesInterval_.add(sobolResult.getTotalOrderIndicesDistribution().computeBilateralConfidenceInterval(getConfidenceLevel()));
+    }
+    // if more than 1 output
+    else
+    {
+      // for each output, relaunch the algo to get the indices
+      // (we do not want the aggregated indices)
+      // We use DatabaseFunction because no more evaluations are needed
+      for (UnsignedInteger i = 0; i < nbOutputs; ++i)
+      {
+        informationMessage_ = OSS() << "Indices computation in progress for the output " << getInterestVariables()[i];
+        notifyMessageUpdated();
+
+        // initialization
+        RandomGenerator::SetSeed(getSeed());
+
+        MartinezSensitivityAlgorithm estimator_i;
+        estimator_i.setUseAsymptoticDistribution(true);
+        SobolSimulationAlgorithm algo_i(getPhysicalModel().getDistribution(),
+                                        DatabaseFunction(function.getInputHistory(), function.getOutputHistory().getMarginal(i)),
+                                        estimator_i);
+
+        algo_i.setMaximumOuterSampling(outerSampling);
+        algo_i.setExperimentSize(getReplicationSize());
+        algo_i.setBlockSize(getBlockSize());
+        algo_i.setIndexQuantileEpsilon(-1.0);
+        algo_i.setIndexQuantileLevel(1.0 - getConfidenceLevel());
+
+        // run algo
+        algo_i.run();
+
+        // set results
+        SobolSimulationResult sobolResult_i(algo_i.getResult());
+        result_.firstOrderIndices_.add(sobolResult_i.getFirstOrderIndicesEstimate());
+        result_.totalIndices_.add(sobolResult_i.getTotalOrderIndicesEstimate());
+        result_.firstOrderIndicesInterval_.add(sobolResult_i.getFirstOrderIndicesDistribution().computeBilateralConfidenceInterval(getConfidenceLevel()));
+        result_.totalIndicesInterval_.add(sobolResult_i.getTotalOrderIndicesDistribution().computeBilateralConfidenceInterval(getConfidenceLevel()));
+      }
+      result_.aggregatedFirstOrderIndices_ = sobolResult.getFirstOrderIndicesEstimate();
+      result_.aggregatedTotalIndices_ = sobolResult.getTotalOrderIndicesEstimate();
+      result_.aggregatedFirstOrderIndicesInterval_ = sobolResult.getFirstOrderIndicesDistribution().computeBilateralConfidenceInterval(getConfidenceLevel());
+      result_.aggregatedTotalIndicesInterval_ = sobolResult.getTotalOrderIndicesDistribution().computeBilateralConfidenceInterval(getConfidenceLevel());
+    }
   }
 
   DesignOfExperiment doe;
@@ -361,7 +378,7 @@ String SobolAnalysis::getPythonScript() const
 
 bool SobolAnalysis::hasValidResult() const
 {
-  return result_.getFirstOrderIndices().getSize() == getInterestVariables().getSize();
+  return result_.getDesignOfExperiment().getOutputSample().getSize() > 0;
 }
 
 
