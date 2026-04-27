@@ -634,7 +634,8 @@ you want to export and hit Finish.
 .. image:: DOE_export.png
     :align: center
 
-Once that is done, a new data set item appears in the study tree. Click on it to see all the availaible analyses in the diagram window.
+Once that is done, a new data set item appears in the study tree.
+Click on it to see all the available analyses in the diagram window.
 
 .. image:: dataModel_diagram.png
     :align: center
