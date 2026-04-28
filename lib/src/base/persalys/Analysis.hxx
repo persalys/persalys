@@ -38,9 +38,10 @@ public:
   Analysis(const AnalysisImplementation & implementation);
   /** Constructor from implementation */
   Analysis(const Implementation & p_implementation);
+#ifndef SWIG
   /** Constructor from implementation pointer */
   Analysis(AnalysisImplementation * p_implementation);
-
+#endif
   /** Comparison operators */
   OT::Bool operator ==(const Analysis & other) const;
   OT::Bool operator !=(const Analysis & other) const;

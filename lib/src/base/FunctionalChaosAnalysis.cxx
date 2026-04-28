@@ -266,8 +266,9 @@ void FunctionalChaosAnalysis::computeAnalyticalValidation(MetaModelAnalysisResul
   const UnsignedInteger size = inputSample.getSize();
   LeaveOneOutSplitter splitter(size);
   FunctionalChaosValidation validation(chaosResult.getFunctionalChaosResult(), splitter);
-  Point r2 = validation.computeR2Score();
-  result.analyticalValidation_.q2_ = r2;
+  result.analyticalValidation_.metaModelSample_ = validation.getMetamodelPredictions();
+  result.analyticalValidation_.mse_ = validation.computeMeanSquaredError();
+  result.analyticalValidation_.q2_ = validation.computeR2Score();
 }
 
 PhysicalModel FunctionalChaosAnalysis::getMetaModel() const

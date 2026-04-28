@@ -51,8 +51,10 @@ public:
   Study(const StudyImplementation& implementation);
   /** Constructor from implementation */
   Study(const Implementation& p_implementation);
+#ifndef SWIG
   /** Constructor from implementation pointer */
   Study(StudyImplementation * p_implementation);
+#endif
 
   /** Virtual constructor */
   virtual Study * clone() const;

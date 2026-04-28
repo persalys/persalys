@@ -29,7 +29,7 @@
 #include "persalys/WidgetBoundToDockWidget.hxx"
 #include "persalys/ErrorWidget.hxx"
 
-#include <openturns/UserDefined.hxx>
+#include <openturns/FiniteDiscreteDistribution.hxx>
 
 #include <QSplitter>
 #include <QVBoxLayout>
@@ -343,7 +343,7 @@ namespace PERSALYS
         ResourceMap::SetAsUnsignedInteger("Distribution-DefaultPointNumber", 513);
 
         // get data
-        const Distribution dist = UserDefined(sample.getMarginal(iMarg));
+        const Distribution dist = FiniteDiscreteDistribution(sample.getMarginal(iMarg));
         const Sample rawData = dist.drawCDF().getDrawable(0).getData();
 
         // remove 0 for y-log scale

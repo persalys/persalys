@@ -18,7 +18,7 @@ RUN curl -L https://downloads.sourceforge.net/omniorb/omniORB-4.2.5.tar.bz2|tar 
 RUN curl -L https://downloads.sourceforge.net/omniorb/omniORBpy/omniORBpy-4.2.5/omniORBpy-4.2.5.tar.bz2|tar xj && cd omniORBpy-4.2.5 && ./configure && make > /dev/null 2>&1 && make install && cd - && rm -r omniORBpy*
 
 # openturns
-RUN git clone -b v1.26 --depth 1 https://github.com/openturns/openturns.git && cd openturns \
+RUN git clone -b v1.27 --depth 1 https://github.com/openturns/openturns.git && cd openturns \
  && cmake -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 -DSWIG_COMPILE_FLAGS="-O1" . && make install > /dev/null 2>&1 && cd - && rm -r openturns*
 
 # libbatch

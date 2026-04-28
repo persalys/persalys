@@ -59,10 +59,10 @@ public:
 
   /** Constructor from implementation */
   DesignOfExperiment(const Implementation & p_implementation);
-
+#ifndef SWIG
   /** Constructor from implementation pointer */
   DesignOfExperiment(DataModel * p_implementation);
-
+#endif
   explicit DesignOfExperiment(const DesignOfExperimentEvaluation & eval);
 
   /** Comparison operator */

@@ -20,7 +20,7 @@
  */
 #include "persalys/EditValuesWizard.hxx"
 
-#include <openturns/UserDefined.hxx>
+#include <openturns/FiniteDiscreteDistribution.hxx>
 #include <openturns/Histogram.hxx>
 
 #include "persalys/DoubleSpinBox.hxx"
@@ -285,7 +285,7 @@ Distribution EditValuesWizard::getDistribution() const
 }
 
 
-UserDefinedWizard::UserDefinedWizard(const Distribution::PointWithDescriptionCollection &parameters, QWidget *parent)
+FiniteDiscreteDistributionWizard::FiniteDiscreteDistributionWizard(const Distribution::PointWithDescriptionCollection &parameters, QWidget *parent)
   : EditValuesWizard(parent)
 {
   Q_ASSERT(parameters.getSize() == 2);
@@ -312,7 +312,7 @@ UserDefinedWizard::UserDefinedWizard(const Distribution::PointWithDescriptionCol
 }
 
 
-void UserDefinedWizard::addValue(Scalar)
+void FiniteDiscreteDistributionWizard::addValue(Scalar)
 {
   if (proxy_->rowCount() && model_->columnCount())
   {
@@ -345,9 +345,9 @@ void UserDefinedWizard::addValue(Scalar)
 }
 
 
-Distribution UserDefinedWizard::getDistribution() const
+Distribution FiniteDiscreteDistributionWizard::getDistribution() const
 {
-  return UserDefined(model_->getSample().getMarginal(0), getValues(1));
+  return FiniteDiscreteDistribution(model_->getSample().getMarginal(0), getValues(1));
 }
 
 HistogramWizard::HistogramWizard(Scalar first, const Point &widths, const Point &heights, QWidget *parent): 

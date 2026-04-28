@@ -38,7 +38,7 @@ with open("post_logistic.py", "w") as f:
     f.write(
         "    Y_mean_t = sum(Y[:idx]) / idx\nexcept StopIteration:\n    Y_mean_t = 0.0\n"
     )
-    f.write('with open("output.txt", "w") as f:\n')
+    f.write('with open("output_logistic.txt", "w") as f:\n')
     f.write('    f.write("Y_min=%.17g\\n" % Y_min)\n')
     f.write('    f.write("Y_max=%.17g\\n" % Y_max)\n')
     f.write('    f.write("Y_mean=%.17g\\n" % Y_mean)\n')
@@ -57,7 +57,7 @@ step1 = persalys.CouplingStep(
 )
 
 resource_file2 = persalys.CouplingResourceFile("post_logistic.py")
-output_file2 = persalys.CouplingOutputFile("output.txt")
+output_file2 = persalys.CouplingOutputFile("output_logistic.txt")
 output_file2.setVariables(
     ["Y_min", "Y_max", "Y_mean", "Y_last", "Y_mean_t"],
     ["Y_min=", "Y_max=", "Y_mean=", "Y_last=", "Y_mean_t="],

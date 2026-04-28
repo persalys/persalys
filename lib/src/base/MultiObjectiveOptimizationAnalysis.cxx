@@ -26,7 +26,7 @@
 #include <openturns/Pagmo.hxx>
 #include <openturns/SimulatedAnnealingLHS.hxx>
 #include <openturns/RandomGenerator.hxx>
-#include <openturns/UserDefined.hxx>
+#include <openturns/FiniteDiscreteDistribution.hxx>
 #include <openturns/OptimizationAlgorithm.hxx>
 
 using namespace OT;
@@ -217,7 +217,7 @@ void MultiObjectiveOptimizationAnalysis::launch()
     {
       Sample values(2, 1);
       values(1, 0) = 1.;
-      distColl.add(OT::UserDefined(values, Point(2, 0.5)));
+      distColl.add(OT::FiniteDiscreteDistribution(values, Point(2, 0.5)));
     }
     else
     {
@@ -227,7 +227,7 @@ void MultiObjectiveOptimizationAnalysis::launch()
         const Point point(1, val);
         values.add(point);
       }
-      distColl.add(OT::UserDefined(values));
+      distColl.add(OT::FiniteDiscreteDistribution(values));
     }
   }
 

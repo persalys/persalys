@@ -45,9 +45,10 @@ public:
   LimitState(const LimitStateImplementation & implementation);
   /** Constructor from implementation */
   LimitState(const Implementation & p_implementation);
+#ifndef SWIG
   /** Constructor from implementation pointer */
   LimitState(LimitStateImplementation * p_implementation);
-
+#endif
   /** Comparison operator */
   OT::Bool operator ==(const LimitState & other) const;
   OT::Bool operator !=(const LimitState & other) const;

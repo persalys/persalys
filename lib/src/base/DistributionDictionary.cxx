@@ -37,7 +37,7 @@ std::vector<String> DistributionDictionary::ContinuousDistributions_ =
 std::vector<String> DistributionDictionary::DiscreteDistributions_ =
 {
   "Bernoulli", "Binomial", "Geometric", "Hypergeometric",
-  "Poisson", "Polya", "Skellam", "UserDefined", "ZipfMandelbrot"
+  "Poisson", "Polya", "Skellam", "FiniteDiscreteDistribution", "ZipfMandelbrot"
 };
 
 
@@ -172,12 +172,12 @@ Distribution DistributionDictionary::BuildDistribution(const String & distributi
     {
       return Uniform(mu - sigma * sqrt(3.0), mu + sigma * sqrt(3.0));
     }
-    else if (distributionName == "UserDefined")
+    else if (distributionName == "FiniteDiscreteDistribution")
     {
       Sample values(2, 1);
       values(0, 0) = mu - sigma;
       values(1, 0) = mu + sigma;
-      return UserDefined(values);
+      return FiniteDiscreteDistribution(values);
     }
     else if (distributionName == "WeibullMax")
     {
@@ -289,7 +289,7 @@ Distribution::PointWithDescriptionCollection DistributionDictionary::GetParamete
 
     nPWithDescColl[0] = nPWithDesc;
   }
-  else if (distributionName == "UserDefined")
+  else if (distributionName == "FiniteDiscreteDistribution")
   {
     nPWithDesc = PointWithDescription(2);
 

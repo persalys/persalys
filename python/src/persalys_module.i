@@ -4,7 +4,6 @@
 
 %{
 #include "openturns/OT.hxx"
-#include "openturns/SequentialSamplingAlgorithm.hxx" // missing include in OT
 #include "openturns/PythonWrappingFunctions.hxx"
 %}
 
@@ -19,8 +18,6 @@
 
 %import base_module.i
 %import uncertainty_module.i
-%import experimental_module.i // for GPR classes
-
 
 OTDefaultCollectionConvertFunctions(DistributionFactory)
 
