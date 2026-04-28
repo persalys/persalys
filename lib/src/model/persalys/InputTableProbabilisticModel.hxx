@@ -43,6 +43,7 @@ public:
 
 public slots:
   void updateData();
+  void setHasInferenceResult(bool hasResult);
 signals:
   void distributionChanged(const QModelIndex&);
   void distributionsChanged();
@@ -50,6 +51,7 @@ signals:
 
 private:
   bool failSoftMode_;
+  bool hasInferenceResult_ = false;
   PhysicalModel physicalModel_;
   QStringList allDistributions_;
 };

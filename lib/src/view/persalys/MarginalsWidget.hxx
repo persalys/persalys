@@ -28,7 +28,9 @@
 #include "persalys/ValueLineEdit.hxx"
 #include "persalys/ErrorWidget.hxx"
 #include "persalys/Study.hxx"
+#include "persalys/StudyItem.hxx"
 #include "persalys/ResizableStackedWidget.hxx"
+#include "persalys/ComboBoxDelegate.hxx"
 
 #include <QGroupBox>
 #include <QVBoxLayout>
@@ -54,7 +56,7 @@ protected:
   void updatePlots();
 
 public slots:
-  void openUrl();
+  void openUrl() const;
   void updateDistributionWidgets(const QModelIndex & index, const QModelIndex & prevIndex = QModelIndex());
   void updateCurrentVariableDistributionWidgets();
   void updateDistributionParametersWidgets(const QModelIndex & index);
@@ -70,15 +72,20 @@ public slots:
 #endif
   void openWizardToChooseHSICResult();
   void openValuesDefinitionWizard();
+  void updateInferenceResultAvailability();
 signals:
   void updateDependenciesRequested();
 
 private:
+  bool studyHasInferenceResults() const;
+
   bool                          failSoftMode_                       = false;
   Study                         study_;
+  StudyItem                     * studyItem_                        = nullptr;
   PhysicalModel                 physicalModel_;
   QTableView                    * inputTableView_                   = nullptr;
   InputTableProbabilisticModel  * inputTableModel_                  = nullptr;
+  ComboBoxDelegate              * delegate_                         = nullptr;
   ResizableStackedWidget        * rightSideOfSplitterStackedWidget_ = nullptr;
   ValueLineEdit                 * valueForDeterministicVariable_    = nullptr;
   PlotWidget                    * pdfPlot_                          = nullptr;

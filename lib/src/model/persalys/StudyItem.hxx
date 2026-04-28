@@ -67,6 +67,7 @@ public slots:
 
 signals:
   void statusChanged();
+  void analysisResultChanged();
 
 protected:
   void buildActions();

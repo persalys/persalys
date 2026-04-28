@@ -38,6 +38,7 @@ public:
 
   void setNoWheelEvent(const bool noWheelEvent);
   void addSeparatorIndex(const int index, const QString &text = "");
+  void clearSeparators();
 
   void paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const override;
   QWidget *createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const override;

@@ -540,6 +540,7 @@ void StudyImplementation::remove(const Analysis& analysis)
   analysis.getImplementation().get()->removeAllObservers();
 
   analyses_.erase(std::remove(analyses_.begin(), analyses_.end(), analysis), analyses_.end());
+  notify("statusChanged");
 }
 
 

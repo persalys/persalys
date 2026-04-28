@@ -168,6 +168,13 @@ void ComboBoxDelegate::addSeparatorIndex(const int index, const QString &text)
 }
 
 
+void ComboBoxDelegate::clearSeparators()
+{
+  separatorIndex_.clear();
+  separatorText_.clear();
+}
+
+
 void ComboBoxDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index) const
 {
   if (cell_ != QPair<int, int>()

@@ -177,6 +177,7 @@ void StudyItem::update(Observable * /*source*/, const String & message)
   else if (message == "analysisFinished" || message == "analysisBadlyFinished")
   {
     analysisInProgress_ = false;
+    emit analysisResultChanged();
   }
   else if (message == "statusChanged")
   {
