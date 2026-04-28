@@ -176,7 +176,7 @@ RUN git clone -b v1.27 --depth 1 https://github.com/openturns/openturns.git && c
  && make install > /dev/null 2>&1 && cd - && rm -r openturns*
 
 # otmorris
-RUN git clone -b v0.19 --depth 1 https://github.com/openturns/otmorris.git && cd otmorris \
+RUN git clone -b v0.20 --depth 1 https://github.com/openturns/otmorris.git && cd otmorris \
  && cmake -DPython_EXECUTABLE=/usr/local/bin/python3 -DCMAKE_INSTALL_LIBDIR=lib . \
  && make install > /dev/null 2>&1 && cd - && rm -r otmorris*
 
