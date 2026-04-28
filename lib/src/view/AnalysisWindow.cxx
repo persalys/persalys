@@ -66,7 +66,7 @@ void AnalysisWindow::buildInterface()
   // analysis parameters widget
   Analysis analysis = analysisItem_->getAnalysis();
   auto * implementation = analysis.getImplementation().get();
-  auto * doeEvalImplementation = dynamic_cast<DesignOfExperimentEvaluation*>(implementation);
+  const auto * doeEvalImplementation = dynamic_cast<DesignOfExperimentEvaluation*>(implementation);
 
   if (doeEvalImplementation)
     Parameters parameters = doeEvalImplementation->getParameters();

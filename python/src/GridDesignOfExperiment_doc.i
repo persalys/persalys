@@ -1,26 +1,19 @@
 %feature("docstring") PERSALYS::GridDesignOfExperiment
 "Create a grid design of experiments.
 
-Available constructors:
-    GridDesignOfExperiment(*name, physicalModel*)
-
-    GridDesignOfExperiment(*name, physicalModel, values*)
-
 Parameters
 ----------
 name : str
     Name
 physicalModel : :class:`~persalys.PhysicalModel`
     Physical model
-bounds : :py:class:`openturns.Interval`
-    Bounds
 values : sequence of :py:class:`openturns.Point`
-    Values of the constant variables (optional)
+    Values of the variables (optional)
 
 Notes
 -----
-The sequences must have a dimension equal to the number of inputs in the
-physical model.
+The length of value must be equal to the number of inputs of the physical model.
+The values can be obtained using class :py:class:`openturns.Box` for example.
 
 Examples
 --------

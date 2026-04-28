@@ -330,9 +330,9 @@ SubWindow* WindowFactory::GetAnalysisWindow(AnalysisItem* item, QWidget * parent
 
   // if no result: can not build a ResultWindow
   if (!item->getAnalysis().hasValidResult())
-    return 0;
+    return nullptr;
 
-  SubWindow * resultWindow = 0;
+  SubWindow * resultWindow = nullptr;
 
   if (analysisType == "ModelEvaluation")
   {

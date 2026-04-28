@@ -358,7 +358,7 @@ void StudyManager::createAnalysisWindow(AnalysisItem* item, const bool createCon
   // do removeSubWindow if the analysis run method has been launched from a Python script
   item->emitRemoveWindowRequested();
 
-  SubWindow * window = 0;
+  SubWindow * window = nullptr;
   QString message = "";
 
   try

@@ -24,6 +24,8 @@
 #include "persalys/SensitivityResultWidget.hxx"
 #include "persalys/ResizableStackedWidget.hxx"
 #include "persalys/QtTools.hxx"
+#include "persalys/ExportableTableView.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <QGroupBox>
 #include <QComboBox>
@@ -66,74 +68,87 @@ void SobolResultWindow::buildInterface()
   // main splitter
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
 
-  // - list outputs
-
-
-
   // - tab widget
   QTabWidget * tabWidget = new QTabWidget;
 
   // first tab --------------------------------
-  QScrollArea * scrollArea = new QScrollArea;
-  scrollArea->setWidgetResizable(true);
-  QWidget * widget = new QWidget;
-  QVBoxLayout * vbox = new QVBoxLayout(widget);
-
-  QComboBox * outputsListWidget = new QComboBox;
-  outputsListWidget->addItems(QtOT::DescriptionToStringList(result_.getOutputNames()));
-  vbox->addWidget(outputsListWidget);
-
-  ResizableStackedWidget * stackedWidget = new ResizableStackedWidget;
-  connect(outputsListWidget, SIGNAL(currentIndexChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
-
-  for (UnsignedInteger i = 0; i < nbOutputs; ++i)
+  if (result_.getFirstOrderIndices().getSize() == nbOutputs)
   {
-    // get indices confidence interval
-    Interval foIndicesInterval;
-    if (result_.getFirstOrderIndicesInterval().getSize() == nbOutputs)
-      foIndicesInterval = result_.getFirstOrderIndicesInterval()[i];
-    Interval toIndicesInterval;
-    if (result_.getTotalIndicesInterval().getSize() == nbOutputs)
-      toIndicesInterval = result_.getTotalIndicesInterval()[i];
+    QScrollArea * scrollArea = new QScrollArea;
+    scrollArea->setWidgetResizable(true);
+    QWidget * widget = new QWidget;
+    QVBoxLayout * vbox = new QVBoxLayout(widget);
 
-    // build widget
-    SensitivityResultWidget * indicesResultWidget = new SensitivityResultWidget(result_.getFirstOrderIndices()[i],
-        foIndicesInterval,
-        result_.getTotalIndices()[i],
-        toIndicesInterval,
+    QComboBox * outputsListWidget = new QComboBox;
+    outputsListWidget->addItems(QtOT::DescriptionToStringList(result_.getOutputNames()));
+    vbox->addWidget(outputsListWidget);
+
+    ResizableStackedWidget * stackedWidget = new ResizableStackedWidget;
+    connect(outputsListWidget, SIGNAL(currentIndexChanged(int)), stackedWidget, SLOT(setCurrentIndex(int)));
+
+    for (UnsignedInteger i = 0; i < nbOutputs; ++i)
+    {
+      // get indices confidence interval
+      Interval foIndicesInterval;
+      if (result_.getFirstOrderIndicesInterval().getSize() == nbOutputs)
+        foIndicesInterval = result_.getFirstOrderIndicesInterval()[i];
+      Interval toIndicesInterval;
+      if (result_.getTotalIndicesInterval().getSize() == nbOutputs)
+        toIndicesInterval = result_.getTotalIndicesInterval()[i];
+
+      // build widget
+      SensitivityResultWidget * indicesResultWidget = new SensitivityResultWidget(result_.getFirstOrderIndices()[i],
+          foIndicesInterval,
+          result_.getTotalIndices()[i],
+          toIndicesInterval,
+          result_.getInputNames(),
+          result_.getOutputNames()[i],
+          SensitivityResultWidget::Sobol,
+          DesignOfExperiment::Type::MC,
+          this);
+      stackedWidget->addWidget(indicesResultWidget);
+    }
+    vbox->addWidget(stackedWidget, 1);
+
+    scrollArea->setWidget(widget);
+    tabWidget->addTab(scrollArea, tr("Indices"));
+
+    // aggregated tab -----------------------------------------
+    if(nbOutputs > 1 && result_.getAggregatedFirstOrderIndices().getSize())
+    {
+      SensitivityResultWidget * aggregatedIndicesResultWidget = new SensitivityResultWidget(
+        result_.getAggregatedFirstOrderIndices(),
+        result_.getAggregatedFirstOrderIndicesInterval(),
+        result_.getAggregatedTotalIndices(),
+        result_.getAggregatedTotalIndicesInterval(),
         result_.getInputNames(),
-        result_.getOutputNames()[i],
+        result_.getOutputNames().__str__(),
         SensitivityResultWidget::Sobol,
         DesignOfExperiment::Type::MC,
         this);
-    stackedWidget->addWidget(indicesResultWidget);
+      tabWidget->addTab(aggregatedIndicesResultWidget, tr("Aggregated Indices"));
+    }
+    outputsListWidget->setCurrentIndex(0);
   }
-  vbox->addWidget(stackedWidget, 1);
 
-  scrollArea->setWidget(widget);
-  tabWidget->addTab(scrollArea, tr("Indices"));
-
-  // aggregated tab -----------------------------------------
-  if(nbOutputs > 1 && result_.getAggregatedFirstOrderIndices().getSize())
-  {
-    SensitivityResultWidget * aggregatedIndicesResultWidget = new SensitivityResultWidget(
-      result_.getAggregatedFirstOrderIndices(),
-      result_.getAggregatedFirstOrderIndicesInterval(),
-      result_.getAggregatedTotalIndices(),
-      result_.getAggregatedTotalIndicesInterval(),
-      result_.getInputNames(),
-      result_.getOutputNames().__str__(),
-      SensitivityResultWidget::Sobol,
-      DesignOfExperiment::Type::MC,
-      this);
-    tabWidget->addTab(aggregatedIndicesResultWidget, tr("Aggregated Indices"));
-  }
+  // points tab
+  tabWidget->addTab(ExportableTableView::GetSampleTableViewWidget(getItem(), result_.getDesignOfExperiment().getSample()), tr("Values"));
 
   // stopping criteria
   if (result_.getElapsedTime() > 0. && result_.getCallsNumber())
   {
-    widget = new QWidget;
+    QWidget * widget = new QWidget;
     QGridLayout * gbox = new QGridLayout(widget);
+
+    const AnalysisItem * analysisItem = dynamic_cast<AnalysisItem *>(getItem());
+    QString warningMsg = analysisItem ? QString::fromStdString(analysisItem->getAnalysis().getWarningMessage()) : QString();
+    ErrorWidget * errorWidget = new ErrorWidget(widget);
+    if (!warningMsg.isEmpty())
+      errorWidget->setMessage(warningMsg, ErrorWidget::Error, false, false);
+    else
+      errorWidget->hide();
+    gbox->addWidget(errorWidget, 0, 0, 1, 2);
+
     QStringList namesList;
     namesList << tr("Elapsed time")
               << tr("Number of calls")
@@ -145,9 +160,9 @@ void SobolResultWindow::buildInterface()
                << QString::number(result_.getConfidenceIntervalLength());
 
     ParametersWidget * parametersWidget = new ParametersWidget(tr("Stopping criteria"), namesList, valuesList, true, true);
-    gbox->addWidget(parametersWidget, 0, 0);
+    gbox->addWidget(parametersWidget, 1, 0);
     gbox->setColumnStretch(1, 1);
-    gbox->setRowStretch(1, 1);
+    gbox->setRowStretch(2, 1);
     tabWidget->addTab(widget, tr("Stopping criteria"));
   }
 
@@ -162,7 +177,6 @@ void SobolResultWindow::buildInterface()
   // set widgets
   mainWidget->addWidget(tabWidget);
   mainWidget->setStretchFactor(1, 10);
-  outputsListWidget->setCurrentIndex(0);
 
   widgetLayout->addWidget(mainWidget, 1);
 }
