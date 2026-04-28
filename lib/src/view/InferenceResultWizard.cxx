@@ -40,7 +40,7 @@ InferenceResultWizard::InferenceResultWizard(const Study& study, QWidget* parent
   , study_(study)
 {
   buildInterface();
-  //adjustSize();
+  resize(1440, 900);
 }
 
 
