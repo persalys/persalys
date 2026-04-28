@@ -1506,7 +1506,7 @@ bayésien (BIC)</translation>
 <context>
     <name>PERSALYS::CorrelationTableModel</name>
     <message>
-        <location filename="../lib/src/model/CorrelationTableModel.cxx" line="153"/>
+        <location filename="../lib/src/model/CorrelationTableModel.cxx" line="154"/>
         <source>The correlation between %1 and %2 cannot be equal to &apos;%3&apos;.
  %4</source>
         <translation>La corrélation entre %1 et %2 ne peut pas être égale à &apos;%3&apos;.
@@ -1757,24 +1757,19 @@ bayésien (BIC)</translation>
 <context>
     <name>PERSALYS::CriticalDomainTableModel</name>
     <message>
-        <location filename="../lib/src/model/CriticalDomainTableModel.cxx" line="63"/>
+        <location filename="../lib/src/model/CriticalDomainTableModel.cxx" line="64"/>
         <source>Variable</source>
         <translation>Variable</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/CriticalDomainTableModel.cxx" line="65"/>
+        <location filename="../lib/src/model/CriticalDomainTableModel.cxx" line="66"/>
         <source>Lower bound</source>
         <translation>Borne inférieure</translation>
     </message>
     <message>
-        <location filename="../lib/src/model/CriticalDomainTableModel.cxx" line="67"/>
+        <location filename="../lib/src/model/CriticalDomainTableModel.cxx" line="68"/>
         <source>Upper bound</source>
         <translation>Borne supérieure</translation>
-    </message>
-    <message>
-        <location filename="../lib/src/model/CriticalDomainTableModel.cxx" line="189"/>
-        <source>Lower bound must be less than or equal to upper bound</source>
-        <translation>La valeur de la borne inférieure doit être inférieure ou égale à celle de la borne supérieure</translation>
     </message>
 </context>
 <context>
@@ -2184,14 +2179,18 @@ données</translation>
         <source>One column in the CSV file
 corresponds to one time step
 and one row to one variable</source>
-        <translation>Une colonne dans le CSV\ncorrespond à un pas de temps\net une ligne à une variable</translation>
+        <translation>Une colonne dans le CSV
+correspond à un pas de temps
+et une ligne à une variable</translation>
     </message>
     <message>
         <location filename="../lib/src/view/DataFieldModelWindow.cxx" line="103"/>
         <source>One row in the CSV file
 corresponds to one time step
 and one column to one variable</source>
-        <translation>Une ligne dans le fichier CSV\ncorrespond à un pas de temps\n et une colonne à une variable</translation>
+        <translation>Une ligne dans le fichier CSV
+correspond à un pas de temps
+et une colonne à une variable</translation>
     </message>
     <message>
         <location filename="../lib/src/view/DataFieldModelWindow.cxx" line="123"/>
@@ -2589,12 +2588,17 @@ métamodèle</translation>
         <translation>Fonctions filtre/de poids</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="481"/>
-        <source>Lower bound must be less than or equal to upper bound</source>
-        <translation>La valeur de la borne inférieure doit être inférieure ou égale à celle de la borne supérieure</translation>
+        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="500"/>
+        <source>Lower bound must be less than or equal to upper bound for variable &apos;%1&apos;</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="486"/>
+        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="509"/>
+        <source>The critical domain cannot include the whole sample for variable &apos;%1&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="517"/>
         <source>Alpha must be strictly positive</source>
         <translation>alpha doit être strictement positif</translation>
     </message>
@@ -2602,52 +2606,52 @@ métamodèle</translation>
 <context>
     <name>PERSALYS::DataSensitivityAnalysisHSICParametersPage</name>
     <message>
-        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="507"/>
+        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="538"/>
         <source>Global HSIC parameters</source>
         <translation>Paramètres des HSIC globaux</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="510"/>
+        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="541"/>
         <source>Target HSIC parameters</source>
         <translation>Paramètres des HSIC ciblés</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="513"/>
+        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="544"/>
         <source>Conditional HSIC parameters</source>
         <translation>Paramètres des HSIC conditionnels</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="525"/>
+        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="556"/>
         <source>Use V-statistic (biased but faster and asymptotically unbiased)</source>
         <translation>Utiliser la V-statistique (biaisée mais plus rapide et asymptotiquement non biaisée)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="526"/>
+        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="557"/>
         <source>Use U-statistic (unbiased but more computationally expensive)</source>
         <translation>Utiliser la U-statistique (non-biaisée mais plus coûteuse à calculer)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="530"/>
+        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="561"/>
         <source>Compute permutation p-values</source>
         <translation>Calculer les p-valeurs par permutations</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="536"/>
+        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="567"/>
         <source>Compute asymptotic p-values</source>
         <translation>Calculer les p-valeurs asymptotiques</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="542"/>
+        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="573"/>
         <source>Covariance models</source>
         <translation>Modèles de covariance</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="579"/>
+        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="610"/>
         <source>Apply to all</source>
         <translation>Appliquer à tous</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="696"/>
+        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="728"/>
         <source>p must be in (0, 2]</source>
         <translation>p doit être dans ]0;2]</translation>
     </message>
@@ -2655,52 +2659,52 @@ métamodèle</translation>
 <context>
     <name>PERSALYS::DataSensitivityAnalysisIntroPage</name>
     <message>
-        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="207"/>
+        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="206"/>
         <source>Sensitivity analysis - methods</source>
         <translation>Analyse de sensibilité - méthodes</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="212"/>
+        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="211"/>
         <source>Variable(s) of interest</source>
         <translation>Variable(s) d&apos;intérêt</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="216"/>
+        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="215"/>
         <source>Global sensitivity analysis methods</source>
         <translation>Méthodes d&apos;analyse de sensibilité globale</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="223"/>
+        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="222"/>
         <source>Sobol indices (rank sobol algorithm)</source>
         <translation>Indices de Sobol&apos; (algorithme sur les rangs)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="229"/>
+        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="228"/>
         <source>Standard regression coefficients</source>
         <translation>SRC</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="235"/>
+        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="234"/>
         <source>Global HSIC</source>
         <translation>HSIC globaux</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="244"/>
+        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="243"/>
         <source>Reliability oriented sensitivity analysis methods</source>
         <translation>Méthodes d&apos;analyse de sensibilité fiabiliste</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="248"/>
+        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="247"/>
         <source>Target HSIC</source>
         <translation>HSIC ciblés</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="256"/>
+        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="255"/>
         <source>Conditional HSIC</source>
         <translation>HSIC conditionnels</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="269"/>
+        <location filename="../lib/src/view/DataSensitivityAnalysisWizard.cxx" line="268"/>
         <source>Warning: if the variables are not i.i.d, there is no theoretical guarantee for rank Sobol and for HSIC</source>
         <translation>Avertissement : si les variables ne sont pas i.i.d, il n&apos;y a pas de garantie théorique pour Sobol ni pour les HSIC</translation>
     </message>
@@ -4615,37 +4619,42 @@ des étiquettes</translation>
         <translation>Variable de sortie</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/HSICResultWizard.cxx" line="139"/>
+        <location filename="../lib/src/view/HSICResultWizard.cxx" line="92"/>
+        <source>p-value threshold</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../lib/src/view/HSICResultWizard.cxx" line="152"/>
         <source>Variable</source>
         <translation>Variable</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/HSICResultWizard.cxx" line="141"/>
+        <location filename="../lib/src/view/HSICResultWizard.cxx" line="154"/>
         <source>p-value (asymptotic)</source>
         <translation>p-valeur (asymptotique)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/HSICResultWizard.cxx" line="143"/>
+        <location filename="../lib/src/view/HSICResultWizard.cxx" line="156"/>
         <source>p-value (permutation)</source>
         <translation>p-valeur (permutation)</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/HSICResultWizard.cxx" line="144"/>
+        <location filename="../lib/src/view/HSICResultWizard.cxx" line="157"/>
         <source>Selected</source>
         <translation>Sélectionné</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/HSICResultWizard.cxx" line="195"/>
+        <location filename="../lib/src/view/HSICResultWizard.cxx" line="208"/>
         <source>Yes</source>
         <translation>Oui</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/HSICResultWizard.cxx" line="195"/>
+        <location filename="../lib/src/view/HSICResultWizard.cxx" line="208"/>
         <source>No</source>
         <translation>Non</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/HSICResultWizard.cxx" line="267"/>
+        <location filename="../lib/src/view/HSICResultWizard.cxx" line="281"/>
         <source>The current study has no global HSIC analysis result with p-values.</source>
         <translation>L&apos;étude courante n&apos;a pas de résultat d&apos;analyse HSIC globaux avec p-valeurs.</translation>
     </message>
@@ -4653,22 +4662,22 @@ des étiquettes</translation>
 <context>
     <name>PERSALYS::HSICTab</name>
     <message>
-        <location filename="../lib/src/view/HSICTab.cxx" line="56"/>
+        <location filename="../lib/src/view/HSICTab.cxx" line="63"/>
         <source>HSIC Indices</source>
         <translation>Indices HSIC</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/HSICTab.cxx" line="58"/>
+        <location filename="../lib/src/view/HSICTab.cxx" line="61"/>
         <source>R2-HSIC Indices</source>
         <translation>Indices R2-HSIC</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/HSICTab.cxx" line="61"/>
+        <location filename="../lib/src/view/HSICTab.cxx" line="57"/>
         <source>HSIC permutations p-values</source>
         <translation>p-valeurs HSIC par permutations</translation>
     </message>
     <message>
-        <location filename="../lib/src/view/HSICTab.cxx" line="64"/>
+        <location filename="../lib/src/view/HSICTab.cxx" line="60"/>
         <source>HSIC asymptotic p-values</source>
         <translation>p-valeurs HSIC asymptotiques</translation>
     </message>
