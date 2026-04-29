@@ -63,6 +63,7 @@ namespace PERSALYS
 MarginalsWidget::MarginalsWidget(PhysicalModelItem * item, QWidget * parent)
   : QWidget(parent)
   , study_(item->getParentStudyItem()->getStudy())
+  , studyItem_(item->getParentStudyItem())
   , physicalModel_(item->getPhysicalModel())
 {
   for (UnsignedInteger i = 0; i < 5; ++i)
@@ -72,6 +73,8 @@ MarginalsWidget::MarginalsWidget(PhysicalModelItem * item, QWidget * parent)
   }
   connect(item, SIGNAL(stochasticInputListChanged()), this, SLOT(updateProbabilisticModel()));
   connect(item, SIGNAL(inputListDefinitionChanged()), this, SLOT(updateCurrentVariableDistributionWidgets()));
+  connect(studyItem_, SIGNAL(statusChanged()), this, SLOT(updateInferenceResultAvailability()));
+  connect(studyItem_, SIGNAL(analysisResultChanged()), this, SLOT(updateInferenceResultAvailability()));
 
   buildInterface();
 }
@@ -118,13 +121,12 @@ void MarginalsWidget::buildInterface()
     inputTableView_->setHorizontalHeader(inputTableHeaderView);
 
     // - delegate for distributions list
-    ComboBoxDelegate * delegate = new ComboBoxDelegate(inputTableView_);
-    delegate->setNoWheelEvent(true);
+    delegate_ = new ComboBoxDelegate(inputTableView_);
+    delegate_->setNoWheelEvent(true);
     const int continuousDistNb = DistributionDictionary::ContinuousDistributions_.size();
-    delegate->addSeparatorIndex(0, tr("Continuous"));
-    delegate->addSeparatorIndex(continuousDistNb + 1, tr("Discrete"));
-    delegate->addSeparatorIndex(continuousDistNb + DistributionDictionary::DiscreteDistributions_.size() + 2, tr("Use result"));
-    inputTableView_->setItemDelegateForColumn(1, delegate);
+    delegate_->addSeparatorIndex(0, tr("Continuous"));
+    delegate_->addSeparatorIndex(continuousDistNb + 1, tr("Discrete"));
+    inputTableView_->setItemDelegateForColumn(1, delegate_);
     inputTableView_->setEditTriggers(QAbstractItemView::NoEditTriggers);
   }
   inputTableView_->horizontalHeader()->setStretchLastSection(true);
@@ -305,11 +307,11 @@ void MarginalsWidget::buildInterface()
   errorWidget_ = new ErrorWidget;
   mainLayout->addWidget(errorWidget_, 0);
 
-  updateProbabilisticModel();
+  updateInferenceResultAvailability();
 }
 
 
-void MarginalsWidget::openUrl()
+void MarginalsWidget::openUrl() const
 {
   if (!inputTableView_->currentIndex().isValid())
     return;
@@ -324,6 +326,49 @@ void MarginalsWidget::openUrl()
   // open url
   const QString link = FileTools::OpenTURNSUrlLink + "user_manual/_generated/openturns." + QString(distName.c_str()) + ".html";
   QDesktopServices::openUrl(QUrl(link));
+}
+
+
+bool MarginalsWidget::studyHasInferenceResults() const
+{
+  for (UnsignedInteger i = 0; i < study_.getAnalyses().getSize(); ++i)
+  {
+    if (study_.getAnalyses()[i].getImplementation()->getClassName() == "InferenceAnalysis"
+        && study_.getAnalyses()[i].hasValidResult())
+      return true;
+  }
+  return false;
+}
+
+
+void MarginalsWidget::updateInferenceResultAvailability()
+{
+  if (failSoftMode_ || !delegate_)
+  {
+    updateProbabilisticModel();
+    return;
+  }
+
+  const bool hasInference = studyHasInferenceResults();
+  inputTableModel_->setHasInferenceResult(hasInference);
+
+  // Update delegate separator indices based on inference availability
+  const int continuousDistNb = DistributionDictionary::ContinuousDistributions_.size();
+  delegate_->clearSeparators();
+  if (hasInference)
+  {
+    // "Inference result" is at index 0 in allDistributions_
+    delegate_->addSeparatorIndex(0, tr("Use result"));
+    delegate_->addSeparatorIndex(2, tr("Continuous"));
+    delegate_->addSeparatorIndex(continuousDistNb + 3, tr("Discrete"));
+  }
+  else
+  {
+    delegate_->addSeparatorIndex(0, tr("Continuous"));
+    delegate_->addSeparatorIndex(continuousDistNb + 1, tr("Discrete"));
+  }
+
+  updateProbabilisticModel();
 }
 
 

@@ -39,8 +39,7 @@ InputTableProbabilisticModel::InputTableProbabilisticModel(const PhysicalModel &
   , physicalModel_(physicalModel)
 {
   allDistributions_ = TranslationManager::GetTranslatedContinuousDistributions() <<
-                      TranslationManager::GetTranslatedDiscreteDistributions() <<
-                      tr("Inference result");
+                      TranslationManager::GetTranslatedDiscreteDistributions();
 }
 
 
@@ -213,6 +212,22 @@ bool InputTableProbabilisticModel::setData(const QModelIndex & index, const QVar
     }
   }
   return false;
+}
+
+
+void InputTableProbabilisticModel::setHasInferenceResult(bool hasResult)
+{
+  if (hasInferenceResult_ == hasResult)
+    return;
+  hasInferenceResult_ = hasResult;
+
+  allDistributions_.clear();
+  if (hasInferenceResult_)
+    allDistributions_ << tr("Inference result");
+  allDistributions_ << TranslationManager::GetTranslatedContinuousDistributions()
+                    << TranslationManager::GetTranslatedDiscreteDistributions();
+  beginResetModel();
+  endResetModel();
 }
 
 
