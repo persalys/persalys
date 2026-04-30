@@ -8,8 +8,10 @@
 %ignore PERSALYS::AnalysisImplementation::getProgressValue;
 %ignore PERSALYS::AnalysisImplementation::stop;
 %ignore PERSALYS::AnalysisImplementation::detach;
+%ignore PERSALYS::AnalysisImplementation::interrupt;
 %ignore PERSALYS::AnalysisImplementation::canBeLaunched;
 %ignore PERSALYS::AnalysisImplementation::canBeDetached;
+%ignore PERSALYS::AnalysisImplementation::canBeInterrupted;
 %ignore PERSALYS::AnalysisImplementation::getElapsedTime;
 %ignore PERSALYS::AnalysisImplementation::getParameters;
 %ignore *::CanBeLaunched;

@@ -64,6 +64,7 @@ RUN git clone -b V9_15_0 --depth 1 https://github.com/SalomePlatform/py2cpp.git 
 
 # ydefx
 RUN git clone -b V9_15_0 --depth 1 https://github.com/SalomePlatform/ydefx.git && cd ydefx \
+ && curl -L https://github.com/SalomePlatform/ydefx/commit/2340979.patch | patch -p1 \
  && sed -i "s|P120K:SALOME|P12H8:SALOME|g" src/pydefx/configuration.py \
  && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DSalomeKERNEL_DIR=/home/devel/local/salome_adm/cmake_files -DCMAKE_INSTALL_PREFIX=/home/devel/local -DKERNEL_ROOT_DIR=/home/devel/local . && make install > /dev/null 2>&1 && cd - && rm -r ydefx*
 

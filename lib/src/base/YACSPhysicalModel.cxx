@@ -201,6 +201,11 @@ Bool YACSPhysicalModel::getUseYACS() const
   return useYACS_;
 }
 
+bool YACSPhysicalModel::canBeInterrupted() const
+{
+  return useYACS_;
+}
+
 
 /** String converter */
 String YACSPhysicalModel::__repr__() const

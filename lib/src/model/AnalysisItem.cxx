@@ -221,6 +221,12 @@ void AnalysisItem::stopAnalysis()
 }
 
 
+void AnalysisItem::interruptAnalysis()
+{
+  analysis_.interrupt();
+}
+
+
 void AnalysisItem::detachAnalysis()
 {
   analysis_.detach();

@@ -143,6 +143,12 @@ bool Analysis::canBeLaunched(String &errorMessage) const
 }
 
 
+bool Analysis::canBeInterrupted() const
+{
+  return getImplementation()->canBeInterrupted();
+}
+
+
 bool Analysis::canBeDetached() const
 {
   return getImplementation()->canBeDetached();
@@ -164,6 +170,12 @@ String Analysis::getPythonScript() const
 void Analysis::stop()
 {
   getImplementation()->stop();
+}
+
+
+void Analysis::interrupt()
+{
+  getImplementation()->interrupt();
 }
 
 

@@ -164,17 +164,31 @@ Sample YACSEvaluation::operator() (const Sample & inS) const
   {
     double progress = myJob->progress();
     String state = myJob->state();
-    while(progress < 1.0 && state != "FINISHED" && state != "ERROR" && state != "FAILED")
+    while (progress < 1.0 && Description({"QUEUED", "IN_PROCESS", "RUNNING"}).contains(state))
     {
-      if (stopCallback_.first)
+      // detach
+      if (detachCallback_.first)
       {
-        const Bool stop = stopCallback_.first(stopCallback_.second);
-        if (stop)
+        const Bool detach = detachCallback_.first(detachCallback_.second);
+        if (detach)
         {
           setDump(myJob->dump());
           throw DetachedException(HERE) << "Job has been detached";
         }
       }
+
+      // stop
+      if (stopCallback_.first)
+      {
+        const Bool stop = stopCallback_.first(stopCallback_.second);
+        if (stop)
+        {
+          myJob->cancel();
+          // throw regardless of the return value of cancel to force error on next blocks
+          throw InternalException(HERE) << "Job cancelled";
+        }
+      }
+
       std::this_thread::sleep_for(std::chrono::seconds(1));
       progress = myJob->progress();
       state = myJob->state();
@@ -312,10 +326,6 @@ Bool YACSEvaluation::getIsRunning() const
   return isRunning_;
 }
 
-void YACSEvaluation::setStopCallback(StopCallback callBack, void * state)
-{
-  stopCallback_ = std::pair<StopCallback, void *>(callBack, state);
-}
 
 /* Method save() stores the object through the StorageManager */
 void YACSEvaluation::save(Advocate & adv) const

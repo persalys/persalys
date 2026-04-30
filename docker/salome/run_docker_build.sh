@@ -82,7 +82,7 @@ cp -v /usr/lib/x86_64-linux-gnu/libhdf5_*.so.103 /usr/lib/x86_64-linux-gnu/libgm
 cp -v /usr/lib/x86_64-linux-gnu/libgnutls.so.30 /usr/lib/x86_64-linux-gnu/libpng16.so.16 /usr/lib/x86_64-linux-gnu/libjpeg.so.62 persalys.AppDir/usr/lib
 cp -v /usr/local/lib/lib*.so persalys.AppDir/usr/lib
 cp -v /usr/local/lib/lib*.so.[0-9] persalys.AppDir/usr/lib
-cp -v /usr/local/lib/libOT.so.0.27 persalys.AppDir/usr/lib
+cp -v /usr/local/lib/libOT.so.0.28 persalys.AppDir/usr/lib
 cp -v /usr/lib/x86_64-linux-gnu/libpython3.9.so.1.0 persalys.AppDir/usr/lib
 cp -v /usr/lib/x86_64-linux-gnu/liblapack.so.3 persalys.AppDir/usr/lib
 cp -v /usr/lib/x86_64-linux-gnu/libblas.so.3 persalys.AppDir/usr/lib

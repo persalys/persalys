@@ -51,6 +51,7 @@ public slots:
   void processStatusChanged();
   virtual void updateAnalysis(const Analysis & analysis);
   void stopAnalysis();
+  void interruptAnalysis();
   void detachAnalysis();
   void modifyAnalysis();
   void addPythonMetaModel();

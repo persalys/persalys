@@ -65,9 +65,11 @@ public:
   bool hasValidResult() const;
 
   bool canBeLaunched(OT::String &errorMessage) const;
+  bool canBeInterrupted() const;
   bool canBeDetached() const;
 
   void stop();
+  void interrupt();
   void detach();
 
   /** override this method in order to emit a notification */

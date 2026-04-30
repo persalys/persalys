@@ -42,7 +42,6 @@ public:
   PhysicalModel getPhysicalModel() const;
 
   bool canBeLaunched(OT::String &errorMessage) const override;
-  bool canBeDetached() const override;
 
   void run() override;
 

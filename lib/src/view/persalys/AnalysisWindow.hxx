@@ -47,6 +47,7 @@ protected:
 protected slots:
   void launchAnalysis();
   void stopAnalysis();
+  void interruptAnalysis();
   void detachAnalysis();
   void updateProgressBar(const int value);
 
@@ -56,6 +57,7 @@ private:
   QProgressBar  * progressBar_    = nullptr;
   QPushButton   * runButton_      = nullptr;
   QPushButton   * stopButton_     = nullptr;
+  QPushButton   * interruptButton_ = nullptr;
   QPushButton   * detachButton_   = nullptr;
   ErrorWidget   * messageWidget_  = nullptr;
 };

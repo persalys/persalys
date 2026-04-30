@@ -142,7 +142,10 @@ public:
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv) override;
 
+  virtual bool canBeInterrupted() const;
   virtual bool canBeDetached() const;
+
+  virtual void interrupt() const;
 
 protected:
   virtual OT::Function generateFunction(const OT::Description & outputNames) const;

@@ -94,14 +94,22 @@ void AnalysisWindow::buildInterface()
   connect(stopButton_, SIGNAL(clicked(bool)), this, SLOT(stopAnalysis()));
   mainLayout->addWidget(stopButton_, 1, 1);
 
+  // - interrupt button
+  interruptButton_ = new QPushButton(tr("Interrupt"));
+  interruptButton_->setToolTip(tr("Immediate dirty exit"));
+  interruptButton_->setIcon(QIcon(":/images/process-stop.png"));
+  interruptButton_->setVisible(analysisItem_->getAnalysis().canBeInterrupted());
+  connect(interruptButton_, SIGNAL(clicked(bool)), this, SLOT(interruptAnalysis()));
+  mainLayout->addWidget(interruptButton_, 1, 2);
+
   // - detach button
   detachButton_ = new QPushButton(tr("Detach"));
   detachButton_->setToolTip(tr("Continue running offline"));
   detachButton_->setIcon(QIcon(":/images/offline.png"));
-  detachButton_->setEnabled(false);
+  detachButton_->setVisible(analysisItem_->getAnalysis().canBeDetached());
   connect(detachButton_, SIGNAL(clicked(bool)), this, SLOT(detachAnalysis()));
-  mainLayout->addWidget(detachButton_, 1, 2);
-  mainLayout->setColumnStretch(3, 1);
+  mainLayout->addWidget(detachButton_, 1, 3);
+  mainLayout->setColumnStretch(4, 1);
 
   // progress bar
   progressBar_ = new QProgressBar;
@@ -180,6 +188,7 @@ void AnalysisWindow::launchAnalysis()
 
   // enable stop buttons
   stopButton_->setEnabled(true);
+  interruptButton_->setEnabled(analysisItem_->getAnalysis().canBeInterrupted());
   runButton_->setEnabled(false);
   detachButton_->setEnabled(analysisItem_->getAnalysis().canBeDetached());
 
@@ -206,10 +215,26 @@ void AnalysisWindow::stopAnalysis()
 
   // disable stop buttons
   stopButton_->setEnabled(false);
+  interruptButton_->setEnabled(false);
   detachButton_->setEnabled(false);
 
   // stop the analysis
   analysisItem_->stopAnalysis();
+}
+
+
+void AnalysisWindow::interruptAnalysis()
+{
+  // add a message in case the analysis take too much time to end
+  messageWidget_->setMessage(messageWidget_->toPlainText() + "\n" + tr("Interrupt in progress"), ErrorWidget::Information, false, false);
+
+  // disable stop buttons
+  stopButton_->setEnabled(false);
+  interruptButton_->setEnabled(false);
+  detachButton_->setEnabled(false);
+
+  // interrupt the analysis
+  analysisItem_->interruptAnalysis();
 }
 
 
@@ -222,6 +247,7 @@ void AnalysisWindow::detachAnalysis()
 
     // disable stop buttons
     stopButton_->setEnabled(false);
+    interruptButton_->setEnabled(false);
     detachButton_->setEnabled(false);
 
     // detach the analysis

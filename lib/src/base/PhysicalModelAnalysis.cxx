@@ -67,19 +67,12 @@ bool PhysicalModelAnalysis::canBeLaunched(String &errorMessage) const
 }
 
 
-bool PhysicalModelAnalysis::canBeDetached() const
-{
-  return getPhysicalModel().getImplementation()->canBeDetached();
-}
-
-
 void PhysicalModelAnalysis::run()
 {
   AnalysisImplementation::run();
   physicalModel_.setEvalTime(getElapsedTime());
   modelHtmlDescription_ = physicalModel_.getHTMLDescription();
 }
-
 
 String PhysicalModelAnalysis::__repr__() const
 {

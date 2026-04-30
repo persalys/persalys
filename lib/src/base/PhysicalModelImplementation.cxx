@@ -1184,9 +1184,20 @@ void PhysicalModelImplementation::load(Advocate & adv)
 }
 
 
+bool PhysicalModelImplementation::canBeInterrupted() const
+{
+  return false;
+}
+
+
 bool PhysicalModelImplementation::canBeDetached() const
 {
   return false;
+}
+
+void PhysicalModelImplementation::interrupt() const
+{
+  throw NotYetImplementedException(HERE) << "PhysicalModelImplementation::interrupt";
 }
 
 }

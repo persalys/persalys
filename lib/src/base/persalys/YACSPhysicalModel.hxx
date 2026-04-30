@@ -64,6 +64,8 @@ public:
 
   OT::String getPythonScript() const override;
 
+  bool canBeInterrupted() const override;
+
   /** Method save() stores the object through the StorageManager */
   void save(OT::Advocate & adv) const override;
 

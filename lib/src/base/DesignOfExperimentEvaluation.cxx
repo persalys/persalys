@@ -149,8 +149,9 @@ void DesignOfExperimentEvaluation::launch()
 
   Function function(getPhysicalModel().getFunction(getInterestVariables()));
 
-  // stopCallback
-  function.setStopCallback(&AnalysisImplementation::Detach, this);
+  // interrupt/detach
+  function.setStopCallback(&AnalysisImplementation::Interrupt, this);
+  function.setDetachCallback(&AnalysisImplementation::Detach, this);
 
   // iterations
   for (UnsignedInteger i = 0; i < nbIter; ++i)
@@ -313,6 +314,16 @@ bool DesignOfExperimentEvaluation::CanBeLaunched(String &errorMessage, const Phy
   return errorMessage.empty();
 }
 
+bool DesignOfExperimentEvaluation::canBeInterrupted() const
+{
+  return getPhysicalModel().getImplementation()->canBeInterrupted();
+}
+
+
+bool DesignOfExperimentEvaluation::canBeDetached() const
+{
+  return getPhysicalModel().getImplementation()->canBeDetached();
+}
 
 Parameters DesignOfExperimentEvaluation::getParameters() const
 {

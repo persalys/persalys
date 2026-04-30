@@ -58,6 +58,9 @@ public:
   bool hasValidResult() const override;
   bool canBeLaunched(OT::String &errorMessage) const override;
 
+  bool canBeInterrupted() const override;
+  bool canBeDetached() const override;
+
   /**
    * Checks that the input values of the given DOE
    * correspond to the current DOE and copy the evaluations

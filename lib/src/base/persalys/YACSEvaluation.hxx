@@ -88,10 +88,6 @@ public:
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv) override;
 
-  /** Stop callback */
-  typedef  OT::Bool (*StopCallback)(void * state);
-  virtual void setStopCallback(StopCallback callBack, void * state = nullptr);
-
   /** Running flag accessor */
   void setIsRunning(const OT::Bool isRunning) const;
   OT::Bool getIsRunning() const;
@@ -113,7 +109,6 @@ private:
   ydefx::JobParametersProxy jobParams_;
   OT::String code_ = "";
   py2cpp::PyPtr jobModel_;
-  std::pair< StopCallback, void *> stopCallback_;
   mutable OT::Bool isRunning_ = false;
   mutable OT::String dump_;
 

@@ -55,6 +55,7 @@ public:
   virtual bool hasValidResult() const;
 
   virtual bool canBeLaunched(OT::String &errorMessage) const;
+  virtual bool canBeInterrupted() const;
   virtual bool canBeDetached() const;
 
   bool isReliabilityAnalysis() const;
@@ -72,6 +73,7 @@ public:
   OT::Scalar getElapsedTime() const;
 
   virtual void stop();
+  virtual void interrupt();
   virtual void detach();
 
   /** Method save() stores the object through the StorageManager */
@@ -84,6 +86,7 @@ protected:
   virtual void initialize();
   virtual void launch();
   static bool Stop(void * p);
+  static bool Interrupt(void * p);
   static bool Detach(void * p);
   static void UpdateProgressValue(double percent, void * data);
 
@@ -92,6 +95,7 @@ protected:
   OT::String informationMessage_;
   OT::String warningMessage_;
   bool stopRequested_ = false;
+  bool interruptRequested_ = false;
   bool detachRequested_ = false;
   int progressValue_ = 0;
   OT::String modelHtmlDescription_;

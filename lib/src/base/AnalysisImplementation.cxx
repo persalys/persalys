@@ -123,6 +123,7 @@ void AnalysisImplementation::initialize()
   errorMessage_ = "";
   warningMessage_ = "";
   stopRequested_ = false;
+  interruptRequested_ = false;
   detachRequested_ = false;
   progressValue_ = 0;
   modelHtmlDescription_ = "";
@@ -215,6 +216,12 @@ bool AnalysisImplementation::canBeLaunched(String & /*errorMessage*/) const
 }
 
 
+bool AnalysisImplementation::canBeInterrupted() const
+{
+  return false;
+}
+
+
 bool AnalysisImplementation::canBeDetached() const
 {
   return false;
@@ -243,6 +250,19 @@ bool AnalysisImplementation::Stop(void * p)
 {
   AnalysisImplementation * arg = (AnalysisImplementation*)p;
   return arg->stopRequested_;
+}
+
+
+void AnalysisImplementation::interrupt()
+{
+  interruptRequested_ = true;
+}
+
+
+bool AnalysisImplementation::Interrupt(void * p)
+{
+  AnalysisImplementation * arg = (AnalysisImplementation*)p;
+  return arg->interruptRequested_;
 }
 
 

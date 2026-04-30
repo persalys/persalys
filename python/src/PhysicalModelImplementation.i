@@ -9,6 +9,8 @@
 %ignore *::getHTMLDescription;
 %ignore *::getCopulaCollection;
 %ignore PERSALYS::PhysicalModelImplementation::canBeDetached;
+%ignore PERSALYS::PhysicalModelImplementation::canBeInterrupted;
+%ignore PERSALYS::PhysicalModelImplementation::interrupt;
 
 %copyctor PERSALYS::PhysicalModelImplementation;
 

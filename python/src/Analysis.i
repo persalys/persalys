@@ -32,9 +32,11 @@ template <>
 %ignore PERSALYS::Analysis::getProgressValue;
 %ignore PERSALYS::Analysis::launch;
 %ignore PERSALYS::Analysis::stop;
+%ignore PERSALYS::Analysis::interrupt;
 %ignore PERSALYS::Analysis::detach;
 %ignore PERSALYS::Analysis::canBeLaunched;
 %ignore PERSALYS::Analysis::canBeDetached;
+%ignore PERSALYS::Analysis::canBeInterrupted;
 %ignore PERSALYS::Analysis::getElapsedTime;
 %ignore PERSALYS::Analysis::getParameters;
 %ignore PERSALYS::Analysis::setImplementationAsPersistentObject;
