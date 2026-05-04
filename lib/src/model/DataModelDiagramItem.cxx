@@ -49,6 +49,11 @@ void DataModelDiagramItem::buildActions()
   defineAction_->setStatusTip(tr("Define the data model"));
   connect(defineAction_, SIGNAL(triggered(bool)), this, SLOT(appendDataModelItem()));
 
+  // duplicate data model action
+  duplicateAction_ = new QAction(tr("Duplicate"), this);
+  duplicateAction_->setStatusTip(tr("Duplicate the data set"));
+  connect(duplicateAction_, SIGNAL(triggered(bool)), this, SLOT(duplicateDataModel()));
+
   // new analyses
   newDataAnalysis_ = createAction("DataAnalysis", getDesignOfExperiment());
   newQuantileAnalysis_ = createAction("QuantileAnalysis", getDesignOfExperiment());
@@ -64,6 +69,7 @@ void DataModelDiagramItem::buildActions()
 
   // add actions
   appendAction(defineAction_);
+  appendAction(duplicateAction_);
   appendSeparator();
   appendAction(removeAction_);
 }
@@ -147,6 +153,17 @@ void DataModelDiagramItem::appendDataModelItem()
 
   // disable the definition action
   defineAction_->setDisabled(true);
+}
+
+void DataModelDiagramItem::duplicateDataModel()
+{
+  if (!getParentStudyItem())
+    return;
+  
+  DataModel * newModel = designOfExperiment_.getImplementation()->clone();
+  String newName = getParentStudyItem()->getStudy().getAvailableDataModelName((QString(designOfExperiment_.getName().c_str()) + "_" + tr("copy")).toStdString() + "_");
+  newModel->setName(newName);
+  getParentStudyItem()->getStudy().add(newModel);
 }
 
 
