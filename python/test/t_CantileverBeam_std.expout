@@ -38,10 +38,10 @@ mySRC = persalys.SRCAnalysis('mySRC', myPhysicalModel, 1000)
 mySRC.setBlockSize(1)
 mySRC.setSeed(0)
 myStudy.add(mySRC)
-values = [[2.8e+07, 4.8e+07],
-[15000, 47021.3],
+values = [[2.8e+07, 3.98847e+07],
+[20166.6, 47021.3],
 [250, 260],
-[310, 450]]
+[326.075, 407.636]]
 aDesign = persalys.GridDesignOfExperiment('aDesign', myPhysicalModel, values)
 aDesign.setBlockSize(1)
 interestVariables = ['y']

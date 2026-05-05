@@ -476,16 +476,17 @@ void Tools::ComputeBounds(const InputCollection& inputs, Point& startingPoint, I
     else
     {
       const Distribution distribution = inputs[i].getDistribution();
-      // lower bound
-      if (distribution.getRange().getFiniteLowerBound()[0])
+
+      lowerBounds[i] = distribution.computeQuantile(0.05)[0];
+      upperBounds[i] = distribution.computeQuantile(0.95)[0];
+
+      Scalar delta = 0.1 * (upperBounds[i] - lowerBounds[i]);
+      if (lowerBounds[i] - delta < distribution.getRange().getLowerBound()[0])
         lowerBounds[i] = distribution.getRange().getLowerBound()[0];
-      else
-        lowerBounds[i] = distribution.computeQuantile(0.05)[0];
-      // upper bound
-      if (distribution.getRange().getFiniteUpperBound()[0])
+      if (upperBounds[i] + delta > distribution.getRange().getUpperBound()[0])
         upperBounds[i] = distribution.getRange().getUpperBound()[0];
-      else
-        upperBounds[i] = distribution.computeQuantile(0.95)[0];
+
+
 
       // check if the interval contains the starting point
       if (!Interval(lowerBounds[i], upperBounds[i]).contains(Point(1, startingPoint[i])))
