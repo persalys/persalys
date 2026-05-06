@@ -49,6 +49,7 @@ private:
 
 public slots:
   void appendDataModelItem();
+  void duplicateDataModel();
   void removeDesignOfExperiment();
   void updateMetamodelCounter(int);
   void requestMetaModelExport();
@@ -65,6 +66,7 @@ signals:
 
 private:
   QAction * defineAction_               = nullptr;
+  QAction * duplicateAction_            = nullptr;
   QAction * newDataAnalysis_            = nullptr;
   QAction * newDataSensitivityAnalysis_ = nullptr;
   QAction * newQuantileAnalysis_        = nullptr;

@@ -291,7 +291,7 @@ void PhysicalModelDiagramItem::duplicatePhysicalModel()
     return;
   // duplicate
   PhysicalModelImplementation * newModel = physicalModel_.getImplementation()->clone();
-  String newName = getParentStudyItem()->getStudy().getAvailablePhysicalModelName((QString(physicalModel_.getName().c_str()) + "_" + tr("copy")).toStdString());
+  String newName = getParentStudyItem()->getStudy().getAvailablePhysicalModelName((QString(physicalModel_.getName().c_str()) + "_" + tr("copy")).toStdString() + "_");
   newModel->setName(newName);
   getParentStudyItem()->getStudy().add(newModel);
 }
