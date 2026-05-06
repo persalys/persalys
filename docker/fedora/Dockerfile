@@ -1,4 +1,4 @@
-FROM fedora:43
+FROM fedora:44
 
 RUN yum install -y cmake git gcc-c++ make boost-devel diffutils patch mold swig python3-devel qwt-qt6-devel xorg-x11-server-Xvfb \
   cminpack-devel eigen3-devel NLopt-devel coin-or-Ipopt-devel tbb-devel libxml2-devel hdf5-devel flexiblas-devel pagmo2-devel
