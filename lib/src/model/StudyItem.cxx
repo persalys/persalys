@@ -18,7 +18,7 @@
  *  along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-#ifdef PERSALYS_HAVE_YACS
+#ifdef PERSALYS_HAVE_YDEFX
 #include "persalys/YACSPhysicalModel.hxx"
 #include "persalys/YACSCouplingPhysicalModel.hxx"
 #endif
@@ -76,7 +76,7 @@ void StudyItem::buildActions()
   newPythonModel_ = new QAction(tr("Python model"), this);
   connect(newPythonModel_, &QAction::triggered, [ = ]()
   {
-#ifdef PERSALYS_HAVE_YACS
+#ifdef PERSALYS_HAVE_YDEFX
     study_.add(new YACSPhysicalModel(getModelName(tr("PythonModel_"))));
 #else
     study_.add(new PythonPhysicalModel(getModelName(tr("PythonModel_"))));
@@ -86,7 +86,7 @@ void StudyItem::buildActions()
   newCouplingModel_ = new QAction(tr("Coupling model"), this);
   connect(newCouplingModel_, &QAction::triggered, [ = ]()
   {
-#ifdef PERSALYS_HAVE_YACS
+#ifdef PERSALYS_HAVE_YDEFX
     study_.add(new YACSCouplingPhysicalModel(getModelName(tr("CouplingModel_"))));
 #else
     study_.add(new CouplingPhysicalModel(getModelName(tr("CouplingModel_"))));

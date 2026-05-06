@@ -156,7 +156,7 @@ ot_add_python_module (persalys persalys_module.i
                     )
 
 if (SalomeYACS_FOUND)
-  set_property (TARGET persalys_python APPEND PROPERTY SWIG_COMPILE_DEFINITIONS PERSALYS_HAVE_YACS=1)
+  set_property (TARGET persalys_python APPEND PROPERTY SWIG_COMPILE_DEFINITIONS PERSALYS_HAVE_YDEFX=1)
 endif ()
 
 install ( FILES __init__.py

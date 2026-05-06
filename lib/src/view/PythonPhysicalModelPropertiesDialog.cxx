@@ -19,7 +19,7 @@
  *
  */
 
-#ifdef PERSALYS_HAVE_YACS
+#ifdef PERSALYS_HAVE_YDEFX
 #include "persalys/YACSPhysicalModel.hxx"
 #include "persalys/YACSCouplingPhysicalModel.hxx"
 #include <ydefx/ResourceWidget.hxx>
@@ -44,7 +44,7 @@ namespace PERSALYS
     setWindowTitle(QString(model->getName().c_str()));
     QVBoxLayout * mainLayout = new QVBoxLayout;
 
-#ifdef PERSALYS_HAVE_YACS
+#ifdef PERSALYS_HAVE_YDEFX
     YACSPhysicalModel *yacsModel = dynamic_cast<YACSPhysicalModel*>(model);
     YACSCouplingPhysicalModel *yacsCouplingModel = dynamic_cast<YACSCouplingPhysicalModel*>(model);
     if (!yacsModel && !yacsCouplingModel)
@@ -60,7 +60,7 @@ namespace PERSALYS
     processNumberSpinBox->setProcessNumber(model->getProcessNumber());
     mainLayout->addWidget(processNumberSpinBox);
 
-#ifdef PERSALYS_HAVE_YACS
+#ifdef PERSALYS_HAVE_YDEFX
     QRadioButton *hpcButton = new QRadioButton(tr("HPC cluster"));
     buttonGroup->addButton(hpcButton, 1);
     hpcButton->setChecked(yacsModel ? yacsModel->getUseYACS() : true);

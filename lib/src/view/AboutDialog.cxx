@@ -37,7 +37,7 @@
 #ifdef PERSALYS_HAVE_PARAVIEW
 #include <vtkPVVersion.h>
 #endif
-#ifdef PERSALYS_HAVE_YACS
+#ifdef PERSALYS_HAVE_YDEFX
 #include <YACS_version.h>
 #endif
 
@@ -115,7 +115,7 @@ AboutDialog::AboutDialog(QWidget* parent)
   names << "OTFMI";
   values << OTFMI_VERSION_STRING;
 #endif
-#ifdef PERSALYS_HAVE_YACS
+#ifdef PERSALYS_HAVE_YDEFX
   names << "YACS";
   values << YACS_VERSION_STR;
 #endif

@@ -191,7 +191,7 @@ PERSALYSTypedCollectionInterfaceObjectMisnamedHelper(Interface,Interface ## Coll
 %include CouplingStep.i
 %include CouplingPhysicalModel.i
 %include DataCleaning.i
-#ifdef PERSALYS_HAVE_YACS
+#ifdef PERSALYS_HAVE_YDEFX
 %include YACSPhysicalModel.i
 %include YACSCouplingPhysicalModel.i
 #endif
