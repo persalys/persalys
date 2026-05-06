@@ -58,7 +58,7 @@ public:
   virtual bool canBeInterrupted() const;
   virtual bool canBeDetached() const;
 
-  bool isReliabilityAnalysis() const;
+  virtual bool isReliabilityAnalysis() const;
 
   bool isRunning() const;
 
@@ -91,7 +91,6 @@ protected:
   static void UpdateProgressValue(double percent, void * data);
 
 protected:
-  bool isReliabilityAnalysis_ = false;
   OT::String informationMessage_;
   OT::String warningMessage_;
   bool stopRequested_ = false;

@@ -30,7 +30,6 @@ namespace PERSALYS
 ReliabilityAnalysis::ReliabilityAnalysis()
   : PhysicalModelAnalysis()
 {
-  isReliabilityAnalysis_ = true;
 }
 
 
@@ -39,7 +38,6 @@ ReliabilityAnalysis::ReliabilityAnalysis(const String & name, const LimitState &
   : PhysicalModelAnalysis(name, limitState.getPhysicalModel())
   , limitState_(limitState)
 {
-  isReliabilityAnalysis_ = true;
 }
 
 
@@ -106,6 +104,12 @@ bool ReliabilityAnalysis::CanBeLaunched(String &errorMessage, const PhysicalMode
     errorMessage = "The limit state is not valid.";
   return errorMessage.empty();
 }
+
+bool ReliabilityAnalysis::isReliabilityAnalysis() const
+{
+  return true;
+}
+
 /* String converter */
 String ReliabilityAnalysis::__repr__() const
 {

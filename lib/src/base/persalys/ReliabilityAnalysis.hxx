@@ -48,6 +48,8 @@ public:
 
   static bool CanBeLaunched(OT::String &errorMessage, const PhysicalModel &physicalModel, const LimitState &limitState);
 
+  bool isReliabilityAnalysis() const override;
+
   /** String converter */
   OT::String __repr__() const override;
 
