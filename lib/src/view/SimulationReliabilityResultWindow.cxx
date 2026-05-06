@@ -179,11 +179,8 @@ QWidget* SimulationReliabilityResultWindow::getSummaryTab()
   resultsTableModel->setNotEditableItem(1, 1, pfEstimate);
 
   // - confidence interval
-  const Scalar confidenceLength = result_.getSimulationResult().getConfidenceLength();
-  const double pfCILowerBound = std::max(0.0, pfEstimate - 0.5 * confidenceLength);
-  const double pfCIUpperBound = std::min(1.0, pfEstimate + 0.5 * confidenceLength);
-
-  resultsTableModel->setNotEditableItem(1, 2, Interval(pfCILowerBound, pfCIUpperBound).__str__().c_str());
+  const Interval pfCI(result_.getSimulationResult().getProbabilityDistribution().computeBilateralConfidenceInterval(0.95));
+  resultsTableModel->setNotEditableItem(1, 2, pfCI.__str__().c_str());
 
   // Coefficient of variation
   resultsTableModel->setNotEditableHeaderItem(2, 0, tr("Coefficient of variation"));
