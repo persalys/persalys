@@ -141,7 +141,7 @@ bool CorrelationTableModel::setData(const QModelIndex & index, const QVariant & 
           throw InvalidArgumentException(HERE) << "Unknown correlation type";
       }
       copula_.setDescription(oldDescription);
-      physicalModel_.setCopula(oldDescription, copula_);
+      physicalModel_.addCopula(oldDescription, copula_);
       physicalModel_.blockNotification();
       emit dataChanged(index, index);
       emit dataUpdated(copula_);

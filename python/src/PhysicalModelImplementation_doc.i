@@ -141,16 +141,31 @@ PERSALYS_PhysicalModel_exportStandalonePythonScript_doc
 
 // ---------------------------------------------------------------------
 
-%define PERSALYS_PhysicalModel_setCopula_doc
-"Copula accessor.
+%define PERSALYS_PhysicalModel_addCopula_doc
+"Add a copula to the model.
 
 Parameters
 ----------
+inputNames : sequence of str
+    Names of the inputs involved in the copula
 copula : :py:class:`openturns.Distribution`
-    The copula"
+    The copula distribution to be added"
 %enddef
-%feature("docstring") PERSALYS::PhysicalModelImplementation::setCopula
-PERSALYS_PhysicalModel_setCopula_doc
+%feature("docstring") PERSALYS::PhysicalModelImplementation::addCopula
+PERSALYS_PhysicalModel_addCopula_doc
+
+// ---------------------------------------------------------------------
+
+%define PERSALYS_PhysicalModel_setBlockIndependentCopula_doc
+"blockIndependentCopula accessor.
+
+Parameters
+----------
+blockIndependentCopula : :py:class:`openturns.BlockIndependentCopula`
+    The block independent copula to be set"
+%enddef
+%feature("docstring") PERSALYS::PhysicalModelImplementation::setBlockIndependentCopula
+PERSALYS_PhysicalModel_setBlockIndependentCopula_doc
 
 // ---------------------------------------------------------------------
 

@@ -61,7 +61,7 @@ ott.assert_almost_equal(sobolResult.getTotalIndices(), to_ref, 1e-3, 1e-3)
 
 # Chaos 2 ##
 R = ot.CorrelationMatrix(2, [1, 0.5, 0.5, 1])
-model.setCopula(["xi1", "xi2"], ot.NormalCopula(R))
+model.addCopula(["xi1", "xi2"], ot.NormalCopula(R))
 
 design2 = persalys.ProbabilisticDesignOfExperiment("design2", model, 200, "MONTE_CARLO")
 myStudy.add(design2)

@@ -54,7 +54,7 @@ void CalibrationTableModel::updateData(const PhysicalModel &model)
   {
     for (UnsignedInteger i = 0; i < model.getCopulaCollection().getSize(); ++i)
       if (model.getCopulaCollection()[i].getImplementation()->getClassName() != "IndependentCopula")
-        fakeModel_.setCopula(model.getCopulaCollection()[i].getDescription(), model.getCopulaCollection()[i]);
+        fakeModel_.addCopula(model.getCopulaCollection()[i].getDescription(), model.getCopulaCollection()[i]);
   }
   endResetModel();
   emit headerDataChanged(Qt::Horizontal, 0, 0);

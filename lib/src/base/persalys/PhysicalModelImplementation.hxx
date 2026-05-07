@@ -111,7 +111,18 @@ public:
 
   OT::Distribution getCopula() const;
   OT::Collection<OT::Distribution> getCopulaCollection() const;
-  void setCopula(const OT::Description& inputNames, const OT::Distribution & copula);
+  /**
+   * @brief Add a copula to the physical model.
+   * 
+   * If some inputs of the list are already in the description of an existing copula, 
+   * the new copula replaces the existing one if it is not an IndependentCopula and if there is only one copula to replace. 
+   * Otherwise, the new copula is added to the collection.
+   * 
+   * @param inputNames names of the inputs involved in the copula
+   * @param copula the copula distribution to be added
+   */
+  void addCopula(const OT::Description& inputNames, const OT::Distribution & copula);
+  void setBlockIndependentCopula(const OT::BlockIndependentCopula & copula);
 
   bool hasMesh() const;
   MeshModel getMeshModel() const;

@@ -48,7 +48,7 @@ RS[0, 1] = -0.2
 R = ot.NormalCopula.GetCorrelationFromSpearmanCorrelation(RS)
 # Create the Normal copula parametrized by R
 copula = ot.NormalCopula(R)
-model.setCopula(["L", "I"], copula)
+model.addCopula(["L", "I"], copula)
 
 # Design of Experiment - Parametric analysis ##
 bounds = persalys.GridDesignOfExperiment.GetDefaultBounds(model)

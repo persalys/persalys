@@ -29,7 +29,7 @@ namespace PERSALYS
 
 CLASSNAMEINIT(FunctionalChaosAnalysisResult)
 
-static Factory<FunctionalChaosAnalysisResult> Factory_FunctionalChaosAnalysisResult;
+const static Factory<FunctionalChaosAnalysisResult> Factory_FunctionalChaosAnalysisResult;
 
 FunctionalChaosAnalysisResult::FunctionalChaosAnalysisResult()
   : MetaModelAnalysisResult()
