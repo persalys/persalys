@@ -7,6 +7,8 @@ It is described in the OpenTURNS examples.
 This example is a simple beam, restrained at one side and stressed by a
 concentrated bending load F at the other side.
 
+You can dowload the model and the full study presented in this study :download:`by clicking here <Deviation_of_a_cantilever_beam.zip>`.
+
 1- Problem statement
 ````````````````````
 
@@ -20,10 +22,10 @@ a- Inputs
 ====== ======================== ==============================================
  Name  Description              Distribution
 ====== ======================== ==============================================
-E      Young's modulus          Beta(alpha=0.93, beta=3.2, a=2.8e7, b=4.8e7)
-F      Charge applied           LogNormal(mu=30000., sigma=9000., gamma=15000)
-L      Length                   Uniform(a=250, b=260)
-I      Section modulus          Beta(alpha=2.5, beta=4., a=3.1e2, b=4.5e2))
+E      Young's modulus          Beta(alpha=0.9, beta=3.5, a=6.5e10, b=7.5e10)
+F      Charge applied           LogNormal(mu=300, sigma=30, gamma=0)
+L      Length                   Uniform(a=2.5, b=2.6)
+I      Section modulus          Beta(alpha=2.5, beta=4, a=1.3e-7, b=1.7e-7)
 ====== ======================== ==============================================
 
 The input variables :math:`L` and :math:`I` are dependent. The dependence structure
@@ -97,12 +99,12 @@ if the formula is not badly defined.
     :align: center
 
 
-The value of the output :math:`y` must be :math:`13.8178` if:
+The value of the output :math:`Y` must be :math:`0.182213` if:
 
 ======= ======= ======= =======
 E       F       L       I
 ======= ======= ======= =======
-3e7     3e4     255     400
+6.5e10  300     2.55    1.4e-7
 ======= ======= ======= =======
 
 
@@ -202,7 +204,7 @@ a result window is created.
 3-1-2 Results
 *************
 
-The results window contains a table.
+The results window contains two tables.
 
 .. image:: taylor_results_table.png
     :align: center
@@ -224,7 +226,7 @@ click on the **Central tendency** box of the model diagram.
 
 Check the radio button **Monte Carlo** in the wizard which appears.
 
-.. image:: central_tendency_wizard_Taylor.png
+.. image:: central_tendency_wizard_mc.png
     :align: center
 
 Click on the **Continue** button to parametrize the Monte Carlo method.
@@ -270,7 +272,7 @@ context menu of the probabilistic model item in the study tree.
 .. image:: contextual_menu_DOE.png
     :align: center
 
-Check the radio button **Deterministic** in the wizard which appears and click on
+Check the radio button **Full factorial design** in the wizard which appears and click on
 **Continue** button.
 
 .. image:: DOE_wizard.png
@@ -283,8 +285,9 @@ Check the **Name** column to make all the inputs variable.
 .. image:: deterministic_design_of_experiment.png
     :align: center
 
-The minimum and the maximum values are computed automatically from
-the range of the distribution of the variables.
+The minimum and the maximum default values are defined either as the range
+of the distribution or as a 5% quantile and a 95% quantile of the distribution
+depending on the distribution type.
 The number of used values per variable is by default 2.
 
 Click on **Finish** button. A new item with a default name appears in the study
@@ -305,7 +308,7 @@ The points are generated according to the structure of a box design of experimen
 This deterministic design of experiments has 16 points obtained by regularly discretizing
 the pavement:
 
-:math:`[2.8e7, 4.8e7] \times [15000, 47021.278] \times [250, 260] \times [310, 450]`.
+:math:`[6.5e10, 7.05513e10] \times [253.34, 351.737] \times [2.5, 2.6] \times [1.34593e-7, 1.57896e-7]`.
 
 Click on **Evaluate** in the context menu of the design of experiments item.
 Click on the **Finish** button of the window which appears.
@@ -352,37 +355,33 @@ context menu of the probabilistic model item in the study tree.
     .. image:: /user_manual/graphical_interface/probabilistic_analysis/probabilisticModelContextMenu.png
         :align: center
 
-Check the radio button **Sobol** in the wizard which appears.
-
-.. image:: sensibilityAnalysis_defaultWizard.png
-    :align: center
-
 Click on **Continue** button. On the new page, you can parametrize the Sobol
 method. To access advanced parameters, expand the **Advanced parameters** group.
 
 .. image:: sobol_parameters.png
     :align: center
 
-Define at least one criterion to stop the algorithm.
+Define at least one stopping criterion for the algorithm.
 
-In the current example, add a third criterion by selecting the **Maximum calls**
-check button.
+In this example, add a third criterion by selecting the **Maximum calls**
+check box.
 
-Changing **Replication size** will update the max number of calls by iteration:
-Indeed the algorithm build two input samples with a size equal to the block size value
-and combines these samples to build *nbInputs* other samples
+Changing the **Replication size** updates the maximum number of calls per iteration.
+Indeed, the algorithm builds two input samples of size equal to the block size,
+then combines them to build *nbInputs* additional samples
 (*nbInputs* is the number of input variables).
-Thus, the maximum number of calls by iteration is computed with the formula:
+Therefore, the maximum number of calls per iteration is:
+
 :math:`(nbInputs + 2) * blockSize`.
 
-If the Replication size is 1000: the maximum number of calls by iteration is 6000.
+If the replication size is 1000, the maximum number of calls per iteration is 6000.
 
-In that case the algorithm will perform two iterations. Indeed, at the second iteration
-the maximum number of calls will not be reached yet.
-The effective maximum total number of calls will be 12000.
+In this case, the algorithm performs two iterations. After the first iteration,
+the maximum number of calls has still not been reached.
+The effective maximum total number of calls is therefore 12000.
 
-Click on **Finish** button. A new item with a default name appears in the study
-tree and a results window is created.
+Click **Finish**. A new item with a default name appears in the study tree,
+and a results window is created.
 
 .. _exsobolResult:
 
@@ -402,25 +401,24 @@ the distances between the first order indices and the total order indices.
 The warnings inform the user that a total order index is smaller than the first
 order index. When increasing the sample size, these warnings disappear.
 
-On the **Summary** tab the value of the effective stopping criteria is written in
+On the **Stopping criteria** tab the value of the effective stopping criteria is written in
 a table.
 
-.. image:: sobol_results_window_summary.png
+.. image:: sobol_results_window_stopping_criteria.png
     :align: center
 
 
 6- Threshold exceedance
 ```````````````````````
 
-To perform the following analyses use again a Gaussian copula
+To perform the following analyses, set the Gaussian copula back
 (In the **Dependence** :ref:`tab <dependenceTab>`
 of the probabilistic model window replace 0 by -0.2).
 
 6-1 Limit state
 '''''''''''''''
 
-To create the limit state function which enables the definition of the failure
-event, choose **Limit state** in the context menu of the
+To define a failure event, choose **Limit state** in the context menu of the
 probabilistic model item in the study tree.
 
     .. image:: /user_manual/graphical_interface/probabilistic_analysis/probabilisticModelContextMenu.png
@@ -432,7 +430,7 @@ tree and the following window appears:
 .. image:: default_limitState.png
     :align: center
 
-We consider the event where the deviation exceeds :math:`30cm`. Choose the right
+We consider the event where the deviation exceeds :math:`25` cm. Choose the right
 operator in the combobox and set the value of the threshold in order to obtain
 the following limit state window:
 
@@ -521,7 +519,6 @@ The new page enables to change the parameters of the analysis.
     :align: center
 
 The starting point is defined by default with the means of the distributions of the stochastic inputs.
-:math:`E[E] = 3.38e7; E[F] = 30000; E[L] = 255; E[I] = 397.5`
 
 6-3-2 Results
 *************
@@ -600,10 +597,6 @@ the sampling is centered on the threshold of the event failure with the Importan
 7- Data analysis
 ````````````````
 
-To perform the following analyses use again a Gaussian copula
-(In the **Dependence** :ref:`tab <dependenceTab>`
-of the probabilistic model window replace 0 by -0.2).
-
 7-1 Data
 ''''''''
 
@@ -624,6 +617,8 @@ We first create a sample for our example:
     :align: center
 
 - Set the sample size to 1000. Click on **Finish** button.
+- Then evaluate the design of experiments by clicking on the **Evaluate** button in the context menu of the design of experiments item.
+  A new window appears, click on the **run** button to launch the evaluation.
 
 7-2 Export as data model
 ''''''''''''''''''''''''
@@ -655,7 +650,7 @@ The following window appears.
 .. _correlationEstimate:
 
 In the **dependence** tab, we can see that the variables L and I are correlated:
-this is in agreement with the :ref:`distribution <probaModelExample>` used to
+this is coherent with the :ref:`distribution <probaModelExample>` used to
 :ref:`generate <probaExperimentExample>` this variable.
 
 .. image:: dataAnalysisResult_dependence.png
@@ -668,10 +663,10 @@ this is in agreement with the :ref:`distribution <probaModelExample>` used to
 8-1 Definition
 ''''''''''''''
 
-Choose **Inference** in the context menu of the sub-item **Definition** of the model.
+Choose **Marginals inference** in the context menu of the sub-item **Definition** of the model.
 
 A window appears:
-  - In the current example, we choose to select 3 variables (E,F,I): uncheck L.
+  - In the current example, we choose to select 3 variables (E,F,I): uncheck L and Y.
   - Add all the distributions for the other variables by choosing the **All** item in the combo box **Add**.
   - Click on the **Finish** button.
 
@@ -687,7 +682,7 @@ Launch the analysis.
     :align: center
 
 The inference analysis recognized a Beta distribution for the variable E:
-this is in agreement with the :ref:`distribution <probaModelExample>` used to
+this is coherent with the :ref:`distribution <probaModelExample>` used to
 :ref:`generate <probaExperimentExample>` this variable.
 
 
@@ -739,15 +734,13 @@ For more details on the computation of a metamodel by the method of
 `Functional chaos <http://openturns.github.io/openturns/latest/theory/meta_modeling/functional_chaos.html>`_,
 you can consult the OpenTURNS documentation.
 
-The functional chaos allows one to compute the Sobol indices. Beware that these indices
-cannot be used for correlated stochastic variables. In order to use these indices,
-replace the value -0.2 by 0 in the **Dependence** :ref:`tab <dependenceTab>` of the probabilistic model window.
+The functional chaos allows one to compute the Sobol indices.
+However, they can theoretically not be used when the input variables are dependant like in the current example.
 
 10-1-1 Definition
 *****************
 
-Choose **Metamodel** in the context menu of the sub-item **Evaluation** of the
-design of experiments item.
+Choose **Metamodel creation** in the tree-view window of the data set item.
 
 .. image:: metamodel_wizard.png
     :align: center
@@ -766,19 +759,13 @@ Launch the analysis.
 **************
 
 The first tab of the result window displays the metamodel.
-The relative error expresses the quality of the metamodel.
-
-.. image:: chaos_result_metamodel.png
-    :align: center
-
 The moments retrieved from the polynomial basis correspond to the result of
 the :ref:`central tendency analyses <exmonteCarloResult>`.
 
-.. image:: chaos_result_summary.png
+.. image:: chaos_result.png
     :align: center
 
-The windows shows the Sobol indices.
-We can see that the values are similar to the ones obtained with the :ref:`sensitivity analysis <exsobolResult>`.
+The Sobol indices window displays the Sobol indices.
 
 .. image:: chaos_result_sobol.png
     :align: center
@@ -807,8 +794,8 @@ For more details on the computation of a metamodel by Gaussian Process, see the 
 10-2-1 Definition
 *****************
 
-Choose **Metamodel** in the context menu of the sub-item **Evaluation** of the
-design of experiments item.
+Choose **Metamodel** in the context menu of the sub-item **Definition** of the
+data set item.
 
 .. image:: metamodel_wizard.png
     :align: center
