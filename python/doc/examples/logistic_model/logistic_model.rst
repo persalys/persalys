@@ -7,6 +7,9 @@ Here we will demonstrate some coupling model capabilities on the
 `logistic model <https://openturns.github.io/openturns/latest/usecases/use_case_logistic.html>`_
 from the OpenTURNS documentation.
 
+You can download the study file for this example from the following link:
+:download:`Logistic growth <logistic_growth.zip>`.
+Note that every absolute path in the study file should be replaced by the actual path on your system for it to work properly.
 
 1- Problem statement
 ````````````````````
@@ -170,8 +173,8 @@ Go to the **Resource** sub-tab, browse for the path to the *program.py* file.
 .. image:: modelDefinition3.png
     :align: center
 
-Now add a new **Command** tab (click on the + button) to add a new coupling step,
-a new "Command 2" tab is opened.
+Now add a new **Step** tab (click on the + button) to add a new coupling step,
+a new "Step 2" tab is opened.
 
 Fill the **Command** box with `python post.py`
 
@@ -194,9 +197,7 @@ then add the following output variables we defined in *post.py*, and set their c
 .. image:: modelDefinition6.png
     :align: center
 
-Click on the **Check model** button in the bottom, the elapsed time should
-appear on success.
-You can go to the **Summary** tab to read the output values.
+Click on the **Evaluate model** button in the bottom, the **Summary** tab should open with the output values.
 
 .. image:: good_defined_physicalModel.png
     :align: center
