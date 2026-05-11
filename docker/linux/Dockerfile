@@ -71,10 +71,10 @@ RUN curl -fsSL https://github.com/ceres-solver/ceres-solver/archive/2.2.0.tar.gz
  && make install > /dev/null 2>&1 && cd - && rm -r ceres*
 
 # tbb
-RUN curl -fsSL https://github.com/oneapi-src/oneTBB/archive/refs/tags/v2022.3.0.tar.gz | tar xz && cd oneTBB* && cmake -DTBB_TEST=OFF -DTBB_FILE_TRIM=OFF . && make install > /dev/null 2>&1 && cd - && rm -r oneTBB*
+RUN curl -fsSL https://github.com/oneapi-src/oneTBB/archive/refs/tags/v2023.0.0.tar.gz | tar xz && cd oneTBB* && cmake -DTBB_TEST=OFF -DTBB_FILE_TRIM=OFF . && make install > /dev/null 2>&1 && cd - && rm -r oneTBB*
 
 # primesieve
-RUN curl -fsSL https://github.com/kimwalisch/primesieve/archive/v12.13.tar.gz | tar xz && cd primesieve* && cmake -DBUILD_STATIC_LIBS=OFF -DWITH_MULTIARCH=OFF -DBUILD_PRIMESIEVE=OFF . && make install > /dev/null 2>&1 && cd - && rm -r primesieve*
+RUN curl -fsSL https://github.com/kimwalisch/primesieve/archive/v12.14.tar.gz | tar xz && cd primesieve* && cmake -DBUILD_STATIC_LIBS=OFF -DWITH_MULTIARCH=OFF -DBUILD_PRIMESIEVE=OFF . && make install > /dev/null 2>&1 && cd - && rm -r primesieve*
 
 # appimagetool
 RUN wget -q https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage -O appimagetool-x86_64.AppImage \
@@ -91,7 +91,7 @@ RUN curl -fsSL https://github.com/libffi/libffi/releases/download/v3.4.6/libffi-
  && CFLAGS="-fPIC" ./configure --disable-shared --disable-multi-os-directory --prefix=/opt/ffi && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r libffi*
 
 # python
-RUN curl -fsSL https://www.python.org/ftp/python/3.14.3/Python-3.14.3.tgz | tar xz && cd Python* \
+RUN curl -fsSL https://www.python.org/ftp/python/3.14.4/Python-3.14.4.tgz | tar xz && cd Python* \
  && ./configure --enable-shared --enable-optimizations PKG_CONFIG_PATH=/opt/ffi/lib/pkgconfig/:/opt/ssl/lib64/pkgconfig/ LDFLAGS="-Wl,-rpath /usr/local/lib -L/opt/ssl/lib64 -L/opt/ffi/lib" && make > /dev/null 2>&1 && make install > /dev/null 2>&1 \
  && python3 -V && python3 -c "import ssl; import ctypes" && cd - && rm -r Python*
 
@@ -134,7 +134,7 @@ RUN git clone --depth 1 https://github.com/ianlancetaylor/libbacktrace.git && cd
  && autoreconf -fi && ./configure --enable-shared --disable-static && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r libbacktrace*
 
 # boost
-RUN curl -fsSL https://archives.boost.io/release/1.90.0/source/boost_1_90_0.tar.bz2 | tar xj && cd boost* \
+RUN curl -fsSL https://archives.boost.io/release/1.91.0/source/boost_1_91_0.tar.bz2 | tar xj && cd boost* \
  && ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/local/bin/python3 \
  && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system ${MAKEFLAGS} install --with-graph --with-chrono --with-serialization --with-program_options --with-filesystem --with-regex > /dev/null 2>&1 && cd - && rm -r boost*
 
@@ -145,7 +145,7 @@ RUN curl -fsSL https://github.com/esa/pagmo2/archive/refs/tags/v2.19.1.tar.gz | 
 RUN curl -fsSL https://github.com/ninja-build/ninja/archive/refs/tags/v1.11.1.tar.gz | tar xz && cd ninja* && cmake -DCMAKE_BUILD_TYPE=Release . && make install > /dev/null 2>&1 && cd - && rm -r ninja*
 
 # wayland
-RUN curl -fsSL https://gitlab.freedesktop.org/wayland/wayland/-/releases/1.23.0/downloads/wayland-1.23.0.tar.xz | tar xJ && cd wayland* \
+RUN curl -fsSL https://gitlab.freedesktop.org/wayland/wayland/-/releases/1.25.0/downloads/wayland-1.25.0.tar.xz | tar xJ && cd wayland* \
  && meson build --buildtype=release -Ddocumentation=false && ninja -C build install > /dev/null 2>&1 && cd - && rm -r wayland*
 
 # qt
@@ -181,11 +181,10 @@ RUN git clone -b v0.20 --depth 1 https://github.com/openturns/otmorris.git && cd
  && make install > /dev/null 2>&1 && cd - && rm -r otmorris*
 
 # otfmi
-RUN pip3 install git+https://github.com/openturns/otfmi@v0.17.1 --quiet && python3 -c "import otfmi"
+RUN pip3 install git+https://github.com/openturns/otfmi@v0.18 --quiet && python3 -c "import otfmi"
 
 # openmodelica
-RUN git clone -b v1.26.3 --depth 1 https://github.com/OpenModelica/OpenModelica.git && cd OpenModelica \
- && git submodule update --init --recursive OMCompiler/3rdParty \
+RUN curl -fsSL https://github.com/OpenModelica/OpenModelica/releases/download/v1.26.7/OpenModelica-src-with-submodules.zip | bsdtar -xf - && cd OpenModelica* \
  && cmake -DCMAKE_BUILD_TYPE=Release -DOM_ENABLE_GUI_CLIENTS=OFF -DCMAKE_INSTALL_PREFIX=/usr/local/ \
           -DOM_OMC_ENABLE_FORTRAN=OFF -DOM_OMC_ENABLE_MOO=OFF -DOM_OMC_ENABLE_OPTIMIZATION=OFF -DOM_USE_CCACHE=OFF -B build . \
  && make install -C build > /dev/null 2>&1 && cd - && rm -r OpenModelica*
