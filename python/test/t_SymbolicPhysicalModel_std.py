@@ -38,7 +38,7 @@ model.setDistribution("X1", ot.LogNormal())
 model.setFiniteDifferenceStep("X1", 1e-5)
 R = ot.CorrelationMatrix(2)
 R[0, 1] = 0.25
-model.setCopula(["X0", "X1"], ot.NormalCopula(R))
+model.addCopula(["X0", "X1"], ot.NormalCopula(R))
 print("inputs=", model.getInputs())
 print("stochastic var=", model.getStochasticInputNames())
 print("distribution=", model.getDistribution())

@@ -257,7 +257,7 @@ void CopulaWidget::updateCopulaFromLineEdit()
       return;
     copula_.setParameter(Point(1, value));
     physicalModel_.blockNotification("ProbabilisticModelItem");
-    physicalModel_.setCopula(copulaDescription, copula_);
+    physicalModel_.addCopula(copulaDescription, copula_);
     physicalModel_.blockNotification();
     updatePlots();
   }

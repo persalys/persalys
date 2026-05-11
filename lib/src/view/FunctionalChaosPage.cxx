@@ -108,6 +108,7 @@ void FunctionalChaosPage::updateBasisSizeLabel()
   const int basisSize = SpecFunc::BinomialCoefficient(inputSampleDimension_ + chaosDegreeSpinbox_->value(), chaosDegreeSpinbox_->value());
   basisSizeLabel_->setText(QString::number(basisSize));
 }
+
 Analysis FunctionalChaosPage::getAnalysis(const String& name, const DesignOfExperiment& doe) const
 {
   FunctionalChaosAnalysis analysis(name, doe);

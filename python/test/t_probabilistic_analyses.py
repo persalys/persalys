@@ -31,7 +31,7 @@ model1 = persalys.SymbolicPhysicalModel(
 )
 R = ot.CorrelationMatrix(2)
 R[0, 1] = 0.25
-model1.setCopula(["x1", "x2"], ot.NormalCopula(R))
+model1.addCopula(["x1", "x2"], ot.NormalCopula(R))
 myStudy.add(model1)
 
 # model 3 ##

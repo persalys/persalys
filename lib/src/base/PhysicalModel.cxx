@@ -375,9 +375,14 @@ Collection<Distribution> PhysicalModel::getCopulaCollection() const
 }
 
 
-void PhysicalModel::setCopula(const Description &inputNames, const Distribution &copula)
+void PhysicalModel::addCopula(const Description &inputNames, const Distribution &copula)
 {
-  getImplementation()->setCopula(inputNames, copula);
+  getImplementation()->addCopula(inputNames, copula);
+}
+
+void PhysicalModel::setBlockIndependentCopula(const BlockIndependentCopula & copula)
+{
+  getImplementation()->setBlockIndependentCopula(copula);
 }
 
 

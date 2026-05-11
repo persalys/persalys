@@ -265,7 +265,7 @@ void StudyTreeView::onCustomContextMenu(const QPoint &point)
 
   // if the item is editable:
   // add rename action at the first position
-  QAction * renameAction = 0;
+  QAction * renameAction = nullptr;
   if (item->isEditable())
   {
     renameAction = new QAction(tr("Rename"), this);

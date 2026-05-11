@@ -307,7 +307,7 @@ void DependenciesWidget::addCopula()
     physicalModel_.blockNotification("ProbabilisticModelItem");
   }
   catch (const std::exception &) { }
-  physicalModel_.setCopula(selectedVars, newCopula);
+  physicalModel_.addCopula(selectedVars, newCopula);
   physicalModel_.blockNotification();
   // add a copula widget
   CopulaWidget * newWidget = new CopulaWidget(physicalModel_, newCopula, this);
@@ -381,7 +381,7 @@ void DependenciesWidget::openWizardToChooseInferenceResult(const QModelIndex& in
 
     // update the copula
     physicalModel_.blockNotification("ProbabilisticModelItem");
-    physicalModel_.setCopula(currentGroup, copula);
+    physicalModel_.addCopula(currentGroup, copula);
     physicalModel_.blockNotification();
 
     // update widget

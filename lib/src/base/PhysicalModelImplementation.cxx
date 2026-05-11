@@ -776,7 +776,7 @@ Collection<Distribution> PhysicalModelImplementation::getCopulaCollection() cons
 }
 
 
-void PhysicalModelImplementation::setCopula(const Description &inputNames, const Distribution &copula)
+void PhysicalModelImplementation::addCopula(const Description &inputNames, const Distribution &copula)
 {
   // - check
   // inputNames and copula must have the same dimension
@@ -812,39 +812,31 @@ void PhysicalModelImplementation::setCopula(const Description &inputNames, const
     }
   }
 
-  // new collection of copulas
+
+  bool replaceInPlace = indicesToRemove.size() == 1 &&
+  copula.getImplementation()->getClassName() != "IndependentCopula";
+
   Collection<Distribution> newColl;
-  if ((indicesToRemove.size() == 1 && copula.getImplementation()->getClassName() != "IndependentCopula") ||
-      indicesToRemove.size() == 0)
+  if (replaceInPlace || indicesToRemove.empty())
   {
     newColl = coll;
   }
   else
   {
     for (UnsignedInteger i = 0; i < coll.getSize(); ++i)
-    {
-      if (indicesToRemove.find(i) == indicesToRemove.end())
+      if (!indicesToRemove.count(i))
         newColl.add(coll[i]);
-    }
   }
 
-  // update copulas collection
   if (copula.getImplementation()->getClassName() != "IndependentCopula")
   {
     Distribution newCopula(copula);
     newCopula.setDescription(inputNames);
-    if (indicesToRemove.size() != 1)
-    {
-      // add copula
-      newColl.add(newCopula);
-    }
-    else
-    {
-      // replace copula
-      // do not : erase copula_i then add newCopula
-      // do like this only for the copulas definition window behavior
+
+    if (replaceInPlace)
       newColl[*indicesToRemove.begin()] = newCopula;
-    }
+    else
+      newColl.add(newCopula);
   }
 
   // update blockIndependentCopula_
@@ -859,7 +851,11 @@ void PhysicalModelImplementation::setCopula(const Description &inputNames, const
     blockIndependentCopula_.setDescription(Description::BuildDefault(2, "_dummy_var_name"));
   }
   updateCopula();
+}
 
+void PhysicalModelImplementation::setBlockIndependentCopula(const BlockIndependentCopula & blockIndependentCopula)
+{
+  blockIndependentCopula_ = blockIndependentCopula;
   notify("copulaChanged");
 }
 
@@ -1102,13 +1098,13 @@ String PhysicalModelImplementation::getCopulaPythonScript() const
     if (blockIndependentCopula_i.getImplementation()->getClassName() == "NormalCopula")
     {
       oss << Parameters::GetOTNormalCopulaStr(blockIndependentCopula_i);
-      oss << getName() << ".setCopula(" << Parameters::GetOTDescriptionStr(blockIndependentCopula_i.getDescription()) << ", copula)\n";
+      oss << getName() << ".addCopula(" << Parameters::GetOTDescriptionStr(blockIndependentCopula_i.getDescription()) << ", copula)\n";
     }
     else
     {
       if (blockIndependentCopula_i.getImplementation()->getClassName() != "IndependentCopula")
       {
-        oss << getName() << ".setCopula(" << Parameters::GetOTDescriptionStr(blockIndependentCopula_i.getDescription()) << ", ";
+        oss << getName() << ".addCopula(" << Parameters::GetOTDescriptionStr(blockIndependentCopula_i.getDescription()) << ", ";
         oss << "ot." << blockIndependentCopula_i.getImplementation()->getClassName() << "(" << blockIndependentCopula_i.getParameter()[0] << "))\n";
       }
     }

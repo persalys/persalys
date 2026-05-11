@@ -164,6 +164,6 @@ Observer* Observable::getObserver(const String & type) const
     if ((*it)->getType() == type)
       return (*it);
   }
-  return 0;
+  return nullptr;
 }
 }

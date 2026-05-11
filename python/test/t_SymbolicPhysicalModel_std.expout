@@ -48,5 +48,5 @@ aModelPhys = persalys.SymbolicPhysicalModel('aModelPhys', inputs, outputs, formu
 R = ot.CorrelationMatrix(2)
 R[0, 1] = 0.239358526049
 copula = ot.NormalCopula(ot.NormalCopula.GetCorrelationFromSpearmanCorrelation(R))
-aModelPhys.setCopula(['X0', 'X1'], copula)
+aModelPhys.addCopula(['X0', 'X1'], copula)
 

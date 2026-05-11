@@ -21,7 +21,7 @@ myPhysicalModel = persalys.SymbolicPhysicalModel('myPhysicalModel', inputs, outp
 R = ot.CorrelationMatrix(2)
 R[0, 1] = -0.2
 copula = ot.NormalCopula(ot.NormalCopula.GetCorrelationFromSpearmanCorrelation(R))
-myPhysicalModel.setCopula(['L', 'I'], copula)
+myPhysicalModel.addCopula(['L', 'I'], copula)
 myStudy.add(myPhysicalModel)
 limitState1 = persalys.LimitState('limitState1', myPhysicalModel, 'y', ot.Greater(), 30)
 myStudy.add(limitState1)

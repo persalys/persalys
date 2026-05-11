@@ -284,7 +284,7 @@ void CalibrationDistributionPage::updateData(const PhysicalModel &model)
   {
     for (UnsignedInteger i = 0; i < model.getCopulaCollection().getSize(); ++i)
       if (model.getCopulaCollection()[i].getImplementation()->getClassName() != "IndependentCopula")
-        model_.setCopula(model.getCopulaCollection()[i].getDescription(), model.getCopulaCollection()[i]);
+        model_.addCopula(model.getCopulaCollection()[i].getDescription(), model.getCopulaCollection()[i]);
   }
   emit updateWidgetRequested();
 }
@@ -578,7 +578,7 @@ void CalibrationAnalysisWizard::initializePages()
       for (UnsignedInteger j = i + 1; j < m2.getDimension(); ++j)
         m2(i, j) = m(indices[i], indices[j]);
     }
-    model.setCopula(correlatedInputs, NormalCopula(NormalCopula::GetCorrelationFromSpearmanCorrelation(m2)));
+    model.addCopula(correlatedInputs, NormalCopula(NormalCopula::GetCorrelationFromSpearmanCorrelation(m2)));
   }
 
   // update the table of the reference point page and the prior distribution page

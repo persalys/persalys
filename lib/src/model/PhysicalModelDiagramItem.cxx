@@ -320,12 +320,15 @@ void PhysicalModelDiagramItem::fill()
     appendRow(meshItem);
     emit windowRequested(meshItem);
   }
+
   // model definition item
   if (physicalModel_.getInputDimension() || physicalModel_.getOutputDimension())
     appendPhysicalModelItem();
+
   // probabilistic model item
   if (physicalModel_.hasStochasticInputs())
     appendProbabilisticModelItem();
+  
   updateDiagramBoxesValidity();
 }
 
