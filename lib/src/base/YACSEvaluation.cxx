@@ -160,8 +160,11 @@ Sample YACSEvaluation::operator() (const Sample & inS) const
   {
     myJob.reset(l.connectJob(dump_, jobSample));
   }
+
   if (myJob)
   {
+    if (!myJob->lastError().empty())
+      throw InternalException(HERE) << myJob->lastError();
     double progress = myJob->progress();
     String state = myJob->state();
     while (progress < 1.0 && Description({"QUEUED", "IN_PROCESS", "RUNNING"}).contains(state))
@@ -199,7 +202,7 @@ Sample YACSEvaluation::operator() (const Sample & inS) const
     if (!myJob->fetch())
     {
       setIsRunning(false);
-      throw NotDefinedException(HERE) << myJob->lastError();
+      throw InternalException(HERE) << myJob->lastError();
     }
 
     // get results
@@ -235,7 +238,7 @@ Sample YACSEvaluation::operator() (const Sample & inS) const
     }
   }
   else
-    throw NotDefinedException(HERE) << l.lastError();
+    throw InternalException(HERE) << l.lastError();
   return result;
 }
 
