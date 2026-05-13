@@ -31,6 +31,7 @@
 #include <QLineEdit>
 #include <QResizeEvent>
 #include <QComboBox>
+#include <QToolButton>
 
 namespace PERSALYS
 {
@@ -74,6 +75,10 @@ private:
   QLabel                        * sampleSizeLabel_          = nullptr;
   ErrorWidget                   * errorWidget_              = nullptr;
   QComboBox                     * typeComboBox_             = nullptr;
+  QToolButton                   * addRowButton_             = nullptr;
+  QToolButton                   * removeRowButton_          = nullptr;
+  QToolButton                   * cleanButton_              = nullptr;
+  QToolButton                   * exportButton_             = nullptr;
 };
 }
 #endif

@@ -178,23 +178,31 @@ void DataModelWindow::buildInterface()
   sizeLayout->addWidget(sampleSizeLabel_, 0, 1);
 
   QToolButton * addRowButton = new QToolButton;
+  addRowButton_ = addRowButton;
   addRowButton->setIcon(QIcon(":/images/list-add.png"));
   addRowButton->setToolTip(tr("Add row"));
+  addRowButton->setEnabled(false);
   sizeLayout->addWidget(addRowButton, 0, 2);
 
   QToolButton * removeRowButton = new QToolButton;
+  removeRowButton_ = removeRowButton;
   removeRowButton->setIcon(QIcon(":/images/list-remove.png"));
   removeRowButton->setToolTip(tr("Remove row(s)"));
+  removeRowButton->setEnabled(false);
   sizeLayout->addWidget(removeRowButton, 0, 3);
 
   QToolButton * cleanButton = new QToolButton;
+  cleanButton_ = cleanButton;
   cleanButton->setIcon(QIcon(":/images/clean.png"));
   cleanButton->setToolTip(tr("Clean"));
+  cleanButton->setEnabled(false);
   sizeLayout->addWidget(cleanButton, 0, 4);
 
   QToolButton * exportButton = new QToolButton;
+  exportButton_ = exportButton;
   exportButton->setIcon(QIcon(":/images/document-export.png"));
   exportButton->setToolTip(tr("Export"));
+  exportButton->setEnabled(false);
   sizeLayout->addWidget(exportButton, 0, 5);
 
   sizeLayout->setColumnStretch(1, 1);
@@ -303,10 +311,23 @@ void DataModelWindow::launchCleaningWizard()
     errorWidget_->setFramelessErrorMessage(tr("Sample must not be empty"));
     return;
   }
-  DataCleaning* cleaner = new DataCleaning(dataModel_->getSample());
-  DataCleaningWizard wizard(cleaner, this);
-  dataModel_->setSample(cleaner->getSample());
-  updateTableView();
+  const Sample sampleToClean = dataModel_->getSampleFromFile().getSize()
+                               ? dataModel_->getSampleFromFile()
+                               : dataModel_->getSample();
+  DataCleaning* cleaner = new DataCleaning(sampleToClean);
+  DataCleaningWizard* wizard = new DataCleaningWizard(cleaner, this);
+  connect(wizard, &QDialog::accepted, this, [this, wizard, cleaner]()
+  {
+    wizard->applyClean();
+    dataModel_->setSample(cleaner->getSample());
+    updateTableView();
+  });
+  connect(wizard, &QDialog::finished, this, [wizard, cleaner]()
+  {
+    delete cleaner;
+    wizard->deleteLater();
+  });
+  wizard->open();
 }
 
 void DataModelWindow::resizeEvent(QResizeEvent* event)
@@ -409,8 +430,17 @@ void DataModelWindow::updateTableView()
   if (!dataModel_->getSample().getSize())
   {
     tableView_->resizeWithOptimalHeight();
+    addRowButton_->setEnabled(false);
+    removeRowButton_->setEnabled(false);
+    cleanButton_->setEnabled(false);
+    exportButton_->setEnabled(false);
     return;
   }
+
+  addRowButton_->setEnabled(true);
+  removeRowButton_->setEnabled(true);
+  cleanButton_->setEnabled(true);
+  exportButton_->setEnabled(true);
 
   // update variables table
   tableModel_->updateData();

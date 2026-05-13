@@ -169,9 +169,19 @@ void DataFieldModelWindow::launchCleaningWizard()
     return;
   }
   DataCleaning* cleaner = new DataCleaning(tableModel_->getSample());
-  DataCleaningWizard wizard(cleaner, this);
-  tableModel_->updateData(cleaner->getSample());
-  updateProcessSample();
+  DataCleaningWizard* wizard = new DataCleaningWizard(cleaner, this);
+  connect(wizard, &QDialog::accepted, this, [this, wizard, cleaner]()
+  {
+    wizard->applyClean();
+    tableModel_->updateData(cleaner->getSample());
+    updateProcessSample();
+  });
+  connect(wizard, &QDialog::finished, this, [wizard, cleaner]()
+  {
+    delete cleaner;
+    wizard->deleteLater();
+  });
+  wizard->open();
 }
 
 
