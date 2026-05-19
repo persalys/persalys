@@ -278,7 +278,7 @@ void DataSample::load(Advocate & adv)
   adv.loadAttribute("outputSample_", outputSample_);
   adv.loadAttribute("listXMin_", listXMin_);
   adv.loadAttribute("listXMax_", listXMax_);
-  if (adv.hasAttribute("inputContainsnaN_"))
+  if (adv.hasAttribute("inputContainsNaN_"))
   {
     adv.loadAttribute("inputContainsNaN_", inputContainsNaN_);
     adv.loadAttribute("outputContainsNaN_", outputContainsNaN_);
