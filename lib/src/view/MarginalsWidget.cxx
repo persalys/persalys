@@ -940,7 +940,10 @@ void MarginalsWidget::openWizardToChooseInferenceResult(const QModelIndex& input
       physicalModel_.setDistribution(input.getName(), wizard->getDistribution());
       physicalModel_.setDistributionParametersType(input.getName(), 0);
       physicalModel_.blockNotification();
-      updateDistributionWidgets(inputIndex);
+      // refresh the table so the new distribution name is displayed
+      inputTableModel_->updateData();
+      const QModelIndex newIndex = inputTableModel_->index(inputIndex.row(), 0);
+      inputTableView_->setCurrentIndex(newIndex);
     });
 
     wizard->open();

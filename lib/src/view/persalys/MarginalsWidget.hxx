@@ -79,10 +79,10 @@ signals:
 private:
   bool studyHasInferenceResults() const;
 
-  bool                          failSoftMode_                       = false;
-  Study                         study_;
+  bool                            failSoftMode_                     = false;
+  Study                           study_;
   StudyItem                     * studyItem_                        = nullptr;
-  PhysicalModel                 physicalModel_;
+  PhysicalModel                   physicalModel_;
   QTableView                    * inputTableView_                   = nullptr;
   InputTableProbabilisticModel  * inputTableModel_                  = nullptr;
   ComboBoxDelegate              * delegate_                         = nullptr;
@@ -93,15 +93,15 @@ private:
   PlotWidget                    * quantilePlot_                     = nullptr;
   PlotWidget                    * survivalPlot_                     = nullptr;
   QComboBox                     * selectParametersTypeCombo_        = nullptr;
-  std::array<QLabel*, 5>        parameterValuesLabel_               = {nullptr, nullptr, nullptr, nullptr, nullptr};
-  std::array<ValueLineEdit*, 5> parameterValuesEdit_                = {nullptr, nullptr, nullptr, nullptr, nullptr};
+  std::array<QLabel*, 5>          parameterValuesLabel_             = {nullptr, nullptr, nullptr, nullptr, nullptr};
+  std::array<ValueLineEdit*, 5>   parameterValuesEdit_              = {nullptr, nullptr, nullptr, nullptr, nullptr};
   QToolButton                   * editButton_                       = nullptr;
   CollapsibleGroupBox           * truncationParamGroupBox_          = nullptr;
   QCheckBox                     * lowerBoundCheckBox_               = nullptr;
   QCheckBox                     * upperBoundCheckBox_               = nullptr;
   ValueLineEdit                 * lowerBoundLineEdit_               = nullptr;
   ValueLineEdit                 * upperBoundLineEdit_               = nullptr;
-  ErrorWidget                   * errorWidget_                = nullptr;
+  ErrorWidget                   * errorWidget_                      = nullptr;
 };
 }
 #endif
