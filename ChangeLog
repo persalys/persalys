@@ -1,3 +1,7 @@
+= 20.0.1 release (2026-05-26) (windows only)
+
+ * removed bonmin support to remove libopt dll dependency flagged by some antiviruses
+
 = 20.0 release (2026-03-30)
 
  * added HSIC sensitivity analyses
