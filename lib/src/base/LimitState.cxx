@@ -34,7 +34,7 @@ LimitState::LimitState()
 }
 
 
-/* Constructor with parameters */
+/* Constructor for regular limit state */
 LimitState::LimitState(const String& name,
                        const PhysicalModel& physicalModel,
                        const String& outputName,
@@ -44,6 +44,16 @@ LimitState::LimitState(const String& name,
 {
 }
 
+/* Constructor for system limit state */
+LimitState::LimitState(const String& name,
+                       const PhysicalModel& physicalModel,
+                       const Description& outputNames,
+                       const Collection<ComparisonOperator>& operators,
+                       const Type type,
+                       const Point& thresholds)
+  : TypedInterfaceObject<LimitStateImplementation>(new LimitStateImplementation(name, physicalModel, outputNames, operators, type, thresholds))
+{
+}
 
 /* Default constructor */
 LimitState::LimitState(const LimitStateImplementation& implementation)
@@ -101,47 +111,105 @@ PhysicalModel LimitState::getPhysicalModel() const
 }
 
 
-String LimitState::getOutputName() const
+Description LimitState::getOutputNames() const
 {
-  return getImplementation()->getOutputName();
+  return getImplementation()->getOutputNames();
 }
 
-
-void LimitState::setOutputName(const String& outputName)
+void LimitState::setOutputNames(const Description& outputNames)
 {
-  getImplementation()->setOutputName(outputName);
+  getImplementation()->setOutputNames(outputNames);
 }
 
-
-ComparisonOperator LimitState::getOperator() const
+void LimitState::setOutputName(UnsignedInteger index, const String& outputName)
 {
-  return getImplementation()->getOperator();
+  getImplementation()->setOutputName(index, outputName);
 }
 
-
-void LimitState::setOperator(const ComparisonOperator& comparisonOperator)
+Collection<ComparisonOperator> LimitState::getOperators() const
 {
-  getImplementation()->setOperator(comparisonOperator);
+  return getImplementation()->getOperators();
 }
 
-
-double LimitState::getThreshold() const
+ComparisonOperator LimitState::getOperator(UnsignedInteger index) const
 {
-  return getImplementation()->getThreshold();
+  return getImplementation()->getOperator(index);
 }
 
-
-void LimitState::setThreshold(const double& threshold)
+void LimitState::setOperators(const Collection<ComparisonOperator>& operators)
 {
-  getImplementation()->setThreshold(threshold);
+  getImplementation()->setOperators(operators);
 }
 
+void LimitState::setOperator(UnsignedInteger index, const ComparisonOperator& comparisonOperator)
+{
+  getImplementation()->setOperator(index, comparisonOperator);
+}
+
+Point LimitState::getThresholds() const
+{
+  return getImplementation()->getThresholds();
+}
+
+double LimitState::getThreshold(UnsignedInteger index) const
+{
+  return getImplementation()->getThreshold(index);
+}
+
+void LimitState::setThresholds(const Point& thresholds)
+{
+  getImplementation()->setThresholds(thresholds);
+}
+
+void LimitState::setThreshold(UnsignedInteger index, const double& threshold)
+{
+  getImplementation()->setThreshold(index, threshold);
+}
+
+void LimitState::setType(const Type type)
+{
+  getImplementation()->setType(type);
+}
+
+LimitState::Type LimitState::getType() const
+{
+  return getImplementation()->getType();
+}
+
+bool LimitState::isSystemLimitState() const
+{
+  return getImplementation()->isSystemLimitState();
+}
 
 bool LimitState::isValid() const
 {
   return getImplementation()->isValid();
 }
 
+void LimitState::addFailureEvent(const String& variableName, const ComparisonOperator& comparisonOperator, const double& threshold)
+{
+  getImplementation()->addFailureEvent(variableName, comparisonOperator, threshold);
+}
+
+void LimitState::removeFailureEvent(UnsignedInteger index)
+{
+  getImplementation()->removeFailureEvent(index);
+}
+
+RandomVector LimitState::getThresholdEvent(OT::Collection<OT::Function> &functions) const
+{
+  return getImplementation()->getThresholdEvent(functions);
+}
+
+RandomVector LimitState::getThresholdEvent() const
+{
+  return getImplementation()->getThresholdEvent();
+}
+
+RandomVector LimitState::getISThresholdEvent() const
+{
+  return getImplementation()->getISThresholdEvent();
+}
 
 String LimitState::getPythonScript() const
 {

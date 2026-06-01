@@ -24,9 +24,12 @@
 
 #include <openturns/Greater.hxx>
 #include <openturns/GreaterOrEqual.hxx>
+#include <openturns/Less.hxx>
 #include <openturns/LessOrEqual.hxx>
 
 #include <QGridLayout>
+#include <QHBoxLayout>
+#include <QHeaderView>
 
 using namespace OT;
 
@@ -36,140 +39,201 @@ namespace PERSALYS
 LimitStateWindow::LimitStateWindow(LimitStateItem * item, QWidget * parent)
   : SubWindow(item, parent)
   , limitState_(item->getLimitState())
-  , errorWidget_(0)
 {
   buildInterface();
 
   // connections
-  connect(item, SIGNAL(outputListChanged()), this, SLOT(updateOutputsList()));
-  connect(item, SIGNAL(operatorChanged()), this, SLOT(updateOperatorWidget()));
-  connect(item, SIGNAL(thresholdChanged()), this, SLOT(updateThresholdWidget()));
+  connect(item, SIGNAL(outputListChanged()), this, SLOT(rebuildEventsTable()));
+  connect(item, SIGNAL(operatorChanged()), this, SLOT(rebuildEventsTable()));
+  connect(item, SIGNAL(thresholdChanged()), this, SLOT(rebuildEventsTable()));
+  connect(item, SIGNAL(typeChanged()), this, SLOT(updateTypeWidget()));
 }
 
 
 void LimitStateWindow::buildInterface()
 {
-  QVBoxLayout * mainLayout = new QVBoxLayout(this);
+  auto * mainLayout = new QVBoxLayout(this);
 
-  mainLayout->addWidget(new TitleLabel(tr("Limit state"), "user_manual/graphical_interface/probabilistic_analysis/user_manual_probabilistic_analysis.html#limit-state"));
+  mainLayout->addWidget(
+    new TitleLabel(
+      tr("Limit state"),
+      "user_manual/graphical_interface/probabilistic_analysis/user_manual_probabilistic_analysis.html#limit-state"
+    )
+  );
 
   // spacer
   mainLayout->addSpacing(30);
 
-  QLabel * label = new QLabel(tr("Definition of the failure event"));
+  auto * label = new QLabel(tr("Definition of the failure event(s)"));
   label->setStyleSheet("QLabel {font: bold;}");
   mainLayout->addWidget(label);
 
   // spacer
   mainLayout->addSpacing(5);
 
-  // definition widgets
-  QGridLayout * gridLayout = new QGridLayout;
-  int row = 0;
+  // Type selector (Union/Intersection) – only visible for system limit states
+  typeWidget_ = new QWidget;
+  auto * typeLayout = new QHBoxLayout(typeWidget_);
+  typeLayout->setContentsMargins(0, 0, 0, 0);
+  typeLayout->addWidget(new QLabel(tr("Type:")));
+  typeComboBox_ = new QComboBox;
+  typeComboBox_->addItem(tr("Union"),        static_cast<int>(LimitStateImplementation::Union));
+  typeComboBox_->addItem(tr("Intersection"), static_cast<int>(LimitStateImplementation::Intersection));
+  connect(typeComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateType(int)));
+  typeLayout->addWidget(typeComboBox_);
+  typeLayout->addStretch();
+  mainLayout->addWidget(typeWidget_);
 
-  label = new QLabel(tr("Output"));
-  gridLayout->addWidget(label, row, 0);
+  // Events table: Output | Operator | Threshold | (Remove)
+  eventsTable_ = new QTableWidget(0, 4);
+  eventsTable_->setHorizontalHeaderLabels({tr("Output"), tr("Operator"), tr("Threshold"), ""});
+  eventsTable_->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+  eventsTable_->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+  eventsTable_->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
+  eventsTable_->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Fixed);
+  eventsTable_->setColumnWidth(3, 30);
+  eventsTable_->verticalHeader()->setVisible(false);
+  eventsTable_->setSelectionMode(QAbstractItemView::NoSelection);
+  mainLayout->addWidget(eventsTable_);
 
-  label = new QLabel(tr("Operator"));
-  gridLayout->addWidget(label, row, 1);
-
-  label = new QLabel(tr("Threshold"));
-  gridLayout->addWidget(label, row, 2);
-
-  outputsComboBox_ = new QComboBox;
-  outputsComboBox_->setSizeAdjustPolicy(QComboBox::AdjustToContents);
-  connect(outputsComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateOutput(int)));
-  gridLayout->addWidget(outputsComboBox_, ++row, 0);
-
-  failureComboBox_ = new QComboBox;
-  failureComboBox_->addItem(tr("<"), LimitStateWindow::LessOperator);
-  failureComboBox_->addItem(tr("<="), LimitStateWindow::LessOrEqualOperator);
-  failureComboBox_->addItem(tr(">"), LimitStateWindow::GreaterOperator);
-  failureComboBox_->addItem(tr(">="), LimitStateWindow::GreaterOrEqualOperator);
-  connect(failureComboBox_, SIGNAL(currentIndexChanged(int)), this, SLOT(updateOperator(int)));
-  gridLayout->addWidget(failureComboBox_, row, 1);
-
-  thresholdLineEdit_ = new ValueLineEdit;
-  connect(thresholdLineEdit_, SIGNAL(editingFinished()), this, SLOT(updateThreshold()));
-  gridLayout->addWidget(thresholdLineEdit_, row, 2);
+  // Add event button
+  addEventButton_ = new QPushButton(tr("+ Add failure event"));
+  connect(addEventButton_, SIGNAL(clicked()), this, SLOT(addFailureEvent()));
+  auto * addBtnLayout = new QHBoxLayout;
+  addBtnLayout->addWidget(addEventButton_);
+  addBtnLayout->addStretch();
+  mainLayout->addLayout(addBtnLayout);
 
   errorWidget_ = new ErrorWidget;
-  gridLayout->addWidget(errorWidget_, ++row, 0, 1, 3);
+  mainLayout->addWidget(errorWidget_);
 
-  gridLayout->setRowStretch(++row, 2);
+  mainLayout->addStretch(1);
 
-  mainLayout->addLayout(gridLayout, 1);
-
-  updateOutputsList();
-  updateOperatorWidget();
-  updateThresholdWidget();
+  rebuildEventsTable();
 }
 
 
-
-void LimitStateWindow::updateOutputsList()
+void LimitStateWindow::rebuildEventsTable()
 {
   errorWidget_->reset();
-  SignalBlocker blocker(outputsComboBox_);
-  outputsComboBox_->clear();
-  QStringList items;
-  for (UnsignedInteger i = 0; i < limitState_.getPhysicalModel().getSelectedOutputsNames().getSize(); ++i)
-    items << QString::fromUtf8(limitState_.getPhysicalModel().getSelectedOutputsNames()[i].c_str());
-  outputsComboBox_->addItems(items);
 
-  const int index = items.indexOf(QString::fromUtf8(limitState_.getOutputName().c_str()));
+  const auto outputNames     = limitState_.getOutputNames();
+  const auto operators       = limitState_.getOperators();
+  const auto thresholds      = limitState_.getThresholds();
+  const auto availableOutputs = limitState_.getPhysicalModel().getSelectedOutputsNames();
 
-  if (index == -1)
+  QStringList availableList;
+  for (UnsignedInteger i = 0; i < availableOutputs.getSize(); ++i)
+    availableList << QString::fromUtf8(availableOutputs[i].c_str());
+
+  const int nEvents = static_cast<int>(outputNames.getSize());
+  eventsTable_->setRowCount(nEvents);
+
+  for (int i = 0; i < nEvents; ++i)
   {
-    errorWidget_->setFramelessErrorMessage(tr("The output name is not valid."));
+    // Output combo
+    auto * outputCombo = new QComboBox;
+    outputCombo->setSizeAdjustPolicy(QComboBox::AdjustToContents);
+    outputCombo->addItems(availableList);
+    const QString currentOutput = QString::fromUtf8(outputNames[i].c_str());
+    const int outputIdx = availableList.indexOf(currentOutput);
+    if (outputIdx == -1)
+      errorWidget_->setFramelessErrorMessage(tr("The output name '%1' is not valid.").arg(currentOutput));
+    outputCombo->setCurrentIndex(outputIdx);
+    connect(outputCombo, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, [this, i](int idx) { updateOutput(i, idx); });
+    eventsTable_->setCellWidget(i, 0, outputCombo);
+
+    // Operator combo
+    auto * opCombo = new QComboBox;
+    opCombo->addItem(tr("<"),  static_cast<int>(LimitStateWindow::LessOperator));
+    opCombo->addItem(tr("<="), static_cast<int>(LimitStateWindow::LessOrEqualOperator));
+    opCombo->addItem(tr(">"),  static_cast<int>(LimitStateWindow::GreaterOperator));
+    opCombo->addItem(tr(">="), static_cast<int>(LimitStateWindow::GreaterOrEqualOperator));
+    const String opName = operators[i].getImplementation()->getClassName();
+    int opIdx = 0;
+    if      (opName == "LessOrEqual")    opIdx = 1;
+    else if (opName == "Greater")        opIdx = 2;
+    else if (opName == "GreaterOrEqual") opIdx = 3;
+    opCombo->setCurrentIndex(opIdx);
+    connect(opCombo, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, [this, i](int idx) { updateOperator(i, idx); });
+    eventsTable_->setCellWidget(i, 1, opCombo);
+
+    // Threshold edit
+    auto * thresholdEdit = new ValueLineEdit(thresholds[i]);
+    connect(thresholdEdit, &QLineEdit::editingFinished,
+            this, [this, i, thresholdEdit]() { updateThreshold(i, thresholdEdit); });
+    eventsTable_->setCellWidget(i, 2, thresholdEdit);
+
+    // Remove button
+    auto * removeButton = new QPushButton(tr("-"));
+    removeButton->setFixedWidth(30);
+    removeButton->setEnabled(nEvents > 1);
+    connect(removeButton, &QPushButton::clicked,
+            this, [this, i]() { removeFailureEvent(i); });
+    eventsTable_->setCellWidget(i, 3, removeButton);
   }
-  outputsComboBox_->setCurrentIndex(index);
+
+  // Update type widget
+  {
+    SignalBlocker blocker(typeComboBox_);
+    typeComboBox_->setCurrentIndex(limitState_.getType() == LimitStateImplementation::Union ? 0 : 1);
+  }
+  typeWidget_->setVisible(limitState_.isSystemLimitState());
 }
 
 
-void LimitStateWindow::updateOutputWidget()
+void LimitStateWindow::updateTypeWidget()
 {
-  SignalBlocker blocker(outputsComboBox_);
-  const int index = outputsComboBox_->findText(QString::fromUtf8(limitState_.getOutputName().c_str()));
-  outputsComboBox_->setCurrentIndex(index);
+  SignalBlocker blocker(typeComboBox_);
+  typeComboBox_->setCurrentIndex(limitState_.getType() == LimitStateImplementation::Union ? 0 : 1);
 }
 
 
-void LimitStateWindow::updateOperatorWidget()
+void LimitStateWindow::addFailureEvent()
 {
-  SignalBlocker blocker(failureComboBox_);
-  const String operatorName = limitState_.getOperator().getImplementation()->getClassName();
-  int indexOperator = 0;
-  if (operatorName == "LessOrEqual")
-    indexOperator = 1;
-  else if (operatorName == "Greater")
-    indexOperator = 2;
-  else if (operatorName == "GreaterOrEqual")
-    indexOperator = 3;
-  failureComboBox_->setCurrentIndex(indexOperator);
+  if (limitState_.getPhysicalModel().getSelectedOutputsNames().isEmpty())
+  {
+    errorWidget_->setFramelessErrorMessage(tr("No output is available in the physical model. Please select at least one output in the physical model settings."));
+    return;
+  }
+  
+  limitState_.addFailureEvent(limitState_.getPhysicalModel().getSelectedOutputsNames()[0], Less(), 0.0);
+  rebuildEventsTable();
 }
 
 
-void LimitStateWindow::updateThresholdWidget()
+void LimitStateWindow::removeFailureEvent(int row)
 {
-  SignalBlocker blocker(thresholdLineEdit_);
-  thresholdLineEdit_->setValue(limitState_.getThreshold());
+  if (row < 0 || static_cast<UnsignedInteger>(row) >= limitState_.getOutputNames().getSize())
+    return;
+  limitState_.removeFailureEvent(static_cast<UnsignedInteger>(row));
+  rebuildEventsTable();
 }
 
 
-void LimitStateWindow::updateOutput(int index)
+void LimitStateWindow::updateOutput(int row, int comboIndex)
 {
+  if (comboIndex < 0)
+    return;
+  const auto availableOutputs = limitState_.getPhysicalModel().getSelectedOutputsNames();
+  if (static_cast<UnsignedInteger>(comboIndex) >= availableOutputs.getSize())
+    return;
   errorWidget_->reset();
   limitState_.blockNotification("LimitStateItem");
-  limitState_.setOutputName(outputsComboBox_->itemText(index).toStdString());
+  limitState_.setOutputName(static_cast<UnsignedInteger>(row), availableOutputs[comboIndex]);
   limitState_.blockNotification();
 }
 
 
-void LimitStateWindow::updateOperator(int index)
+void LimitStateWindow::updateOperator(int row, int comboIndex)
 {
+  const auto * opCombo = qobject_cast<QComboBox *>(eventsTable_->cellWidget(row, 1));
+  if (!opCombo)
+    return;
   ComparisonOperator comparisonOperator;
-  switch (LimitStateWindow::Operator(failureComboBox_->itemData(index, Qt::UserRole).toInt()))
+  switch (LimitStateWindow::Operator(opCombo->itemData(comboIndex, Qt::UserRole).toInt()))
   {
     case LimitStateWindow::LessOperator:
       comparisonOperator = Less();
@@ -185,24 +249,35 @@ void LimitStateWindow::updateOperator(int index)
       break;
   }
   limitState_.blockNotification("LimitStateItem");
-  limitState_.setOperator(comparisonOperator);
+  limitState_.setOperator(static_cast<UnsignedInteger>(row), comparisonOperator);
   limitState_.blockNotification();
 }
 
 
-void LimitStateWindow::updateThreshold()
+void LimitStateWindow::updateThreshold(int row, ValueLineEdit * edit)
 {
   try
   {
     limitState_.blockNotification("LimitStateItem");
-    limitState_.setThreshold(thresholdLineEdit_->value());
+    limitState_.setThreshold(static_cast<UnsignedInteger>(row), edit->value());
     limitState_.blockNotification();
     errorWidget_->reset();
   }
   catch (const std::exception & ex)
   {
-    updateThresholdWidget();
+    SignalBlocker blocker(edit);
+    edit->setValue(limitState_.getThresholds()[row]);
     errorWidget_->setFramelessErrorMessage(ex.what());
   }
 }
+
+
+void LimitStateWindow::updateType(int index)
+{
+  const auto type = (index == 0) ? LimitStateImplementation::Union : LimitStateImplementation::Intersection;
+  limitState_.blockNotification("LimitStateItem");
+  limitState_.setType(type);
+  limitState_.blockNotification();
 }
+}
+

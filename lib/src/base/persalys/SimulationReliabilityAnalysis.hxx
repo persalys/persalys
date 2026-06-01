@@ -67,6 +67,8 @@ protected:
   void initialize() override;
   void launch() override;
   virtual SimulationInterface getSimulationAlgorithm(const OT::RandomVector& event);
+  /** True when all component functions share the same input sample (e.g. MC). */
+  virtual bool useSharedInputSamples() const { return true; }
   static void UpdateProgressValue(double percent, void* data);
 
 private:

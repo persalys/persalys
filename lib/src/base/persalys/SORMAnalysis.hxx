@@ -27,7 +27,7 @@
 
 namespace PERSALYS
 {
-class PERSALYS_BASE_API SORMAnalysis : public ReliabilityAnalysis, public ApproximationAnalysis
+class PERSALYS_BASE_API SORMAnalysis final : public ReliabilityAnalysis, public ApproximationAnalysis
 {
   CLASSNAME
 

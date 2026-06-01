@@ -19,11 +19,12 @@
  *
  */
 #include "persalys/FORMAnalysis.hxx"
+#include "persalys/BaseTools.hxx"
 
 #include <openturns/FORM.hxx>
+#include <openturns/SystemFORM.hxx>
 #include <openturns/CompositeRandomVector.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
-#include <openturns/ThresholdEvent.hxx>
 
 using namespace OT;
 
@@ -32,7 +33,7 @@ namespace PERSALYS
 
 CLASSNAMEINIT(FORMAnalysis)
 
-static Factory<FORMAnalysis> Factory_FORMAnalysis;
+const static Factory<FORMAnalysis> Factory_FORMAnalysis;
 
 /* Default constructor */
 FORMAnalysis::FORMAnalysis()
@@ -43,9 +44,10 @@ FORMAnalysis::FORMAnalysis()
 
 
 /* Constructor with parameters */
-FORMAnalysis::FORMAnalysis(const String& name, const LimitState& limitState)
+FORMAnalysis::FORMAnalysis(const String& name, const LimitState& limitState, bool useISEvent)
   : ReliabilityAnalysis(name, limitState)
   , ApproximationAnalysis()
+  , useISEvent_(useISEvent)
 {
   setPhysicalStartingPoint(limitState.getPhysicalModel().getDistribution().getMean());
 }
@@ -72,38 +74,46 @@ void FORMAnalysis::launch()
   if (!getPhysicalModel().getDistribution().isContinuous())
     throw InvalidArgumentException(HERE) << "The model distribution must have continuous marginals.";
 
-  const Description outputName(1, getLimitState().getOutputName());
-
-  // get function
-  Function function(getPhysicalModel().getRestrictedFunction(outputName));
-
-  // create OT::Event
-  ThresholdEvent event(CompositeRandomVector(function, getPhysicalModel().getInputRandomVector()), getLimitState().getOperator(), getLimitState().getThreshold());
-  event.setDescription(outputName);
+  RandomVector event;
+  if(useISEvent_)
+    event = getLimitState().getISThresholdEvent();
+  else
+    event = getLimitState().getThresholdEvent();
 
   OptimizationAlgorithm solver(getOptimizationAlgorithm());
   solver.setStopCallback(&AnalysisImplementation::Stop, this);
   solver.setProgressCallback(&UpdateProgressValue, this);
   solver.setStartingPoint(getPhysicalStartingPoint());
 
-  // create OT::FORM
-  FORM algo(solver, event);
 
-  // run algo
-  algo.run();
-
-  // set result
-  result_.formResult_ = algo.getResult();
-
-  // compute event probability sensitivity (not computed by default)
-  try
+  if (getLimitState().isSystemLimitState() && !(useISEvent_ && getLimitState().getType() == LimitState::Type::Intersection))
   {
-    result_.formResult_.getEventProbabilitySensitivity();
+    // create OT::SystemFORM
+    SystemFORM algo(solver, event);
+    // run algo
+    algo.run();
+    // set result
+    result_ = FORMAnalysisResult(algo.getResult());
   }
-  catch (const InvalidArgumentException &)
+  else
   {
-    // do nothing
-    LOGWARN(" Error when computing the event probability sensitivity");
+    // create OT::FORM
+    FORM algo(solver, event);
+    // run algo
+    algo.run();
+    // set result
+    result_ = FORMAnalysisResult(algo.getResult());
+
+    // compute event probability sensitivity (not computed by default)
+    try
+    {
+      result_.getFORMResult().getEventProbabilitySensitivity();
+    }
+    catch (const InvalidArgumentException &)
+    {
+      // do nothing
+      LOGWARN(" Error when computing the event probability sensitivity");
+    }
   }
 }
 
@@ -119,7 +129,7 @@ Parameters FORMAnalysis::getParameters() const
   Parameters param;
 
   param.add("Algorithm", "FORM");
-  param.add("Output of interest", getLimitState().getOutputName());
+  param.add("Output of interest", Parameters::GetOTDescriptionStr(getLimitState().getOutputNames(), false, false));
   param.add("Optimization algorithm", getOptimizationAlgorithm().getImplementation()->getClassName());
   param.add("Physical starting point", getPhysicalStartingPoint());
   param.add("Maximum number of calls", getOptimizationAlgorithm().getMaximumCallsNumber());
@@ -153,7 +163,21 @@ String FORMAnalysis::getPythonScript() const
 
 bool FORMAnalysis::hasValidResult() const
 {
-  return result_.getFORMResult().getStandardSpaceDesignPoint().getDimension() != 0;
+  bool hasResult = false;
+
+  try {
+    if (getLimitState().isSystemLimitState())
+      hasResult = result_.getMultiFORMResult().getFORMResultCollection().getSize() != 0 
+                  && result_.getMultiFORMResult().getFORMResultCollection()[0].getStandardSpaceDesignPoint().getDimension() != 0;
+    else
+      hasResult = result_.getFORMResult().getStandardSpaceDesignPoint().getDimension() != 0;
+  }
+  catch (const InvalidArgumentException &)
+  {
+    // return false
+  }
+    
+  return hasResult;
 }
 
 
@@ -173,6 +197,7 @@ void FORMAnalysis::save(Advocate & adv) const
   ReliabilityAnalysis::save(adv);
   ApproximationAnalysis::save(adv);
   adv.saveAttribute("formanalysisresult_", result_);
+  adv.saveAttribute("useISEvent_", useISEvent_);
 }
 
 
@@ -183,11 +208,13 @@ void FORMAnalysis::load(Advocate & adv)
   ApproximationAnalysis::load(adv);
   adv.loadAttribute("formanalysisresult_", result_);
   // can open older xml files
-  if (!result_.getFORMResult().getStandardSpaceDesignPoint().getDimension())
+  if (adv.hasAttribute("result_") && !result_.getFORMResult().getStandardSpaceDesignPoint().getDimension())
   {
     FORMResult formResu;
     adv.loadAttribute("result_", formResu);
-    result_.formResult_ = formResu;
+    result_ = FORMAnalysisResult(formResu);
   }
+  if (adv.hasAttribute("useISEvent_"))
+    adv.loadAttribute("useISEvent_", useISEvent_);
 }
 }

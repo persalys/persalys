@@ -43,7 +43,7 @@ class PERSALYS_VIEW_API ReliabilityIntroPage : public QWizardPage
 public:
   enum Method {MonteCarlo, FORM_IS, FORM, SORM};
 
-  ReliabilityIntroPage(QWidget* parent = 0);
+  explicit ReliabilityIntroPage(QWidget* parent = nullptr);
 
   int nextId() const override;
 
@@ -53,14 +53,15 @@ public:
 
 public slots:
   void changeLimitStateLabel(int);
+
 signals:
   void methodChanged(int);
 
 private:
-  QComboBox * limitStatesComboBox_;
-  QStandardItemModel * limitStatesComboBoxModel_;
-  QLabel * limitStateLabel_;
-  QButtonGroup * methodGroup_;
+  QComboBox           * limitStatesComboBox_      = nullptr;
+  QStandardItemModel  * limitStatesComboBoxModel_ = nullptr;
+  QLabel              * limitStateLabel_          = nullptr;
+  QButtonGroup        * methodGroup_              = nullptr;
 };
 }
 #endif

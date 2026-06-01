@@ -50,3 +50,23 @@ Returns
 -------
 time : int
     Elapsed time in seconds to perform the analysis"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::SimulationReliabilityResult::getInputSamples
+"Input samples accessor.
+
+Returns
+-------
+inputSamples : collection of :py:class:`openturns.Sample`
+    Input samples used for the analysis"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::SimulationReliabilityResult::getOutputSamples
+"Output samples accessor.
+
+Returns
+-------
+outputSamples : collection of :py:class:`openturns.Sample`
+    Output samples used for the analysis"

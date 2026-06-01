@@ -32,6 +32,20 @@ using namespace OT;
 namespace PERSALYS
 {
 
+struct SimuReliabilityAnalysisStruct
+{
+  SimuReliabilityAnalysisStruct(SimulationReliabilityAnalysis* analysis, SimulationInterface simulation)
+    : analysis_(analysis)
+    , simulation_(simulation)
+  {
+  };
+
+  virtual ~SimuReliabilityAnalysisStruct() = default;
+
+  SimulationReliabilityAnalysis * analysis_;
+  SimulationInterface simulation_;
+};
+
 /* Default constructor */
 SimulationReliabilityAnalysis::SimulationReliabilityAnalysis()
   : ReliabilityAnalysis()
@@ -59,24 +73,9 @@ SimulationReliabilityAnalysis* SimulationReliabilityAnalysis::clone() const
   return new SimulationReliabilityAnalysis(*this);
 }
 
-
-struct SimuReliabilityAnalysisStruct
-{
-  SimuReliabilityAnalysisStruct(SimulationReliabilityAnalysis* analysis, SimulationInterface simulation)
-    : analysis_(analysis)
-    , simulation_(simulation)
-  {
-  };
-
-  virtual ~SimuReliabilityAnalysisStruct() {};
-
-  SimulationReliabilityAnalysis * analysis_;
-  SimulationInterface simulation_;
-};
-
 void SimulationReliabilityAnalysis::UpdateProgressValue(double percent, void * data)
 {
-  SimuReliabilityAnalysisStruct * analysisStruct = static_cast<SimuReliabilityAnalysisStruct*>(data);
+  auto * analysisStruct = static_cast<SimuReliabilityAnalysisStruct*>(data);
   if (!analysisStruct)
     return;
 
@@ -141,16 +140,20 @@ void SimulationReliabilityAnalysis::launch()
   // initialization
   RandomGenerator::SetSeed(getSeed());
 
-  Description outputName = {getLimitState().getOutputName()};
-
-  // get function
-  MemoizeFunction function(getPhysicalModel().getRestrictedFunction(outputName));
-  function.enableHistory();
-  function.clearHistory();
-
   // create OT::Event
-  ThresholdEvent event(CompositeRandomVector(function, getPhysicalModel().getInputRandomVector()), getLimitState().getOperator(), getLimitState().getThreshold());
-  event.setDescription(outputName);
+  Collection<Function> functions;
+  RandomVector event = getLimitState().getThresholdEvent(functions);
+
+  Collection<MemoizeFunction> memoFunctions;
+  for (auto & func : functions)
+  {
+    const auto * memoFunc = dynamic_cast<MemoizeFunction*>(func.getImplementation().get());
+    if (!memoFunc)
+      throw InternalException(HERE) << "Expected a MemoizeFunction in getThresholdEvent";
+    memoFunc->enableHistory();
+    memoFunc->clearHistory();
+    memoFunctions.add(*memoFunc);
+  }
 
   // create OT::Simulation
   SimulationInterface algo = getSimulationAlgorithm(event);
@@ -162,10 +165,10 @@ void SimulationReliabilityAnalysis::launch()
     algo.setConvergenceStrategy(Compact(getMaximumCalls())); // TODO: propose in wizard the convergence sample's size?
     maximumOuterSampling = static_cast<UnsignedInteger>(ceil(1.0 * getMaximumCalls() / getBlockSize()));
   }
+  
   algo.setMaximumOuterSampling(maximumOuterSampling);
   algo.setMaximumCoefficientOfVariation(getMaximumCoefficientOfVariation());
   algo.setBlockSize(getBlockSize());
-
   if (getMaximumElapsedTime() > 0)
     algo.setMaximumTimeDuration(getMaximumElapsedTime());
   algo.setStopCallback(&AnalysisImplementation::Stop, this);
@@ -186,22 +189,32 @@ void SimulationReliabilityAnalysis::launch()
     }
   }
 
-  Sample outSample = function.getOutputHistory();
-  outSample.setDescription(function.getOutputDescription());
-  Sample inSample = function.getInputHistory();
-  inSample.setDescription(function.getInputDescription());
+  Collection<Sample> inSamples(memoFunctions.getSize());
+  Collection<Sample> outSamples(memoFunctions.getSize());
+
+  for (UnsignedInteger i = 0; i < memoFunctions.getSize(); ++i)
+  {
+    inSamples[i] = memoFunctions[i].getInputHistory();
+    inSamples[i].setDescription(memoFunctions[i].getInputDescription());
+    outSamples[i] = memoFunctions[i].getOutputHistory();
+    outSamples[i].setDescription(memoFunctions[i].getOutputDescription());
+  }
 
   result_ = SimulationReliabilityResult(algo.getResult(),
-                                        outSample,
+                                        inSamples,
+                                        outSamples,
                                         graph.getDrawables()[0].getData(),
                                         graph.getDrawables()[1].getData(),
                                         graph.getDrawables()[2].getData(),
-                                        inSample);
+                                        useSharedInputSamples());
 
   result_.designOfExperiment_.setPhysicalModel(getPhysicalModel());
   result_.elapsedTime_ = algo.getResult().getTimeDuration();
 
-  function.disableHistory();
+  for (const auto & memoFunc : memoFunctions)
+  {
+    memoFunc.disableHistory();
+  }
 }
 
 

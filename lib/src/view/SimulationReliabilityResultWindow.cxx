@@ -23,12 +23,20 @@
 #include "persalys/MonteCarloReliabilityAnalysis.hxx"
 #include "persalys/ImportanceSamplingAnalysis.hxx"
 #include "persalys/FORMImportanceSamplingAnalysis.hxx"
+#include "persalys/SimulationReliabilityAnalysis.hxx"
+#include "persalys/ReliabilityAnalysis.hxx"
 #include "persalys/ParametersTableView.hxx"
 #include "persalys/ApproximationResultTabWidget.hxx"
 #include "persalys/ResizableStackedWidget.hxx"
 #include "persalys/GraphConfigurationWidget.hxx"
 #include "persalys/WidgetBoundToDockWidget.hxx"
 #include "persalys/TranslationManager.hxx"
+#include "persalys/ExportableTableView.hxx"
+
+#include <openturns/Less.hxx>
+#include <openturns/LessOrEqual.hxx>
+#include <openturns/Greater.hxx>
+#include <openturns/GreaterOrEqual.hxx>
 
 #include <qwt_legend.h>
 #include <qwt_scale_engine.h>
@@ -43,21 +51,54 @@ using namespace OT;
 namespace PERSALYS
 {
 
+/** Format a single limit-state event as "outputName op threshold". */
+static QString formatLimitStateEntry(const OT::String & outputName,
+                                     const OT::ComparisonOperator & op,
+                                     double threshold)
+{
+  QString opStr;
+  const OT::String opName = op.getImplementation()->getClassName();
+  if      (opName == "LessOrEqual")    opStr = "<=";
+  else if (opName == "Greater")        opStr = ">";
+  else if (opName == "GreaterOrEqual") opStr = ">=";
+  else                                 opStr = "<";
+  return QString("%1 %2 %3")
+    .arg(QString::fromUtf8(outputName.c_str()), opStr, QString::number(threshold));
+}
+
 SimulationReliabilityResultWindow::SimulationReliabilityResultWindow(AnalysisItem * item, QWidget * parent)
   : ResultWindow(item, parent)
   , result_(dynamic_cast<SimulationReliabilityAnalysis*>(item->getAnalysis().getImplementation().get())->getResult())
-  , titleLabel_(0)
-  , formTabWidget_(0)
 {
   // title
   const QString methodName = TranslationManager::GetTranslatedParameterName(item->getAnalysis().getImplementation()->getParameters()[0].second);
   titleLabel_ = new TitleLabel(methodName);
 
-  // FORM result widget
-  if (dynamic_cast<const FORMImportanceSamplingAnalysis*>(item->getAnalysis().getImplementation().get()))
+  // Compute limit state display names
+  const auto * reliabilityAnalysis = dynamic_cast<const ReliabilityAnalysis*>(item->getAnalysis().getImplementation().get());
+  if (reliabilityAnalysis)
   {
-    FORMImportanceSamplingAnalysis analysis = *dynamic_cast<const FORMImportanceSamplingAnalysis*>(item->getAnalysis().getImplementation().get());
-    formTabWidget_ = new ApproximationResultTabWidget(analysis.getFORMResult(), analysis, this);
+    const LimitState & ls = reliabilityAnalysis->getLimitState();
+    const Description outputNames = ls.getOutputNames();
+    for (UnsignedInteger i = 0; i < outputNames.getSize(); ++i)
+    {
+      limitStateNames_ << formatLimitStateEntry(outputNames[i], ls.getOperator(i), ls.getThreshold(i));
+      eventThresholds_ << ls.getThreshold(i);
+    }
+  }
+
+  // FORM result widget
+  if (const auto * formISAnalysis = dynamic_cast<const FORMImportanceSamplingAnalysis*>(item->getAnalysis().getImplementation().get()))
+  {
+    if (formISAnalysis->getLimitState().isSystemLimitState())
+    {
+      const Description outputNames = formISAnalysis->getLimitState().getOutputNames();
+      formTabWidget_ = new ApproximationResultTabWidget(formISAnalysis->getMultiFORMResult(), *formISAnalysis, outputNames, this);
+    }
+    else
+    {
+      formTabWidget_ = new ApproximationResultTabWidget(formISAnalysis->getFORMResult(), *formISAnalysis, this);
+    }
     titleLabel_->setDocLink("user_manual/graphical_interface/probabilistic_analysis/user_manual_probabilistic_analysis.html#formisresult");
   }
   else
@@ -78,18 +119,30 @@ void SimulationReliabilityResultWindow::buildInterface()
 
   widgetLayout->addWidget(titleLabel_);
 
-  // get output info
+  // get output info (fallback label for single-event case)
   QString outputName(QString::fromUtf8(result_.getSimulationResult().getEvent().getDescription()[0].c_str()));
 
   // main splitter
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
 
-  // - list outputs
-  QGroupBox * outputsGroupBox = new QGroupBox(tr("Output"));
+  // - list of limit states
+  QGroupBox * outputsGroupBox = new QGroupBox(tr("Limit state"));
   QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
 
   VariablesListWidget * outputsListWidget = new VariablesListWidget;
-  outputsListWidget->addItems(QStringList() << outputName);
+
+  // Use computed limit state display names when available
+  QStringList displayNames = limitStateNames_;
+  if (displayNames.isEmpty())
+  {
+    for (UnsignedInteger i = 0; i < result_.getOutputSamples().getSize(); ++i)
+      if (!result_.getOutputSamples()[i].getDescription().isEmpty())
+        displayNames << QString::fromUtf8(result_.getOutputSamples()[i].getDescription()[0].c_str());
+  }
+  if (displayNames.isEmpty())
+    displayNames << outputName;
+
+  outputsListWidget->addItems(displayNames);
   outputsListWidget->setCurrentRow(0);
   outputsLayoutGroupBox->addWidget(outputsListWidget);
 
@@ -116,9 +169,27 @@ void SimulationReliabilityResultWindow::buildInterface()
   if (parametersWidget_)
     tabWidget->addTab(parametersWidget_, tr("Parameters"));
 
+  // tab : table of values --------------------------------
+  if (result_.getDesignOfExperiment().getSample().getSize() > 0)
+    tabWidget->addTab(ExportableTableView::GetSampleTableViewWidget(getItem(), result_.getDesignOfExperiment().getSample()), tr("Table"));
+
   // tab : model description --------------------------------
   if (modelDescriptionWidget_)
     tabWidget->addTab(modelDescriptionWidget_, tr("Model"));
+
+  // Wire limit state selection to dynamic content
+  // Histogram stacked widget (system events only, set by getHistogramTab())
+  if (histogramStack_)
+    connect(outputsListWidget, &VariablesListWidget::currentRowChanged,
+            histogramStack_, &QStackedWidget::setCurrentIndex);
+
+  // FORM results sub-tabs (system FORM IS only)
+  if (formTabWidget_)
+  {
+    if (auto * approxWidget = dynamic_cast<ApproximationResultTabWidget*>(formTabWidget_))
+      connect(outputsListWidget, &VariablesListWidget::currentRowChanged,
+              approxWidget, &ApproximationResultTabWidget::setCurrentEvent);
+  }
 
   //
   mainWidget->addWidget(tabWidget);
@@ -202,32 +273,77 @@ QWidget* SimulationReliabilityResultWindow::getSummaryTab()
 
 QWidget* SimulationReliabilityResultWindow::getHistogramTab()
 {
-  QScrollArea * scrollArea = new QScrollArea;
+  auto * scrollArea = new QScrollArea;
   scrollArea->setWidgetResizable(true);
 
-  // get output info
-  QString outputName(QString::fromUtf8(result_.getSimulationResult().getEvent().getDescription()[0].c_str()));
+  const Collection<Sample> outSamples = result_.getOutputSamples();
 
-  // plot histogram
-  PlotWidget * plot = new PlotWidget(tr("histogram"));
-  plot->plotHistogram(result_.getDesignOfExperiment().getOutputSample(), PlotWidget::Other, 0, tr("%1 distribution").arg(outputName));
+  if (outSamples.getSize() > 1)
+  {
+    // For system events: one page per limit state, driven by limit state list
+    histogramStack_ = new QStackedWidget;
 
-  // plot threshold
-  Sample threshold(2, 2);
-  threshold(0, 0) = result_.getSimulationResult().getEvent().getThreshold();
-  threshold(1, 0) = plot->axisInterval(QwtPlot::yLeft).minValue();
-  threshold(1, 0) = result_.getSimulationResult().getEvent().getThreshold();
-  threshold(1, 1) = plot->axisInterval(QwtPlot::yLeft).maxValue();
-  plot->plotCurve(threshold, QPen(QColor("#D55E00")), QwtPlotCurve::Lines, 0, tr("Threshold"));
+    for (UnsignedInteger i = 0; i < outSamples.getSize(); ++i)
+    {
+      auto * page       = new QWidget;
+      auto * pageLayout = new QVBoxLayout(page);
 
-  plot->setAxisTitle(QwtPlot::xBottom, tr("Values"));
-  plot->setAxisTitle(QwtPlot::yLeft, tr("Number of simulations"));
-  plot->insertLegend(new QwtLegend, QwtPlot::BottomLegend);
-  plot->setTitle(tr("%1 output distribution").arg(outputName));
+      if (outSamples[i].getSize() > 0)
+      {
+        const QString subOutputName(QString::fromUtf8(outSamples[i].getDescription()[0].c_str()));
+        auto * plot = new PlotWidget(tr("histogram%1").arg(i));
+        plot->plotHistogram(outSamples[i], PlotWidget::Other, 0, tr("%1 distribution").arg(subOutputName));
 
-  SimpleGraphSetting * histogramSettingWidget = new SimpleGraphSetting(plot, this);
+        // plot threshold line
+        if (i < static_cast<UnsignedInteger>(eventThresholds_.size()))
+        {
+          const double thr = eventThresholds_[i];
+          Sample thresholdLine(2, 2);
+          thresholdLine(0, 0) = thr;
+          thresholdLine(0, 1) = plot->axisInterval(QwtPlot::yLeft).minValue();
+          thresholdLine(1, 0) = thr;
+          thresholdLine(1, 1) = plot->axisInterval(QwtPlot::yLeft).maxValue();
+          plot->plotCurve(thresholdLine, QPen(Qt::red), QwtPlotCurve::Lines, 0, tr("Threshold"));
+          plot->insertLegend(new QwtLegend, QwtPlot::BottomLegend);
+        }
 
-  scrollArea->setWidget(new WidgetBoundToDockWidget(plot, histogramSettingWidget, this));
+        plot->setAxisTitle(QwtPlot::xBottom, tr("Values"));
+        plot->setAxisTitle(QwtPlot::yLeft, tr("Number of simulations"));
+        plot->setTitle(tr("%1 output distribution").arg(subOutputName));
+
+        auto * histogramSettingWidget = new SimpleGraphSetting(plot, this);
+        pageLayout->addWidget(new WidgetBoundToDockWidget(plot, histogramSettingWidget, this));
+      }
+
+      histogramStack_->addWidget(page);
+    }
+
+    scrollArea->setWidget(histogramStack_);
+  }
+  else
+  {
+    const QString outputName(QString::fromUtf8(result_.getSimulationResult().getEvent().getDescription()[0].c_str()));
+
+    auto * plot = new PlotWidget(tr("histogram"));
+    plot->plotHistogram(result_.getDesignOfExperiment().getOutputSample(), PlotWidget::Other, 0, tr("%1 distribution").arg(outputName));
+
+    // plot threshold
+    Sample threshold(2, 2);
+    threshold(0, 0) = result_.getSimulationResult().getEvent().getThreshold();
+    threshold(0, 1) = plot->axisInterval(QwtPlot::yLeft).minValue();
+    threshold(1, 0) = result_.getSimulationResult().getEvent().getThreshold();
+    threshold(1, 1) = plot->axisInterval(QwtPlot::yLeft).maxValue();
+    plot->plotCurve(threshold, QPen(QColor("#D55E00")), QwtPlotCurve::Lines, 0, tr("Threshold"));
+
+    plot->setAxisTitle(QwtPlot::xBottom, tr("Values"));
+    plot->setAxisTitle(QwtPlot::yLeft, tr("Number of simulations"));
+    plot->insertLegend(new QwtLegend, QwtPlot::BottomLegend);
+    plot->setTitle(tr("%1 output distribution").arg(outputName));
+
+    auto * histogramSettingWidget = new SimpleGraphSetting(plot, this);
+
+    scrollArea->setWidget(new WidgetBoundToDockWidget(plot, histogramSettingWidget, this));
+  }
 
   return scrollArea;
 }
