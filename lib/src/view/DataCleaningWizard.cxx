@@ -41,8 +41,11 @@ DataCleaningWizard::DataCleaningWizard(DataCleaning* cleaner, QWidget * parent)
   , cleaner_(cleaner)
 {
   buildInterface();
-  if(exec())
-    tableModel_->clean();
+}
+
+void DataCleaningWizard::applyClean()
+{
+  tableModel_->clean();
 }
 
 void DataCleaningWizard::keyPressEvent (QKeyEvent * event)

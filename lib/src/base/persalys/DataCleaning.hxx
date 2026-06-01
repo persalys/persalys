@@ -31,7 +31,7 @@ class PERSALYS_BASE_API DataCleaning : public OT::Object
   CLASSNAME
 public:
   /* Default ctor */
-  DataCleaning() {};
+  DataCleaning() = default;
   /* Sample-based constructor */
   explicit DataCleaning(const OT::Sample& sample);
 

@@ -45,6 +45,7 @@ void DataCleaning::removeAllNans()
   if(!sample_.getSize())
     return;
   Sample sample(0, sample_.getDimension());
+  sample.setDescription(sample_.getDescription());
   for(UnsignedInteger i = 0; i < sample_.getSize(); ++i)
   {
     Bool nanFound = false;
@@ -85,6 +86,7 @@ void DataCleaning::removeNansByColumn(const UnsignedInteger col)
   if(!sample_.getSize())
     return;
   Sample sample(0, sample_.getDimension());
+  sample.setDescription(sample_.getDescription());
   for(UnsignedInteger i = 0; i < sample_.getSize(); ++i)
   {
     if(std::isfinite(sample_(i, col)))
