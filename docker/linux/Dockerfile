@@ -46,7 +46,7 @@ RUN curl -fsSL https://github.com/devernay/cminpack/archive/v1.3.11.tar.gz | tar
  && cmake -DCMINPACK_LIB_INSTALL_DIR=lib -DBUILD_SHARED_LIBS=ON -DBUILD_EXAMPLES=OFF -DCMINPACK_PRECISION=d -DUSE_BLAS=OFF . && make install > /dev/null 2>&1 && cd - && rm -r cminpack*
 
 # nlopt
-RUN curl -fsSL https://github.com/stevengj/nlopt/archive/v2.10.1.tar.gz | tar xz && cd nlopt* \
+RUN curl -fsSL https://github.com/stevengj/nlopt/archive/v2.11.0.tar.gz | tar xz && cd nlopt* \
  && cmake -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_UNITY_BUILD=ON -DNLOPT_PYTHON=OFF -DNLOPT_OCTAVE=OFF -DNLOPT_GUILE=OFF -DNLOPT_JAVA=OFF . && make install > /dev/null 2>&1 && cd - && rm -r nlopt*
 
 # hdf5
@@ -149,11 +149,11 @@ RUN curl -fsSL https://gitlab.freedesktop.org/wayland/wayland/-/releases/1.25.0/
  && meson build --buildtype=release -Ddocumentation=false && ninja -C build install > /dev/null 2>&1 && cd - && rm -r wayland*
 
 # qt
-RUN curl -fsSL https://ftp.fau.de/qtproject/archive/qt/5.15/5.15.18/submodules/qtbase-everywhere-opensource-src-5.15.18.tar.xz | tar xJ && cd qtbase* && ./configure -xcb -no-mimetype-database -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtbase*
-RUN curl -fsSL https://ftp.fau.de/qtproject/archive/qt/5.15/5.15.18/submodules/qtsvg-everywhere-opensource-src-5.15.18.tar.xz | tar xJ && cd qtsvg* && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtsvg*
-RUN curl -fsSL https://ftp.fau.de/qtproject/archive/qt/5.15/5.15.18/submodules/qtx11extras-everywhere-opensource-src-5.15.18.tar.xz | tar xJ && cd qtx11extras* && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtx11extras*
-RUN curl -fsSL https://ftp.fau.de/qtproject/archive/qt/5.15/5.15.18/submodules/qttools-everywhere-opensource-src-5.15.18.tar.xz | tar xJ && cd qttools* && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qttools*
-RUN curl -fsSL https://ftp.fau.de/qtproject/archive/qt/5.15/5.15.18/submodules/qtwayland-everywhere-opensource-src-5.15.18.tar.xz | tar xJ && cd qtwayland* && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtwayland*
+RUN curl -fsSL https://ftp.fau.de/qtproject/archive/qt/5.15/5.15.19/submodules/qtbase-everywhere-opensource-src-5.15.19.tar.xz | tar xJ && cd qtbase* && ./configure -xcb -no-mimetype-database -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtbase*
+RUN curl -fsSL https://ftp.fau.de/qtproject/archive/qt/5.15/5.15.19/submodules/qtsvg-everywhere-opensource-src-5.15.19.tar.xz | tar xJ && cd qtsvg* && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtsvg*
+RUN curl -fsSL https://ftp.fau.de/qtproject/archive/qt/5.15/5.15.19/submodules/qtx11extras-everywhere-opensource-src-5.15.19.tar.xz | tar xJ && cd qtx11extras* && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtx11extras*
+RUN curl -fsSL https://ftp.fau.de/qtproject/archive/qt/5.15/5.15.19/submodules/qttools-everywhere-opensource-src-5.15.19.tar.xz | tar xJ && cd qttools* && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qttools*
+RUN curl -fsSL https://ftp.fau.de/qtproject/archive/qt/5.15/5.15.19/submodules/qtwayland-everywhere-opensource-src-5.15.19.tar.xz | tar xJ && cd qtwayland* && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtwayland*
 
 # qwt
 RUN curl -fsSL https://downloads.sourceforge.net/qwt/qwt-6.3.0.tar.bz2 | tar xj && cd qwt* \
@@ -162,7 +162,7 @@ RUN curl -fsSL https://downloads.sourceforge.net/qwt/qwt-6.3.0.tar.bz2 | tar xj 
  && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qwt*
 
 # paraview
-RUN curl -fsSL https://paraview.org/files/v6.1/ParaView-v6.1.0.tar.xz | tar xJ && cd ParaView* \
+RUN curl -fsSL https://paraview.org/files/v6.1/ParaView-v6.1.1.tar.xz | tar xJ && cd ParaView* \
  && cmake -DCMAKE_BUILD_TYPE=Release \
   -DPARAVIEW_ENABLE_EMBEDDED_DOCUMENTATION=OFF -DPARAVIEW_PLUGIN_DISABLE_XML_DOCUMENTATION=ON \
   -DPARAVIEW_USE_VISKORES=OFF -DPARAVIEW_USE_FORTRAN=OFF -DPARAVIEW_ENABLE_XDMF2=OFF \
@@ -184,7 +184,7 @@ RUN git clone -b v0.20 --depth 1 https://github.com/openturns/otmorris.git && cd
 RUN pip3 install git+https://github.com/openturns/otfmi@v0.18 --quiet && python3 -c "import otfmi"
 
 # openmodelica
-RUN curl -fsSL https://github.com/OpenModelica/OpenModelica/releases/download/v1.26.7/OpenModelica-src-with-submodules.zip | bsdtar -xf - && cd OpenModelica* \
+RUN curl -fsSL https://github.com/OpenModelica/OpenModelica/releases/download/v1.26.8/OpenModelica-v1.26.8-src-with-submodules.zip | bsdtar -xf - && cd OpenModelica* \
  && cmake -DCMAKE_BUILD_TYPE=Release -DOM_ENABLE_GUI_CLIENTS=OFF -DCMAKE_INSTALL_PREFIX=/usr/local/ \
           -DOM_OMC_ENABLE_FORTRAN=OFF -DOM_OMC_ENABLE_MOO=OFF -DOM_OMC_ENABLE_OPTIMIZATION=OFF -DOM_USE_CCACHE=OFF -B build . \
  && make install -C build > /dev/null 2>&1 && cd - && rm -r OpenModelica*
