@@ -174,13 +174,11 @@ void HSICResultWizard::updateTable(int index)
 
   for (UnsignedInteger i = 0; i < nbInputs; ++i)
   {
-    int col = 0;
     QList<QStandardItem*> row;
 
     // variable name
     auto * nameItem = new QStandardItem(QString::fromUtf8(inputNames[i].c_str()));
     row << nameItem;
-    col++;
 
     // determine min p-value for selection criterion
     double minPValue = 1.0;
@@ -190,7 +188,6 @@ void HSICResultWizard::updateTable(int index)
       double pval = pValuesAsymptotic[outputIndex][i];
       auto * item = new QStandardItem(QString::number(pval, 'g', 4));
       row << item;
-      col++;
       if (pval < minPValue) minPValue = pval;
     }
 
@@ -199,7 +196,6 @@ void HSICResultWizard::updateTable(int index)
       double pval = pValuesPermutation[outputIndex][i];
       auto * item = new QStandardItem(QString::number(pval, 'g', 4));
       row << item;
-      col++;
       if (pval < minPValue) minPValue = pval;
     }
 
