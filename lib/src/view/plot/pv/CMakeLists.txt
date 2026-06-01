@@ -36,6 +36,7 @@ qt_wrap_cpp (PERSALYS_PLOTPARAVIEW_MOC_SRCS
 
 include_directories (${INTERNAL_INCLUDE_DIRS})
 add_library (persalysplotpv ${SOURCEFILES} ${PERSALYS_PLOTPARAVIEW_MOC_SRCS})
+set_target_properties (persalysplotpv PROPERTIES CXX_STANDARD 17)
 
 if (BUILD_SHARED_LIBS)
   target_compile_definitions (persalysplotpv PRIVATE PERSALYS_PLOTPV_DLL_EXPORTS)
