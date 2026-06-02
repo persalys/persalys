@@ -18,8 +18,8 @@ limitState = persalys.LimitState("aLimitState", model, "Y0", ot.Greater(), 20.0)
 print(limitState)
 myStudy.add(limitState)
 
-limitState.setThreshold(10.0)
-limitState.setOperator(ot.Less())
+limitState.setThreshold(0, 10.0)
+limitState.setOperator(0, ot.Less())
 print(limitState)
 
 # limit state ##
@@ -27,12 +27,12 @@ limitState2 = persalys.LimitState("aLimitState2", model)
 print(limitState2)
 myStudy.add(limitState2)
 
-limitState2.setThreshold(15.0)
+limitState2.setThreshold(0, 15.0)
 print(limitState2)
 
 model.addOutput(persalys.Output("Y1"))
 model.setFormula("Y1", "1 + sin(X0) + 8*X1")
-limitState2.setOutputName("Y1")
+limitState2.setOutputName(0, "Y1")
 print(limitState2)
 
 # script

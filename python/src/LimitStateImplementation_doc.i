@@ -311,11 +311,6 @@ PERSALYS_LimitState_isValid_doc
 %define PERSALYS_LimitState_getThresholdEvent_doc
 "Get the threshold event corresponding to the limit state.
 
-Parameters
-----------
-functions (optional) : collection of :py:class:`~openturns.Function`
-    A collection in which will be added every function used to build the threshold event in the form of a MemoizedFunction.
-
 Returns
 -------
 event : :py:class:`~openturns.RandomVector`

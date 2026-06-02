@@ -39,22 +39,6 @@ using namespace OT;
 
 namespace PERSALYS
 {
-
-/** Format a single limit-state event as "outputName op threshold". */
-static QString formatLimitStateEntry(const String & outputName,
-                                     const ComparisonOperator & op,
-                                     double threshold)
-{
-  QString opStr;
-  const String opName = op.getImplementation()->getClassName();
-  if      (opName == "LessOrEqual")    opStr = "<=";
-  else if (opName == "Greater")        opStr = ">";
-  else if (opName == "GreaterOrEqual") opStr = ">=";
-  else                                 opStr = "<";
-  return QString("%1 %2 %3")
-    .arg(QString::fromUtf8(outputName.c_str()), opStr, QString::number(threshold));
-}
-
 ApproximationResultWindow::ApproximationResultWindow(AnalysisItem* item, QWidget * parent)
   : ResultWindow(item, parent)
 {
@@ -73,7 +57,7 @@ ApproximationResultWindow::ApproximationResultWindow(AnalysisItem* item, QWidget
     const Description outputNames = ls.getOutputNames();
     isSystem = ls.isSystemLimitState();
     for (UnsignedInteger i = 0; i < outputNames.getSize(); ++i)
-      limitStateNameList << formatLimitStateEntry(outputNames[i], ls.getOperator(i), ls.getThreshold(i));
+      limitStateNameList << FormatLimitStateEntry(outputNames[i], ls.getOperator(i), ls.getThreshold(i));
 
     if (isSystem)
       tabWidget = new ApproximationResultTabWidget(formAnalysis_ptr->getResult().getMultiFORMResult(), *formAnalysis_ptr, outputNames, this);
@@ -85,7 +69,7 @@ ApproximationResultWindow::ApproximationResultWindow(AnalysisItem* item, QWidget
   {
     const LimitState & ls = sormAnalysis_ptr->getLimitState();
     const Description outputNames = ls.getOutputNames();
-    limitStateNameList << formatLimitStateEntry(outputNames[0], ls.getOperator(0), ls.getThreshold(0));
+    limitStateNameList << FormatLimitStateEntry(outputNames[0], ls.getOperator(0), ls.getThreshold(0));
     tabWidget = new ApproximationResultTabWidget(sormAnalysis_ptr->getResult().getSORMResult(), *sormAnalysis_ptr, this);
   }
   else

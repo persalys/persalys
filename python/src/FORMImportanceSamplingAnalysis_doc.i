@@ -44,3 +44,13 @@ Returns
 -------
 result : :py:class:`openturns.FORMResult`
     Result of the FORM analysis"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::FORMImportanceSamplingAnalysis::getMultiFORMResult
+"MultiFORM result accessor.
+
+Returns
+-------
+result : :py:class:`~openturns.MultiFORMResult`
+    Result of the MultiFORM analysis (for system limit states)"

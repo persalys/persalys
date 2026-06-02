@@ -107,7 +107,7 @@ void FORMAnalysis::launch()
     // compute event probability sensitivity (not computed by default)
     try
     {
-      result_.getFORMResult().getEventProbabilitySensitivity();
+      result_.formResult_.getEventProbabilitySensitivity();
     }
     catch (const InvalidArgumentException &)
     {
@@ -166,7 +166,7 @@ bool FORMAnalysis::hasValidResult() const
   bool hasResult = false;
 
   try {
-    if (getLimitState().isSystemLimitState())
+    if (getLimitState().isSystemLimitState() && !(useISEvent_ && getLimitState().getType() == LimitState::Type::Intersection))
       hasResult = result_.getMultiFORMResult().getFORMResultCollection().getSize() != 0 
                   && result_.getMultiFORMResult().getFORMResultCollection()[0].getStandardSpaceDesignPoint().getDimension() != 0;
     else
@@ -176,7 +176,7 @@ bool FORMAnalysis::hasValidResult() const
   {
     // return false
   }
-    
+  
   return hasResult;
 }
 

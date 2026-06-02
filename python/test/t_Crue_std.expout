@@ -19,7 +19,10 @@ outputs = [S]
 formulas = ['(Q/(Ks*300.*sqrt((Zm-Zv)/5000)))^(3.0/5.0)+Zv-55.5-3.']
 myPhysicalModel = persalys.SymbolicPhysicalModel('myPhysicalModel', inputs, outputs, formulas)
 myStudy.add(myPhysicalModel)
-limitState1 = persalys.LimitState('limitState1', myPhysicalModel, 'S', ot.Greater(), -1)
+outputNames = ['S']
+operators = [ot.Greater()]
+thresholds = [-1]
+limitState1 = persalys.LimitState('limitState1', myPhysicalModel, outputNames, operators,  persalys.LimitState.Union, thresholds)
 myStudy.add(limitState1)
 myMonteCarlo = persalys.MonteCarloReliabilityAnalysis('myMonteCarlo', limitState1)
 myMonteCarlo.setMaximumCalls(10000)

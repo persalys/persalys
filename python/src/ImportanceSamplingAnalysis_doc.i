@@ -27,7 +27,7 @@ Create the limit state:
 Process the reliability analysis:
 
 >>> analysis = persalys.ImportanceSamplingAnalysis('myAnalysis', limitState)
->>> analysis.setStandardSpaceDesignPoint([-1.59388,0.998942])
+>>> analysis.setStandardSpaceDesignPoints([[-1.59388,0.998942]])
 >>> analysis.run()
 
 Get the result:

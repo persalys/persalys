@@ -19,6 +19,7 @@
  *
  */
 #include "persalys/ImportanceSamplingAnalysis.hxx"
+#include "persalys/BaseTools.hxx"
 
 #include <openturns/ProbabilitySimulationAlgorithm.hxx>
 #include <openturns/Normal.hxx>
@@ -58,6 +59,10 @@ ImportanceSamplingAnalysis* ImportanceSamplingAnalysis::clone() const
 
 SimulationInterface ImportanceSamplingAnalysis::getSimulationAlgorithm(const RandomVector & event)
 {
+
+  if (!standardSpaceDesignPoints_.getSize())
+    throw InvalidArgumentException(HERE) << "No design point provided for importance sampling.";
+
   const UnsignedInteger inDimension = standardSpaceDesignPoints_.getDimension();
 
   Distribution conditionalDistribution;
@@ -125,6 +130,10 @@ Sample ImportanceSamplingAnalysis::getStandardSpaceDesignPoints() const
 
 void ImportanceSamplingAnalysis::setStandardSpaceDesignPoints(const Sample& points)
 {
+  for (UnsignedInteger i = 0; i < points.getSize(); ++i)
+    if (points[i].getDimension() != getPhysicalModel().getStochasticInputNames().getSize())
+      throw InvalidArgumentException(HERE) << "Design point " << i << " has dimension " << points[i].getDimension()
+        << " but physical model stochastic input dimension is " << getPhysicalModel().getStochasticInputNames().getSize() << ".";
   standardSpaceDesignPoints_ = points;
 }
 
@@ -147,7 +156,7 @@ String ImportanceSamplingAnalysis::getPythonScript() const
 {
   OSS oss;
   oss << SimulationReliabilityAnalysis::getPythonScript();
-  oss << getName() << ".setStandardSpaceDesignPoints(" << getStandardSpaceDesignPoints().__str__() << ")\n";
+  oss << getName() << ".setStandardSpaceDesignPoints(" << Parameters::GetOTSampleStr(getStandardSpaceDesignPoints()) << ")\n";
 
   return oss;
 }

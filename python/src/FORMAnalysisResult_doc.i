@@ -14,7 +14,7 @@ multiFormResult : :py:class:`~openturns.MultiFORMResult`
 
 // ----------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::FORMAnalysisResult::getEventProbability_doc
+%feature("docstring") PERSALYS::FORMAnalysisResult::getEventProbability
 "Event probability accessor.
 
 Returns
@@ -24,7 +24,7 @@ eventProbability : float
 
 // ----------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::FORMAnalysisResult::getGeneralisedReliabilityIndex_doc
+%feature("docstring") PERSALYS::FORMAnalysisResult::getGeneralisedReliabilityIndex
 "Generalised reliability index accessor.
 
 Returns

@@ -50,22 +50,6 @@ using namespace OT;
 
 namespace PERSALYS
 {
-
-/** Format a single limit-state event as "outputName op threshold". */
-static QString formatLimitStateEntry(const OT::String & outputName,
-                                     const OT::ComparisonOperator & op,
-                                     double threshold)
-{
-  QString opStr;
-  const OT::String opName = op.getImplementation()->getClassName();
-  if      (opName == "LessOrEqual")    opStr = "<=";
-  else if (opName == "Greater")        opStr = ">";
-  else if (opName == "GreaterOrEqual") opStr = ">=";
-  else                                 opStr = "<";
-  return QString("%1 %2 %3")
-    .arg(QString::fromUtf8(outputName.c_str()), opStr, QString::number(threshold));
-}
-
 SimulationReliabilityResultWindow::SimulationReliabilityResultWindow(AnalysisItem * item, QWidget * parent)
   : ResultWindow(item, parent)
   , result_(dynamic_cast<SimulationReliabilityAnalysis*>(item->getAnalysis().getImplementation().get())->getResult())
@@ -82,7 +66,7 @@ SimulationReliabilityResultWindow::SimulationReliabilityResultWindow(AnalysisIte
     const Description outputNames = ls.getOutputNames();
     for (UnsignedInteger i = 0; i < outputNames.getSize(); ++i)
     {
-      limitStateNames_ << formatLimitStateEntry(outputNames[i], ls.getOperator(i), ls.getThreshold(i));
+      limitStateNames_ << FormatLimitStateEntry(outputNames[i], ls.getOperator(i), ls.getThreshold(i));
       eventThresholds_ << ls.getThreshold(i);
     }
   }

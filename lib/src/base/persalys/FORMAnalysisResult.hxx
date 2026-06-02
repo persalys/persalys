@@ -28,11 +28,13 @@
 
 namespace PERSALYS
 {
-class PERSALYS_BASE_API FORMAnalysisResult final : public AnalysisResult
+class PERSALYS_BASE_API FORMAnalysisResult : public AnalysisResult
 {
   CLASSNAME
 
 public:
+  friend class FORMAnalysis;
+
   /** Default constructor */
   FORMAnalysisResult() = default;
 

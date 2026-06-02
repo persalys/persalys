@@ -35,6 +35,8 @@ class PERSALYS_BASE_API LimitStateImplementation : public OT::PersistentObject, 
 public:
   enum Type { Union, Intersection };
 
+  using ComparisonOperatorCollection = OT::Collection<OT::ComparisonOperator>;
+
   /** Default constructor */
   LimitStateImplementation();
 
@@ -46,7 +48,7 @@ public:
   /** Constructor for system limit state */
   LimitStateImplementation( const OT::String & name, const PhysicalModel & physicalModel,
                             const OT::Description & outputNames,
-                            const OT::Collection<OT::ComparisonOperator> & operators,
+                            const ComparisonOperatorCollection & operators,
                             const Type type, const OT::Point & thresholds );
   
   /** Virtual constructor */
@@ -64,9 +66,9 @@ public:
   void setOutputNames(const OT::Description & outputNames);
   void setOutputName(OT::UnsignedInteger index, const OT::String & outputName);
 
-  OT::Collection<OT::ComparisonOperator> getOperators() const;
+  ComparisonOperatorCollection getOperators() const;
   OT::ComparisonOperator getOperator(OT::UnsignedInteger index) const;
-  void setOperators(const OT::Collection<OT::ComparisonOperator> & operators);
+  void setOperators(const ComparisonOperatorCollection & operators);
   void setOperator(OT::UnsignedInteger index, const OT::ComparisonOperator & comparisonOperator);
 
   OT::Point getThresholds() const;
@@ -86,12 +88,14 @@ public:
 
   bool isValid() const;
 
+  #ifndef SWIG
   /** Get the threshold event corresponding to the limit state
    * 
    * @param functions A collection in which will be added every function used to build 
    * the threshold event in the form of a MemoizedFunction.
    */
   OT::RandomVector getThresholdEvent(OT::Collection<OT::Function> &functions) const;
+  #endif
   OT::RandomVector getThresholdEvent() const;
 
   /** Get the the threshold event constructed specifically for importance sampling */

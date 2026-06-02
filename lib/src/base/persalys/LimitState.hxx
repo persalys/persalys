@@ -32,6 +32,7 @@ class PERSALYS_BASE_API LimitState : public OT::TypedInterfaceObject<LimitStateI
 public:
   using Implementation = OT::Pointer<LimitStateImplementation>;
   using Type = LimitStateImplementation::Type;
+  using ComparisonOperatorCollection = LimitStateImplementation::ComparisonOperatorCollection;
 
   /** Default constructor */
   LimitState();
@@ -45,7 +46,7 @@ public:
   /** Constructor for system limit state */
   LimitState( const OT::String & name, const PhysicalModel & physicalModel,
              const OT::Description & outputNames,
-             const OT::Collection<OT::ComparisonOperator> & operators,
+             const ComparisonOperatorCollection & operators,
              const Type type, const OT::Point & thresholds );
   
   /** Default constructor */
@@ -71,9 +72,9 @@ public:
   void setOutputNames(const OT::Description & outputNames);
   void setOutputName(OT::UnsignedInteger index, const OT::String & outputName);
 
-  OT::Collection<OT::ComparisonOperator> getOperators() const;
+  ComparisonOperatorCollection getOperators() const;
   OT::ComparisonOperator getOperator(OT::UnsignedInteger index) const;
-  void setOperators(const OT::Collection<OT::ComparisonOperator> & operators);
+  void setOperators(const ComparisonOperatorCollection & operators);
   void setOperator(OT::UnsignedInteger index, const OT::ComparisonOperator & comparisonOperator);
 
   OT::Point getThresholds() const;
@@ -93,12 +94,14 @@ public:
                         const double & threshold = 0.0 );
   void removeFailureEvent(OT::UnsignedInteger index);
 
+  #ifndef SWIG
   /** Get the threshold event corresponding to the limit state
    * 
    * @param functions A collection in which will be added every function used to build 
    * the threshold event in the form of a MemoizedFunction.
    */
   OT::RandomVector getThresholdEvent(OT::Collection<OT::Function> &functions) const;
+  #endif
   OT::RandomVector getThresholdEvent() const;
 
   /** Get the the threshold event constructed specifically for importance sampling */
