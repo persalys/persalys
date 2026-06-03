@@ -115,6 +115,9 @@ public:
 
 private:
   static OT::Sample ImportRawSample(const OT::String &filename);
+  static OT::Sample ChooseSeparatorsFromSample(const OT::String &filename);
+  static OT::Sample ChooseSeparatorsFromSize(const OT::String &filename);
+  static OT::UnsignedInteger CountValidElements(const OT::Sample &sample);
 #endif // SWIG
 };
 

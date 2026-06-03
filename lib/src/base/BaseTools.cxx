@@ -22,6 +22,7 @@
 
 #include <stdint.h>
 #include <chrono>
+#include <filesystem>
 
 using namespace OT;
 
@@ -281,11 +282,63 @@ OT::String Parameters::GetOTBoolStr(const OT::Bool value)
 
 // ------------------------ Tools --------------------------------------
 
-Sample Tools::ImportRawSample(const String &fileName)
+UnsignedInteger Tools::CountValidElements(const Sample &sample)
+{
+  UnsignedInteger count = 0;
+  for (UnsignedInteger i = 0; i < sample.getSize(); ++i)
+  {
+    Point pt(sample[i]);
+    for (UnsignedInteger j = 0; j < pt.getDimension(); ++j)
+    {
+      if (std::isfinite(pt[j]))
+        ++count;
+    }
+  }
+  return count;
+}
+
+Sample Tools::ChooseSeparatorsFromSample(const String &filename)
 {
   std::vector<String> separatorsList{" ", ",", ";"};
   std::vector<String> numSepList{".", ","};
+  
+  Sample sampleFromFile;
+  Sample testSample;
 
+  UnsignedInteger maxValidElements = 0;
+
+  for (const String &numSep : numSepList)
+  {
+    for (const String &separator : separatorsList)
+    {
+      if (separator == numSep)
+        continue;
+      try
+      {
+        testSample = Sample::ImportFromTextFile(filename, separator, 0, numSep);
+      }
+      catch (const InvalidArgumentException &)
+      {
+        // wrong separator
+        testSample.clear();
+      }
+      const UnsignedInteger numberOfValidElements = CountValidElements(testSample);
+      if (numberOfValidElements > maxValidElements)
+      {
+        maxValidElements = numberOfValidElements;
+        sampleFromFile = testSample;
+      }
+    }
+  }
+
+  return sampleFromFile;
+}
+
+Sample Tools::ChooseSeparatorsFromSize(const String &filename)
+{
+  std::vector<String> separatorsList{" ", ",", ";"};
+  std::vector<String> numSepList{".", ","};
+  
   Sample sampleFromFile;
   Sample testSample;
 
@@ -299,21 +352,41 @@ Sample Tools::ImportRawSample(const String &fileName)
         continue;
       try
       {
-        testSample = Sample::ImportFromTextFile(fileName, separator, 0, numSep);
+        testSample = Sample::ImportFromTextFile(filename, separator, 0, numSep);
       }
       catch (const InvalidArgumentException &)
       {
         // wrong separator
         testSample.clear();
       }
-      // Select num/col separator pair leading to the largest sample
-      if (testSample.getSize() * testSample.getDimension() > maxNumberOfElements)
+      const UnsignedInteger numberOfElements = testSample.getSize() * testSample.getDimension();
+      if (numberOfElements > maxNumberOfElements)
       {
-        maxNumberOfElements = testSample.getSize() * testSample.getDimension();
+        maxNumberOfElements = numberOfElements;
         sampleFromFile = testSample;
       }
     }
   }
+
+  return sampleFromFile;
+}
+
+Sample Tools::ImportRawSample(const String &fileName)
+{
+  Sample sampleFromFile;
+  std::uintmax_t fileSize;
+  try
+  {
+    fileSize = std::filesystem::file_size(fileName);
+  }
+  catch (const std::filesystem::filesystem_error &)
+  {
+    throw InvalidArgumentException(HERE) << "The file does not exist or is not accessible";
+  }
+  if  (fileSize >= 400000)
+    sampleFromFile = ChooseSeparatorsFromSize(fileName);
+  else
+    sampleFromFile = ChooseSeparatorsFromSample(fileName);
 
   if (!sampleFromFile.getSize())
     throw InvalidArgumentException(HERE) << "The file does not contain a sample and/or the file encoding is not valid (use utf-8)";
