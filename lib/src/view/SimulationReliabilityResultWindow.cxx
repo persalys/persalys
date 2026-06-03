@@ -41,6 +41,7 @@
 #include <qwt_legend.h>
 #include <qwt_scale_engine.h>
 
+#include <QSet>
 #include <QVBoxLayout>
 #include <QScrollArea>
 #include <QSplitter>
@@ -109,13 +110,7 @@ void SimulationReliabilityResultWindow::buildInterface()
   // main splitter
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
 
-  // - list of limit states
-  QGroupBox * outputsGroupBox = new QGroupBox(tr("Limit state"));
-  QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
-
-  VariablesListWidget * outputsListWidget = new VariablesListWidget;
-
-  // Use computed limit state display names when available
+  // Compute display names
   QStringList displayNames = limitStateNames_;
   if (displayNames.isEmpty())
   {
@@ -126,28 +121,47 @@ void SimulationReliabilityResultWindow::buildInterface()
   if (displayNames.isEmpty())
     displayNames << outputName;
 
-  outputsListWidget->addItems(displayNames);
-  outputsListWidget->setCurrentRow(0);
-  outputsLayoutGroupBox->addWidget(outputsListWidget);
+  const bool isSystem = (displayNames.size() > 1);
 
-  mainWidget->addWidget(outputsGroupBox);
-  mainWidget->setStretchFactor(0, 1);
+  // Limit state selection groupbox — only for system events (>1 limit state)
+  QGroupBox           * outputsGroupBox   = nullptr;
+  VariablesListWidget * outputsListWidget = nullptr;
+  if (isSystem)
+  {
+    outputsGroupBox = new QGroupBox(tr("Limit state"));
+    auto * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
+    outputsListWidget = new VariablesListWidget;
+    outputsListWidget->addItems(displayNames);
+    outputsListWidget->setCurrentRow(0);
+    outputsLayoutGroupBox->addWidget(outputsListWidget);
+    mainWidget->addWidget(outputsGroupBox);
+    mainWidget->setStretchFactor(0, 1);
+  }
 
-  // tab widget
+  // tab widget — track which tab indices are per-event (depend on limit state)
   QTabWidget * tabWidget = new QTabWidget;
+  QSet<int> perEventTabIndices;
+  int tabIdx = 0;
 
   // first tab : summary --------------------------------
   tabWidget->addTab(getSummaryTab(), tr("Summary"));
+  ++tabIdx; // global
 
   // second tab : output histogram --------------------------------
   tabWidget->addTab(getHistogramTab(), tr("Histogram"));
+  if (histogramStack_) perEventTabIndices.insert(tabIdx);
+  ++tabIdx; // per-event when system
 
   // third tab : convergence --------------------------------
   tabWidget->addTab(getConvergenceTab(), tr("Convergence graph"));
+  ++tabIdx; // global
 
   // fourth tab : FORM result --------------------------------
   if (formTabWidget_)
+  {
     tabWidget->addTab(formTabWidget_, tr("FORM results"));
+    perEventTabIndices.insert(tabIdx++); // per-event
+  }
 
   // fifth tab : parameters --------------------------------
   if (parametersWidget_)
@@ -161,23 +175,34 @@ void SimulationReliabilityResultWindow::buildInterface()
   if (modelDescriptionWidget_)
     tabWidget->addTab(modelDescriptionWidget_, tr("Model"));
 
-  // Wire limit state selection to dynamic content
-  // Histogram stacked widget (system events only, set by getHistogramTab())
-  if (histogramStack_)
-    connect(outputsListWidget, &VariablesListWidget::currentRowChanged,
-            histogramStack_, &QStackedWidget::setCurrentIndex);
-
-  // FORM results sub-tabs (system FORM IS only)
-  if (formTabWidget_)
+  // Wire limit state selection to dynamic content (system events only)
+  if (isSystem && outputsListWidget)
   {
-    if (auto * approxWidget = dynamic_cast<ApproximationResultTabWidget*>(formTabWidget_))
+    // Histogram stacked widget
+    if (histogramStack_)
       connect(outputsListWidget, &VariablesListWidget::currentRowChanged,
-              approxWidget, &ApproximationResultTabWidget::setCurrentEvent);
+              histogramStack_, &QStackedWidget::setCurrentIndex);
+
+    // FORM results sub-tabs (system FORM IS only)
+    if (formTabWidget_)
+    {
+      if (auto * approxWidget = dynamic_cast<ApproximationResultTabWidget*>(formTabWidget_))
+        connect(outputsListWidget, &VariablesListWidget::currentRowChanged,
+                approxWidget, &ApproximationResultTabWidget::setCurrentEvent);
+    }
+
+    // Show/hide groupbox based on whether current tab is per-event
+    connect(tabWidget, &QTabWidget::currentChanged, outputsGroupBox,
+            [outputsGroupBox, perEventTabIndices](int idx) {
+              outputsGroupBox->setVisible(perEventTabIndices.contains(idx));
+            });
+    // Initial state: tab 0 (Summary) is global → hide groupbox
+    outputsGroupBox->setVisible(perEventTabIndices.contains(0));
   }
 
   //
   mainWidget->addWidget(tabWidget);
-  mainWidget->setStretchFactor(1, 10);
+  mainWidget->setStretchFactor(isSystem ? 1 : 0, 10);
 
   widgetLayout->addWidget(mainWidget, 1);
 }

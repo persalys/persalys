@@ -30,6 +30,7 @@
 #include <openturns/Greater.hxx>
 #include <openturns/GreaterOrEqual.hxx>
 
+#include <QSet>
 #include <QSplitter>
 #include <QVBoxLayout>
 #include <QDebug>
@@ -90,27 +91,36 @@ ApproximationResultWindow::ApproximationResultWindow(AnalysisItem* item, QWidget
   // main splitter
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
 
-  // - limit state list
-  QGroupBox * outputsGroupBox = new QGroupBox(tr("Limit state"));
-  QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
+  // Limit state selection groupbox — only for system events (>1 limit state)
+  if (isSystem)
+  {
+    auto * outputsGroupBox       = new QGroupBox(tr("Limit state"));
+    auto * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
+    auto * outputsListWidget     = new VariablesListWidget;
+    outputsListWidget->addItems(limitStateNameList);
+    outputsListWidget->setCurrentRow(0);
+    outputsLayoutGroupBox->addWidget(outputsListWidget);
 
-  VariablesListWidget * outputsListWidget = new VariablesListWidget;
-  outputsListWidget->addItems(limitStateNameList);
-  outputsListWidget->setCurrentRow(0);
-  outputsLayoutGroupBox->addWidget(outputsListWidget);
+    mainWidget->addWidget(outputsGroupBox);
+    mainWidget->setStretchFactor(0, 1);
 
-  mainWidget->addWidget(outputsGroupBox);
-  mainWidget->setStretchFactor(0, 1);
+    // Wire limit state selection to dynamic tabs
+    connect(outputsListWidget, &VariablesListWidget::currentRowChanged,
+            tabWidget, &ApproximationResultTabWidget::setCurrentEvent);
+
+    // Per-event tabs in system FORM: Summary (0), Design point (1)
+    const QSet<int> perEventTabs{0, 1};
+    connect(tabWidget, &QTabWidget::currentChanged, outputsGroupBox,
+            [outputsGroupBox, perEventTabs](int idx) {
+              outputsGroupBox->setVisible(perEventTabs.contains(idx));
+            });
+    // Initial state: tab 0 (Summary) is per-event → visible (default)
+  }
 
   if (tabWidget)
   {
-    // Wire limit state selection to dynamic tabs (system FORM only)
-    if (isSystem)
-      connect(outputsListWidget, &VariablesListWidget::currentRowChanged,
-              tabWidget, &ApproximationResultTabWidget::setCurrentEvent);
-
     mainWidget->addWidget(tabWidget);
-    mainWidget->setStretchFactor(1, 10);
+    mainWidget->setStretchFactor(isSystem ? 1 : 0, 10);
   }
   widgetLayout->addWidget(mainWidget, 1);
 }
