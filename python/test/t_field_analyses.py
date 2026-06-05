@@ -21,6 +21,7 @@ inputs = [z0, v0, m, c]
 outputs = [z, z2]
 code = 'from math import exp\n\ndef _exec(z0,v0,m,c):\n    g = 9.81\n    zmin = 0.\n    tau = m / c\n    vinf = -m * g / c\n\n    # mesh nodes\n    t = getMesh().getVertices()\n\n    z = [max(z0 + vinf * t_i[0] + tau * (v0 - vinf) * (1 - exp(-t_i[0] / tau)), zmin) for t_i in t]\n    z2 = [2*max(z0 + vinf * t_i[0] + tau * (v0 - vinf) * (1 - exp(-t_i[0] / tau)), zmin) for t_i in t]\n\n    return z, z2'  # type: ignore # noqa: E501
 PhysicalModel_1 = persalys.PythonFieldModel('PhysicalModel_1', meshModel, inputs, outputs, code)
+PhysicalModel_1.setParallel(False)
 Study_0.add(PhysicalModel_1)
 t = persalys.Variable('t', 0, '')
 meshModel = persalys.GridMeshModel([t], ot.Interval([0], [1]), [12])

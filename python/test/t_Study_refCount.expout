@@ -13,6 +13,8 @@ def _exec(X0):
     Y0 = X0
     return Y0'''
 PhysicalModel_0 = persalys.PythonPhysicalModel('PhysicalModel_0', inputs, outputs, code)
+PhysicalModel_0.setParallel(True)
+PhysicalModel_0.setProcessNumber(1)
 Study_0.add(PhysicalModel_0)
 persalys.Study.Add(Study_0)
 

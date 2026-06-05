@@ -3,6 +3,8 @@
 import openturns as ot
 import persalys
 
+ot.ResourceMap.SetAsUnsignedInteger("PythonPhysicalModel-DefaultProcessNumber", 1)
+
 myStudy = persalys.Study("myStudy")
 
 X0 = persalys.Input("X0", ot.Normal(1, 1))

@@ -71,6 +71,7 @@ step2 = persalys.CouplingStep(
 
 model = persalys.CouplingPhysicalModel("logistic", [step1, step2])
 model.setSSHHostname(ssh_hostname)
+model.setParallel(False)
 print(model.getInputNames())
 print(model.getOutputNames())
 assert model.getInputNames() == ["y0", "a", "b"]

@@ -68,6 +68,7 @@ CouplingStepCollection CouplingPhysicalModel::getSteps() const
 
 void CouplingPhysicalModel::setSSHHostname(const String & hostname)
 {
+  setParallel(hostname.empty());
   SSHHostname_ = hostname;
   updateCode();
 }

@@ -52,6 +52,7 @@ PythonPhysicalModel::PythonPhysicalModel(const String & name)
   : PhysicalModelImplementation(name)
 {
   setCode("def _exec(X0):\n    \"\"\"Main function: *must* be present\"\"\"\n    Y0 = X0\n    return Y0");
+  PhysicalModelImplementation::setParallel(getProcessNumber() != 1);
 }
 
 
@@ -63,6 +64,7 @@ PythonPhysicalModel::PythonPhysicalModel(const String & name,
   : PhysicalModelImplementation(name, inputs, outputs)
 {
   setCode(code);
+  PhysicalModelImplementation::setParallel(getProcessNumber() != 1);
 }
 
 /* Virtual constructor */
@@ -256,10 +258,8 @@ String PythonPhysicalModel::getPythonScript() const
   oss << "code = r'''\n" + getCode() + "'''\n";
 
   oss << getName() + " = persalys.PythonPhysicalModel('" + getName() + "', inputs, outputs, code)\n";
-  if (isParallel())
-    oss << getName() + ".setParallel(True)\n";
-  if (getProcessNumber() != 1)
-    oss << getName() + ".setProcessNumber(" << getProcessNumber() << ")\n";
+  oss << getName() << ".setParallel(" << (isParallel() ? "True" : "False") << ")\n";
+  oss << getName() << ".setProcessNumber(" << getProcessNumber() << ")\n";
 
   oss << PhysicalModelImplementation::getCopulaPythonScript();
 

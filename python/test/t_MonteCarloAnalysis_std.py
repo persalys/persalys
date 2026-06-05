@@ -103,6 +103,7 @@ failCode = """def _exec(X3):
     return Y3
 """
 failModel = persalys.PythonPhysicalModel("failModel", [X3], [Y3], failCode)
+failModel.setParallel(False)
 
 # allowFailedEvaluations=False: analysis stops at first error
 analysis5 = persalys.MonteCarloAnalysis("myMonteCarlo5", failModel)

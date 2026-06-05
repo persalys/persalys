@@ -20,6 +20,8 @@ def _exec(R, F):
     return G
 '''
 myPhysicalModel = persalys.PythonPhysicalModel('myPhysicalModel', inputs, outputs, code)
+myPhysicalModel.setParallel(True)
+myPhysicalModel.setProcessNumber(1)
 myStudy.add(myPhysicalModel)
 values = [[253.34, 351.737],
 [66775.7, 83224.3]]

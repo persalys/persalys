@@ -31,6 +31,7 @@ myStudy.add(symbolicModel)
 # python model ##
 code = 'from math import cos, sin, sqrt\n\ndef _exec(x1, x2, x3):\n    y0 = cos(0.5*x1) + sin(x2) + sqrt(x3)\n    return y0\n'
 pythonModel = persalys.PythonPhysicalModel('pythonModel', [x1, x2, x3], [y0], code)
+pythonModel.setParallel(False)
 myStudy.add(pythonModel)
 
 filename = 'data.csv'

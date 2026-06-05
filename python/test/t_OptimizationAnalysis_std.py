@@ -53,6 +53,7 @@ X2 = persalys.Input("X2", ot.Normal(1, 1))
 Y00 = persalys.Output("X2")
 code = "def _exec(X0,X1,X2):\n    Y00 = X0\n    Y0 = 3*(X0-5)**2 + 8*(X1+8)**2\n    return Y0,X2"
 model2 = persalys.PythonPhysicalModel("pythonModel", [X0, X1, X2], [Y0, Y00], code)
+model2.setParallel(False)
 myStudy.add(model2)
 
 analysis = persalys.OptimizationAnalysis("optim", model2, "Cobyla")

@@ -28,6 +28,7 @@ code += "    return z, z2"
 PhysicalModel_1 = persalys.PythonFieldModel(
     "PhysicalModel_1", meshModel, inputs, outputs, code
 )
+PhysicalModel_1.setParallel(False)
 Study_0.add(PhysicalModel_1)
 
 # evaluation
