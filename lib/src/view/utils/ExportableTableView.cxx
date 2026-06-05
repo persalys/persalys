@@ -26,6 +26,7 @@
 #include "persalys/FileTools.hxx"
 
 #include <QMenu>
+#include <QMessageBox>
 #include <QSortFilterProxyModel>
 #include <QHeaderView>
 #include <QVBoxLayout>
@@ -136,9 +137,8 @@ void ExportableTableView::exportData()
   else if (!text.isEmpty())
     FileTools::ExportData(text, this);
   else
-    throw SimpleException(tr("Internal exception: cannot get the sample"));
+    QMessageBox::warning(this, tr("Export"), tr("The table must not be empty."));
 }
-
 
 void ExportableTableView::exportImage()
 {
