@@ -21,7 +21,7 @@ def _exec(R, F):
 '''
 myPhysicalModel = persalys.PythonPhysicalModel('myPhysicalModel', inputs, outputs, code)
 myStudy.add(myPhysicalModel)
-values = [[0, 351.737],
+values = [[253.34, 351.737],
 [66775.7, 83224.3]]
 design = persalys.GridDesignOfExperiment('design', myPhysicalModel, values)
 design.setBlockSize(1)
