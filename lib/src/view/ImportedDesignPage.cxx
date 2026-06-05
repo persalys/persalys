@@ -227,6 +227,11 @@ Analysis ImportedDesignPage::getAnalysis() const
 
 bool ImportedDesignPage::validatePage()
 {
+  if (importedDoE_.getImportedDataset().getFileName().empty())
+  {
+    sampleWidget_->errorWidget_->setFramelessErrorMessage(tr("Please select a data file."));
+    return false;
+  }
   return sampleWidget_->tableValidity_;
 }
 }
