@@ -321,7 +321,7 @@ void AnalysisItem::appendDataModelItem()
   else if (calibrationAnalysis)
   {
     CalibrationResult calibrationResult = calibrationAnalysis->getResult().getCalibrationResult();
-    const String newName{study.getAvailableDataModelName((QString(result.getName().c_str()) + "_").toStdString())};
+    const String newName{study.getAvailableDataModelName((QString(calibrationResult.getName().c_str()) + "_").toStdString())};
 
     const DesignOfExperiment observations = calibrationAnalysis->getObservations();
     const Sample obsInput{observations.getInputSample()};

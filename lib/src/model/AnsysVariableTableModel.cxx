@@ -53,7 +53,7 @@ QVariant AnsysVariableTableModel::data(const QModelIndex & index, int role) cons
   if (role == Qt::TextAlignmentRole)
     return Qt::AlignLeft;
 
-  VarInfo info(varInfos_[varInfoKeysSorted_[index.row()]]);
+  VarInfo info(varInfos_.value(varInfoKeysSorted_[index.row()]));
 
   if (role == Qt::CheckStateRole && index.column() == 0)
   {

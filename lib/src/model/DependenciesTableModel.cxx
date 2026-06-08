@@ -169,7 +169,7 @@ void DependenciesTableModel::updateCopula()
 
 bool DependenciesTableModel::setData(const QModelIndex & index, const QVariant & value, int role)
 {
-  if (!index.isValid() && index.column() != 1 && role != Qt::EditRole)
+  if (!index.isValid() || index.column() != 1 || role != Qt::EditRole)
     return false;
 
   const QString newName = value.toString();
@@ -211,12 +211,11 @@ bool DependenciesTableModel::setData(const QModelIndex & index, const QVariant &
 
 void DependenciesTableModel::removeLine(const QModelIndex &index)
 {
+  const Description copulaVar(copula_.getCopulaCollection()[index.row()].getDescription());
   beginRemoveRows(index.parent(), index.row(), index.row());
-  removeRows(index.row(), 1, index.parent());
   // physicalModel_ has no item if coming from CalibrationWizard
   if (physicalModel_.getImplementation()->getObserver("ProbabilisticModelItem"))
     physicalModel_.blockNotification("ProbabilisticModelItem");
-  const Description copulaVar(copula_.getCopulaCollection()[index.row()].getDescription());
   physicalModel_.addCopula(copulaVar, IndependentCopula(copulaVar.getSize()));
   physicalModel_.blockNotification();
   updateCopula();

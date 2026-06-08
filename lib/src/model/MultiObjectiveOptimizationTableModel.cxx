@@ -33,6 +33,7 @@ MultiObjectiveOptimizationTableModel::MultiObjectiveOptimizationTableModel(const
   , analysis_(analysis)
 {
   analysis_.updateParameters();
+  fixedValues_ = analysis_.getStartingPoint();
   types_.clear();
   const UnsignedInteger nbInputs = analysis_.getPhysicalModel().getInputs().getSize();
   for (UnsignedInteger i = 0; i < nbInputs; ++i)
@@ -175,7 +176,7 @@ QVariant MultiObjectiveOptimizationTableModel::data(const QModelIndex & ind, int
                                                  << currentInputName;
         }
       case 3:
-        return QString::number(analysis_.getStartingPoint()[inputIndex], 'g', StudyTreeViewModel::DefaultSignificantDigits);
+        return QString::number(fixedValues_[inputIndex], 'g', StudyTreeViewModel::DefaultSignificantDigits);
       case 4:
         return QString::number(analysis_.getBounds().getLowerBound()[inputIndex], 'g', StudyTreeViewModel::DefaultSignificantDigits);
       case 5:
@@ -259,14 +260,15 @@ bool MultiObjectiveOptimizationTableModel::setData(const QModelIndex & index, co
         setData(this->index(index.row(), 5), data(this->index(index.row(), 5), role), role);
         break;
       }
-      case 3: // starting point
+      case 3: // fixed value
       {
-        Point values = analysis_.getStartingPoint();
-        if (values[inputIndex] == value.toDouble())
+        if (fixedValues_[inputIndex] == value.toDouble())
           return false;
 
-        values[inputIndex] = value.toDouble();
-        analysis_.setStartingPoint(values);
+        fixedValues_[inputIndex] = value.toDouble();
+        Point startingPoint = analysis_.getStartingPoint();
+        startingPoint[inputIndex] = fixedValues_[inputIndex];
+        analysis_.setStartingPoint(startingPoint);
 
         break;
       }

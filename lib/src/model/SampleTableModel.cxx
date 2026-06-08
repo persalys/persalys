@@ -192,8 +192,10 @@ Sample SampleTableModel::getSample() const
 
 void SampleTableModel::updateHeaderData(const Description& header)
 {
-  Q_ASSERT(hasRowIDcolumn_);
-  Q_ASSERT(header.getSize() == data_.getDimension());
+  if (!hasRowIDcolumn_)
+    throw InvalidArgumentException(HERE) << "Row ID column is missing";
+  if (header.getSize() != data_.getDimension())
+    throw InvalidArgumentException(HERE) << "Header size does not match data dimension";
   data_.setDescription(header);
   emit headerDataChanged(Qt::Horizontal, 0, columnCount() - 1);
 }
@@ -211,18 +213,19 @@ bool SampleTableModel::removeRows(int row, int count, const QModelIndex &)
   beginRemoveRows(QModelIndex(), row, row + count - 1);
   data_.erase(row, row + count);
   endRemoveRows();
-  updateData(data_);
   emit sampleChanged();
   return true;
 }
 
 bool SampleTableModel::insertRows(int row, int count, const QModelIndex &)
 {
-  beginInsertRows(QModelIndex(), row, row + count);
-  data_.add(Point(data_.getDimension(), 0.));
+  beginInsertRows(QModelIndex(), row, row + count - 1);
+  const Sample remainder(data_.split(row));
+  data_.add(Sample(count, data_.getDimension()));
+  data_.add(remainder);
   endInsertRows();
-  updateData(data_);
   emit sampleChanged();
   return true;
 }
+
 }

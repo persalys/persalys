@@ -26,7 +26,7 @@ namespace PERSALYS
 {
 
 PhysicalModelItem::PhysicalModelItem(const PhysicalModel & physicalModel, const String observerType)
-  : Item("Unnamed", observerType.c_str())
+  : Item(QString::fromStdString(physicalModel.getName()), observerType.c_str())
   , Observer(observerType)
   , physicalModel_(physicalModel)
 {
