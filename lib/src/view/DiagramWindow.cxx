@@ -25,6 +25,7 @@
 #include <QVBoxLayout>
 #include <QGraphicsView>
 #include <QSplitter>
+#include <QTextBrowser>
 
 using namespace OT;
 
@@ -95,7 +96,7 @@ void DiagramWindow::updateDiagram()
   for (auto const *button : buttons)
   {
     // connection with textArea_ to display messages
-    connect(button->getOverlay(), SIGNAL(messageChanged(QString)), textArea_, SLOT(setHtml(QString)));
+    connect(button->getOverlay(), &HoverOverlay::messageChanged, textArea_, &QTextBrowser::setHtml);
     // get button max size
     boxWidth = std::max(boxWidth, button->width());
     boxHeight = std::max(boxHeight, button->height());

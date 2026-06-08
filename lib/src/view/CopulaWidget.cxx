@@ -237,7 +237,8 @@ void CopulaWidget::updatePlots()
 
 void CopulaWidget::setCopula(const Distribution &copula)
 {
-  Q_ASSERT(copula.getDimension() == copula.getDimension());
+  if (copula.getDimension() != copula_.getDimension())
+    throw InvalidArgumentException(HERE) << "Copula dimension mismatch";
   copula_ = copula;
   updateParameters();
   updatePlots();

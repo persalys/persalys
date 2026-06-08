@@ -232,7 +232,8 @@ void PolynomialRegressionResultWindow::buildInterface()
             parameterFound = true;
           }
         }
-        Q_ASSERT(parameterFound);
+        if (!parameterFound)
+          throw InvalidArgumentException(HERE) << "PolynomialRegressionResultWindow: seed not found in validation parameters";
         RandomGenerator::SetSeed(seed);
         const UnsignedInteger testSampleSize = result_.getValidations()[i].getMetaModelOutputSample().getSize();
         Point indicesTestSample(KPermutationsDistribution(testSampleSize, outputSample.getSize()).getRealization());

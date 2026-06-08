@@ -174,7 +174,7 @@ bool MetaModelValidationPage::validatePage()
   if (testSampleCheckBox_->isChecked() && inputSampleSize_ * percentageOfPointsSpinBox_->value() / 100 < 3)
   {
     const QString errorMessage = tr("Test sample validation: The test sample must contain at least three points. Here size * k / 100 = %1")
-                                 .arg(percentageOfPointsSpinBox_->value());
+                                 .arg(inputSampleSize_ * percentageOfPointsSpinBox_->value() / 100);
     errorWidget_->setMessage(errorMessage);
     return false;
   }

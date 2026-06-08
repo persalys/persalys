@@ -117,7 +117,7 @@ void PlotWidget::contextMenu(const QPoint & pos)
   QMenu contextMenu(this);
   QAction * exportPlotAction = new QAction(tr("Export plot"), this);
   connect(exportPlotAction, SIGNAL(triggered(bool)), this, SLOT(exportPlot()));
-  contextMenu.addAction(new QAction(tr("Export plot"), &contextMenu));
+  contextMenu.addAction(exportPlotAction);
   contextMenu.popup(mapToGlobal(pos));
 }
 

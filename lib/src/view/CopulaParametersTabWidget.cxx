@@ -207,7 +207,10 @@ void CopulaParametersTabWidget::buildInterface()
     distParamTableModel->setHorizontalHeaderLabels(variablesNames);
     distParamTableModel->setVerticalHeaderLabels(variablesNames);
 
-    NormalCopula copula = *dynamic_cast<NormalCopula*>(distribution_.getImplementation().get());
+    const auto * copulaPtr = dynamic_cast<NormalCopula*>(distribution_.getImplementation().get());
+    if (!copulaPtr)
+      throw InvalidArgumentException(HERE) << "Expected NormalCopula";
+    const NormalCopula copula(*copulaPtr);
 
     for (UnsignedInteger i = 0; i < distribution_.getDimension(); ++i)
       for (UnsignedInteger j = 0; j < distribution_.getDimension(); ++j)
@@ -251,7 +254,7 @@ void CopulaParametersTabWidget::openUrl()
 
 void CopulaParametersTabWidget::setCurrentIndexWithoutSignal(int index)
 {
-  SignalBlocker(this);
+  SignalBlocker blocker(this);
   setCurrentIndex(index);
 }
 }

@@ -40,7 +40,6 @@ class PERSALYS_VIEW_API ConstraintsPage: public QWizardPage
 public:
   explicit ConstraintsPage(QWidget* parent = nullptr);
   bool validatePage() override;
-  void resizeEvent(QResizeEvent *event) override;
   ConstraintsTableModel* getTableModel() const
   {
     return cstrTableModel_;

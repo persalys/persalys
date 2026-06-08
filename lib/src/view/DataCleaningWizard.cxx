@@ -136,11 +136,13 @@ void DataCleaningWizard::buildAnalysisPage()
 
 void DataCleaningWizard::updateUserValues()
 {
-  UnsignedInteger nbVars = cleaner_->getSample().getDimension();
-  Point vals(nbVars);
-  for(UnsignedInteger i = 0; i < nbVars; ++i)
-    vals[i] = lineEdit_->text().toDouble();
-  tableModel_->updateReplacingValues(vals);
+  bool ok = false;
+  const double value = lineEdit_->text().toDouble(&ok);
+  if (ok)
+  {
+    const UnsignedInteger nbVars = cleaner_->getSample().getDimension();
+    tableModel_->updateReplacingValues(Point(nbVars, value));
+  }
 }
 
 }

@@ -35,8 +35,6 @@ namespace PERSALYS
 
 MenuBar::MenuBar(const Actions* actions)
   : QMenuBar()
-  , recentFilesMenu_(0)
-  , recentFileActions_()
 {
   buildActions(actions);
 }

@@ -54,10 +54,10 @@ signals:
   void pythonConsoleVisibilityChanged(bool);
 
 private:
-  QMenu * recentFilesMenu_;
-  QAction * recentFileActions_[NbMaxRecentFiles];
-  QAction * pythonConsoleDisplayAction_;
-  QAction * settingsDisplayAction_;
+  QMenu * recentFilesMenu_ = nullptr;
+  QAction * recentFileActions_[NbMaxRecentFiles] = {};
+  QAction * pythonConsoleDisplayAction_ = nullptr;
+  QAction * settingsDisplayAction_ = nullptr;
 };
 }
 #endif
