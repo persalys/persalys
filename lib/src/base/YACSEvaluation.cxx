@@ -94,12 +94,10 @@ Point YACSEvaluation::operator() (const Point & inP) const
 Sample YACSEvaluation::operator() (const Sample & inS) const
 {
   InterpreterUnlocker iul;
+  if (getCode().empty())
+    throw InvalidArgumentException(HERE) << "The script is empty.";
   ydefx::PyStudyFunction studyFunction;
   studyFunction.loadString(getCode());
-  if (getCode().empty())
-  {
-    throw InvalidArgumentException(HERE) << "The script is empty.";
-  }
 
   std::list<std::string> inputNames = studyFunction.inputNames();
   std::list<std::string> outputNames = studyFunction.outputNames();

@@ -209,10 +209,11 @@ void DataAnalysis::launch()
     }
 
     // output sample
-    const int nbAnalysedOutputs = nbAnalysedVar - (designOfExperiment_.getInputSample().getSize() > 0 ? designOfExperiment_.getInputSample().getDimension() : 0);
+    const UnsignedInteger inputDimension = designOfExperiment_.getInputSample().getSize() > 0 ? designOfExperiment_.getInputSample().getDimension() : 0;
 
-    if (nbAnalysedOutputs > 0)
+    if (nbAnalysedVar > inputDimension)
     {
+      const UnsignedInteger nbAnalysedOutputs = nbAnalysedVar - inputDimension;
       Indices outputIndices(nbAnalysedOutputs);
       outputIndices.fill();
       result_.designOfExperiment_.setOutputSample(designOfExperiment_.getOutputSample().getMarginal(outputIndices));

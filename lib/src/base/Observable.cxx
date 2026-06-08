@@ -122,8 +122,9 @@ void Observable::notifyAndRemove(const String & type)
   {
     if ((*it)->getType() == type)
     {
-      (*it)->update(this, "objectRemoved");
+      Observer* observer = *it;
       observers_.erase(it);
+      observer->update(this, "objectRemoved");
       return;
     }
   }
