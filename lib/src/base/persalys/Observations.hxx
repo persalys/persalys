@@ -64,6 +64,12 @@ public:
                   const OT::Description &inputNames,
                   const OT::Indices &outputColumns,
                   const OT::Description &outputNames) override;
+                  
+  void setFileName( const OT::String & fileName,
+                    const OT::Indices &inputColumns,
+                    const OT::Indices &outputColumns,
+                    const OT::Description &inputNames,
+                    const OT::Description &outputNames);
   
   OT::String getPythonScript() const override;
 
@@ -76,6 +82,9 @@ protected:
                             const OT::Indices &outputColumns,
                             const OT::Description &outputNames) const;
   virtual void orderSamples();
+
+private:
+    using DataModel::setFileName;
 };
 }
 #endif

@@ -51,3 +51,20 @@ Create the observations:
 >>> ot.Normal(8).getSample(10).exportToCSVFile(filename)
 >>> aObs = persalys.Observations('anObs', model, filename, [2, 7], [3], ['X0', 'X2'], ['Y1'])"
 
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::Observations::setFileName
+"Changes the file name and the column assignments of the observations.
+
+Parameters
+----------
+fileName : str
+    Name of a data file (.txt ot .csv) to load
+inputColumns : sequence of int
+    Indices of columns of the input variables in file to consider
+outputColumns : sequence of int
+    Indices of columns of the output variables in file to consider
+inputNames : sequence of str
+    Names of the input variables
+outputNames : sequence of str
+    Names of the output variables"

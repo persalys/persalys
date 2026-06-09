@@ -33,13 +33,8 @@ namespace PERSALYS
 
 CLASSNAMEINIT(DataModel)
 
-// TODO : change in OT 1.27
-const static Factory<DataModel> Factory_DesignOfExperimentImplementation = [] {
-  Factory<DataModel> factory;
-  const PersistentObjectFactory * poFactory = &Catalog::Get("DataModel");
-  Catalog::Add("DesignOfExperimentImplementation", poFactory);
-  return factory;
-}();
+const static Factory<DataModel> Factory_DataModel;
+const static Factory<DataModel> Factory_DesignOfExperimentImplementation("DesignOfExperimentImplementation");
 
 
 DataModel::DataModel(const String& name,

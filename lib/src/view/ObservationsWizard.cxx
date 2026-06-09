@@ -28,10 +28,11 @@ using namespace OT;
 
 namespace PERSALYS
 {
-ImportObservationsPage::ImportObservationsPage(QWidget* parent)
+ImportObservationsPage::ImportObservationsPage(const PhysicalModel& physicalModel, const String& obsName, QWidget* parent)
   : QWizardPage(parent)
   , sampleWidget_(new ImportSampleWidget(this))
-  , observations_()
+  , physicalModel_(physicalModel)
+  , obsName_(obsName)
 {
   buildInterface();
 }
@@ -51,25 +52,37 @@ void ImportObservationsPage::buildInterface()
 
 void ImportObservationsPage::setTable(const QString& fileName)
 {
-  // set file name
-  observations_.setFileName(fileName.toUtf8().data());
-  // get variable names
-  Description allVarNames(observations_.getPhysicalModel().getInputNames());
-  allVarNames.add(observations_.getPhysicalModel().getOutputNames());
-  Description initVarNames(observations_.getInputNames());
-  initVarNames.add(observations_.getOutputNames());
-  // get variable columns indices
-  Indices columns(observations_.getInputColumns());
-  columns.add(observations_.getOutputColumns());
-  // update widgets
-  sampleWidget_->updateWidgets(observations_.getSampleFromFile(), initVarNames, columns, allVarNames);
+  const String fname = fileName.toUtf8().data();
+
+  // Keep the file path line edit in sync (e.g. when called directly in tests)
+  sampleWidget_->filePathLineEdit_->setText(fileName);
+
+  // Load the file with default column assignments
+  ImportedDataset dataset;
+  dataset.setFileName(fname);
+  fileName_ = fname;
+
+  // All physical model variable names (for comboboxes)
+  Description allVarNames(physicalModel_.getInputNames());
+  allVarNames.add(physicalModel_.getOutputNames());
+
+  // Initial variable names and column indices from file headers
+  const Sample sampleFromFile = dataset.getSampleFromFile();
+  const Indices inputCols(dataset.getInputColumns());
+  const Indices outputCols(dataset.getOutputColumns());
+  Description initVarNames = sampleFromFile.getMarginal(inputCols).getDescription();
+  initVarNames.add(sampleFromFile.getMarginal(outputCols).getDescription());
+  Indices columns(inputCols);
+  columns.add(outputCols);
+
+  sampleWidget_->updateWidgets(sampleFromFile, initVarNames, columns, allVarNames);
 }
 
 
 void ImportObservationsPage::checkColumns()
 {
-  const Description inputNames(observations_.getPhysicalModel().getInputNames());
-  const Description outputNames(observations_.getPhysicalModel().getOutputNames());
+  const Description inputNames(physicalModel_.getInputNames());
+  const Description outputNames(physicalModel_.getOutputNames());
 
   Indices inColumns;
   Indices outColumns;
@@ -84,6 +97,7 @@ void ImportObservationsPage::checkColumns()
   {
     sampleWidget_->errorWidget_->setFramelessErrorMessage(tr("Each variable must be associated with one column."));
     sampleWidget_->tableValidity_ = false;
+    return;
   }
 
   QStringList inNames;
@@ -99,36 +113,31 @@ void ImportObservationsPage::checkColumns()
     sampleWidget_->tableValidity_ = false;
     return;
   }
-  // try to update the observations
-  try
-  {
-    observations_.setColumns(inColumns, QtOT::StringListToDescription(inNames), outColumns, QtOT::StringListToDescription(outNames));
-    sampleWidget_->tableValidity_ = true;
-    sampleWidget_->errorWidget_->reset();
-  }
-  catch (const InvalidArgumentException &)
+
+  // Validate: at least one output, and no column assigned to both input and output
+  Indices allCols(inColumns);
+  allCols.add(outColumns);
+  const int ncols = sampleWidget_->dataPreviewTableView_->model()->columnCount();
+  if (outColumns.getSize() == 0 || !allCols.check(ncols))
   {
     sampleWidget_->errorWidget_->setFramelessErrorMessage(tr("Define observations for at least an output variable and an input variable. A variable must be associated with only one column."));
     sampleWidget_->tableValidity_ = false;
+    return;
   }
-}
 
-
-void ImportObservationsPage::initialize(const DesignOfExperiment& designOfExp)
-{
-  const auto * obs_ptr = dynamic_cast<const Observations*>(designOfExp.getImplementation().get());
-
-  Q_ASSERT(obs_ptr);
-
-  observations_ = *obs_ptr;
-  if (!observations_.getFileName().empty())
-    sampleWidget_->setData(QString::fromUtf8(observations_.getFileName().c_str()));
+  // Store validated state
+  inColumns_ = inColumns;
+  outColumns_ = outColumns;
+  inNames_ = QtOT::StringListToDescription(inNames);
+  outNames_ = QtOT::StringListToDescription(outNames);
+  sampleWidget_->tableValidity_ = true;
+  sampleWidget_->errorWidget_->reset();
 }
 
 
 DesignOfExperiment ImportObservationsPage::getDesignOfExperiment() const
 {
-  return observations_;
+  return Observations(obsName_, physicalModel_, fileName_, inColumns_, outColumns_, inNames_, outNames_);
 }
 
 

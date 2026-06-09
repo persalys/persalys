@@ -46,7 +46,7 @@ public slots:
   // open wizards
   void openAnalysisWizard(StudyItem* item, const Analysis& analysis, const bool isGeneralWizard = false);
   void openDesignOfExperimentEvaluationWizard(const Analysis& analysis, const bool isGeneralWizard = false);
-  void openObservationsWizard(StudyItem*, const DesignOfExperiment& designOfExp);
+  void openObservationsWizard(StudyItem*, const PhysicalModel& physicalModel, const QString& obsName);
   void openExtractDataFieldWizard(StudyItem *item, const Analysis& analysis);
   void openMetamodelExportWizard(StudyItem *item, const Analysis& model, const bool isGeneralWizard = false);
   void openDesignOfExperimentExportWizard(const StudyItem *item);
