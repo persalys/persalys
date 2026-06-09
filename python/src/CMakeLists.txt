@@ -108,6 +108,8 @@ ot_add_python_module (persalys persalys_module.i
                       TaylorExpansionMomentsAnalysis.i TaylorExpansionMomentsAnalysis_doc.i
                       SobolResult.i SobolResult_doc.i
                       SobolAnalysis.i SobolAnalysis_doc.i
+                      SRCResult.i SRCResult_doc.i
+                      SRCAnalysis.i SRCAnalysis_doc.i
                       MorrisResult.i MorrisResult_doc.i
                       MorrisAnalysis.i MorrisAnalysis_doc.i
                       ReliabilityAnalysis.i ReliabilityAnalysis_doc.i

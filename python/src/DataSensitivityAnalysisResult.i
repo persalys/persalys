@@ -17,7 +17,7 @@ template <>
   canConvert< _PyObject_, OT::Interval >(PyObject * pyObj)
   {
     void * ptr = 0;
-    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("OT::Interval *"), 0 ))) {
+    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("OT::Interval *"), SWIG_POINTER_NO_NULL))) {
       OT::Interval * p_it = reinterpret_cast< OT::Interval * >( ptr );
       return p_it != NULL;
     }
@@ -31,12 +31,12 @@ template <>
   convert< _PyObject_, OT::Interval >(PyObject * pyObj)
   {
     void * ptr = 0;
-    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("OT::Interval *"), 0))) {
+    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("OT::Interval *"), SWIG_POINTER_NO_NULL))) {
       OT::Interval * p_it = reinterpret_cast< OT::Interval * >( ptr );
       return *p_it;
     }
     else {
-      throw OT::InvalidArgumentException(HERE) << "Object passed as argument is not convertible to a Point";
+      throw OT::InvalidArgumentException(HERE) << "Object passed as argument is not convertible to an Interval";
     }
     return OT::Interval();
   }

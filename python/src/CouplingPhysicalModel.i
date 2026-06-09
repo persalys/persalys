@@ -18,7 +18,7 @@ namespace OT {
   canConvert< _PyObject_, PERSALYS::CouplingStep >(PyObject * pyObj)
   {
     void * ptr = 0;
-    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("PERSALYS::CouplingStep *"), 0 ))) {
+    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("PERSALYS::CouplingStep *"), SWIG_POINTER_NO_NULL))) {
       PERSALYS::CouplingStep * p_it = reinterpret_cast< PERSALYS::CouplingStep * >( ptr );
       return p_it != NULL;
     }
@@ -31,7 +31,7 @@ namespace OT {
   convert< _PyObject_, PERSALYS::CouplingStep >(PyObject * pyObj)
   {
     void * ptr = 0;
-    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("PERSALYS::CouplingStep *"), 0))) {
+    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("PERSALYS::CouplingStep *"), SWIG_POINTER_NO_NULL))) {
       PERSALYS::CouplingStep * p_it = reinterpret_cast< PERSALYS::CouplingStep * >( ptr );
       return *p_it;
     }
@@ -46,7 +46,7 @@ namespace OT {
 %template(CouplingStepCollection) OT::Collection<PERSALYS::CouplingStep>;
 
 %typemap(in) const PERSALYS::CouplingStepCollection & {
-  if (SWIG_IsOK(SWIG_ConvertPtr($input, (void **) &$1, $1_descriptor, 0))) {
+  if (SWIG_IsOK(SWIG_ConvertPtr($input, (void **) &$1, $1_descriptor, SWIG_POINTER_NO_NULL))) {
     // From interface class, ok
   } else {
     try {
@@ -58,7 +58,7 @@ namespace OT {
 }
 
 %typemap(typecheck,precedence=SWIG_TYPECHECK_POINTER) const PERSALYS::CouplingStepCollection & {
-  $1 = SWIG_IsOK(SWIG_ConvertPtr($input, NULL, $1_descriptor, 0))
+  $1 = SWIG_IsOK(SWIG_ConvertPtr($input, NULL, $1_descriptor, SWIG_POINTER_NO_NULL))
     || OT::canConvertCollectionObjectFromPySequence< PERSALYS::CouplingStep >( $input );
 }
 

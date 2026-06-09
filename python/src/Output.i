@@ -17,7 +17,7 @@ template <>
   canConvert< _PyObject_, PERSALYS::Output >(PyObject * pyObj)
   {
     void * ptr = 0;
-    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("PERSALYS::Output *"), 0 ))) {
+    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("PERSALYS::Output *"), SWIG_POINTER_NO_NULL))) {
       PERSALYS::Output * p_it = reinterpret_cast< PERSALYS::Output * >( ptr );
       return p_it != NULL;
     }
@@ -31,7 +31,7 @@ template <>
   convert< _PyObject_, PERSALYS::Output >(PyObject * pyObj)
   {
     void * ptr = 0;
-    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("PERSALYS::Output *"), 0))) {
+    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("PERSALYS::Output *"), SWIG_POINTER_NO_NULL))) {
       PERSALYS::Output * p_it = reinterpret_cast< PERSALYS::Output * >( ptr );
       return *p_it;
     }
@@ -49,7 +49,7 @@ template <>
 %template(OutputCollection) OT::Collection<PERSALYS::Output>;
 
 %typemap(in) const OutputCollection & {
-  if (SWIG_IsOK(SWIG_ConvertPtr($input, (void **) &$1, $1_descriptor, 0))) {
+  if (SWIG_IsOK(SWIG_ConvertPtr($input, (void **) &$1, $1_descriptor, SWIG_POINTER_NO_NULL))) {
     // From interface class, ok
   } else {
     try {
@@ -61,7 +61,7 @@ template <>
 }
 
 %typemap(typecheck,precedence=SWIG_TYPECHECK_POINTER) const OutputCollection & {
-  $1 = SWIG_IsOK(SWIG_ConvertPtr($input, NULL, $1_descriptor, 0))
+  $1 = SWIG_IsOK(SWIG_ConvertPtr($input, NULL, $1_descriptor, SWIG_POINTER_NO_NULL))
     || OT::canConvertCollectionObjectFromPySequence< PERSALYS::Output >( $input );
 }
 

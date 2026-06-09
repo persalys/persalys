@@ -16,7 +16,7 @@ template <>
   convert< _PyObject_, PERSALYS::Analysis >(PyObject * pyObj)
   {
     void * ptr = 0;
-    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("PERSALYS::Analysis *"), 0))) {
+    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("PERSALYS::Analysis *"), SWIG_POINTER_NO_NULL))) {
       PERSALYS::Analysis * p_it = reinterpret_cast< PERSALYS::Analysis * >( ptr );
       return *p_it;
     }
