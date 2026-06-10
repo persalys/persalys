@@ -31,8 +31,8 @@ namespace PERSALYS
 
 CLASSNAMEINIT(CouplingPhysicalModel)
 
-static Factory<CouplingPhysicalModel> Factory_CouplingPhysicalModel;
-static Factory<PersistentCollection<CouplingStep> > Factory_PersistentCollectionCouplingStep;
+const static Factory<CouplingPhysicalModel> Factory_CouplingPhysicalModel;
+const static Factory<PersistentCollection<CouplingStep> > Factory_PersistentCollectionCouplingStep;
 
 /* Default constructor */
 CouplingPhysicalModel::CouplingPhysicalModel(const OT::String & name,
@@ -68,6 +68,7 @@ CouplingStepCollection CouplingPhysicalModel::getSteps() const
 
 void CouplingPhysicalModel::setSSHHostname(const String & hostname)
 {
+  setParallel(hostname.empty());
   SSHHostname_ = hostname;
   updateCode();
 }
@@ -136,6 +137,8 @@ String CouplingPhysicalModel::getStepsMacro(const String & offset) const
     oss << offset << "step" << i << " = persalys.CouplingStep(r'"
         << step.getCommand() << "', input_files, resource_files, output_files)\n";
     oss << offset << "step" << i << ".setIsShell(" << (step.getIsShell() ? "True" : "False") << ")\n";
+    oss << offset << "step" << i << ".setTimeOut(" << step.getTimeOut() << ")\n";
+    oss << offset << "step" << i << ".setEncoding('" << step.getEncoding() << "')\n";
     if(!step.getCode().empty())
       oss << offset << "step" << i << ".setCode(\"" << step.getEscapedCode() << "\")\n";
     oss << offset << "step" << i << ".setEnvironment("

@@ -51,6 +51,8 @@ def _exec(X0, X1):
     return Y0, fake_Y0
 '''
 myPhysicalModel = persalys.PythonPhysicalModel('myPhysicalModel', inputs, outputs, code)
+myPhysicalModel.setParallel(False)
+myPhysicalModel.setProcessNumber(1)
 myStudy.add(myPhysicalModel)
 aTaylor = persalys.TaylorExpansionMomentsAnalysis('aTaylor', aModelPhys)
 interestVariables = ['Y0']

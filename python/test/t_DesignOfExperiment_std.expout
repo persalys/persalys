@@ -143,6 +143,8 @@ def _exec(X0,X1):
     return Y0
 '''
 aModelPhys2 = persalys.PythonPhysicalModel('aModelPhys2', inputs, outputs, code)
+aModelPhys2.setParallel(False)
+aModelPhys2.setProcessNumber(1)
 anOTStudy.add(aModelPhys2)
 values = [[0.9, 1.1],
 [1.8, 2.2]]

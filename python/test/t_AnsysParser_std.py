@@ -20,6 +20,7 @@ templateFile = "input.txt.in"
 
 step = persalys.CouplingStep()
 model = persalys.CouplingPhysicalModel("A", [step])
+model.setParallel(False)
 
 parser = persalys.AnsysParser(modelFile)
 parser.populateCouplingStep(model, 0, templateFile)

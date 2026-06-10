@@ -44,6 +44,9 @@ step = persalys.CouplingStep(
 
 model = persalys.CouplingPhysicalModel("A", [step])
 model.setSSHHostname(ssh_hostname)
+if len(ssh_hostname) > 0:
+    assert not model.isParallel()
+model.setParallel(False)
 print(output_file.checkOutputFile("outputRef.txt"))
 
 # single evaluation
@@ -68,6 +71,7 @@ code += "    Y2 = Y0+3*Y1\n    Y3 = Y2+3*Y1\n    return Y2, Y3\n"
 step.setCode(code)
 model = persalys.CouplingPhysicalModel("B", [step])
 model.setSSHHostname(ssh_hostname)
+model.setParallel(False)
 f = model.getFunction()
 y = f(x)
 print(y)
@@ -79,6 +83,7 @@ step.setCode(
 )
 model = persalys.CouplingPhysicalModel("C", [step])
 model.setSSHHostname(ssh_hostname)
+model.setParallel(False)
 f = model.getFunction()
 try:
     f(x)
@@ -92,6 +97,7 @@ step.setCode(
 )
 model = persalys.CouplingPhysicalModel("D", [step])
 model.setSSHHostname(ssh_hostname)
+model.setParallel(False)
 f = model.getFunction()
 try:
     f(x)
@@ -141,6 +147,7 @@ step = persalys.CouplingStep(
 )
 model = persalys.CouplingPhysicalModel("E", [step])
 model.setSSHHostname(ssh_hostname)
+model.setParallel(False)
 
 # single evaluation
 x = [1.0, 2.0, 3.0]
@@ -183,6 +190,7 @@ step = persalys.CouplingStep(
 )
 model = persalys.CouplingPhysicalModel("F", [step])
 model.setSSHHostname(ssh_hostname)
+model.setParallel(False)
 
 # single evaluation
 x = [1.0, 2.0, 3.0]
@@ -226,6 +234,7 @@ step = persalys.CouplingStep(
 )
 model = persalys.CouplingPhysicalModel("reuse1", [step])
 model.setSSHHostname(ssh_hostname)
+model.setParallel(False)
 # leave work dir
 model.setCleanupWorkDirectory(False)
 
@@ -240,6 +249,7 @@ ott.assert_almost_equal(y, [6.0, 7.0])
 step = persalys.CouplingStep("", [input_file], [resource_file], [output_file])
 model = persalys.CouplingPhysicalModel("reuse2", [step])
 model.setSSHHostname(ssh_hostname)
+model.setParallel(False)
 f = model.getFunction()
 y = f(x)
 ott.assert_almost_equal(y, [6.0, 7.0])
@@ -277,6 +287,7 @@ step = persalys.CouplingStep(
 )
 model = persalys.CouplingPhysicalModel("csvcache", [step])
 model.setSSHHostname(ssh_hostname)
+model.setParallel(False)
 model.setCacheFiles("in.csv", "out.csv")
 
 # single evaluation
@@ -364,6 +375,7 @@ step4.setIsShell(True)
 
 model = persalys.CouplingPhysicalModel("multi", [step1, step2, step3, step4])
 model.setSSHHostname(ssh_hostname)
+model.setParallel(False)
 print("input variables=", model.getInputNames())
 print("output variables=", model.getOutputNames())
 
@@ -382,6 +394,7 @@ resource_file = persalys.CouplingResourceFile("program4.py")
 step5 = persalys.CouplingStep(sys.executable + " program4.py", [], [resource_file], [])
 step5.setEnvironment(["PYTHONPATH", "PYTHONHOME"], ["", ""])
 model2 = persalys.CouplingPhysicalModel("envTest", [step1, step5])
+model2.setParallel(False)
 x = [1.0, 2.0, 3.0]
 f = model2.getFunction()
 try:

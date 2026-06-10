@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
-
 import persalys
+import openturns as ot
+
+ot.ResourceMap.SetAsUnsignedInteger("PythonPhysicalModel-DefaultProcessNumber", 2)
 
 
 def test():

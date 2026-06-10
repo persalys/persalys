@@ -17,6 +17,11 @@ code = "from math import pi\n\ndef _exec(R, F):\n    G = R-F/(pi*100.0)\n    ret
 model = persalys.PythonPhysicalModel("myPhysicalModel", [R, F], [G], code)
 myStudy.add(model)
 
+if model.getProcessNumber() > 1:
+    assert model.isParallel()
+
+model.setParallel(False)
+
 f = model.getFunction()
 print(f([300.0, 75000.0]))
 
@@ -75,7 +80,9 @@ code1 = "def _exec(x1, x2):\n    y = x1 + x2\n    return y\n"
 code2 = "def _exec(x1):\n    y = x1\n    return y\n"
 y = persalys.Output("y")
 model1 = persalys.PythonPhysicalModel("model1", [x1, x2], [y], code1)
+model1.setParallel(False)
 model2 = persalys.PythonPhysicalModel("model1", [x1, x2], [y], code2)
+model2.setParallel(False)
 f1 = model1.getFunction()
 y1 = f1([1.0, 2.0])
 f2 = model2.getFunction()
@@ -86,4 +93,5 @@ y1 = f1([2.0, 3.0])
 outvars = ["y" * 100 + str(i) for i in range(1000)]
 code = f"def _exec(x1, x2):\n    y = x1 + x2\n    return {', '.join(outvars)}\n"
 model_big = persalys.PythonPhysicalModel("model_big", [x1, x2], [], code)
+model_big.setParallel(False)
 assert len(model_big.getOutputNames()) == 1000

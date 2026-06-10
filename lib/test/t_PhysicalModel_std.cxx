@@ -23,11 +23,15 @@
 #include "openturns/OT.hxx"
 #include "persalys/Persalys.hxx"
 
+#include <openturns/ResourceMap.hxx>
+
 using namespace OT;
 using namespace PERSALYS;
 
 int main(int /*argc*/, char ** /*argv*/)
 {
+  ResourceMap::SetAsUnsignedInteger("PythonPhysicalModel-DefaultProcessNumber", 2);
+
   PythonEnvironment pyEnv;
 
   PERSALYS::Study study("study1");
