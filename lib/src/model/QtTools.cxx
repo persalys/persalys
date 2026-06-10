@@ -40,33 +40,6 @@ SignalBlocker::~SignalBlocker()
   blockedObject_->blockSignals(previousBlockingStatus_);
 }
 
-// SimpleException class
-SimpleException::SimpleException(const QString &text)
-  : text_(text)
-{
-}
-
-
-SimpleException::~SimpleException() throw() {}
-
-
-QString SimpleException::text() const
-{
-  return text_;
-}
-
-
-const char *SimpleException::what() const throw()
-{
-  const std::string message(text_.toStdString());
-  const std::string::size_type size = message.size();
-  const char *src = message.c_str();
-  char *buffer = new char[size + 1];
-  std::copy(src, src + size + 1, buffer);
-  return buffer;
-}
-
-
 QStringList QtOT::DescriptionToStringList(const Description& description)
 {
   UnsignedInteger size(description.getSize());
@@ -126,10 +99,10 @@ QString QtOT::FormatDuration(double seconds)
 {
   // convert seconds
   double sec = std::fmod(seconds, 60.);
-  int minutes = seconds / 60;
-  int hours = minutes / 60;
-  minutes %= 60;
-  int days = hours / 24;
+  long long totalMinutes = static_cast<long long>(seconds / 60);
+  long long hours = totalMinutes / 60;
+  long long minutes = totalMinutes % 60;
+  long long days = hours / 24;
   hours %= 24;
 
   // set text: XXX d XX h XX m XX s || XXX ms

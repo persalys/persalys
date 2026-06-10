@@ -16,7 +16,7 @@ template <>
   convert< _PyObject_, PERSALYS::DataFieldModel >(PyObject * pyObj)
   {
     void * ptr = 0;
-    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("PERSALYS::DataFieldModel *"), 0))) {
+    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("PERSALYS::DataFieldModel *"), SWIG_POINTER_NO_NULL))) {
       PERSALYS::DataFieldModel * p_it = reinterpret_cast< PERSALYS::DataFieldModel * >( ptr );
       return *p_it;
     }

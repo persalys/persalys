@@ -156,7 +156,7 @@ String YACSPhysicalModel::getPythonScript() const
 
   // replace ''' by """
   std::string code = getCode();
-  std::regex_replace(code, std::regex("'''"), "\"\"\"");
+  code = std::regex_replace(code, std::regex("'''"), "\"\"\"");
 
   oss << "code = '''" << code << "'''\n";
   oss << getName()

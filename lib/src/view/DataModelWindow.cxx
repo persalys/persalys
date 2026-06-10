@@ -449,10 +449,6 @@ void DataModelWindow::updateTableView()
 
   if(dataModel_->getSampleFromFile().getSize())
   {
-    // use comboboxes to define the variable type
-    for (int i = 0; i < tableModel_->columnCount(); ++i)
-      tableView_->openPersistentEditor(tableModel_->index(1, i));
-
     // if first time here
     if (!dynamic_cast<CheckableHeaderView*>(tableView_->verticalHeader()))
     {
@@ -466,6 +462,10 @@ void DataModelWindow::updateTableView()
       // use a LineEditWithQValidatorDelegate with an offset to see the checkbox
       tableView_->setItemDelegateForRow(0, new LineEditWithQValidatorDelegate(true, tableView_));
     }
+
+    // use comboboxes to define the variable type
+    for (int i = 0; i < tableModel_->columnCount(); ++i)
+      tableView_->openPersistentEditor(tableModel_->index(1, i));
   }
 
   // hide data table columns if not done yet

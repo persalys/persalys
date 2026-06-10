@@ -178,6 +178,8 @@ void ConstraintsTableModel::updateData()
 
 void ConstraintsTableModel::addLine()
 {
+  if (vars_.isEmpty())
+    return;
   leftParts_ << QString(vars_.at(0));
   operators_ << QString(">");
   rightParts_ << QString("0");

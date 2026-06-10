@@ -32,29 +32,27 @@ OTgetImplementationHelper(PERSALYS, Interface, Implementation)
 %typemap(in) const PERSALYS::Interface &
 {
   void * ptr = 0;
-  if (SWIG_IsOK(SWIG_ConvertPtr($input, (void **) &$1, $1_descriptor, 0)))
+  if (SWIG_IsOK(SWIG_ConvertPtr($input, (void **) &$1, SWIG_TypeQuery("PERSALYS::Interface *"), SWIG_POINTER_NO_NULL)))
   {
     // From interface class, ok
   }
-  else if (SWIG_IsOK(SWIG_ConvertPtr($input, &ptr, SWIG_TypeQuery("PERSALYS::Implementation *"), 0)))
+  else if (SWIG_IsOK(SWIG_ConvertPtr($input, &ptr, SWIG_TypeQuery("PERSALYS::Implementation *"), SWIG_POINTER_NO_NULL)))
   {
-    // From Implementation*
+    // From Implementation*: use raw-pointer constructor to preserve object identity
+    // (Persalys equality is pointer-identity based; the const-ref constructor would clone)
     PERSALYS::Implementation * p_impl = reinterpret_cast< PERSALYS::Implementation * >(ptr);
-    $1 = new PERSALYS::Interface( &*p_impl );
+    $1 = new PERSALYS::Interface( p_impl );
   }
-  else if (SWIG_IsOK(SWIG_ConvertPtr($input, &ptr, SWIG_TypeQuery("OT::Pointer<PERSALYS::Implementation> *"), 0)))
+  else
   {
-    // From Pointer<Implementation>
-    OT::Pointer<PERSALYS::Implementation> * p_impl = reinterpret_cast< OT::Pointer<PERSALYS::Implementation> * >(ptr);
-    $1 = new PERSALYS::Interface( **p_impl );
+    SWIG_exception(SWIG_TypeError, "Object passed as argument is not convertible to a " # Interface);
   }
 }
 
 %typemap(typecheck,precedence=SWIG_TYPECHECK_POINTER) const PERSALYS::Interface &
 {
-  $1 = SWIG_IsOK(SWIG_ConvertPtr($input, NULL, $1_descriptor, 0))
-    || SWIG_IsOK(SWIG_ConvertPtr($input, NULL, SWIG_TypeQuery("PERSALYS::Implementation *"), 0))
-    || SWIG_IsOK(SWIG_ConvertPtr($input, NULL, SWIG_TypeQuery("OT::Pointer<PERSALYS::Implementation> *"), 0));
+  $1 = SWIG_IsOK(SWIG_ConvertPtr($input, NULL, SWIG_TypeQuery("PERSALYS::Interface *"), SWIG_POINTER_NO_NULL))
+    || SWIG_IsOK(SWIG_ConvertPtr($input, NULL, SWIG_TypeQuery("PERSALYS::Implementation *"), SWIG_POINTER_NO_NULL));
 }
 %enddef
 
@@ -66,19 +64,41 @@ PERSALYSTypedInterfaceObjectImplementationHelper(Interface,Interface ## Implemen
 // define PERSALYSTypedCollectionInterfaceObjectHelper
 %define PERSALYSTypedCollectionInterfaceObjectMisnamedHelper(Interface,CollectionType)
 
+%{
+namespace OT {
+  template <>
+  inline
+  bool
+  canConvert< _PyObject_, PERSALYS::Interface >(PyObject * pyObj)
+  {
+    void * ptr = 0;
+    if (SWIG_IsOK(SWIG_ConvertPtr(pyObj, &ptr, SWIG_TypeQuery("PERSALYS::Interface *"), SWIG_POINTER_NO_NULL))) {
+      PERSALYS::Interface * p_it = reinterpret_cast< PERSALYS::Interface * >(ptr);
+      return p_it != NULL;
+    }
+    return false;
+  }
+} /* namespace OT */
+%}
+
 %template(CollectionType)           OT::Collection<PERSALYS::Interface>;
 
-%typemap(in) const CollectionType & {
-  if (SWIG_IsOK(SWIG_ConvertPtr($input, (void **) &$1, $1_descriptor, 0))) {
+%typemap(in) const CollectionType & (OT::Pointer<OT::Collection<PERSALYS::Interface> > temp) {
+  if (SWIG_IsOK(SWIG_ConvertPtr($input, (void **) &$1, $1_descriptor, SWIG_POINTER_NO_NULL))) {
     // From interface class, ok
   } else {
-    $1 = OT::buildCollectionFromPySequence< PERSALYS::Interface >( $input );
+    try {
+      temp = OT::buildCollectionFromPySequence< PERSALYS::Interface >($input);
+      $1 = temp.get();
+    } catch (const OT::InvalidArgumentException &) {
+      SWIG_exception(SWIG_TypeError, "Object passed as argument is not convertible to a collection of " # Interface);
+    }
   }
 }
 
 %typemap(typecheck,precedence=SWIG_TYPECHECK_POINTER) const CollectionType & {
-  $1 = SWIG_IsOK(SWIG_ConvertPtr($input, NULL, $1_descriptor, 0))
-    || OT::canConvertCollectionObjectFromPySequence< PERSALYS::Interface >( $input );
+  $1 = SWIG_IsOK(SWIG_ConvertPtr($input, NULL, $1_descriptor, SWIG_POINTER_NO_NULL))
+    || OT::canConvertCollectionObjectFromPySequence< PERSALYS::Interface >($input);
 }
 
 %apply const CollectionType & { const OT::Collection<PERSALYS::Interface> & };

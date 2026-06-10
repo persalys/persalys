@@ -55,7 +55,7 @@ QVariant AnsysSystemTableModel::data(const QModelIndex & index, int role) const
   if (role == Qt::TextAlignmentRole)
     return Qt::AlignLeft;
 
-  SysInfo info(sysInfos_[sysInfoKeysSorted_[index.row()]]);
+  SysInfo info(sysInfos_.value(sysInfoKeysSorted_[index.row()]));
 
   if (role == Qt::CheckStateRole)
   {
@@ -121,8 +121,6 @@ QVariant AnsysSystemTableModel::headerData(int section, Qt::Orientation orientat
         return tr("System header text");
       case 2:
         return tr("System type");
-      case 3:
-        return tr("Selected");
     }
   }
   return QAbstractTableModel::headerData(section, orientation, role);

@@ -16,7 +16,7 @@ template <>
   convert< _PyObject_, PERSALYS::MeshModel >(PyObject * pyObj)
   {
     void * ptr = 0;
-    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("PERSALYS::MeshModel *"), 0))) {
+    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("PERSALYS::MeshModel *"), SWIG_POINTER_NO_NULL))) {
       PERSALYS::MeshModel * p_it = reinterpret_cast< PERSALYS::MeshModel * >( ptr );
       return *p_it;
     }

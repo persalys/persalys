@@ -103,10 +103,10 @@ void FileMemoizeEvaluation::setCacheFiles(const OT::FileName & inputFile, const 
   {
     try
     {
-      Sample inSample(Sample::ImportFromTextFile(inputFile_, ";"));
+      Sample inSample(Sample::ImportFromTextFile(inputFile, ";"));
       if (inSample.getDimension() != evaluation_.getInputDimension())
         throw InvalidDimensionException(HERE) << "Input dimension has changed. Try clearing cache.";
-      Sample outSample(Sample::ImportFromTextFile(outputFile_, ";"));
+      Sample outSample(Sample::ImportFromTextFile(outputFile, ";"));
       if (outSample.getDimension() != evaluation_.getOutputDimension())
         throw InvalidDimensionException(HERE) << "Output dimension has changed. Try clearing cache.";
     }

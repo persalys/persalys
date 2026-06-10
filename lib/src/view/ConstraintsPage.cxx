@@ -86,6 +86,8 @@ void ConstraintsPage::initialize(OptimizationAnalysis& analysis)
   cstrTableModel_ = new ConstraintsTableModel(this);
   cstrTableView_->setModel(cstrTableModel_);
   cstrTableModel_->updateTable(analysis);
+  cstrTableView_->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+  cstrTableView_->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
   updateView();
 
   connect(this, SIGNAL(removeInputLine(QModelIndex)), cstrTableModel_, SLOT(removeLine(QModelIndex)));
@@ -119,13 +121,5 @@ void ConstraintsPage::updateView()
   const int lastRow = cstrTableView_->model()->rowCount() - 1;
   if (lastRow + 1)
     cstrTableView_->selectRow(lastRow);
-
 }
-
-void ConstraintsPage::resizeEvent(QResizeEvent *event)
-{
-  cstrTableView_->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
-  cstrTableView_->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
-  QWizardPage::resizeEvent(event);
-}
-}
+} // namespace PERSALYS

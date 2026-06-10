@@ -456,6 +456,8 @@ QAction * ItemFactory::createAction(const QString &analysisName, const DataField
 
 String ItemFactory::availableAnalysisName(const QString &baseName) const
 {
+  if (!parentStudyItem_)
+    return baseName.toStdString();
   return parentStudyItem_->getStudy().getAvailableAnalysisName(baseName.toStdString());
 }
 }

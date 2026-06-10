@@ -69,30 +69,33 @@ QVariant DistributionsTableModel::data(const QModelIndex& index, int role) const
 
 void DistributionsTableModel::appendDistribution(const QString& distributionName)
 {
-  int nbRow = 0;
   if (distributionName == tr("All"))
   {
     if (availableDistributions_.size() == distributions_.size())
       return;
+    QStringList newDistributions;
     for (int i = 0; i < availableDistributions_.size(); ++i)
     {
       if (!distributions_.contains(availableDistributions_[i]))
-      {
-        ++nbRow;
-        distributions_ << availableDistributions_[i];
-      }
+        newDistributions << availableDistributions_[i];
     }
-    --nbRow;
+    const int firstRow = distributions_.size();
+    const int lastRow = firstRow + newDistributions.size() - 1;
+    beginInsertRows(QModelIndex(), firstRow, lastRow);
+    distributions_ << newDistributions;
+    distributions_.sort();
+    endInsertRows();
+    emit distributionsListChanged(distributions_);
   }
   else
   {
+    const int row = distributions_.size();
+    beginInsertRows(QModelIndex(), row, row);
     distributions_ << distributionName;
+    distributions_.sort();
+    endInsertRows();
+    emit distributionsListChanged(distributions_);
   }
-  distributions_.sort();
-  QModelIndex lastIndex = index(rowCount() - 1, 0);
-  beginInsertRows(lastIndex.parent(), lastIndex.row(), lastIndex.row() + nbRow);
-  endInsertRows();
-  emit distributionsListChanged(distributions_);
 }
 
 

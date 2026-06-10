@@ -219,15 +219,12 @@ void OutputTableModel::addLine()
   int i = 0;
   while (physicalModel_.hasOutputNamed('Y' + (OSS() << i).str()))
     ++i;
+  const int row = rowCount();
+  beginInsertRows(QModelIndex(), row, row);
   physicalModel_.blockNotification("PhysicalModelDefinitionItem");
   physicalModel_.addOutput(Output('Y' + (OSS() << i).str()));
   emit outputNumberChanged();
   physicalModel_.blockNotification();
-  //
-  QModelIndex lastIndex = index(rowCount() - 1, 0);
-  beginInsertRows(lastIndex.parent(), lastIndex.row(), lastIndex.row());
-  insertRow(lastIndex.row());
-
   endInsertRows();
   emit headerDataChanged(Qt::Horizontal, 0, 0);
 }
@@ -235,10 +232,10 @@ void OutputTableModel::addLine()
 
 void OutputTableModel::removeLine(const QModelIndex & index)
 {
+  const String name(physicalModel_.getOutputs()[index.row()].getName());
   beginRemoveRows(index.parent(), index.row(), index.row());
-  removeRows(index.row(), 1, index.parent());
   physicalModel_.blockNotification("PhysicalModelDefinitionItem");
-  physicalModel_.removeOutput(physicalModel_.getOutputs()[index.row()].getName());
+  physicalModel_.removeOutput(name);
   emit outputNumberChanged();
   physicalModel_.blockNotification();
   endRemoveRows();

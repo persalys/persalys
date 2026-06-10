@@ -359,8 +359,8 @@ void SensitivityResultWidget::updateIndicesPlot(int, Qt::SortOrder)
     }
   }
 
-  const Interval foInterval(sortedFOIntervalLowerBounds, sortedFOIntervalUpperBounds);
-  const Interval toInterval(sortedTOIntervalLowerBounds, sortedTOIntervalUpperBounds);
+  const Interval foInterval(sortedFOIntervalLowerBounds.getSize() ? Interval(sortedFOIntervalLowerBounds, sortedFOIntervalUpperBounds) : Interval());
+  const Interval toInterval(sortedTOIntervalLowerBounds.getSize() ? Interval(sortedTOIntervalLowerBounds, sortedTOIntervalUpperBounds) : Interval());
   plot_->updatePlot(sortedFirstOrderIndices, sortedTotalIndices, foInterval, toInterval, sortedInputNames);
 }
 }

@@ -70,8 +70,8 @@ QVariant GradientTableModel::data(const QModelIndex& index, int role) const
   if (!index.isValid())
     return QVariant();
 
-  if ((int)gradient_.getNbRows() != rowCount() ||
-      (int)gradient_.getNbColumns() != columnCount())
+  if (gradient_.getNbRows() != static_cast<UnsignedInteger>(rowCount()) ||
+      gradient_.getNbColumns() != static_cast<UnsignedInteger>(columnCount()))
   {
     if (role == Qt::DisplayRole)
       return QString("?");

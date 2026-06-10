@@ -61,16 +61,6 @@ public :
   ~SignalBlocker();
 };
 
-class PERSALYS_MODEL_API SimpleException : public std::exception
-{
-  const QString text_;
-public :
-  SimpleException(const QString& text);
-  virtual ~SimpleException() throw();
-  QString text() const;
-  const char* what() const noexcept override;
-};
-
 class PERSALYS_MODEL_API QtOT
 {
 public:

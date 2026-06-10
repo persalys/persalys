@@ -17,7 +17,7 @@ template <>
   canConvert< _PyObject_, LinearModelResult >(PyObject * pyObj)
   {
     void * ptr = 0;
-    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("LinearModelResult *"), 0 ))) {
+    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("LinearModelResult *"), SWIG_POINTER_NO_NULL))) {
       LinearModelResult * p_it = reinterpret_cast< LinearModelResult * >( ptr );
       return p_it != NULL;
     }
@@ -31,7 +31,7 @@ template <>
   convert< _PyObject_, LinearModelResult >(PyObject * pyObj)
   {
     void * ptr = 0;
-    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("LinearModelResult *"), 0))) {
+    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("LinearModelResult *"), SWIG_POINTER_NO_NULL))) {
       LinearModelResult * p_it = reinterpret_cast< LinearModelResult * >( ptr );
       return *p_it;
     }

@@ -59,8 +59,7 @@ ApproximationResultWindow::ApproximationResultWindow(AnalysisItem* item, QWidget
   }
   else
   {
-    qDebug() << "In ApproximationResultWindow: the given analysis is not a FORMAnalysis or a SORMAnalysis";
-    throw std::exception();
+    throw InvalidArgumentException(HERE) << "The given analysis is not a FORMAnalysis or a SORMAnalysis";
   }
 
   // tab : model description --------------------------------

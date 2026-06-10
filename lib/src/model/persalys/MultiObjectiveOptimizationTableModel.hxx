@@ -42,6 +42,7 @@ public:
 private:
   MultiObjectiveOptimizationAnalysis analysis_;
   bool firstColumnChecked_;
+  OT::Point fixedValues_;
 };
 }
 #endif

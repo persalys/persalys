@@ -253,13 +253,9 @@ namespace PERSALYS
     pageLayout->addWidget(tabWidget);
 
     // threshold for variables
-    QVBoxLayout * thresholdLayout = new QVBoxLayout(tabWidget);
-
     tableView_ = new ResizableHeaderlessTableView;
     tableView_->setEditTriggers(QTableView::AllEditTriggers);
 
-    thresholdLayout->addWidget(tableView_);
-    thresholdLayout->addStretch();
     tabWidget->addTab(tableView_, tr("Threshold"));
 
     QWidget * tab = new QWidget;

@@ -25,7 +25,6 @@
 #include "persalys/ParametersWidget.hxx"
 #include "persalys/TranslationManager.hxx"
 #include "persalys/QtTools.hxx"
-#include "persalys/DesignOfExperimentEvaluation.hxx"
 
 #include "persalys/StudyManager.hxx"
 
@@ -43,6 +42,8 @@ AnalysisWindow::AnalysisWindow(AnalysisItem* item, StudyManager *manager, QWidge
   , studyManager_(manager)
   , analysisItem_(item)
 {
+  if (!item)
+    throw InvalidArgumentException(HERE) << "AnalysisWindow: item is null";
   buildInterface();
 }
 
@@ -64,13 +65,6 @@ void AnalysisWindow::buildInterface()
   scrollArea->setWidgetResizable(true);
 
   // analysis parameters widget
-  Analysis analysis = analysisItem_->getAnalysis();
-  auto * implementation = analysis.getImplementation().get();
-  const auto * doeEvalImplementation = dynamic_cast<DesignOfExperimentEvaluation*>(implementation);
-
-  if (doeEvalImplementation)
-    Parameters parameters = doeEvalImplementation->getParameters();
-
   const Parameters analysisParameters(analysisItem_->getAnalysis().getImplementation()->getParameters());
   if (analysisParameters.getSize())
   {
@@ -200,6 +194,7 @@ void AnalysisWindow::launchAnalysis()
 
   // create controller
   Controller * controller = new Controller;
+  controller->setParent(this);
   connect(controller, SIGNAL(launchAnalysisRequested(Analysis)), analysisItem_, SLOT(processStatusChanged()));
   connect(controller, SIGNAL(processFinished()), analysisItem_, SLOT(processStatusChanged()));
 

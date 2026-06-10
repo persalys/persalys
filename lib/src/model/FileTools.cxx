@@ -213,7 +213,8 @@ void FileTools::ExportImage(const QImage& image, QWidget * parent)
 QString FileTools::GetDocumentationDirectoryPath()
 {
   // case 1: try to use the environment variable
-  QString userManualDir = std::getenv("PERSALYS_HTML_PATH");
+  const char * htmlPath = std::getenv("PERSALYS_HTML_PATH");
+  QString userManualDir = htmlPath ? QString(htmlPath) : QString();
   if (!userManualDir.isEmpty())
   {
     if (QDir(userManualDir).exists())

@@ -16,7 +16,7 @@ template <>
   convert< _PyObject_, PERSALYS::Study >(PyObject * pyObj)
   {
     void * ptr = 0;
-    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("PERSALYS::Study *"), 0))) {
+    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("PERSALYS::Study *"), SWIG_POINTER_NO_NULL))) {
       PERSALYS::Study * p_it = reinterpret_cast< PERSALYS::Study * >( ptr );
       return *p_it;
     }
@@ -30,7 +30,7 @@ template <>
 
 %include Study_doc.i
 
-%ignore *::SetInstanceObserver;
+%ignore PERSALYS::Study::SetInstanceObserver;
 
 %pythonappend PERSALYS::Study::add %{
    args[0].thisown = 0

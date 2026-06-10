@@ -33,7 +33,7 @@ namespace PERSALYS
 
 class DiagramPushButton;
 
-class HoverOverlay: public QWidget
+class PERSALYS_UTILS_API HoverOverlay: public QWidget
 {
     Q_OBJECT
 public:

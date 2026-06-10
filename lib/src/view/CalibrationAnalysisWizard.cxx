@@ -423,7 +423,10 @@ void CalibrationParametersPage::updateLabel()
 CalibrationAnalysisWizard::CalibrationAnalysisWizard(const Analysis &analysis, const bool isGeneralWizard, QWidget *parent)
   : AnalysisWizard(analysis, parent)
 {
-  const DesignOfExperiment observations(dynamic_cast<CalibrationAnalysis*>(analysis_.getImplementation().get())->getObservations());
+  const auto * calibrationAnalysis = dynamic_cast<CalibrationAnalysis*>(analysis_.getImplementation().get());
+  if (!calibrationAnalysis)
+    throw InvalidArgumentException(HERE) << "The analysis is not a CalibrationAnalysis";
+  const DesignOfExperiment observations(calibrationAnalysis->getObservations());
 
   if (isGeneralWizard)
   {

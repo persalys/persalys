@@ -161,22 +161,22 @@ void InputTableModel::addLine()
   int i = 0;
   while (physicalModel_.hasInputNamed('X' + (OSS() << i).str()))
     ++i;
+  const int row = rowCount();
+  beginInsertRows(QModelIndex(), row, row);
   physicalModel_.blockNotification("PhysicalModelDefinitionItem");
   physicalModel_.addInput(Input('X' + (OSS() << i).str()));
   emit inputNumberChanged();
   physicalModel_.blockNotification();
-  QModelIndex lastIndex = index(rowCount() - 1, 0);
-  beginInsertRows(lastIndex.parent(), lastIndex.row(), lastIndex.row());
   endInsertRows();
 }
 
 
 void InputTableModel::removeLine(const QModelIndex & index)
 {
+  const String name(physicalModel_.getInputs()[index.row()].getName());
   beginRemoveRows(index.parent(), index.row(), index.row());
-  removeRows(index.row(), 1, index.parent());
   physicalModel_.blockNotification("PhysicalModelDefinitionItem");
-  physicalModel_.removeInput(physicalModel_.getInputs()[index.row()].getName());
+  physicalModel_.removeInput(name);
   emit inputNumberChanged();
   physicalModel_.blockNotification();
   endRemoveRows();

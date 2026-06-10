@@ -127,6 +127,8 @@ AboutDialog::AboutDialog(QWidget* parent)
   names << "OpenGL Vendor";
   names << "OpenGL Version";
   names << "OpenGL Renderer";
+  while (glInfos.size() < 3)
+    glInfos << "";
   values << glInfos;
 #endif
 

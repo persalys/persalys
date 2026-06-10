@@ -175,7 +175,7 @@ UnsignedInteger MetaModelAnalysis::getTestSampleValidationSeed() const
 
 void MetaModelAnalysis::setKFoldValidationNumberOfFolds(const UnsignedInteger nbFolds)
 {
-  if (nbFolds_ < 2)
+  if (nbFolds < 2)
     throw InvalidArgumentException(HERE) << "The number of folds must be greater than 1 ";
   nbFolds_ = nbFolds;
 }

@@ -64,12 +64,16 @@ void FMUInfo::initialize(const String & fmuType)
 
   ScopedPyObjectPointer otfmi_fmiModule(PyImport_ImportModule("otfmi.fmi")); // new reference
   handleException();// if cannot import otfmi
-  assert(otfmi_fmiModule.get());
+  if (!otfmi_fmiModule.get())
+    throw InternalException(HERE) << "Failed to import otfmi.fmi";
 
   PyObject * otfmi_fmiDict = PyModule_GetDict(otfmi_fmiModule.get());
-  assert(otfmi_fmiDict);
+  if (!otfmi_fmiDict)
+    throw InternalException(HERE) << "Failed to get otfmi.fmi module dict";
+
   PyObject * load_fmuMethod = PyDict_GetItemString(otfmi_fmiDict, "load_fmu");
-  assert(load_fmuMethod);
+  if (!load_fmuMethod)
+    throw InternalException(HERE) << "Failed to find load_fmu in otfmi.fmi";
 
   ScopedPyObjectPointer fileName_py(convert< String, _PyString_>(fileName_));
   ScopedPyObjectPointer kind(PyUnicode_FromString(fmuType.c_str())); // new reference

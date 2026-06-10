@@ -71,7 +71,10 @@ bool CodeModel::setData(const QModelIndex & index, const QVariant & value, int r
     physicalModel_.blockNotification("PhysicalModelDefinitionItem");
     auto * pyModel = dynamic_cast<PythonPhysicalModel*>(physicalModel_.getImplementation().get());
     if (pyModel && value.toString() == QString::fromStdString(pyModel->getCode()))
+    {
+      physicalModel_.blockNotification();
       return false;
+    }
     
     try
     {
@@ -95,6 +98,8 @@ bool CodeModel::setData(const QModelIndex & index, const QVariant & value, int r
 
 Qt::ItemFlags CodeModel::flags(const QModelIndex & index) const
 {
+  if (!index.isValid())
+    return QAbstractTableModel::flags(index);
   return Qt::ItemIsEditable | QAbstractTableModel::flags(index);
 }
 

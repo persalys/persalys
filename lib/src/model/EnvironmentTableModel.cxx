@@ -151,7 +151,7 @@ void EnvironmentTableModel::addLine()
 
 void EnvironmentTableModel::removeLine()
 {
-  QTableView * tableView = static_cast<QTableView*>(parent());
+  QTableView * tableView = qobject_cast<QTableView*>(parent());
   if (!tableView || !tableView->selectionModel() || !tableView->selectionModel()->hasSelection())
     return;
 

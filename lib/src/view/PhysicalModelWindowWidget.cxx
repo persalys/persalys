@@ -380,7 +380,8 @@ void PhysicalModelWindowWidget::evaluateOutputs()
   }
   else
   {
-    removeTab(1);
+    if (count() > 1)
+      removeTab(1);
     FieldModelEvaluation eval("anEval", physicalModel_);
     try
     {

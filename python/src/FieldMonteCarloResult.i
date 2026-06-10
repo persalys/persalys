@@ -17,7 +17,7 @@ template <>
   canConvert< _PyObject_, KarhunenLoeveResult >(PyObject * pyObj)
   {
     void * ptr = 0;
-    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("KarhunenLoeveResult *"), 0 ))) {
+    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("KarhunenLoeveResult *"), SWIG_POINTER_NO_NULL))) {
       KarhunenLoeveResult * p_it = reinterpret_cast< KarhunenLoeveResult * >( ptr );
       return p_it != NULL;
     }
@@ -31,7 +31,7 @@ template <>
   convert< _PyObject_, KarhunenLoeveResult >(PyObject * pyObj)
   {
     void * ptr = 0;
-    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("KarhunenLoeveResult *"), 0))) {
+    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("KarhunenLoeveResult *"), SWIG_POINTER_NO_NULL))) {
       KarhunenLoeveResult * p_it = reinterpret_cast< KarhunenLoeveResult * >( ptr );
       return *p_it;
     }

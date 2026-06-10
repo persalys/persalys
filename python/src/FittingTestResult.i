@@ -17,7 +17,7 @@ template <>
   canConvert< _PyObject_, PERSALYS::FittingTestResult >(PyObject * pyObj)
   {
     void * ptr = 0;
-    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("PERSALYS::FittingTestResult *"), 0 ))) {
+    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("PERSALYS::FittingTestResult *"), SWIG_POINTER_NO_NULL))) {
       PERSALYS::FittingTestResult * p_it = reinterpret_cast< PERSALYS::FittingTestResult * >( ptr );
       return p_it != NULL;
     }
@@ -31,7 +31,7 @@ template <>
   convert< _PyObject_, PERSALYS::FittingTestResult >(PyObject * pyObj)
   {
     void * ptr = 0;
-    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("PERSALYS::FittingTestResult *"), 0))) {
+    if (SWIG_IsOK(SWIG_ConvertPtr( pyObj, &ptr, SWIG_TypeQuery("PERSALYS::FittingTestResult *"), SWIG_POINTER_NO_NULL))) {
       PERSALYS::FittingTestResult * p_it = reinterpret_cast< PERSALYS::FittingTestResult * >( ptr );
       return *p_it;
     }
