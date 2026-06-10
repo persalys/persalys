@@ -93,7 +93,7 @@ class PERSALYS_VIEW_API EnumDelegate : public QItemDelegate
 {
   Q_OBJECT
 public:
-  explicit EnumDelegate(QStringList & enumLabels, QObject *parent = nullptr)
+  explicit EnumDelegate(const QStringList & enumLabels, QObject *parent = nullptr)
     : QItemDelegate(parent)
     , enumLabels_(enumLabels)
   {
@@ -234,15 +234,14 @@ public:
 private:
   void mousePressEvent(QMouseEvent *event) override
   {
-    QModelIndex item = indexAt(event->pos());
-    bool selected = selectionModel()->isSelected(indexAt(event->pos()));
+    const QModelIndex item = indexAt(event->pos());
+    const bool selected = item.isValid() && selectionModel()->isSelected(item);
     QTreeView::mousePressEvent(event);
 
     if (!item.isValid() || selected)
     {
       clearSelection();
-      const QModelIndex index;
-      selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
+      selectionModel()->setCurrentIndex(QModelIndex(), QItemSelectionModel::Select);
     }
   }
 };

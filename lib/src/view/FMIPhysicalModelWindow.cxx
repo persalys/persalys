@@ -44,6 +44,7 @@
 #include <QTreeView>
 #include <QGroupBox>
 #include <QScrollArea>
+#include <QSet>
 
 using namespace OT;
 
@@ -187,7 +188,7 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
 
   variablesLayout->addWidget(filterGroupBox);
 
-  tree_model_ = new TreeModel("");
+  tree_model_ = new TreeModel("", this);
 
   QTreeView * view = new DeselectableTreeView;
   view->setModel(tree_model_);
@@ -350,12 +351,12 @@ void FMIPhysicalModelWindow::selectImportFileDialogRequested()
         fmiModel->setFMUType(FMUTypeCombobox_->currentText().toStdString());
         fmiModel->setFMUFileName(fileName.toUtf8().data());
         errorWidget_->reset();
+        loadModel(fmiModel->getFMUInfo());
       }
       catch (const std::exception & ex)
       {
         errorWidget_->setFramelessErrorMessage(ex.what());
       }
-      loadModel(fmiModel->getFMUInfo());
       QApplication::restoreOverrideCursor();
     }
   }
@@ -388,43 +389,40 @@ void FMIPhysicalModelWindow::updateFilters()
   proxyModel_->setFilterKeyColumn(searchFieldComboBox_->currentIndex());
 
   // filter variability
-  QStringList variabilityStrings(variabilityField_->getItemNames());
-  QStringList checkedVariabilityStrings(variabilityField_->getCheckedItemNames());
-  QList<int> checkedVariability;
-  for (int i = 0; i < variabilityStrings.size(); ++ i)
   {
-    if (checkedVariabilityStrings.contains(variabilityStrings[i]))
-    {
-      checkedVariability.append(i);
-    }
+    QStringList names(variabilityField_->getItemNames());
+    QSet<QString> checked(variabilityField_->getCheckedItemNames().begin(),
+                          variabilityField_->getCheckedItemNames().end());
+    QList<int> indices;
+    for (int i = 0; i < names.size(); ++i)
+      if (checked.contains(names[i]))
+        indices.append(i);
+    proxyModel_->setVariabilityFilter(indices);
   }
-  proxyModel_->setVariabilityFilter(checkedVariability);
 
   // filter causality
-  QStringList causalityStrings(causalityField_->getItemNames());
-  QStringList checkedCausalityStrings(causalityField_->getCheckedItemNames());
-  QList<int> checkedCausality;
-  for (int i = 0; i < causalityStrings.size(); ++ i)
   {
-    if (checkedCausalityStrings.contains(causalityStrings[i]))
-    {
-      checkedCausality.append(i);
-    }
+    QStringList names(causalityField_->getItemNames());
+    QSet<QString> checked(causalityField_->getCheckedItemNames().begin(),
+                          causalityField_->getCheckedItemNames().end());
+    QList<int> indices;
+    for (int i = 0; i < names.size(); ++i)
+      if (checked.contains(names[i]))
+        indices.append(i);
+    proxyModel_->setCausalityFilter(indices);
   }
-  proxyModel_->setCausalityFilter(checkedCausality);
 
-  // filter causality
-  QStringList ioStrings(ioField_->getItemNames());
-  QStringList checkedIOStrings(ioField_->getCheckedItemNames());
-  QList<int> checkedIO;
-  for (int i = 0; i < ioStrings.size(); ++ i)
+  // filter I/O
   {
-    if (checkedIOStrings.contains(ioStrings[i]))
-    {
-      checkedIO.append(i);
-    }
+    QStringList names(ioField_->getItemNames());
+    QSet<QString> checked(ioField_->getCheckedItemNames().begin(),
+                          ioField_->getCheckedItemNames().end());
+    QList<int> indices;
+    for (int i = 0; i < names.size(); ++i)
+      if (checked.contains(names[i]))
+        indices.append(i);
+    proxyModel_->setIOFilter(indices);
   }
-  proxyModel_->setIOFilter(checkedIO);
   updatePersistentEditor();
 }
 
@@ -496,7 +494,7 @@ void FMIPhysicalModelWindow::updateVariablesTableModel()
   connect(variablesTableModel_, SIGNAL(ioCountChanged()), this, SLOT(updateIOCount()));
   connect(dynamic_cast<PhysicalModelItem*>(getItem()), SIGNAL(outputChanged()), variablesTableModel_, SLOT(updateOutputValues()));
 
-  proxyModel_ = new DataFilterProxyModel;
+  proxyModel_ = new DataFilterProxyModel(this);
   proxyModel_->setSourceModel(variablesTableModel_);
   proxyModel_->setDynamicSortFilter(true);
 
