@@ -36,9 +36,8 @@ class PERSALYS_VIEW_API ImportObservationsPage : public QWizardPage
   friend class TestObservationsWizard;
 
 public:
-  explicit ImportObservationsPage(QWidget *parent = nullptr);
+  explicit ImportObservationsPage(const PhysicalModel& physicalModel, const OT::String& obsName, QWidget *parent = nullptr);
 
-  void initialize(const DesignOfExperiment& designOfExp);
   DesignOfExperiment getDesignOfExperiment() const;
   bool validatePage() override;
 
@@ -51,7 +50,13 @@ public slots:
 
 private:
   ImportSampleWidget * sampleWidget_;
-  Observations observations_;
+  PhysicalModel physicalModel_;
+  OT::String obsName_;
+  OT::String fileName_;
+  OT::Indices inColumns_;
+  OT::Indices outColumns_;
+  OT::Description inNames_;
+  OT::Description outNames_;
 };
 
 
@@ -62,13 +67,12 @@ class PERSALYS_VIEW_API ObservationsWizard : public Wizard
   friend class TestObservationsWizard;
 
 public:
-  explicit ObservationsWizard(const DesignOfExperiment &designOfExp, QWidget *parent = nullptr)
+  explicit ObservationsWizard(const PhysicalModel& physicalModel, const OT::String& obsName, QWidget *parent = nullptr)
     : Wizard(parent)
   {
     docLink_ = "user_manual/graphical_interface/deterministic_analysis/user_manual_deterministic_analysis.html#observationwizard";
 
-    page_ = new ImportObservationsPage(this);
-    page_->initialize(designOfExp);
+    page_ = new ImportObservationsPage(physicalModel, obsName, this);
     setPage(0, page_);
   }
   DesignOfExperiment getDesignOfExperiment()

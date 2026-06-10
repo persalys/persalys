@@ -225,9 +225,8 @@ void PhysicalModelDiagramItem::newObservations()
   }
   // new observations
   const String obsName(getParentStudyItem()->getStudy().getAvailableDataModelName(tr("observations_").toStdString()));
-  Observations obs(obsName, physicalModel_);
   // emit signal to StudyManager to open a wizard
-  emit wizardRequested(getParentStudyItem(), obs);
+  emit observationsWizardRequested(getParentStudyItem(), physicalModel_, QString::fromUtf8(obsName.c_str()));
 }
 
 

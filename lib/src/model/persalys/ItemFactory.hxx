@@ -77,7 +77,7 @@ signals:
   void doeExportWizardRequested(const StudyItem*);
   void wizardRequested(const PhysicalModel&);
   void openPropertiesRequested();
-  void wizardRequested(StudyItem*, const DesignOfExperiment& designOfExp);
+  void observationsWizardRequested(StudyItem*, const PhysicalModel& physicalModel, const QString& obsName);
   void analysisRequested(StudyItem*, const Analysis&);
 
 protected:

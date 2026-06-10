@@ -44,18 +44,26 @@ private:
 private slots:
   void TestImport() const
   {
-    // create the observations
+    // create the observations (used only for __repr__ comparison at the end)
     String filename = "normal2.csv";
     Normal(5).getSample(10).exportToCSVFile(filename);
     Observations obs("obs", model_, filename, Indices(1, 2), Indices(1, 0), Description(1, "E"), Description(1, "Ep2"));
 
     // create the wizard
-    ObservationsWizard wizard(obs);
+    ObservationsWizard wizard(model_, "obs");
     wizard.show();
+
+    // Load the file (triggers setTable via the updateTableRequested signal)
+    wizard.page_->setTable(QString::fromUtf8(filename.c_str()));
 
     const ErrorWidget * errorMessageLabel = wizard.page_->findChild<ErrorWidget*>();
     SampleTableModel * model = wizard.page_->findChild<SampleTableModel*>();
     const QLineEdit * fileLineEdit = wizard.page_->findChild<QLineEdit*>();
+
+    // Set up column assignments matching the original observations:
+    // column 0 → output "Ep2", column 2 → input "E"
+    model->setHeaderData(0, Qt::Horizontal, "Ep2", Qt::DisplayRole);
+    model->setHeaderData(2, Qt::Horizontal, "E", Qt::DisplayRole);
 
     // checks
     QVERIFY2(wizard.nextId() == -1, "Next page ID must be -1");

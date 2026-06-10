@@ -204,10 +204,10 @@ void StudyManager::openImportEvaluationsWizard(const StudyItem *item, const Anal
   wizard->open();
 }
 
-void StudyManager::openObservationsWizard(StudyItem *item, const DesignOfExperiment &designOfExp)
+void StudyManager::openObservationsWizard(StudyItem *item, const PhysicalModel &physicalModel, const QString &obsName)
 {
   Q_ASSERT(item);
-  ObservationsWizard * wizard = new ObservationsWizard(designOfExp, mainWidget_);
+  ObservationsWizard * wizard = new ObservationsWizard(physicalModel, obsName.toStdString(), mainWidget_);
 
   if (wizard)
   {
@@ -319,7 +319,7 @@ void StudyManager::createWindow(Item *item)
   connect(item, &Item::openPropertiesRequested, [item, this] () {
     openProperties(item);
   });
-  connect(item, SIGNAL(wizardRequested(StudyItem*, DesignOfExperiment)), this, SLOT(openObservationsWizard(StudyItem*, DesignOfExperiment)));
+  connect(item, SIGNAL(observationsWizardRequested(StudyItem*, PhysicalModel, QString)), this, SLOT(openObservationsWizard(StudyItem*, PhysicalModel, QString)));
 
   connect(item, SIGNAL(analysisRequested(StudyItem*, Analysis)), this, SLOT(openAnalysisWindow(StudyItem*, Analysis)));
 

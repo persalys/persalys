@@ -122,6 +122,16 @@ void Observations::setColumns(const Indices &inputColumns,
   DataModel::setColumns(inputColumns, inputNames, outputColumns, outputNames);
 }
 
+void Observations::setFileName(const String & fileName, 
+                              const Indices &inputColumns,
+                              const Indices &outputColumns,
+                              const Description &inputNames,
+                              const Description &outputNames)
+{
+  checkColumnsAndNames(inputNames, outputColumns, outputNames);
+  DataModel::setFileName(fileName);
+  setColumns(inputColumns, inputNames, outputColumns, outputNames);
+}
 
 void Observations::update()
 {

@@ -41,7 +41,7 @@ openturns.testing.assert_almost_equal(
 # - reload file
 sample2 = sample * 3
 sample2.exportToCSVFile(filename)
-obs.setFileName(filename)
+obs.setFileName(filename, [7, 3], [6, 2], ["X3", "X1"], ["Y2", "Y1"])
 openturns.testing.assert_almost_equal(
     obs.getSample(), sample2.getMarginal([3, 7, 2, 6]), 1e-16
 )
