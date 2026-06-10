@@ -40,6 +40,7 @@ export PYTHONPATH=${PYTHONUSERBASE}/lib/python3.14/site-packages
 mkdir -p ${PYTHONPATH}
 export QT_PLUGIN_PATH=${HERE}/usr/lib/plugins
 export PV_PLUGIN_PATH=${HERE}/usr/lib/paraview/plugins/BagPlotViewsAndFilters
+export QT_QPA_PLATFORM=xcb
 
 # assumes fonts are provided on host machine
 export QT_QPA_FONTDIR=/usr/share/fonts/truetype
