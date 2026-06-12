@@ -410,17 +410,13 @@ Export/Import Study
 
 - open the interface
 
-- click on button Import Python script in the mdiArea
+- click on button Import Python script in the midArea
 
   - choose test.py
 
 - click on the icon Import Python of the tool bar
 
-  - a message box appears to close opened studies, click OK
-
-  - a message box appears to save the current study, click close without saving
-
-  - choose the script test.py
+- choose the script test.py
 
 - close myOTStudy3
 
@@ -477,7 +473,7 @@ Models
 - unselect all outputs
 
 - click on 'Evaluate model' button
-    - nothing appends
+    - nothing happens
 
 - check fake_var + change its formula to 'x1 +'
 
@@ -614,7 +610,7 @@ Models
   .. image:: /developer_manual/validation/model4.png
       :align: center
 
-  - click on reload button: nothing appends
+  - click on reload button: nothing happens
 
 - click on 'Definition' child item of 'importDataModel' item
 
@@ -1264,24 +1260,6 @@ Designs of experiments
           - additional columns can be displayed by checking them in the graph setting widget in the window bottom left corner
 
 
-  - Click on symbolicModel definition item, select only y0:
-
-  - right click on importDesign and choose Modify:
-
-    - First page:
-        - type: Imported design
-        - continue
-
-    - Second page:
-
-      .. image:: /developer_manual/validation/design_3_wizard_2nd_page_eval.png
-          :align: center
-
-      - Data file: data_da.csv
-      - header items: ['x1', 'y0', 'x2', 'x3']
-      - finish
-      - check the evaluation is done and y0 has been evaluated
-
 - save the study, close it, reopen it, check all windows are correctly built
 - verify that you can close every analysis
 - close the study
@@ -1755,7 +1733,8 @@ Probabilistic analyses
     - right click on the physical model 'kriging' that got created
 
       - click on 'Remove'
-      - click on model1 item, the diagram is displayed
+
+    - click on probaDesign_0 item, the diagram is displayed
       - click on 'export as model'
       - select 'kriging', analysis parameters are displayed
       - click on 'Finish'
@@ -2308,11 +2287,6 @@ Data set
       - there is a "Covariance models" table with one row per variable (inputs + outputs)
       - click Next
 
-    - Critical domain page
-      - there is a "Critical domain" table with one row per output variable
-      - define the critical domain for Y0 as [8;inf)
-      - there is a "Filter/weight functions" table with alpha parameters for each output variable
-
     - Target HSIC parameters page:
 
       - there is a combo box to choose V-statistic or U-statistic
@@ -2328,6 +2302,11 @@ Data set
       - there is NO "Compute asymptotic p-values" checkbox (conditional HSIC does not support it)
       - there is a "Covariance models" table
       - click Finish
+
+    - Critical domain page
+      - there is a "Critical domain" table with one row per output variable
+      - define the critical domain for Y0 as [8;inf)
+      - there is a "Filter/weight functions" table with alpha parameters for each output variable
 
     - an item 'Sensitivity' appears in the tree view
     - a window appears with a progress bar and 2 buttons 'Run' and 'Stop'
