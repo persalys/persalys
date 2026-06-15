@@ -227,8 +227,8 @@ endmacro ( ot_add_current_dir_to_include_dirs )
 
 
 set ( CPACK_PACKAGE_NAME          ${PACKAGE_NAME} )
-set ( CPACK_PACKAGE_VERSION_MAJOR 20              )
-set ( CPACK_PACKAGE_VERSION_MINOR 1              )
+set ( CPACK_PACKAGE_VERSION_MAJOR 21              )
+set ( CPACK_PACKAGE_VERSION_MINOR 0dev              )
 set ( CPACK_PACKAGE_VERSION_PATCH                )
 set ( CPACK_SOURCE_GENERATOR      "TGZ;TBZ2"     )
 set ( CPACK_BINARY_STGZ           OFF CACHE BOOL "STGZ")
