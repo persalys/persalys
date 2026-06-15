@@ -178,7 +178,8 @@ void PhysicalModelDiagramItem::updateDiagramBoxesValidity()
   emit physicalModelValidityChanged(validity, QString(errorMessage.c_str()));
   validity = MorrisAnalysis::CanBeLaunched(errorMessage, physicalModel_);
   emit twoInputsValidityChanged(validity, QString(errorMessage.c_str()));
-  validity = DesignOfExperimentEvaluation::CanBeLaunched(errorMessage, physicalModel_);
+  errorMessage = physicalModel_.getInputDimension() ? "" : tr("Define at least one input in the model").toStdString();
+  validity = errorMessage.empty();
   emit inputNumberValidityChanged(validity, QString(errorMessage.c_str()));
   validity = MultiObjectiveOptimizationAnalysis::CanBeLaunched(errorMessage, physicalModel_);
   emit outputNumberValidityChanged(validity, QString(errorMessage.c_str()));
@@ -186,8 +187,8 @@ void PhysicalModelDiagramItem::updateDiagramBoxesValidity()
   emit dependenceValidityChanged(validity, QString(errorMessage.c_str()));
   validity = MonteCarloAnalysis::CanBeLaunched(errorMessage, physicalModel_);
   emit probabilisticModelValidityChanged(validity, QString(errorMessage.c_str()));
-  validity = physicalModel_.isValid() && doeCounter_[0] > 0;
-  qErrorMessage = tr("Create at least one design of experiments and define output variables in the model");
+  validity = physicalModel_.isValid() && doeCounter_[0] > 0 && DesignOfExperimentEvaluation::CanBeLaunched(errorMessage, physicalModel_);
+  qErrorMessage = errorMessage.empty() ? tr("Create at least one design of experiments and define output variables in the model") : QString(errorMessage.c_str());
   emit doeNumberValidityChanged(validity, qErrorMessage);
   validity = physicalModel_.isValid() && doeCounter_[1] > 0;
   qErrorMessage = tr("Define at least one design of experiments which contains output values");

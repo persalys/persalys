@@ -1,3 +1,11 @@
+= 20.1 release (2026-06-15)
+
+ * Various bug fixes and improvments
+ * improvments on the sensitivity analysis wizard
+ * added the possibility to duplicate a data set
+ * multiple selection now working in paraview graphs
+ * computations can be interrupted with ydefx
+
 = 20.0 release (2026-03-30)
 
  * added HSIC sensitivity analyses

@@ -942,6 +942,9 @@ void MarginalsWidget::openWizardToChooseInferenceResult(const QModelIndex& input
       physicalModel_.blockNotification();
       // refresh the table so the new distribution name is displayed
       inputTableModel_->updateData();
+      // beginResetModel/endResetModel destroys persistent editors - reopen them
+      for (int i = 0; i < inputTableModel_->rowCount(); ++i)
+        inputTableView_->openPersistentEditor(inputTableModel_->index(i, 1));
       const QModelIndex newIndex = inputTableModel_->index(inputIndex.row(), 0);
       inputTableView_->setCurrentIndex(newIndex);
     });
