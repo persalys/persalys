@@ -1,18 +1,18 @@
 linux:
   script:
-    - ./utils/build_locally.sh linux
+    - ./utils/build_locally.sh linux 20.1
   except:
     - tags
 
 mingw:
   script:
-    - ./utils/build_locally.sh mingw
+    - ./utils/build_locally.sh mingw 20.1
   except:
     - tags
 
 linux-tag:
   script:
-    - ./utils/build_locally.sh linux
+    - ./utils/build_locally.sh linux 20.1
   artifacts:
     name: persalys-appimage
     paths:
@@ -23,7 +23,7 @@ linux-tag:
 
 mingw-tag:
   script:
-    - ./utils/build_locally.sh mingw
+    - ./utils/build_locally.sh mingw 20.1
   artifacts:
     name: persalys-exe
     paths:
