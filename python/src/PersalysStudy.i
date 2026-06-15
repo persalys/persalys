@@ -28,7 +28,7 @@ template <>
 }
 %}
 
-%include Study_doc.i
+%include PersalysStudy_doc.i
 
 %ignore PERSALYS::Study::SetInstanceObserver;
 

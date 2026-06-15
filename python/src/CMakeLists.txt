@@ -143,7 +143,7 @@ ot_add_python_module (persalys persalys_module.i
                       CalibrationAnalysis.i CalibrationAnalysis_doc.i
                       CalibrationAnalysisResult.i CalibrationAnalysisResult_doc.i
                       StudyImplementation.i
-                      Study.i Study_doc.i
+                      PersalysStudy.i PersalysStudy_doc.i
                       CouplingInputFile.i CouplingInputFile_doc.i
                       CouplingResourceFile.i CouplingResourceFile_doc.i
                       CouplingOutputFile.i CouplingOutputFile_doc.i
