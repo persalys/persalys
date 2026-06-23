@@ -118,8 +118,12 @@ public:
 
   void setModelData(QWidget * editor, QAbstractItemModel * model, const QModelIndex & index) const override
   {
-    const QComboBox * comboBox = static_cast<QComboBox*>(editor);
-    model->setData(index, QString::number(comboBox->currentIndex()), Qt::EditRole);
+    QComboBox * comboBox = static_cast<QComboBox*>(editor);
+    if (!model->setData(index, QString::number(comboBox->currentIndex()), Qt::EditRole))
+    {
+      int value = model->data(index, Qt::EditRole).toInt();
+      comboBox->setCurrentIndex(value);
+    }
   }
 
 private:
