@@ -35,6 +35,7 @@
 #include <QAbstractTableModel>
 #include <QSortFilterProxyModel>
 #include <QItemDelegate>
+#include <QStandardItemModel>
 #include <QTextEdit>
 #include <QTreeView>
 #include <QMouseEvent>
@@ -99,10 +100,25 @@ public:
   {
   }
 
-  QWidget *createEditor(QWidget * parent, const QStyleOptionViewItem & /*option*/, const QModelIndex & /*index*/) const override
+  QWidget *createEditor(QWidget * parent, const QStyleOptionViewItem & /*option*/, const QModelIndex & index) const override
   {
     QComboBox * editor = new QComboBox(parent);
     editor->addItems(enumLabels_);
+    QModelIndex causalityIndex = index.sibling(index.row(), 3);
+    int causality = index.model()->data(causalityIndex, Qt::EditRole).toInt();
+    {
+      QStandardItemModel * model = qobject_cast<QStandardItemModel *>(editor->model());
+      if (model)
+      {
+        // FMI2: PARAMETER(0), CALCULATED_PARAMETER(1), INPUT(2), OUTPUT(3), LOCAL(4), INDEPENDENT(5), UNKNOWN(6)
+        if (causality == 2 && model->item(0))
+          model->item(0)->setEnabled(false); // Disabled
+        if ((causality == 0 || causality == 2) && model->item(2))
+          model->item(2)->setEnabled(false); // Output
+        if ((causality == 3 || causality == 4) && model->item(1))
+          model->item(1)->setEnabled(false); // Input
+      }
+    }
     return editor;
   }
 
@@ -113,6 +129,21 @@ public:
     int value = index.model()->data(index, Qt::EditRole).toInt();
     comboBox->setCurrentIndex(value);
     comboBox->setEnabled(comboBox->currentIndex() >= 0);
+    QModelIndex causalityIndex = index.sibling(index.row(), 3);
+    int causality = index.model()->data(causalityIndex, Qt::EditRole).toInt();
+    {
+      QStandardItemModel * model = qobject_cast<QStandardItemModel *>(comboBox->model());
+      if (model)
+      {
+        // FMI2: PARAMETER(0), CALCULATED_PARAMETER(1), INPUT(2), OUTPUT(3), LOCAL(4), INDEPENDENT(5), UNKNOWN(6)
+        if (causality == 2 && model->item(0))
+          model->item(0)->setEnabled(false); // Disabled
+        if ((causality == 0 || causality == 2) && model->item(2))
+          model->item(2)->setEnabled(false); // Output
+        if ((causality == 3 || causality == 4) && model->item(1))
+          model->item(1)->setEnabled(false); // Input
+      }
+    }
   }
 
 
