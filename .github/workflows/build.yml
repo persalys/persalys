@@ -1,0 +1,96 @@
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    env:
+      MAKEFLAGS: -j4
+    steps:
+      - uses: actions/checkout@v7
+      - uses: docker/setup-buildx-action@v4
+      - name: Build Docker image (cached)
+        uses: docker/build-push-action@v7
+        with:
+          context: docker/linux
+          tags: persalys/linux
+          cache-from: type=gha,scope=linux
+          cache-to: type=gha,scope=linux,mode=max
+          load: true
+      - name: Build persalys
+        run: docker run --rm --volume "${{ github.workspace }}:/io" persalys/linux sh -c "/io/docker/linux/run_docker_build.sh $(id -u):$(id -g)"
+
+  mingw:
+    runs-on: ubuntu-latest
+    env:
+      MAKEFLAGS: -j4
+    steps:
+      - uses: actions/checkout@v7
+      - uses: docker/setup-buildx-action@v4
+      - name: Build Docker image (cached)
+        uses: docker/build-push-action@v7
+        with:
+          context: docker/mingw
+          tags: persalys/mingw
+          cache-from: type=gha,scope=mingw
+          cache-to: type=gha,scope=mingw,mode=max
+          load: true
+      - name: Build persalys
+        run: docker run --rm --volume "${{ github.workspace }}:/io" persalys/mingw sh -c "/io/docker/mingw/run_docker_build.sh $(id -u):$(id -g)"
+
+  fedora:
+    runs-on: ubuntu-latest
+    env:
+      MAKEFLAGS: -j4
+    steps:
+      - uses: actions/checkout@v7
+      - uses: docker/setup-buildx-action@v4
+      - name: Build Docker image (cached)
+        uses: docker/build-push-action@v7
+        with:
+          context: docker/fedora
+          tags: persalys/fedora
+          cache-from: type=gha,scope=fedora
+          cache-to: type=gha,scope=fedora,mode=max
+          load: true
+      - name: Build persalys
+        run: docker run --rm --volume "${{ github.workspace }}:/io" persalys/fedora sh -c "/io/docker/fedora/run_docker_build.sh"
+
+  macos:
+    runs-on: macos-latest
+    env:
+      MAKEFLAGS: -j3
+    steps:
+      - uses: actions/checkout@v7
+      - run: brew install openblas swig boost tbb nlopt cminpack hdf5 libxml2 qwt
+      - run: |
+          git clone -b v1.27.3 --depth 1 https://github.com/openturns/openturns.git
+          cmake -DCMAKE_INSTALL_PREFIX=/opt/homebrew \
+          -DCMAKE_PREFIX_PATH="/opt/homebrew/opt/openblas;/opt/homebrew/opt/libxml2" \
+          -DPython_EXECUTABLE=/opt/homebrew/bin/python3 \
+          -DSWIG_COMPILE_FLAGS="-O1" \
+          -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 \
+          -B build_openturns openturns
+          cmake --build build_openturns --target install
+      - run: |
+          cmake -DCMAKE_INSTALL_PREFIX=~/.local \
+          -DCMAKE_PREFIX_PATH="/opt/homebrew/opt/openblas;/opt/homebrew/opt/libxml2" \
+          -DCMAKE_FRAMEWORK_PATH="$(brew --prefix qwt)/lib" \
+          -DPython_EXECUTABLE=/opt/homebrew/bin/python3 \
+          -DPERSALYS_QT_MAJOR_VERSION=6 \
+          -DUSE_PARAVIEW=OFF \
+          -DCMAKE_CXX_FLAGS="-Wall -Wextra -Werror" \
+          -DCMAKE_SWIG_FLAGS="-Werror" -DSWIG_COMPILE_FLAGS="-O1 -Wno-unused-parameter -Wno-unused-function" \
+          -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 .
+          make install
+          make tests
+          ctest ${MAKEFLAGS} --output-on-failure --timeout 100 --schedule-random
