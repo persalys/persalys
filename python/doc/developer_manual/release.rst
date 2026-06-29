@@ -15,7 +15,7 @@ Release process
 
 6. Create X.Y branch and protect it
 
-7. In X.Y branch, modify .gitlab-ci.yml to add X.Y version argument to build_locally.sh to use tagged images
+7. In X.Y branch, modify .gitlab-ci.yml / .github/workflows/build.yml to add X.Y version to use tagged images
 
 8. In X.Y branch, create vX.Y tag
 
