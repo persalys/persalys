@@ -47,6 +47,9 @@ public:
   OT::UnsignedInteger getBlockSize() const;
   virtual void setBlockSize(const OT::UnsignedInteger size);
 
+  bool getComputeIndividualEventProbabilities() const;
+  void setComputeIndividualEventProbabilities(bool compute);
+
   Parameters getParameters() const override;
 
   SimulationReliabilityResult getResult() const;
@@ -70,10 +73,13 @@ protected:
   /** True when all component functions share the same input sample (e.g. MC). */
   virtual bool useSharedInputSamples() const { return true; }
   static void UpdateProgressValue(double percent, void* data);
+  OT::Collection<OT::ProbabilitySimulationResult> computeIndividualEventResults(OT::Collection<OT::Function> memoFunctions, OT::Scalar & elapsedTime);
 
 private:
-  OT::UnsignedInteger seed_ = 0;
-  OT::UnsignedInteger blockSize_ = 1;
+  OT::UnsignedInteger seed_                 = 0;
+  OT::UnsignedInteger blockSize_            = 1;
+  bool computeIndividualEventProbabilities_ = false;
+
 protected:
   SimulationReliabilityResult result_;
 };

@@ -56,6 +56,9 @@ public:
   OT::Collection<OT::Sample> getInputSamples() const;
   OT::Collection<OT::Sample> getOutputSamples() const;
 
+  bool hasPerEventSimulationResults() const;
+  OT::ProbabilitySimulationResult getPerEventSimulationResult(OT::UnsignedInteger eventIndex) const;
+
   /** String converter */
   OT::String __repr__() const override;
 
@@ -69,6 +72,7 @@ private:
   OT::PersistentCollection<OT::Sample> inputSamples_;
   OT::PersistentCollection<OT::Sample> outputSamples_;
   OT::ProbabilitySimulationResult simulationResult_;
+  OT::PersistentCollection<OT::ProbabilitySimulationResult> perEventSimulationResults_;
   OT::Sample convergenceSample_;
   OT::Sample convergenceSampleLowerBound_;
   OT::Sample convergenceSampleUpperBound_;

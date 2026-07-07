@@ -42,6 +42,8 @@ PERSALYS_LimitState_removeFailureEvent_doc
 
 %feature("docstring") PERSALYS::LimitState::isSystemLimitState
 PERSALYS_LimitState_isSystemLimitState_doc
+%feature("docstring") PERSALYS::LimitState::getNumberOfFailureEvents
+PERSALYS_LimitState_getNumberOfFailureEvents_doc
 %feature("docstring") PERSALYS::LimitState::isValid
 PERSALYS_LimitState_isValid_doc
 

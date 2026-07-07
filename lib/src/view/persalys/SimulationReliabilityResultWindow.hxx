@@ -44,9 +44,10 @@ protected:
 
 private:
   SimulationReliabilityResult   result_;
-  TitleLabel                  * titleLabel_     = nullptr;
-  QTabWidget                  * formTabWidget_  = nullptr;
-  QStackedWidget              * histogramStack_ = nullptr;
+  TitleLabel                  * titleLabel_           = nullptr;
+  QTabWidget                  * formTabWidget_        = nullptr;
+  QStackedWidget              * histogramStack_       = nullptr;
+  QStackedWidget              * summaryPerEventStack_ = nullptr;
   QStringList                   limitStateNames_;
   QVector<double>               eventThresholds_;
 };

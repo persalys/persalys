@@ -85,6 +85,7 @@ public:
   void removeFailureEvent(OT::UnsignedInteger index);
 
   bool isSystemLimitState() const;
+  OT::UnsignedInteger getNumberOfFailureEvents() const;
 
   bool isValid() const;
 

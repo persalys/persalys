@@ -145,7 +145,8 @@ void SimulationReliabilityResultWindow::buildInterface()
 
   // first tab : summary --------------------------------
   tabWidget->addTab(getSummaryTab(), tr("Summary"));
-  ++tabIdx; // global
+  if (isSystem) perEventTabIndices.insert(tabIdx);
+  ++tabIdx; // per-event when system
 
   // second tab : output histogram --------------------------------
   tabWidget->addTab(getHistogramTab(), tr("Histogram"));
@@ -163,21 +164,26 @@ void SimulationReliabilityResultWindow::buildInterface()
     perEventTabIndices.insert(tabIdx++); // per-event
   }
 
-  // fifth tab : parameters --------------------------------
-  if (parametersWidget_)
-    tabWidget->addTab(parametersWidget_, tr("Parameters"));
-
-  // tab : table of values --------------------------------
+  // fifth tab : table of values --------------------------------
   if (result_.getDesignOfExperiment().getSample().getSize() > 0)
     tabWidget->addTab(ExportableTableView::GetSampleTableViewWidget(getItem(), result_.getDesignOfExperiment().getSample()), tr("Table"));
 
-  // tab : model description --------------------------------
+  // sixth tab : parameters --------------------------------
+  if (parametersWidget_)
+    tabWidget->addTab(parametersWidget_, tr("Parameters"));
+
+  // seventh tab : model description --------------------------------
   if (modelDescriptionWidget_)
     tabWidget->addTab(modelDescriptionWidget_, tr("Model"));
 
   // Wire limit state selection to dynamic content (system events only)
   if (isSystem && outputsListWidget)
   {
+    // Summary per-event stacked widget
+    if (summaryPerEventStack_)
+      connect(outputsListWidget, &VariablesListWidget::currentRowChanged,
+              summaryPerEventStack_, &QStackedWidget::setCurrentIndex);
+
     // Histogram stacked widget
     if (histogramStack_)
       connect(outputsListWidget, &VariablesListWidget::currentRowChanged,
@@ -196,7 +202,7 @@ void SimulationReliabilityResultWindow::buildInterface()
             [outputsGroupBox, perEventTabIndices](int idx) {
               outputsGroupBox->setVisible(perEventTabIndices.contains(idx));
             });
-    // Initial state: tab 0 (Summary) is global → hide groupbox
+    // Initial state: tab 0 (Summary) is per-event for system events → show groupbox
     outputsGroupBox->setVisible(perEventTabIndices.contains(0));
   }
 
@@ -237,7 +243,8 @@ QWidget* SimulationReliabilityResultWindow::getSummaryTab()
   tabLayout->addWidget(parametersGroupBox, 0, Qt::AlignTop);
 
   // probability estimate table
-  QGroupBox * groupBox = new QGroupBox(tr("Failure probability estimate"));
+  const bool isSystemSummary = (result_.getOutputSamples().getSize() > 1);
+  QGroupBox * groupBox = new QGroupBox(isSystemSummary ? tr("Global failure probability estimate") : tr("Failure probability estimate"));
   QVBoxLayout * groupBoxLayout = new QVBoxLayout(groupBox);
 
   CopyableTableView * resultsTable = new CopyableTableView;
@@ -272,6 +279,59 @@ QWidget* SimulationReliabilityResultWindow::getSummaryTab()
   groupBoxLayout->addWidget(resultsTable);
 
   tabLayout->addWidget(groupBox, 0, Qt::AlignTop);
+
+  // Per-event failure probability estimate (system events only, when individually computed)
+  if (isSystemSummary && result_.hasPerEventSimulationResults())
+  {
+    QGroupBox * perEventGroupBox = new QGroupBox(tr("Individual failure probability estimate"));
+    QVBoxLayout * perEventLayout = new QVBoxLayout(perEventGroupBox);
+
+    summaryPerEventStack_ = new QStackedWidget;
+
+    const UnsignedInteger nEvents = result_.getOutputSamples().getSize();
+    for (UnsignedInteger i = 0; i < nEvents; ++i)
+    {
+      auto * page = new QWidget;
+      auto * pageLayout = new QVBoxLayout(page);
+      pageLayout->setContentsMargins(0, 0, 0, 0);
+
+      try
+      {
+        const ProbabilitySimulationResult perEventResult = result_.getPerEventSimulationResult(i);
+
+        CopyableTableView * perEventTable = new CopyableTableView;
+        perEventTable->horizontalHeader()->hide();
+        perEventTable->verticalHeader()->hide();
+        CustomStandardItemModel * perEventModel = new CustomStandardItemModel(3, 3, perEventTable);
+        perEventTable->setModel(perEventModel);
+
+        perEventModel->setNotEditableHeaderItem(0, 0, tr("Estimate"));
+        perEventModel->setNotEditableHeaderItem(0, 1, tr("Value"));
+        perEventModel->setNotEditableHeaderItem(0, 2, tr("Confidence interval\nat") + " " + QString::number(defaultLevel) + "%");
+
+        perEventModel->setNotEditableHeaderItem(1, 0, tr("Failure probability"));
+        perEventModel->setNotEditableItem(1, 1, perEventResult.getProbabilityEstimate());
+
+        const Interval perEventCI(perEventResult.getProbabilityDistribution().computeBilateralConfidenceInterval(0.95));
+        perEventModel->setNotEditableItem(1, 2, perEventCI.__str__().c_str());
+
+        perEventModel->setNotEditableHeaderItem(2, 0, tr("Coefficient of variation"));
+        perEventModel->setNotEditableItem(2, 1, perEventResult.getCoefficientOfVariation());
+
+        perEventTable->resizeToContents();
+        pageLayout->addWidget(perEventTable, 0, Qt::AlignTop);
+      }
+      catch (const std::exception &ex) {
+        // do nothing
+      }
+
+      summaryPerEventStack_->addWidget(page);
+    }
+
+    perEventLayout->addWidget(summaryPerEventStack_);
+    tabLayout->addWidget(perEventGroupBox, 0, Qt::AlignTop);
+  }
+
   tabLayout->addStretch();
 
   scrollArea->setWidget(tab);

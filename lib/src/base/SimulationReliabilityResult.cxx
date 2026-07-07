@@ -24,7 +24,7 @@
 
 #include <openturns/PersistentObjectFactory.hxx>
 
-#include <set>
+#include <map>
 #include <limits>
 
 using namespace OT;
@@ -54,111 +54,58 @@ SimulationReliabilityResult::SimulationReliabilityResult(const ProbabilitySimula
   , convergenceSampleUpperBound_(convergenceSampleUpperBound)
   , sharedInputs_(sharedInputs)
 {
-  if (sharedInputs && inSamples.getSize() > 1)
+  if (inSamples.getSize() != outSamples.getSize())
+    throw InvalidArgumentException(HERE) << "Input and output sample collections must have the same size.";
+
+  std::map<Point, UnsignedInteger> inputPointToRow;
+  std::map<String, UnsignedInteger> outputDescriptionToColumn;
+
+  for (const auto & sample : outSamples)
   {
-    // MC with system event: all components share the same input points.
-    // Build a DOE with N rows, one output column per component (no row duplication).
-    UnsignedInteger N = 0;
-    Sample inSample;
-    for (UnsignedInteger i = 0; i < inSamples.getSize(); ++i)
-      if (inSamples[i].getSize() > N)
-      {
-        N = inSamples[i].getSize();
-        inSample = inSamples[i];
-      }
-    
-    const UnsignedInteger k = outSamples.getSize();
-
-    Description outDescription;
-    for (const auto & s : outSamples)
-      outDescription.add(s.getDescription()[0]);
-
-    Sample outSample(N, Point(k, std::numeric_limits<Scalar>::quiet_NaN()));
-    outSample.setDescription(outDescription);
-
-    // Each component may have fewer rows than the reference sample: some input
-    // points are skipped for a given output (e.g. short-circuit evaluation in
-    // union/intersection).  Both the reference sample and each component sample
-    // are in the same RNG order, so we use a two-pointer merge to locate the
-    // position of each component row inside the reference.
-    const UnsignedInteger dim = inSample.getDimension();
-    for (UnsignedInteger j = 0; j < k; ++j)
-    {
-      const Sample & inJ  = inSamples[j];
-      const Sample & outJ = outSamples[j];
-      UnsignedInteger refIdx  = 0;
-      UnsignedInteger compIdx = 0;
-      while (refIdx < N && compIdx < inJ.getSize())
-      {
-        bool match = true;
-        for (UnsignedInteger d = 0; d < dim; ++d)
-        {
-          if (inSample(refIdx, d) != inJ(compIdx, d))
-          {
-            match = false;
-            break;
-          }
-        }
-        if (match)
-        {
-          outSample(refIdx, j) = outJ(compIdx, 0);
-          ++refIdx;
-          ++compIdx;
-        }
-        else
-        {
-          // This reference row was not evaluated for component j — leave NaN.
-          ++refIdx;
-        }
-      }
-    }
-
-    designOfExperiment_.setInputSample(inSample);
-    designOfExperiment_.setOutputSample(outSample);
+    const String desc = sample.getDescription()[0];
+    if (outputDescriptionToColumn.find(desc) == outputDescriptionToColumn.end())
+      outputDescriptionToColumn[desc] = outputDescriptionToColumn.size();
   }
-  else
+
+  const UnsignedInteger numberOfEvents = inSamples.getSize();
+  const UnsignedInteger numberOfOutputs = outputDescriptionToColumn.size();
+
+  Sample mergedInSample(0, inSamples[0].getDimension());
+  Sample mergedOutSample(0, numberOfOutputs);
+
+  for (UnsignedInteger k = 0; k < numberOfEvents; ++k)
   {
-    // IS with system event (or single event): each component may have different
-    // input points. Stack rows, NaN-pad output columns.
-    UnsignedInteger totalSize = 0;
-    std::set<String> outputDescriptions;
-    for (const auto & sample : outSamples)
+    Sample inSample   = inSamples[k];
+    Sample outSample  = outSamples[k];
+
+    if (inSample.getSize() != outSample.getSize())
+      throw InvalidArgumentException(HERE) << "Input and output samples must have the same size for each event.";
+
+    for (UnsignedInteger i = 0; i < inSample.getSize(); ++i)
     {
-      totalSize += sample.getSize();
-      outputDescriptions.insert(sample.getDescription()[0]);
+      Point inputPoint = inSample[i];
+      if (inputPointToRow.find(inputPoint) == inputPointToRow.end())
+      {
+        inputPointToRow[inputPoint] = inputPointToRow.size();
+        mergedInSample.add(inputPoint);
+        mergedOutSample.add(Point(numberOfOutputs, std::numeric_limits<Scalar>::quiet_NaN()));
+      }
+
+      mergedOutSample(inputPointToRow[inputPoint], outputDescriptionToColumn[outSample.getDescription()[0]]) = outSample[i][0];
     }
-
-    Sample inSample(totalSize, Point(inSamples[0].getDimension(), std::numeric_limits<Scalar>::quiet_NaN()));
-    Sample outSample(totalSize, Point(outputDescriptions.size(), std::numeric_limits<Scalar>::quiet_NaN()));
-    inSample.setDescription(inSamples[0].getDescription());
-    Description outDescription;
-    for(const auto & desc : outputDescriptions)
-      outDescription.add(desc);
-    outSample.setDescription(outDescription);
-
-    UnsignedInteger offset = 0;
-    for (const auto & sample : inSamples)
-    {
-      for(UnsignedInteger i = 0; i < sample.getSize(); ++i)
-        for (UnsignedInteger j = 0; j < sample.getDimension(); ++j)
-          inSample(i + offset, j) = sample(i, j);
-      offset += sample.getSize();
-    }
-
-    offset = 0;
-    for (const auto & sample : outSamples)
-    {
-      UnsignedInteger descIndex = outDescription.find(sample.getDescription()[0]);
-      for(UnsignedInteger i = 0; i < sample.getSize(); ++i)
-        outSample(i + offset, descIndex) = sample(i, 0);
-      offset += sample.getSize();
-    }
-
-    designOfExperiment_.setInputSample(inSample);
-    designOfExperiment_.setOutputSample(outSample);
   }
+
+  Description mergedOutDescription(numberOfOutputs);
+  for (const auto & [str, idx] : outputDescriptionToColumn)
+    mergedOutDescription[idx] = str;
+  
+  mergedOutSample.setDescription(mergedOutDescription);
+  mergedInSample.setDescription(inSamples[0].getDescription());
+
+  designOfExperiment_.setInputSample(mergedInSample);
+  designOfExperiment_.setOutputSample(mergedOutSample);
+
 }
-
 
 /* Virtual constructor */
 SimulationReliabilityResult* SimulationReliabilityResult::clone() const
@@ -200,6 +147,20 @@ Collection<Sample> SimulationReliabilityResult::getOutputSamples() const
   return outputSamples_;
 }
 
+ProbabilitySimulationResult SimulationReliabilityResult::getPerEventSimulationResult(UnsignedInteger eventIndex) const
+{
+  if (eventIndex >= perEventSimulationResults_.getSize())
+    throw InvalidArgumentException(HERE) << "Event index out of range: " << eventIndex;
+  
+  return perEventSimulationResults_[eventIndex];
+}
+
+
+bool SimulationReliabilityResult::hasPerEventSimulationResults() const
+{
+  return perEventSimulationResults_.getSize() > 0;
+}
+
 
 /* String converter */
 String SimulationReliabilityResult::__repr__() const
@@ -223,6 +184,7 @@ void SimulationReliabilityResult::save(Advocate& adv) const
   adv.saveAttribute("inputSamples_", inputSamples_);
   adv.saveAttribute("outputSamples_", outputSamples_);
   adv.saveAttribute("sharedInputs_", sharedInputs_);
+  adv.saveAttribute("perEventSimulationResults_", perEventSimulationResults_);
 }
 
 
@@ -247,6 +209,8 @@ void SimulationReliabilityResult::load(Advocate& adv)
     adv.loadAttribute("inputSamples_", inputSamples_);
     adv.loadAttribute("outputSamples_", outputSamples_);
     adv.loadAttribute("sharedInputs_", sharedInputs_);
+    if (adv.hasAttribute("perEventSimulationResults_"))
+      adv.loadAttribute("perEventSimulationResults_", perEventSimulationResults_);
   }
   else
   {

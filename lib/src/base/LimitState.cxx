@@ -181,6 +181,11 @@ bool LimitState::isSystemLimitState() const
   return getImplementation()->isSystemLimitState();
 }
 
+UnsignedInteger LimitState::getNumberOfFailureEvents() const
+{
+  return getImplementation()->getNumberOfFailureEvents();
+}
+
 bool LimitState::isValid() const
 {
   return getImplementation()->isValid();

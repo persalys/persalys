@@ -266,6 +266,11 @@ bool LimitStateImplementation::isSystemLimitState() const
   return outputNames_.getSize() > 1;
 }
 
+UnsignedInteger LimitStateImplementation::getNumberOfFailureEvents() const
+{
+  return outputNames_.getSize();
+}
+
 bool LimitStateImplementation::isValid() const
 {
   for (const auto& outputName : outputNames_)

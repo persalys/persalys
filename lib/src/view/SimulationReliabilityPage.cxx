@@ -25,6 +25,7 @@
 
 #include <QVBoxLayout>
 #include <QLabel>
+#include <QCheckBox>
 
 using namespace OT;
 
@@ -68,6 +69,11 @@ void SimulationReliabilityPage::buildInterface()
   seedLabel->setBuddy(seedSpinbox_);
   advancedWidgetsLayout->addWidget(seedSpinbox_, 1, 1);
 
+  // individual event probabilities
+  computeIndividualProbabilitiesCheckBox_ = new QCheckBox(tr("Compute individual event probabilities"));
+  computeIndividualProbabilitiesCheckBox_->setChecked(false);
+  advancedWidgetsLayout->addWidget(computeIndividualProbabilitiesCheckBox_, 2, 0, 1, 2);
+
   pageLayout->addWidget(advancedParamGroupBox);
 
   // error message
@@ -96,6 +102,7 @@ void SimulationReliabilityPage::initialize(const Analysis& analysis)
   blockSizeGroupBox_->setBlockSizeValue(analysis_ptr->getBlockSize());
 
   seedSpinbox_->setValue(analysis_ptr->getSeed());
+  computeIndividualProbabilitiesCheckBox_->setChecked(analysis_ptr->getComputeIndividualEventProbabilities());
 }
 
 
@@ -109,6 +116,7 @@ void SimulationReliabilityPage::updateAnalysis(const Analysis& analysis)
   analysis_ptr->setMaximumElapsedTime(stopCriteriaGroupBox_->getMaximumElapsedTime());
   analysis_ptr->setBlockSize(blockSizeGroupBox_->getBlockSizeValue());
   analysis_ptr->setSeed(seedSpinbox_->value());
+  analysis_ptr->setComputeIndividualEventProbabilities(computeIndividualProbabilitiesCheckBox_->isChecked());
 }
 
 

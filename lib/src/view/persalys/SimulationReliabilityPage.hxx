@@ -29,6 +29,8 @@
 
 #include <QWizardPage>
 
+class QCheckBox;
+
 namespace PERSALYS
 {
 class PERSALYS_VIEW_API SimulationReliabilityPage : public QWizardPage
@@ -47,10 +49,11 @@ protected:
   void buildInterface();
 
 private:
-  StopCriteriaGroupBox  * stopCriteriaGroupBox_ = nullptr;
-  BlockSizeGroupBox     * blockSizeGroupBox_    = nullptr;
-  QSpinBox              * seedSpinbox_          = nullptr;
-  ErrorWidget           * errorWidget_    = nullptr;
+  StopCriteriaGroupBox  * stopCriteriaGroupBox_                   = nullptr;
+  BlockSizeGroupBox     * blockSizeGroupBox_                      = nullptr;
+  QSpinBox              * seedSpinbox_                            = nullptr;
+  QCheckBox             * computeIndividualProbabilitiesCheckBox_ = nullptr;
+  ErrorWidget           * errorWidget_                            = nullptr;
 };
 }
 #endif

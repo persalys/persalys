@@ -294,6 +294,20 @@ PERSALYS_LimitState_isSystemLimitState_doc
 
 // ---------------------------------------------------------------------
 
+%define PERSALYS_LimitState_getNumberOfFailureEvents_doc
+"Get the number of failure events in the limit state.
+
+Returns
+-------
+numberOfFailureEvents : int
+    Number of failure events"
+%enddef
+
+%feature("docstring") PERSALYS::LimitStateImplementation::getNumberOfFailureEvents
+PERSALYS_LimitState_getNumberOfFailureEvents_doc
+
+// ---------------------------------------------------------------------
+
 %define PERSALYS_LimitState_isValid_doc
 "Whether limit state is valid.
 

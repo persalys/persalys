@@ -32,6 +32,8 @@
 #include <openturns/ThresholdEvent.hxx>
 #include <openturns/UnionEvent.hxx>
 #include <openturns/IntersectionEvent.hxx>
+#include <openturns/MemoizeFunction.hxx>
+#include <openturns/RandomGenerator.hxx>
 
 using namespace OT;
 
@@ -80,8 +82,12 @@ SimulationInterface ImportanceSamplingAnalysis::getSimulationAlgorithm(const Ran
 
   const ImportanceSamplingExperiment experiment(conditionalDistribution);
 
+  // check if the event in argument is a system event or not.
+  const bool isUnionEvent = event.getImplementation()->getClassName() == "UnionEvent";
+  const bool isSystemEvent = isUnionEvent || event.getImplementation()->getClassName() == "IntersectionEvent";
+
   RandomVector algoEvent;
-  if (getLimitState().isSystemLimitState())
+  if (isSystemEvent)
   {
     // StandardEvent cannot be constructed from UnionEvent/IntersectionEvent because
     // getFunction() is not implemented for system events. Instead, manually build
@@ -93,7 +99,7 @@ SimulationInterface ImportanceSamplingAnalysis::getSimulationAlgorithm(const Ran
     const RandomVector sharedAntecedent(distribution.getStandardDistribution());
 
     Collection<RandomVector> subEvents;
-    if (getLimitState().getType() == LimitState::Type::Union)
+    if (isUnionEvent)
       subEvents = dynamic_cast<const UnionEvent&>(*event.getImplementation()).getEventCollection();
     else
       subEvents = dynamic_cast<const IntersectionEvent&>(*event.getImplementation()).getEventCollection();
@@ -106,7 +112,7 @@ SimulationInterface ImportanceSamplingAnalysis::getSimulationAlgorithm(const Ran
       standardSubEvents[i] = ThresholdEvent(vect, subEvents[i].getOperator(), subEvents[i].getThreshold());
     }
 
-    if (getLimitState().getType() == LimitState::Type::Union)
+    if (isUnionEvent)
       algoEvent = UnionEvent(standardSubEvents);
     else
       algoEvent = IntersectionEvent(standardSubEvents);
@@ -117,7 +123,7 @@ SimulationInterface ImportanceSamplingAnalysis::getSimulationAlgorithm(const Ran
   }
 
   SimulationInterface interface = ProbabilitySimulationAlgorithm(algoEvent, experiment);
-  
+
   return interface;
 }
 
@@ -136,7 +142,6 @@ void ImportanceSamplingAnalysis::setStandardSpaceDesignPoints(const Sample& poin
         << " but physical model stochastic input dimension is " << getPhysicalModel().getStochasticInputNames().getSize() << ".";
   standardSpaceDesignPoints_ = points;
 }
-
 
 Parameters ImportanceSamplingAnalysis::getParameters() const
 {
