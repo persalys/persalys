@@ -215,10 +215,11 @@ void OptimizationResultWindow::buildInterface()
 
   graph = result_.drawErrorHistory();
   plot = new PlotWidget;
-  plot->plotCurve(graph.getDrawables()[0].getData(), QPen(Qt::red, 2), QwtPlotCurve::Lines, 0, tr("Absolute error"));
-  plot->plotCurve(graph.getDrawables()[1].getData(), QPen(Qt::blue, 2), QwtPlotCurve::Lines, 0, tr("Relative error"));
-  plot->plotCurve(graph.getDrawables()[2].getData(), QPen(Qt::green, 2), QwtPlotCurve::Lines, 0, tr("Residual error"));
-  plot->plotCurve(graph.getDrawables()[3].getData(), QPen(Qt::magenta, 2), QwtPlotCurve::Lines, 0, tr("Constraint error"));
+  // Okabe-Ito colorblind-safe palette for 4 distinct curves
+  plot->plotCurve(graph.getDrawables()[0].getData(), QPen(QColor("#D55E00"), 2), QwtPlotCurve::Lines, 0, tr("Absolute error"));   // vermillion
+  plot->plotCurve(graph.getDrawables()[1].getData(), QPen(QColor("#0072B2"), 2), QwtPlotCurve::Lines, 0, tr("Relative error"));    // blue
+  plot->plotCurve(graph.getDrawables()[2].getData(), QPen(QColor("#009E73"), 2), QwtPlotCurve::Lines, 0, tr("Residual error"));    // bluish-green
+  plot->plotCurve(graph.getDrawables()[3].getData(), QPen(QColor("#CC79A7"), 2), QwtPlotCurve::Lines, 0, tr("Constraint error")); // reddish-purple
 
   plot->setTitle(tr("Error convergence graph"));
   plot->setAxisTitle(QwtPlot::yLeft, tr("Error"));

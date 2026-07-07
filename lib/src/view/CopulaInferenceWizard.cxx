@@ -108,6 +108,7 @@ void CopulaInferenceWizard::buildInterface()
   QToolButton * arrowButton = new QToolButton;
   arrowButton->setArrowType(Qt::RightArrow);
   arrowButton->setToolTip(tr("Add a group of variables"));
+  arrowButton->setAccessibleName(tr("Add a group of variables"));
   leftWidgetLayout->addWidget(arrowButton, 0, 1, Qt::AlignBottom);
   connect(arrowButton, SIGNAL(pressed()), this, SLOT(defineGroup()));
 
@@ -115,6 +116,7 @@ void CopulaInferenceWizard::buildInterface()
   arrowButton = new QToolButton;
   arrowButton->setArrowType(Qt::LeftArrow);
   arrowButton->setToolTip(tr("Remove the selected group of variables"));
+  arrowButton->setAccessibleName(tr("Remove the selected group of variables"));
   leftWidgetLayout->addWidget(arrowButton, 1, 1, Qt::AlignTop);
   connect(arrowButton, SIGNAL(pressed()), this, SLOT(removeGroup()));
 

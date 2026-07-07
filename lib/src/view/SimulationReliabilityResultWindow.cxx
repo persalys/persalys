@@ -218,7 +218,7 @@ QWidget* SimulationReliabilityResultWindow::getHistogramTab()
   threshold(1, 0) = plot->axisInterval(QwtPlot::yLeft).minValue();
   threshold(1, 0) = result_.getSimulationResult().getEvent().getThreshold();
   threshold(1, 1) = plot->axisInterval(QwtPlot::yLeft).maxValue();
-  plot->plotCurve(threshold, QPen(Qt::red), QwtPlotCurve::Lines, 0, tr("Threshold"));
+  plot->plotCurve(threshold, QPen(QColor("#D55E00")), QwtPlotCurve::Lines, 0, tr("Threshold"));
 
   plot->setAxisTitle(QwtPlot::xBottom, tr("Values"));
   plot->setAxisTitle(QwtPlot::yLeft, tr("Number of simulations"));
@@ -243,13 +243,14 @@ QWidget* SimulationReliabilityResultWindow::getConvergenceTab()
 
   PlotWidget * plot = new PlotWidget(tr("convergence"));
   // plot pf convergence
-  plot->plotCurve(result_.getConvergenceSample(), QPen(Qt::red), QwtPlotCurve::Lines, 0, tr("Probability estimate"));
+  // Okabe-Ito: vermillion for main estimate, dark blue for confidence interval bounds
+  plot->plotCurve(result_.getConvergenceSample(), QPen(QColor("#D55E00")), QwtPlotCurve::Lines, 0, tr("Probability estimate"));
   // plot lower bound
   if (result_.getConvergenceSampleLowerBound().getSize())
-    plot->plotCurve(result_.getConvergenceSampleLowerBound(), QPen(Qt::green), QwtPlotCurve::Lines, 0, tr("Lower bound"));
+    plot->plotCurve(result_.getConvergenceSampleLowerBound(), QPen(QColor("#0072B2")), QwtPlotCurve::Lines, 0, tr("Lower bound"));
   // plot upper bound
   if (result_.getConvergenceSampleUpperBound().getSize())
-    plot->plotCurve(result_.getConvergenceSampleUpperBound(), QPen(Qt::green), QwtPlotCurve::Lines, 0, tr("Upper bound"));
+    plot->plotCurve(result_.getConvergenceSampleUpperBound(), QPen(QColor("#0072B2")), QwtPlotCurve::Lines, 0, tr("Upper bound"));
 
   plot->setTitle(tr("Probability estimate convergence graph at level 0.95"));
   plot->setAxisTitle(QwtPlot::yLeft, tr("Estimate"));

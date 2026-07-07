@@ -62,8 +62,8 @@ MorrisPlot::MorrisPlot(const QString &plotTypeName, const QPointF& initialMarker
   connect(picker, SIGNAL(selected(QRectF)), this, SLOT(selectPoints(QRectF)));
 
   // - two fake markers to add items in the legend
-  fakeSelectedMarker_ = new FakePlotMarker(this, QPen(Qt::blue));
-  fakeUnselectedMarker_ = new FakePlotMarker(this, QPen(Qt::red));
+  fakeSelectedMarker_ = new FakePlotMarker(this, QPen(QColor("#0072B2")));   // dark blue (Okabe-Ito)
+  fakeUnselectedMarker_ = new FakePlotMarker(this, QPen(QColor("#D55E00"))); // vermillion (Okabe-Ito)
 }
 
 
@@ -125,7 +125,7 @@ void MorrisPlot::selectPoints(const QRectF& rect)
     // emit signal to the window to update the data
     if (action == deselectPointsAction || action == selectPointsAction)
     {
-      const QPen markerPen = (action == deselectPointsAction ? QPen(Qt::red) : QPen(Qt::blue));
+      const QPen markerPen = (action == deselectPointsAction ? QPen(QColor("#D55E00")) : QPen(QColor("#E69F00")));
       for (int i = 0; i < selectedMarkers.size(); ++i)
         selectedMarkers[i]->setSymbol(new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, markerPen, QSize(5, 5)));
       emit selectedPointsChanged();

@@ -331,24 +331,27 @@ namespace PERSALYS
   void QuantileAnalysisThresholdPage::plotMeanExcess(const Graph &graph, const QString& varName)
   {
     plotWidget_->clear();
+    // Okabe-Ito colorblind-safe: vermillion (MRL) and dark blue (confidence intervals)
+    const QColor mrlColor("#D55E00");   // vermillion - distinguishable under all color vision deficiencies
+    const QColor ciColor("#0072B2");    // dark blue
     QwtSymbol* symbol1 = new QwtSymbol(QwtSymbol::Ellipse,
-                                       QBrush(Qt::red),
-                                       QPen(Qt::red),
+                                       QBrush(mrlColor),
+                                       QPen(mrlColor),
                                        QSize(0, 0));
     QwtSymbol* symbol2 = new QwtSymbol(QwtSymbol::Ellipse,
-                                       QBrush(Qt::blue),
-                                       QPen(Qt::blue),
+                                       QBrush(ciColor),
+                                       QPen(ciColor),
                                        QSize(0, 0));
     QwtSymbol* symbol3 = new QwtSymbol(QwtSymbol::Ellipse,
-                                       QBrush(Qt::blue),
-                                       QPen(Qt::blue),
+                                       QBrush(ciColor),
+                                       QPen(ciColor),
                                        QSize(0, 0));
     QwtPlotCurve::CurveStyle style = QwtPlotCurve::Lines;
-    plotWidget_->plotCurve(graph.getDrawable(0).getData(), QPen(Qt::red, 1),
+    plotWidget_->plotCurve(graph.getDrawable(0).getData(), QPen(mrlColor, 1),
                            style, symbol1, QString("MRL"));
-    plotWidget_->plotCurve(graph.getDrawable(1).getData(), QPen(Qt::blue, 1),
+    plotWidget_->plotCurve(graph.getDrawable(1).getData(), QPen(ciColor, 1),
                            style, symbol2, QString("CI-"));
-    plotWidget_->plotCurve(graph.getDrawable(2).getData(), QPen(Qt::blue, 1),
+    plotWidget_->plotCurve(graph.getDrawable(2).getData(), QPen(ciColor, 1),
                            style, symbol3, QString("CI+"));
 
     plotWidget_->setAxisTitle(QwtPlot::yLeft, tr("Mean Excess"));

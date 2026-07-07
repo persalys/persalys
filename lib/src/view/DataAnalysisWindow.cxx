@@ -492,23 +492,25 @@ void DataAnalysisWindow::addDependenceTab()
         if (std::abs(C(i, j)) > epsilon)
         {
           if (C(i, j) < -0.7)
-            item->setBackground(QBrush("#7caef4"));  //dark blue
+            // #3082d0: L~21%, black text contrast 5.2:1 — passes WCAG AA
+            item->setBackground(QBrush("#3082d0"));  //dark blue
           else if (C(i, j) >= -0.7 && C(i, j) < -0.3)
-            item->setBackground(QBrush("#b0cef8"));  //blue
+            item->setBackground(QBrush("#7ab3f2"));  //sky blue (L~71%)
           else if (C(i, j) >= -0.3 && C(i, j) < 0.)
-            item->setBackground(QBrush("#e4eefc"));  //light blue
+            item->setBackground(QBrush("#d4e8fb"));  //light sky blue (L~91%)
           else if (C(i, j) > 0. && C(i, j) <= 0.3)
-            item->setBackground(QBrush("#fadec3"));  //light orange
+            item->setBackground(QBrush("#fadec3"));  //light peach (L~93%)
           else if (C(i, j) > 0.3 && C(i, j) <= 0.7)
-            item->setBackground(QBrush("#f4b87c"));  //orange
+            item->setBackground(QBrush("#f09a3e"));  //amber (L~59%)
           else if (C(i, j) > 0.7)
-            item->setBackground(QBrush("#ee9235"));  //dark orange
+            item->setBackground(QBrush("#c96d0a"));  //dark amber (L~41%)
         }
       }
       else
       {
         item->setText("1.");
         item->setBackground(Qt::black);
+        item->setForeground(Qt::white);  // white text needed: black-on-black = invisible
       }
       tableModel->setItem(i, j, item);
     }
@@ -532,7 +534,7 @@ void DataAnalysisWindow::addDependenceTab()
          << "-0.7 ≤ ρ < -0.3"
          << "ρ < -0.7";
   QStringList colors;
-  colors << "#ee9235" << "#f4b87c" << "#fadec3" << "#ffffff" << "#e4eefc" << "#b0cef8" << "#7caef4";
+  colors << "#c96d0a" << "#f09a3e" << "#fadec3" << "#ffffff" << "#d4e8fb" << "#7ab3f2" << "#3082d0";
 
   QTableView * colorTable = new QTableView;
   colorTable->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -540,6 +542,7 @@ void DataAnalysisWindow::addDependenceTab()
   colorTable->setFocusPolicy(Qt::NoFocus);
   colorTable->setSelectionMode(QAbstractItemView::NoSelection);
   colorTable->setShowGrid(false);
+  colorTable->setAccessibleName(tr("Color legend for Spearman's coefficient"));
 
   QStandardItemModel * colorTableModel = new QStandardItemModel(labels.size(), 1, colorTable);
   for (int i = 0; i < labels.size(); ++i)
@@ -735,20 +738,21 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
       // input sample
       samples.add(inSample);
       PVXYChartViewWidget * sampleScatterPlotWidget = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get());
-      sampleScatterPlotWidget->setData(inSample, Qt::green);
+      // Okabe-Ito palette: bluish-green for evaluated, vermillion for failed, grey for non-evaluated
+      sampleScatterPlotWidget->setData(inSample, QColor("#009E73"));
       sampleScatterPlotWidget->setRepresentationLabels(QVector<QString>(inSampleDim, tr("Evaluated points")).toList(), 0);
       // failed input sample
       if (failedInSampleSize)
       {
         samples.add(failedInputSample_);
-        sampleScatterPlotWidget->setData(failedInputSample_, Qt::red);
+        sampleScatterPlotWidget->setData(failedInputSample_, QColor("#D55E00"));
         sampleScatterPlotWidget->setRepresentationLabels(QVector<QString>(inSampleDim, tr("Failed points")).toList(), 1);
       }
       // not evaluated points
       if (notEvalInSampleSize)
       {
         samples.add(notEvaluatedInputSample_);
-        sampleScatterPlotWidget->setData(notEvaluatedInputSample_, Qt::blue);
+        sampleScatterPlotWidget->setData(notEvaluatedInputSample_, QColor("#999999"));
         sampleScatterPlotWidget->setRepresentationLabels(QVector<QString>(inSampleDim, tr("Non-evaluated points")).toList(), failedInSampleSize > 0 ? 2 : 1);
       }
       sampleScatterPlotWidget->setAxisTitles(inputNames_, inAxisTitles_);

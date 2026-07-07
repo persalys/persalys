@@ -159,6 +159,7 @@ void PVXYChartSettingWidget::addMarkerTab(const bool canChangeColor)
     QPixmap px(20, 20);
     px.fill(pvXYViewWidget_->getRepresentationColor());
     colorButton_->setIcon(px);
+    colorButton_->setAccessibleName(tr("Select color"));
     connect(colorButton_, SIGNAL(clicked()), this, SLOT(setColor()));
     widgetLayout->addWidget(colorButton_, 0, 1, Qt::AlignLeft);
   }

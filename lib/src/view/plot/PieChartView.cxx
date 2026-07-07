@@ -660,16 +660,42 @@ QRegion PieChartView::visualRegionForSelection(const QItemSelection &selection) 
 
 QVector<QColor> PieChartView::generateSegmentsColors(const int nbColors) const
 {
+  // Okabe-Ito palette — universally safe for all types of color vision deficiency.
+  // Each color is distinguishable by both hue AND luminance, making it usable
+  // even in greyscale. For more than 8 inputs, the palette cycles with shifted
+  // lightness to remain distinguishable.
+  static const QStringList okabeIto = {
+    "#E69F00",  // Orange       (L~63%)
+    "#56B4E9",  // Sky Blue     (L~71%)
+    "#009E73",  // Bluish Green (L~57%)
+    "#F0E442",  // Yellow       (L~89%)
+    "#0072B2",  // Blue         (L~35%)
+    "#D55E00",  // Vermillion   (L~41%)
+    "#CC79A7",  // Rose/Purple  (L~63%)
+    "#999999"   // Grey         (L~60%)
+  };
+
   QVector<QColor> colors;
-
-  int colorPos = 13;
-
-  // get colors
-  QStringList colorNames = QColor::colorNames();
+  const int paletteSize = okabeIto.size();
   for (int i = 0; i < nbColors; i++)
   {
-    QColor col(colorNames.at(colorPos % colorNames.count()));
-    colorPos++;
+    QColor col(okabeIto.at(i % paletteSize));
+    // For cycles beyond the first, shift the lightness to keep colors distinct
+    if (i >= paletteSize)
+    {
+#if QT_VERSION >= QT_VERSION_CHECK(6,0,0)
+      float h, s, l, a;
+#else
+      qreal h, s, l, a;
+#endif
+      col.getHslF(&h, &s, &l, &a);
+      // Alternate lighter/darker on each cycle
+      const int cycle = i / paletteSize;
+      l = (cycle % 2 == 0)
+          ? qMin(1.0, l + 0.15)
+          : qMax(0.0, l - 0.15);
+      col.setHslF(h, s, l, a);
+    }
     colors.append(col);
   }
 

@@ -107,6 +107,7 @@ void AnalysisWindow::buildInterface()
 
   // progress bar
   progressBar_ = new QProgressBar;
+  progressBar_->setAccessibleName(tr("Analysis progress"));
   QPalette p = progressBar_->palette();
   p.setColor(QPalette::Highlight, ApplicationColor["darkColor"]);
   progressBar_->setPalette(p);

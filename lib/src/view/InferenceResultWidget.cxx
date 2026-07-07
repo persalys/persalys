@@ -271,7 +271,8 @@ void InferenceResultWidget::updateDistributionTable(const double level, const In
       // if accepted
       if (currentFittingTestResult_.getTestResults()[indices[i]].getBinaryQualityMeasure())
       {
-        distTableModel_->setNotEditableItem(cellRow, 3, tr("yes"), Qt::green);
+        // Use as background (not foreground): black text on teal gives 6.1:1 contrast (WCAG AA)
+        distTableModel_->setNotEditableItem(cellRow, 3, tr("yes"), QColor(), QColor("#009E73"));
       }
       else
       {
@@ -282,7 +283,8 @@ void InferenceResultWidget::updateDistributionTable(const double level, const In
     {
       distTableModel_->setNotEditableItem(cellRow, 1, "-");
       distTableModel_->setNotEditableItem(cellRow, 2, "-");
-      distTableModel_->setNotEditableItem(cellRow, 3, tr("failed"), Qt::red);
+      // Use as background (not foreground): black text on vermillion gives 5.4:1 contrast (WCAG AA)
+      distTableModel_->setNotEditableItem(cellRow, 3, tr("failed"), QColor(), QColor("#D55E00"));
     }
   }
   // -- update parameters table

@@ -50,12 +50,18 @@ Actions::Actions(QObject * parent)
   save_->setStatusTip(tr("Save the current study"));
 
   saveAs_ = new QAction(QIcon(":/images/document-save-as.png"), tr("Save As..."), parent);
+  saveAs_->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_S));
+  saveAs_->setShortcutContext(Qt::ApplicationShortcut);
   saveAs_->setStatusTip(tr("Save the current study with a new name"));
 
   importPy_ = new QAction(QIcon(":/images/document-import.png"), tr("&Import Python..."), parent);
+  importPy_->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_I));
+  importPy_->setShortcutContext(Qt::ApplicationShortcut);
   importPy_->setStatusTip(tr("Import a Python Script"));
 
   close_ = new QAction(QIcon(":/images/window-close.png"), tr("Close"), parent);
+  close_->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_W));
+  close_->setShortcutContext(Qt::ApplicationShortcut);
   close_->setStatusTip(tr("Close the current study"));
 
   exit_ = new QAction(QIcon(":/images/window-close.png"), tr("E&xit"), parent);

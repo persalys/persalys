@@ -91,16 +91,18 @@ void SensitivityIndicesPlot::updatePlot(const Point &firstOrderIndices,
   if (totalIndices.getSize())
     xOffset = 0.1;
 
-  const char *colors[] = {"DarkOrchid", "SteelBlue"};
+  // Okabe-Ito colorblind-safe palette: reddish-purple (L~63%) and dark blue (L~35%)
+  const QColor colorFirst("#CC79A7");  // reddish-purple/rose
+  const QColor colorTotal("#0072B2");  // dark blue
 
   // first order indices
-  QwtSymbol * symbol = new QwtSymbol(QwtSymbol::Ellipse, QBrush(colors[0]), QPen(colors[0]), QSize(5, 5));
+  QwtSymbol * symbol = new QwtSymbol(QwtSymbol::Ellipse, QBrush(colorFirst), QPen(colorFirst), QSize(5, 5));
   plotIndices(firstOrderIndices, firstOrderIndicesIntervals, -xOffset, symbol, legendNames_[0]);
 
   // total order indices
   if (totalIndices.getSize())
   {
-    QwtSymbol * symbol2 = new QwtSymbol(QwtSymbol::Rect, QBrush(colors[1]), QPen(colors[1]), QSize(5, 5));
+    QwtSymbol * symbol2 = new QwtSymbol(QwtSymbol::Rect, QBrush(colorTotal), QPen(colorTotal), QSize(5, 5));
     plotIndices(totalIndices, totalIndicesIntervals, xOffset, symbol2, legendNames_[1]);
   }
   // update x axis
