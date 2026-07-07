@@ -319,7 +319,7 @@ String SimulationReliabilityAnalysis::getPythonScript() const
 
   oss << getName() << ".setSeed(" << getSeed() << ")\n";
   if (computeIndividualEventProbabilities_)
-    oss << getName() << ".setComputeIndividualEventProbabilities(true)\n";
+    oss << getName() << ".setComputeIndividualEventProbabilities(True)\n";
 
   return oss;
 }
