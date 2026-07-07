@@ -1,8 +1,8 @@
-[class=LimitStateImplementation, type=Union, failure events: [Y0 > 20]]
-[class=LimitStateImplementation, type=Union, failure events: [Y0 < 10]]
-[class=LimitStateImplementation, type=Union, failure events: [Y0 < 0]]
-[class=LimitStateImplementation, type=Union, failure events: [Y0 < 15]]
-[class=LimitStateImplementation, type=Union, failure events: [Y1 < 15]]
+type=Union, failure events: [Y0 > 20]
+type=Union, failure events: [Y0 < 10]
+type=Union, failure events: [Y0 < 0]
+type=Union, failure events: [Y0 < 15]
+type=Union, failure events: [Y1 < 15]
 #!/usr/bin/env python
 
 import openturns as ot

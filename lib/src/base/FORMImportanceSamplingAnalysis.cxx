@@ -107,6 +107,7 @@ void FORMImportanceSamplingAnalysis::launch()
     setStandardSpaceDesignPoints(designPoints);
   }
   ImportanceSamplingAnalysis::launch();
+  result_.designOfExperiment_.setType(DesignOfExperiment::Type::UK);
 }
 
 FORMResult FORMImportanceSamplingAnalysis::getFORMResult() const

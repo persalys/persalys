@@ -227,6 +227,7 @@ void SimulationReliabilityAnalysis::launch()
   useSharedInputSamples());
 
   result_.designOfExperiment_.setPhysicalModel(getPhysicalModel());
+  result_.designOfExperiment_.setType(DesignOfExperiment::Type::MC);
   result_.elapsedTime_ = elapsedTime;
 
   result_.perEventSimulationResults_ = individualEventResults;

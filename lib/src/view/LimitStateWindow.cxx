@@ -87,9 +87,9 @@ void LimitStateWindow::buildInterface()
   // Events table: Output | Operator | Threshold | (Remove)
   eventsTable_ = new QTableWidget(0, 4);
   eventsTable_->setHorizontalHeaderLabels({tr("Output"), tr("Operator"), tr("Threshold"), ""});
-  eventsTable_->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+  eventsTable_->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
   eventsTable_->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
-  eventsTable_->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
+  eventsTable_->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
   eventsTable_->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Fixed);
   eventsTable_->setColumnWidth(3, 30);
   eventsTable_->verticalHeader()->setVisible(false);
@@ -181,6 +181,9 @@ void LimitStateWindow::rebuildEventsTable()
     typeComboBox_->setCurrentIndex(limitState_.getType() == LimitStateImplementation::Union ? 0 : 1);
   }
   typeWidget_->setVisible(limitState_.isSystemLimitState());
+
+  // Force the output column to resize to its new content
+  eventsTable_->resizeColumnToContents(0);
 }
 
 

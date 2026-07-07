@@ -33,6 +33,7 @@ class PERSALYS_BASE_API SimulationReliabilityResult : public EvaluationResult
 
 public:
   friend class SimulationReliabilityAnalysis;
+  friend class FORMImportanceSamplingAnalysis;
 
   /** Default constructor */
   SimulationReliabilityResult() = default;

@@ -390,8 +390,7 @@ String LimitStateImplementation::__repr__() const
 String LimitStateImplementation::__str__(const String & offset) const
 {
   OSS oss(false);
-  oss << offset << "[";
-  oss << "class=" << GetClassName() << ", ";
+  oss << offset;
   oss << "type=" << (type_ == Type::Union ? "Union" : "Intersection") << ", ";
   oss << "failure events: ";
 
@@ -402,8 +401,6 @@ String LimitStateImplementation::__str__(const String & offset) const
     
     oss << "[" << outputNames_[i] << " " << operators_[i].__str__() << " " << thresholds_[i] << "]";
   }
-  
-  oss << "]";
 
   return oss;
 }

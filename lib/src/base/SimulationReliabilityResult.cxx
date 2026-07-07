@@ -104,7 +104,6 @@ SimulationReliabilityResult::SimulationReliabilityResult(const ProbabilitySimula
 
   designOfExperiment_.setInputSample(mergedInSample);
   designOfExperiment_.setOutputSample(mergedOutSample);
-
 }
 
 /* Virtual constructor */
