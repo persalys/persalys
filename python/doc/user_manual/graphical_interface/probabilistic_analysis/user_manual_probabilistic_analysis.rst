@@ -213,15 +213,23 @@ Its context menu contains the following actions:
   - **Threshold exceedance**: Create a new threshold exceedance analysis
   - **Remove**: Remove the limit state and all the analyses depending on it
 
-This item is associated with a window which allows one to:
-  - Select the output of interest
-  - Define the failure event by:
-      - selecting an operator:
-          - <= (less or equal)
-          - >= (greater or equal)
-          - > (greater than)
-          - < (less than)
-      - setting up the threshold defining the failure domain (default: 0., expected: floating points or integers)
+This item is associated with a window which allows one to define one or more failure events.
+Each failure event is a row in the **failure events** table, where the user can:
+
+  - Select the **output** of interest (combo box, lists all selected model outputs)
+  - Choose the **operator**:
+      - ``<``  (less than)
+      - ``<=`` (less or equal)
+      - ``>``  (greater than)
+      - ``>=`` (greater or equal)
+  - Set the **threshold** defining the failure domain (default: 0., expected: floating point or integer)
+  - **Remove** the event with the ``-`` button (disabled when only one event remains)
+
+To add a new failure event click the **+ Add failure event** button below the table.
+When more than one event is defined, a **Type** selector appears above the table:
+
+  - **Union**: failure occurs when *at least one* event is satisfied (logical OR)
+  - **Intersection**: failure occurs when *all* events are satisfied (logical AND)
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/limitState.png
     :align: center
@@ -275,8 +283,12 @@ The **Simulation methods** window allows one to define:
   - **Evaluation parameter**:
       - the block size (default=1): defines the maximum number of samples queued for evaluation by the physical model,
         see :ref:`design of experiment evaluation <doeevalwizard>` for more details
-  - **Advanced Parameters** (default: hidden): the seed of the random generator (default: 0,
-    positive integer expected)
+  - **Advanced Parameters** (default: hidden):
+      - the seed of the random generator (default: 0, positive integer expected)
+      - **Compute individual event probabilities** (default: unchecked): when the limit state
+        is a system event (Union or Intersection), check this option to also estimate the
+        failure probability of each individual sub-event. The individual estimates are computed
+        by replaying the already-evaluated samples so that no additional model calls are required.
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/limitStateReliabilitySimu.png
     :align: center
@@ -323,15 +335,24 @@ on the chosen algorithm.
 3-3-1 Monte Carlo
 ~~~~~~~~~~~~~~~~~
 
-On the left, the **Output** section recalls the analysed output.
+For a **system limit state** (more than one failure event), the left panel shows a
+**Limit state** selector listing all sub-events. Selecting a sub-event updates the
+**Summary** (individual probability), **Histogram** and **FORM results** tabs accordingly.
+The **Convergence graph** tab always shows the convergence of the global (system) estimate.
+
+For a single-event limit state, no selector is shown.
 
 The results window gathers several tabs:
 
 - The **Summary** tab shows:
     - the elapsed computation time
     - the number of performed simulations (i.e. calls to the model)
-    - the failure probability estimate, its coefficient of variation and the corresponding
+    - **Global failure probability estimate** (system events) or **Failure probability estimate**
+      (single event): the probability estimate, its coefficient of variation and the corresponding
       confidence interval at 95%
+    - **Individual failure probability estimate** (system events only, visible when
+      *Compute individual event probabilities* was enabled): the failure probability of
+      the currently selected sub-event, with its coefficient of variation and confidence interval.
 
     .. image:: /user_manual/graphical_interface/probabilistic_analysis/limitStateReliabilitySummary.png
         :align: center
