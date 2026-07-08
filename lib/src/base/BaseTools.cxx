@@ -550,6 +550,6 @@ Scalar TimeCriteria::getElapsedTime() const
 Scalar TimeCriteria::Now()
 {
   std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
-  return 1e-3 * std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count();
+  return 1e-9 * static_cast<Scalar>(std::chrono::duration_cast<std::chrono::nanoseconds>(now.time_since_epoch()).count());
 }
 }
