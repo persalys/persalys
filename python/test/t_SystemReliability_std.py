@@ -210,6 +210,54 @@ ott.assert_almost_equal(
 )
 
 # -------------------------------------------------------
+# 6b. FORM-IS on Intersection event (exercises getISThresholdEvent → asComposedEvent)
+#     {Y0>2 AND Y1>2}: FORM finds a design point on an individual constraint
+#     boundary (beta=sqrt(2)), then IS draws from the importance distribution.
+# -------------------------------------------------------
+formis_inter = persalys.FORMImportanceSamplingAnalysis("formis_inter", ls_inter)
+formis_inter.setMaximumCalls(5000)
+formis_inter.setBlockSize(100)
+formis_inter.setSeed(42)
+myStudy.add(formis_inter)
+
+formis_inter.run()
+
+# Intersection uses a single combined FORM event → getFORMResult(), not getMultiFORMResult()
+assert formis_inter.getFORMResult().getGeneralisedReliabilityIndex() > 0.0
+assert formis_inter.getResult().getSimulationResult().getProbabilityEstimate() > 0.0
+
+# -------------------------------------------------------
+# 6c. FORM-IS on Intersection with mixed operators
+#     {Y0>2 AND Y1<-2} = {X0+X1>2 AND X0-X1<-2}
+#     Specifically exercises the operator-sign handling in asComposedEvent():
+#     sign(Greater)=-1 → slack=t-f; sign(Less)=+1 → slack=f-t.
+#     Without correct sign handling the combined function would not represent
+#     the intersection, and FORM/IS would give wrong or zero probability.
+# -------------------------------------------------------
+ls_inter_mixed = persalys.LimitState(
+    "ls_inter_mixed",
+    model,
+    ["Y0", "Y1"],
+    [ot.Greater(), ot.Less()],
+    persalys.LimitState.Intersection,
+    [2.0, -2.0],
+)
+
+myStudy.add(ls_inter_mixed)
+
+formis_mixed = persalys.FORMImportanceSamplingAnalysis("formis_mixed", ls_inter_mixed)
+formis_mixed.setMaximumCalls(5000)
+formis_mixed.setBlockSize(100)
+formis_mixed.setSeed(42)
+
+myStudy.add(formis_mixed)
+
+formis_mixed.run()
+
+assert formis_mixed.getFORMResult().getGeneralisedReliabilityIndex() > 0.0
+assert formis_mixed.getResult().getSimulationResult().getProbabilityEstimate() > 0.0
+
+# -------------------------------------------------------
 # 7. FORM-IS on Union event
 # -------------------------------------------------------
 formis_sys = persalys.FORMImportanceSamplingAnalysis("formis_sys", ls_union)

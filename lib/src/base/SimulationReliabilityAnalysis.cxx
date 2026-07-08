@@ -251,9 +251,7 @@ Collection<ProbabilitySimulationResult> SimulationReliabilityAnalysis::computeIn
     memoFunctions.add(*memoFunc);
   }
 
-  UnsignedInteger maxOuterSampling = maxSampleSize / getBlockSize();
-  if (maxSampleSize % getBlockSize() != 0)
-    maxOuterSampling += 1;
+  const auto maxOuterSampling = static_cast<UnsignedInteger>(ceil(static_cast<double>(maxSampleSize) / static_cast<double>(getBlockSize())));
 
   Collection<ProbabilitySimulationResult> individualEventResults(memoFunctions.getSize());
 

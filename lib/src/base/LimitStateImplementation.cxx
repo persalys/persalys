@@ -150,7 +150,7 @@ void LimitStateImplementation::setOutputNames(const OT::Description& outputNames
   notify("outputNameChanged");
 }
 
-void LimitStateImplementation::setOutputName(UnsignedInteger index, const String& outputName)
+void LimitStateImplementation::setOutputName(const UnsignedInteger index, const String& outputName)
 {
   if (index >= outputNames_.getSize())
     throw InvalidArgumentException(HERE) << "Index out of range.";
@@ -166,7 +166,7 @@ Collection<ComparisonOperator> LimitStateImplementation::getOperators() const
   return operators_;
 }
 
-ComparisonOperator LimitStateImplementation::getOperator(UnsignedInteger index) const
+ComparisonOperator LimitStateImplementation::getOperator(const UnsignedInteger index) const
 {
   if (index >= operators_.getSize())
     throw InvalidArgumentException(HERE) << "Index out of range.";
@@ -185,7 +185,7 @@ void LimitStateImplementation::setOperators(const OT::Collection<OT::ComparisonO
   notify("operatorChanged");
 }
 
-void LimitStateImplementation::setOperator(UnsignedInteger index, const OT::ComparisonOperator& comparisonOperator)
+void LimitStateImplementation::setOperator(const UnsignedInteger index, const OT::ComparisonOperator& comparisonOperator)
 {
   if (index >= operators_.getSize())
     throw InvalidArgumentException(HERE) << "Index out of range.";
@@ -200,7 +200,7 @@ Point LimitStateImplementation::getThresholds() const
   return thresholds_;
 }
 
-double LimitStateImplementation::getThreshold(UnsignedInteger index) const
+double LimitStateImplementation::getThreshold(const UnsignedInteger index) const
 {
   if (index >= thresholds_.getDimension())
     throw InvalidArgumentException(HERE) << "Index out of range.";
@@ -213,7 +213,7 @@ void LimitStateImplementation::setThresholds(const OT::Point& thresholds)
   notify("thresholdChanged");
 }
 
-void LimitStateImplementation::setThreshold(UnsignedInteger index, const double& threshold)
+void LimitStateImplementation::setThreshold(const UnsignedInteger index, const double& threshold)
 {
   if (index >= thresholds_.getDimension())
     throw InvalidArgumentException(HERE) << "Index out of range.";
@@ -242,7 +242,7 @@ void LimitStateImplementation::addFailureEvent(const String& variableName, const
   thresholds_.add(threshold);
 }
 
-void LimitStateImplementation::removeFailureEvent(UnsignedInteger index)
+void LimitStateImplementation::removeFailureEvent(const UnsignedInteger index)
 {
   if (outputNames_.getSize() <= 1)
     throw InvalidArgumentException(HERE) << "A limit state must contain at least one failure event.";
@@ -251,14 +251,7 @@ void LimitStateImplementation::removeFailureEvent(UnsignedInteger index)
 
   outputNames_.erase(outputNames_.begin() + index);
   operators_.erase(operators_.begin() + index);
-
-  Point thresholds;
-  for (UnsignedInteger i = 0; i < thresholds_.getDimension(); ++i)
-  {
-    if (i != index)
-      thresholds.add(thresholds_[i]);
-  }
-  thresholds_ = thresholds;
+  thresholds_.erase(thresholds_.begin() + index);
 }
 
 bool LimitStateImplementation::isSystemLimitState() const
@@ -330,25 +323,7 @@ RandomVector LimitStateImplementation::getISThresholdEvent() const
   if (!isSystemLimitState() || type_ != Type::Intersection)
     return getThresholdEvent();
   
-  OSS minFuncFormula;
-  minFuncFormula << "min(";
-  for (UnsignedInteger i = 0; i < outputNames_.getSize(); ++i)
-  {
-    if (i > 0)
-      minFuncFormula << ", ";
-    if (operators_[i].getImplementation()->getClassName() == "Greater" || operators_[i].getImplementation()->getClassName() == "GreaterOrEqual")
-      minFuncFormula << outputNames_[i] << " - " << thresholds_[i];
-    else
-      minFuncFormula << thresholds_[i] << " - " << outputNames_[i];
-  }
-  minFuncFormula << ")";
-  SymbolicFunction minFunc(outputNames_, Description(1, minFuncFormula.str()));
-
-  ComposedFunction fun(minFunc, getPhysicalModel().getRestrictedFunction(outputNames_));
-  MemoizeFunction function(fun);
-  ThresholdEvent event(CompositeRandomVector(function, getPhysicalModel().getInputRandomVector()), Greater(), 0.0);
-  
-  return event;
+  return getThresholdEvent().getImplementation()->asComposedEvent();
 }
 
 String LimitStateImplementation::getPythonScript() const
