@@ -43,8 +43,7 @@ SimulationReliabilityResult::SimulationReliabilityResult(const ProbabilitySimula
     const Collection<Sample> &outSamples,
     const Sample& convergenceSample,
     const Sample& convergenceSampleLowerBound,
-    const Sample& convergenceSampleUpperBound,
-    bool sharedInputs)
+    const Sample& convergenceSampleUpperBound)
   : EvaluationResult()
   , inputSamples_(inSamples)
   , outputSamples_(outSamples)
@@ -52,7 +51,6 @@ SimulationReliabilityResult::SimulationReliabilityResult(const ProbabilitySimula
   , convergenceSample_(convergenceSample)
   , convergenceSampleLowerBound_(convergenceSampleLowerBound)
   , convergenceSampleUpperBound_(convergenceSampleUpperBound)
-  , sharedInputs_(sharedInputs)
 {
   if (inSamples.getSize() != outSamples.getSize())
     throw InvalidArgumentException(HERE) << "Input and output sample collections must have the same size.";
@@ -182,7 +180,6 @@ void SimulationReliabilityResult::save(Advocate& adv) const
   adv.saveAttribute("convergenceSampleUpperBound_", convergenceSampleUpperBound_);
   adv.saveAttribute("inputSamples_", inputSamples_);
   adv.saveAttribute("outputSamples_", outputSamples_);
-  adv.saveAttribute("sharedInputs_", sharedInputs_);
   adv.saveAttribute("perEventSimulationResults_", perEventSimulationResults_);
 }
 
@@ -207,7 +204,6 @@ void SimulationReliabilityResult::load(Advocate& adv)
     // Persalys 20.1+
     adv.loadAttribute("inputSamples_", inputSamples_);
     adv.loadAttribute("outputSamples_", outputSamples_);
-    adv.loadAttribute("sharedInputs_", sharedInputs_);
     if (adv.hasAttribute("perEventSimulationResults_"))
       adv.loadAttribute("perEventSimulationResults_", perEventSimulationResults_);
   }

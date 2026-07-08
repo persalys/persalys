@@ -56,7 +56,6 @@ public:
 
 protected:
   SimulationInterface getSimulationAlgorithm(const OT::RandomVector & event) override;
-  bool useSharedInputSamples() const override { return false; }
 
 private:
   OT::Sample standardSpaceDesignPoints_;

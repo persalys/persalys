@@ -44,8 +44,8 @@ public:
                               const OT::Collection<OT::Sample> &outSamples,
                               const OT::Sample& convergenceSample,
                               const OT::Sample& convergenceSampleLowerBound,
-                              const OT::Sample& convergenceSampleUpperBound,
-                              bool sharedInputs = false);
+                              const OT::Sample& convergenceSampleUpperBound
+                            );
 
   /** Virtual constructor */
   SimulationReliabilityResult * clone() const override;
@@ -77,7 +77,6 @@ private:
   OT::Sample convergenceSample_;
   OT::Sample convergenceSampleLowerBound_;
   OT::Sample convergenceSampleUpperBound_;
-  OT::Bool sharedInputs_ = false;
 };
 }
 #endif

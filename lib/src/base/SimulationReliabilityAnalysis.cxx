@@ -219,12 +219,11 @@ void SimulationReliabilityAnalysis::launch()
   }
   
   result_ = SimulationReliabilityResult(algo.getResult(),
-  inSamples,
-  outSamples,
-  graph.getDrawables()[0].getData(),
-  graph.getDrawables()[1].getData(),
-  graph.getDrawables()[2].getData(),
-  useSharedInputSamples());
+                                        inSamples,
+                                        outSamples,
+                                        graph.getDrawables()[0].getData(),
+                                        graph.getDrawables()[1].getData(),
+                                        graph.getDrawables()[2].getData());
 
   result_.designOfExperiment_.setPhysicalModel(getPhysicalModel());
   result_.designOfExperiment_.setType(DesignOfExperiment::Type::MC);
