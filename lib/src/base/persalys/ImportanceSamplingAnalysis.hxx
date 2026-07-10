@@ -42,6 +42,8 @@ public:
   OT::Sample getStandardSpaceDesignPoints() const;
   void setStandardSpaceDesignPoints(const OT::Sample& points);
 
+  void setComputeIndividualEventProbabilities(bool compute) override;
+
   Parameters getParameters() const override;
   OT::String getPythonScript() const override;
 

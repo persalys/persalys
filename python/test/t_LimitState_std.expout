@@ -23,12 +23,12 @@ myStudy.add(aModelPhys)
 outputNames = ['Y0']
 operators = [ot.Less()]
 thresholds = [10]
-aLimitState = persalys.LimitState('aLimitState', aModelPhys, outputNames, operators,  persalys.LimitState.Union, thresholds)
+aLimitState = persalys.LimitState('aLimitState', aModelPhys, outputNames, operators, thresholds, persalys.LimitState.Union)
 myStudy.add(aLimitState)
 outputNames = ['Y1']
 operators = [ot.Less()]
 thresholds = [15]
-aLimitState2 = persalys.LimitState('aLimitState2', aModelPhys, outputNames, operators,  persalys.LimitState.Union, thresholds)
+aLimitState2 = persalys.LimitState('aLimitState2', aModelPhys, outputNames, operators, thresholds, persalys.LimitState.Union)
 myStudy.add(aLimitState2)
 persalys.Study.Add(myStudy)
 

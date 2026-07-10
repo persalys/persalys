@@ -38,16 +38,19 @@ public:
   LimitState();
 
   /** Constructor for regular limit state */
-  LimitState(const OT::String & name, const PhysicalModel & physicalModel,
-             const OT::String & outputName = "",
-             const OT::ComparisonOperator & failure = OT::Less(),
-             const double & threshold = 0.);
+  LimitState( const OT::String & name, 
+              const PhysicalModel & physicalModel,
+              const OT::String & outputName = "",
+              const OT::ComparisonOperator & failure = OT::Less(),
+              const double & threshold = 0.);
   
   /** Constructor for system limit state */
-  LimitState( const OT::String & name, const PhysicalModel & physicalModel,
-             const OT::Description & outputNames,
-             const ComparisonOperatorCollection & operators,
-             const Type type, const OT::Point & thresholds );
+  LimitState( const OT::String & name, 
+              const PhysicalModel & physicalModel,
+              const OT::Description & outputNames,
+              const ComparisonOperatorCollection & operators, 
+              const OT::Point & thresholds,
+              const Type type = Type::Union);
   
   /** Default constructor */
   LimitState(const LimitStateImplementation & implementation);
@@ -106,7 +109,7 @@ public:
   OT::RandomVector getThresholdEvent() const;
 
   /** Get the the threshold event constructed specifically for importance sampling */
-  OT::RandomVector getISThresholdEvent() const;
+  OT::RandomVector asComposedEvent() const;
 
   OT::String getPythonScript() const;
 

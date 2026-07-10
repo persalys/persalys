@@ -76,7 +76,7 @@ void FORMAnalysis::launch()
 
   RandomVector event;
   if(useISEvent_)
-    event = getLimitState().getISThresholdEvent();
+    event = getLimitState().asComposedEvent();
   else
     event = getLimitState().getThresholdEvent();
 

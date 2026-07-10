@@ -41,12 +41,13 @@ public:
   explicit SimulationReliabilityPage(QWidget* parent = nullptr);
 
   void initialize(const Analysis& analysis);
-  void updateAnalysis(const Analysis& analysis);
+  void updateAnalysis(const Analysis& analysis) const;
 
   bool validatePage() override;
 
 protected:
   void buildInterface();
+  void initializePage() override;
 
 private:
   StopCriteriaGroupBox  * stopCriteriaGroupBox_                   = nullptr;

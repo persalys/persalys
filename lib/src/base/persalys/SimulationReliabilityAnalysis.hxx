@@ -48,7 +48,7 @@ public:
   virtual void setBlockSize(const OT::UnsignedInteger size);
 
   bool getComputeIndividualEventProbabilities() const;
-  void setComputeIndividualEventProbabilities(bool compute);
+  virtual void setComputeIndividualEventProbabilities(bool compute);
 
   Parameters getParameters() const override;
 

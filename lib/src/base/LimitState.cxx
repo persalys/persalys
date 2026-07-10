@@ -49,9 +49,9 @@ LimitState::LimitState(const String& name,
                        const PhysicalModel& physicalModel,
                        const Description& outputNames,
                        const Collection<ComparisonOperator>& operators,
-                       const Type type,
-                       const Point& thresholds)
-  : TypedInterfaceObject<LimitStateImplementation>(new LimitStateImplementation(name, physicalModel, outputNames, operators, type, thresholds))
+                       const Point& thresholds,
+                       const Type type)
+  : TypedInterfaceObject<LimitStateImplementation>(new LimitStateImplementation(name, physicalModel, outputNames, operators, thresholds, type))
 {
 }
 
@@ -211,9 +211,9 @@ RandomVector LimitState::getThresholdEvent() const
   return getImplementation()->getThresholdEvent();
 }
 
-RandomVector LimitState::getISThresholdEvent() const
+RandomVector LimitState::asComposedEvent() const
 {
-  return getImplementation()->getISThresholdEvent();
+  return getImplementation()->asComposedEvent();
 }
 
 String LimitState::getPythonScript() const

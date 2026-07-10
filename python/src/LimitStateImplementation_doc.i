@@ -13,6 +13,9 @@ operator : :py:class:`~openturns.ComparisonOperator` or collection of :py:class:
     Comparison operator(s) against threshold(s) (optional)
 threshold : float or :py:class:`~openturns.Point`
     Threshold value(s) (optional)
+type : int
+    Type of system limit state (optional, default is Union)
+    Possible values are persalys.LimitState.Union and persalys.LimitState.Intersection.
 
 Examples
 --------
@@ -336,7 +339,7 @@ PERSALYS_LimitState_getThresholdEvent_doc
 
 // ---------------------------------------------------------------------
 
-%define PERSALYS_LimitState_getISThresholdEvent_doc
+%define PERSALYS_LimitState_asComposedEvent_doc
 "Get the the threshold event constructed specifically for importance sampling.
 
 Returns
@@ -345,8 +348,8 @@ event : :py:class:`~openturns.RandomVector`
     Threshold event"
 %enddef
 
-%feature("docstring") PERSALYS::LimitStateImplementation::getISThresholdEvent
-PERSALYS_LimitState_getISThresholdEvent_doc
+%feature("docstring") PERSALYS::LimitStateImplementation::asComposedEvent
+PERSALYS_LimitState_asComposedEvent_doc
 
 // ---------------------------------------------------------------------
 

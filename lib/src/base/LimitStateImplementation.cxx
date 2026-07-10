@@ -78,8 +78,8 @@ LimitStateImplementation::LimitStateImplementation(const String& name,
     const PhysicalModel& physicalModel,
     const Description& outputNames,
     const Collection<ComparisonOperator>& operators,
-    const Type type,
-    const Point& thresholds)
+    const Point& thresholds,
+    const Type type)
   : PersistentObject()
   , Observable()
   , physicalModel_(physicalModel)
@@ -318,7 +318,7 @@ RandomVector LimitStateImplementation::getThresholdEvent() const
   return getThresholdEvent(functions);
 }
 
-RandomVector LimitStateImplementation::getISThresholdEvent() const
+RandomVector LimitStateImplementation::asComposedEvent() const
 {
   if (!isSystemLimitState() || type_ != Type::Intersection)
     return getThresholdEvent();
@@ -342,7 +342,7 @@ String LimitStateImplementation::getPythonScript() const
 
   oss << "thresholds = " << Parameters::GetOTPointStr(thresholds_, ", ") << "\n";
 
-  oss << getName() << " = persalys.LimitState('" << getName() << "', " << getPhysicalModel().getName() << ", outputNames, operators,  " << (type_ == Type::Union ? "persalys.LimitState.Union" : "persalys.LimitState.Intersection") << ", thresholds)\n";
+  oss << getName() << " = persalys.LimitState('" << getName() << "', " << getPhysicalModel().getName() << ", outputNames, operators, thresholds, " << (type_ == Type::Union ? "persalys.LimitState.Union" : "persalys.LimitState.Intersection") << ")\n";
 
   return oss;
 }

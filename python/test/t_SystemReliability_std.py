@@ -46,8 +46,8 @@ ls_union = persalys.LimitState(
     model,
     ["Y0", "Y1"],
     [ot.Greater(), ot.Greater()],
-    persalys.LimitState.Union,
     [2.0, 2.0],
+    persalys.LimitState.Union,
 )
 myStudy.add(ls_union)
 
@@ -61,8 +61,8 @@ ls_inter = persalys.LimitState(
     model,
     ["Y0", "Y1"],
     [ot.Greater(), ot.Greater()],
-    persalys.LimitState.Intersection,
     [2.0, 2.0],
+    persalys.LimitState.Intersection,
 )
 myStudy.add(ls_inter)
 
@@ -193,6 +193,36 @@ assert pf_inter <= pf0_inter, f"Expected P(inter)={pf_inter} <= P(Y0>2)={pf0_int
 assert pf_inter <= pf1_inter, f"Expected P(inter)={pf_inter} <= P(Y1>2)={pf1_inter}"
 
 # -------------------------------------------------------
+# 5b. Importance Sampling on Intersection event – individual probabilities
+#     must be rejected (design point/importance distribution is unreliable
+#     for individual sub-events in this case)
+# -------------------------------------------------------
+is_inter = persalys.ImportanceSamplingAnalysis("is_inter", ls_inter)
+is_inter.setStandardSpaceDesignPoints([[1.0, 1.0]])
+try:
+    is_inter.setComputeIndividualEventProbabilities(True)
+    raise RuntimeError(
+        "Expected an exception when enabling individual event "
+        "probabilities for importance sampling on an intersection limit state"
+    )
+except Exception as ex:
+    assert "intersection" in str(ex).lower(), f"Unexpected exception: {ex}"
+
+# same restriction must apply to FORM-IS (which derives from ImportanceSamplingAnalysis)
+formis_inter_restricted = persalys.FORMImportanceSamplingAnalysis(
+    "formis_inter_restricted", ls_inter
+)
+try:
+    formis_inter_restricted.setComputeIndividualEventProbabilities(True)
+    raise RuntimeError(
+        "Expected an exception when enabling individual event "
+        "probabilities for FORM-IS on an intersection limit state"
+    )
+except Exception as ex:
+    assert "intersection" in str(ex).lower(), f"Unexpected exception: {ex}"
+
+
+# -------------------------------------------------------
 # 6. FORM on Union event (MultiFORMResult)
 # -------------------------------------------------------
 form_sys = persalys.FORMAnalysis("form_sys", ls_union)
@@ -210,7 +240,7 @@ ott.assert_almost_equal(
 )
 
 # -------------------------------------------------------
-# 6b. FORM-IS on Intersection event (exercises getISThresholdEvent → asComposedEvent)
+# 6b. FORM-IS on Intersection event (exercises asComposedEvent → asComposedEvent)
 #     {Y0>2 AND Y1>2}: FORM finds a design point on an individual constraint
 #     boundary (beta=sqrt(2)), then IS draws from the importance distribution.
 # -------------------------------------------------------
@@ -239,8 +269,8 @@ ls_inter_mixed = persalys.LimitState(
     model,
     ["Y0", "Y1"],
     [ot.Greater(), ot.Less()],
-    persalys.LimitState.Intersection,
     [2.0, -2.0],
+    persalys.LimitState.Intersection,
 )
 
 myStudy.add(ls_inter_mixed)

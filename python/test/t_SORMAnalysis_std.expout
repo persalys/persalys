@@ -42,7 +42,7 @@ myStudy.add(aModelPhys)
 outputNames = ['Y0']
 operators = [ot.Greater()]
 thresholds = [20]
-aLimitState = persalys.LimitState('aLimitState', aModelPhys, outputNames, operators,  persalys.LimitState.Union, thresholds)
+aLimitState = persalys.LimitState('aLimitState', aModelPhys, outputNames, operators, thresholds, persalys.LimitState.Union)
 myStudy.add(aLimitState)
 mySORM = persalys.SORMAnalysis('mySORM', aLimitState)
 mySORM.setPhysicalStartingPoint([1, 1])

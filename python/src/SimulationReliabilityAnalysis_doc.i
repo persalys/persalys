@@ -35,6 +35,8 @@ size : int
 %feature("docstring") PERSALYS::SimulationReliabilityAnalysis::setComputeIndividualEventProbabilities
 "Compute individual event probabilities accessor.
 
+Individual probabilities cannot be computed with importance sampling for an intersection limit state.
+
 Parameters
 ----------
 compute : bool

@@ -22,7 +22,7 @@ myStudy.add(myPhysicalModel)
 outputNames = ['S']
 operators = [ot.Greater()]
 thresholds = [-1]
-limitState1 = persalys.LimitState('limitState1', myPhysicalModel, outputNames, operators,  persalys.LimitState.Union, thresholds)
+limitState1 = persalys.LimitState('limitState1', myPhysicalModel, outputNames, operators, thresholds, persalys.LimitState.Union)
 myStudy.add(limitState1)
 myMonteCarlo = persalys.MonteCarloReliabilityAnalysis('myMonteCarlo', limitState1)
 myMonteCarlo.setMaximumCalls(10000)

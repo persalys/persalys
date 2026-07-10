@@ -143,6 +143,13 @@ void ImportanceSamplingAnalysis::setStandardSpaceDesignPoints(const Sample& poin
   standardSpaceDesignPoints_ = points;
 }
 
+void ImportanceSamplingAnalysis::setComputeIndividualEventProbabilities(bool compute)
+{
+  if (compute && getLimitState().isSystemLimitState() && getLimitState().getType() == LimitState::Type::Intersection)
+    throw InvalidArgumentException(HERE) << "Individual event probabilities cannot be computed with importance sampling for an intersection limit state.";
+  SimulationReliabilityAnalysis::setComputeIndividualEventProbabilities(compute);
+}
+
 Parameters ImportanceSamplingAnalysis::getParameters() const
 {
   Parameters param;

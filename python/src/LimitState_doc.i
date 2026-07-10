@@ -49,8 +49,8 @@ PERSALYS_LimitState_isValid_doc
 
 %feature("docstring") PERSALYS::LimitState::getThresholdEvent
 PERSALYS_LimitState_getThresholdEvent_doc
-%feature("docstring") PERSALYS::LimitState::getISThresholdEvent
-PERSALYS_LimitState_getISThresholdEvent_doc
+%feature("docstring") PERSALYS::LimitState::asComposedEvent
+PERSALYS_LimitState_asComposedEvent_doc
 
 %feature("docstring") PERSALYS::LimitState::getPythonScript
 PERSALYS_LimitState_getPythonScript_doc

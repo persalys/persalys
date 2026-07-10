@@ -22,10 +22,13 @@
 
 #include "persalys/MonteCarloReliabilityAnalysis.hxx"
 #include "persalys/CollapsibleGroupBox.hxx"
+#include "persalys/ReliabilityAnalysisWizard.hxx"
+#include "persalys/ReliabilityIntroPage.hxx"
 
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QCheckBox>
+#include <QGroupBox>
 
 using namespace OT;
 
@@ -55,6 +58,14 @@ void SimulationReliabilityPage::buildInterface()
   blockSizeGroupBox_ = new BlockSizeGroupBox(tr("Evaluation parameter"));
   pageLayout->addWidget(blockSizeGroupBox_);
 
+  // individual event probabilities (relevant for system limit states only)
+  QGroupBox * individualProbabilitiesGroupBox = new QGroupBox(tr("Individual event probabilities"));
+  QVBoxLayout * individualProbabilitiesLayout = new QVBoxLayout(individualProbabilitiesGroupBox);
+  computeIndividualProbabilitiesCheckBox_ = new QCheckBox(tr("Compute individual event probabilities"));
+  computeIndividualProbabilitiesCheckBox_->setChecked(false);
+  individualProbabilitiesLayout->addWidget(computeIndividualProbabilitiesCheckBox_);
+  pageLayout->addWidget(individualProbabilitiesGroupBox);
+
   //// advanced parameters
   CollapsibleGroupBox * advancedParamGroupBox = new CollapsibleGroupBox;
   advancedParamGroupBox->setTitle(tr("Advanced parameters"));
@@ -68,11 +79,6 @@ void SimulationReliabilityPage::buildInterface()
   seedSpinbox_->setMaximum(std::numeric_limits<int>::max());
   seedLabel->setBuddy(seedSpinbox_);
   advancedWidgetsLayout->addWidget(seedSpinbox_, 1, 1);
-
-  // individual event probabilities
-  computeIndividualProbabilitiesCheckBox_ = new QCheckBox(tr("Compute individual event probabilities"));
-  computeIndividualProbabilitiesCheckBox_->setChecked(false);
-  advancedWidgetsLayout->addWidget(computeIndividualProbabilitiesCheckBox_, 2, 0, 1, 2);
 
   pageLayout->addWidget(advancedParamGroupBox);
 
@@ -90,7 +96,7 @@ void SimulationReliabilityPage::buildInterface()
 
 void SimulationReliabilityPage::initialize(const Analysis& analysis)
 {
-  const SimulationReliabilityAnalysis * analysis_ptr = dynamic_cast<const SimulationReliabilityAnalysis*>(analysis.getImplementation().get());
+  const auto * analysis_ptr = dynamic_cast<const SimulationReliabilityAnalysis*>(analysis.getImplementation().get());
 
   if (!analysis_ptr)
     return;
@@ -101,14 +107,14 @@ void SimulationReliabilityPage::initialize(const Analysis& analysis)
 
   blockSizeGroupBox_->setBlockSizeValue(analysis_ptr->getBlockSize());
 
-  seedSpinbox_->setValue(analysis_ptr->getSeed());
+  seedSpinbox_->setValue(static_cast<int>(analysis_ptr->getSeed()));
   computeIndividualProbabilitiesCheckBox_->setChecked(analysis_ptr->getComputeIndividualEventProbabilities());
 }
 
 
-void SimulationReliabilityPage::updateAnalysis(const Analysis& analysis)
+void SimulationReliabilityPage::updateAnalysis(const Analysis& analysis) const
 {
-  SimulationReliabilityAnalysis * analysis_ptr = dynamic_cast<SimulationReliabilityAnalysis*>(analysis.getImplementation().get());
+  auto * analysis_ptr = dynamic_cast<SimulationReliabilityAnalysis*>(analysis.getImplementation().get());
   if (!analysis_ptr)
     return;
   analysis_ptr->setMaximumCalls(stopCriteriaGroupBox_->getMaximumCalls());
@@ -137,5 +143,28 @@ bool SimulationReliabilityPage::validatePage()
     return false;
 
   return true;
+}
+
+
+void SimulationReliabilityPage::initializePage()
+{
+  // Individual event probabilities cannot be computed with importance sampling
+  // for an intersection limit state (see ImportanceSamplingAnalysis::setComputeIndividualEventProbabilities).
+  bool disableCheckBox = false;
+  if (const auto * introPage = dynamic_cast<ReliabilityIntroPage *>(wizard()->page(ReliabilityAnalysisWizard::Page_Intro)))
+  {
+    const bool isImportanceSampling = (introPage->getMethodId() == ReliabilityIntroPage::FORM_IS);
+    const LimitState limitState = introPage->getLimitState();
+    const bool isIntersection = limitState.isSystemLimitState() && limitState.getType() == LimitState::Type::Intersection;
+    disableCheckBox = isImportanceSampling && isIntersection;
+  }
+  
+  if (disableCheckBox)
+  {
+    computeIndividualProbabilitiesCheckBox_->setChecked(false);
+    computeIndividualProbabilitiesCheckBox_->setEnabled(false);
+  }
+  else
+    computeIndividualProbabilitiesCheckBox_->setEnabled(true);
 }
 }

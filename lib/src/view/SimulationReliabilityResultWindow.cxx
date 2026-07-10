@@ -75,7 +75,7 @@ SimulationReliabilityResultWindow::SimulationReliabilityResultWindow(AnalysisIte
   // FORM result widget
   if (const auto * formISAnalysis = dynamic_cast<const FORMImportanceSamplingAnalysis*>(item->getAnalysis().getImplementation().get()))
   {
-    if (formISAnalysis->getLimitState().isSystemLimitState())
+    if (formISAnalysis->getLimitState().isSystemLimitState() && formISAnalysis->getLimitState().getType() != LimitState::Type::Intersection)
     {
       const Description outputNames = formISAnalysis->getLimitState().getOutputNames();
       formTabWidget_ = new ApproximationResultTabWidget(formISAnalysis->getMultiFORMResult(), *formISAnalysis, outputNames, this);
@@ -122,11 +122,13 @@ void SimulationReliabilityResultWindow::buildInterface()
     displayNames << outputName;
 
   const bool isSystem = (displayNames.size() > 1);
+  // The selector is only useful when individual (per sub-event) results were computed
+  const bool showLimitStateSelector = isSystem && result_.hasPerEventSimulationResults();
 
-  // Limit state selection groupbox — only for system events (>1 limit state)
+  // Limit state selection groupbox — only when individual event probabilities were computed
   QGroupBox           * outputsGroupBox   = nullptr;
   VariablesListWidget * outputsListWidget = nullptr;
-  if (isSystem)
+  if (showLimitStateSelector)
   {
     outputsGroupBox = new QGroupBox(tr("Limit state"));
     auto * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
@@ -176,8 +178,8 @@ void SimulationReliabilityResultWindow::buildInterface()
   if (modelDescriptionWidget_)
     tabWidget->addTab(modelDescriptionWidget_, tr("Model"));
 
-  // Wire limit state selection to dynamic content (system events only)
-  if (isSystem && outputsListWidget)
+  // Wire limit state selection to dynamic content (only when the selector is shown)
+  if (showLimitStateSelector && outputsListWidget)
   {
     // Summary per-event stacked widget
     if (summaryPerEventStack_)
@@ -208,7 +210,7 @@ void SimulationReliabilityResultWindow::buildInterface()
 
   //
   mainWidget->addWidget(tabWidget);
-  mainWidget->setStretchFactor(isSystem ? 1 : 0, 10);
+  mainWidget->setStretchFactor(showLimitStateSelector ? 1 : 0, 10);
 
   widgetLayout->addWidget(mainWidget, 1);
 }

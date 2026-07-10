@@ -283,12 +283,15 @@ The **Simulation methods** window allows one to define:
   - **Evaluation parameter**:
       - the block size (default=1): defines the maximum number of samples queued for evaluation by the physical model,
         see :ref:`design of experiment evaluation <doeevalwizard>` for more details
+  - **Compute individual event probabilities** (default: unchecked): when the limit state
+        is a system event (Union or Intersection), check this option to also estimate the
+        failure probability of each individual sub-event.
+        The computation of individual probabilities uses every point already computed during the simulation,
+        but depending on the model and on the method additional computations may be required.
+        This option is not available for Importance sampling with an Intersection limit state.
+
   - **Advanced Parameters** (default: hidden):
       - the seed of the random generator (default: 0, positive integer expected)
-      - **Compute individual event probabilities** (default: unchecked): when the limit state
-        is a system event (Union or Intersection), check this option to also estimate the
-        failure probability of each individual sub-event. The individual estimates are computed
-        by replaying the already-evaluated samples so that no additional model calls are required.
 
 .. image:: /user_manual/graphical_interface/probabilistic_analysis/limitStateReliabilitySimu.png
     :align: center
