@@ -50,3 +50,48 @@ Returns
 -------
 time : int
     Elapsed time in seconds to perform the analysis"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::SimulationReliabilityResult::getInputSamples
+"Input samples accessor.
+
+Returns
+-------
+inputSamples : collection of :py:class:`openturns.Sample`
+    Input samples used for the analysis"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::SimulationReliabilityResult::getOutputSamples
+"Output samples accessor.
+
+Returns
+-------
+outputSamples : collection of :py:class:`openturns.Sample`
+    Output samples used for the analysis"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::SimulationReliabilityResult::hasPerEventSimulationResults
+"Check if the result contains per-event simulation results.
+
+Returns
+-------
+hasResults : bool
+    True if the result contains per-event simulation results, False otherwise"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::SimulationReliabilityResult::getPerEventSimulationResult
+"For system events, get the simulation result for a specific event.
+
+Parameters
+----------
+eventIndex : int
+    Index of the event
+
+Returns
+-------
+simulationResult : :py:class:`openturns.SimulationResult`
+    Simulation result for the specified event"

@@ -44,4 +44,9 @@ std::string __repr__() {
   return "LimitState";
 }
 
+%pythoncode %{
+    Union = LimitStateImplementation.Union
+    Intersection = LimitStateImplementation.Intersection
+%}
+
 } }

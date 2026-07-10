@@ -123,7 +123,9 @@ void AnalysisItem::buildActions()
            analysisType == "MorrisAnalysis" ||
            analysisType == "CalibrationAnalysis" ||
            analysisType == "SobolAnalysis" ||
-           analysisType == "SimulationReliabilityAnalysis" ||
+           analysisType == "MonteCarloReliabilityAnalysis" ||
+           analysisType == "ImportanceSamplingAnalysis" ||
+           analysisType == "FORMImportanceSamplingAnalysis" ||
            analysisType == "MultiObjectiveOptimizationAnalysis")
   {
     convertAction_ = new QAction(tr("Convert into data model"), this);

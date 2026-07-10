@@ -47,6 +47,9 @@ public:
   OT::UnsignedInteger getBlockSize() const;
   virtual void setBlockSize(const OT::UnsignedInteger size);
 
+  bool getComputeIndividualEventProbabilities() const;
+  virtual void setComputeIndividualEventProbabilities(bool compute);
+
   Parameters getParameters() const override;
 
   SimulationReliabilityResult getResult() const;
@@ -68,10 +71,13 @@ protected:
   void launch() override;
   virtual SimulationInterface getSimulationAlgorithm(const OT::RandomVector& event);
   static void UpdateProgressValue(double percent, void* data);
+  OT::Collection<OT::ProbabilitySimulationResult> computeIndividualEventResults(OT::Collection<OT::Function> memoFunctions, OT::Scalar & elapsedTime);
 
 private:
-  OT::UnsignedInteger seed_ = 0;
-  OT::UnsignedInteger blockSize_ = 1;
+  OT::UnsignedInteger seed_                 = 0;
+  OT::UnsignedInteger blockSize_            = 1;
+  bool computeIndividualEventProbabilities_ = false;
+
 protected:
   SimulationReliabilityResult result_;
 };

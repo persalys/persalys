@@ -27,6 +27,8 @@
 #include "persalys/ErrorWidget.hxx"
 
 #include <QComboBox>
+#include <QPushButton>
+#include <QTableWidget>
 
 namespace PERSALYS
 {
@@ -37,29 +39,33 @@ class PERSALYS_VIEW_API LimitStateWindow : public SubWindow
 public:
   enum Operator {LessOperator, LessOrEqualOperator, GreaterOperator, GreaterOrEqualOperator};
 
-  LimitStateWindow(LimitStateItem * item, QWidget *parent = nullptr);
+  explicit LimitStateWindow(LimitStateItem * item, QWidget *parent = nullptr);
 
 protected:
   void buildInterface();
 
 public slots:
-  void updateOutputsList();
-  void updateOutputWidget();
-  void updateOperatorWidget();
-  void updateThresholdWidget();
-  void updateOutput(int);
-  void updateOperator(int);
-  void updateThreshold();
+  void rebuildEventsTable();
+  void updateTypeWidget();
+  void addFailureEvent();
+  void removeFailureEvent(int row);
+  void updateType(int index);
+
 signals:
   void limitStateChanged(const LimitState & limitState);
 
 private:
+  void updateOutput(int row, int comboIndex);
+  void updateOperator(int row, int comboIndex);
+  void updateThreshold(int row, ValueLineEdit * edit);
+
   LimitState limitState_;
 
-  QComboBox * outputsComboBox_ = nullptr;
-  QComboBox * failureComboBox_ = nullptr;
-  ValueLineEdit * thresholdLineEdit_ = nullptr;
-  ErrorWidget * errorWidget_ = nullptr;
+  QWidget       * typeWidget_      = nullptr;
+  QComboBox     * typeComboBox_    = nullptr;
+  QTableWidget  * eventsTable_     = nullptr;
+  QPushButton   * addEventButton_  = nullptr;
+  ErrorWidget   * errorWidget_     = nullptr;
 };
 }
 #endif

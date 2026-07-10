@@ -27,6 +27,7 @@
 #include "persalys/ParametersWidget.hxx"
 #include "persalys/PieChartView.hxx"
 #include "persalys/TranslationManager.hxx"
+#include "persalys/ErrorWidget.hxx"
 
 #include <QVBoxLayout>
 #include <QScrollArea>
@@ -47,13 +48,11 @@ ApproximationResultTabWidget::ApproximationResultTabWidget(const FORMResult& res
   , formResult_(result)
   , sormResult_()
   , result_(result)
-  , parametersWidget_(0)
-  , maximumEvaluationNumber_(0)
 {
   // analysis parameters
   Parameters analysisParameters;
 
-  const FORMAnalysis * formAnalysis(dynamic_cast<const FORMAnalysis*>(&analysis));
+  const auto * formAnalysis(dynamic_cast<const FORMAnalysis*>(&analysis));
   if (formAnalysis)
   {
     // Maximum iteration number : to add a warning if needed
@@ -62,7 +61,7 @@ ApproximationResultTabWidget::ApproximationResultTabWidget(const FORMResult& res
     // analysis parameters
     analysisParameters = analysis.getParameters();
   }
-  const FORMImportanceSamplingAnalysis * formISAnalysis(dynamic_cast<const FORMImportanceSamplingAnalysis*>(&analysis));
+  const auto * formISAnalysis(dynamic_cast<const FORMImportanceSamplingAnalysis*>(&analysis));
   if (formISAnalysis)
   {
     // Maximum iteration number : to add a warning if needed
@@ -97,13 +96,11 @@ ApproximationResultTabWidget::ApproximationResultTabWidget(const SORMResult& res
   , formResult_()
   , sormResult_(result)
   , result_(result)
-  , parametersWidget_(0)
-  , maximumEvaluationNumber_(0)
 {
   // analysis parameters
   Parameters analysisParameters;
 
-  const SORMAnalysis * sormAnalysis(dynamic_cast<const SORMAnalysis*>(&analysis));
+  const auto * sormAnalysis(dynamic_cast<const SORMAnalysis*>(&analysis));
   if (sormAnalysis)
   {
     // Maximum iteration number : to add a warning if needed
@@ -126,8 +123,47 @@ ApproximationResultTabWidget::ApproximationResultTabWidget(const SORMResult& res
 }
 
 
+ApproximationResultTabWidget::ApproximationResultTabWidget(const MultiFORMResult& result,
+    const ReliabilityAnalysis& analysis,
+    const Description& outputNames,
+    QWidget* parent)
+  : QTabWidget(parent)
+  , method_(SystemFORM)
+  , formResult_()
+  , sormResult_()
+  , result_()
+  , multiFORMResult_(result)
+  , outputNames_(outputNames)
+{
+  Parameters analysisParameters;
+
+  if (const auto * formAnalysis(dynamic_cast<const FORMAnalysis*>(&analysis)); formAnalysis)
+  {
+    maximumEvaluationNumber_ = formAnalysis->getOptimizationAlgorithm().getMaximumCallsNumber();
+    analysisParameters = analysis.getParameters();
+  }
+
+  if (analysisParameters.getSize())
+  {
+    parametersWidget_ = new QScrollArea;
+    auto * paramWidget = new QWidget;
+    auto * parametersWidgetLayout = new QVBoxLayout(paramWidget);
+    parametersWidgetLayout->addWidget(new ParametersWidget(tr("Threshold exceedance parameters"), analysisParameters), 0, Qt::AlignTop);
+    parametersWidget_->setWidget(paramWidget);
+  }
+
+  buildInterface();
+}
+
+
 void ApproximationResultTabWidget::buildInterface()
 {
+  if (method_ == SystemFORM)
+  {
+    buildSystemFORMInterface();
+    return;
+  }
+
   // first tab summary --------------------
   QWidget * tab = new QWidget;
   QVBoxLayout * tabLayout = new QVBoxLayout(tab);
@@ -428,17 +464,161 @@ void ApproximationResultTabWidget::buildInterface()
   }
   catch (const std::exception& ex)
   {
-    QLabel * errorLabel = new QLabel;
-    errorLabel->setStyleSheet("QLabel { color : red; }");
-    errorLabel->setText(tr("Internal error during the computation of the sensitivities.\n\n%1").arg(ex.what()));
-    errorLabel->setWordWrap(true);
+    auto * errorWidget = new ErrorWidget();
+    errorWidget->setFramelessErrorMessage(tr("Internal error during the computation of the sensitivities.\n\n%1").arg(ex.what()));
 
-    tabLayout->addWidget(errorLabel);
+    tabLayout->addWidget(errorWidget);
     tabLayout->addStretch();
     addTab(tab, tr("Sensitivities"));
   }
 
   // parameters widget --------------------
+  if (parametersWidget_)
+    addTab(parametersWidget_, tr("Parameters"));
+}
+
+
+void ApproximationResultTabWidget::setCurrentEvent(int index)
+{
+  if (summaryOptimizationStack_)
+    summaryOptimizationStack_->setCurrentIndex(index);
+  if (designPointStack_)
+    designPointStack_->setCurrentIndex(index);
+}
+
+
+void ApproximationResultTabWidget::buildSystemFORMInterface()
+{
+  const auto collection = multiFORMResult_.getFORMResultCollection();
+
+  // Summary tab -------------------------------------------------------
+  auto * tab        = new QWidget;
+  auto * tabLayout  = new QVBoxLayout(tab);
+  auto * scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
+
+  // system failure probability (always visible)
+  QStringList namesList;
+  QStringList valuesList;
+  namesList << tr("System failure probability") << tr("System reliability index");
+  valuesList << QString::number(multiFORMResult_.getEventProbability())
+             << QString::number(multiFORMResult_.getGeneralisedReliabilityIndex());
+  tabLayout->addWidget(new ParametersWidget(tr("System failure probability"), namesList, valuesList, true, true), 0, Qt::AlignTop);
+
+  // per-event results — one page per limit state
+  summaryOptimizationStack_ = new QStackedWidget;
+  for (UnsignedInteger i = 0; i < collection.getSize(); ++i)
+  {
+    const FORMResult& eventResult = collection[i];
+
+    auto * page       = new QWidget;
+    auto * pageLayout = new QVBoxLayout(page);
+
+    // individual failure probability
+    QStringList pfNames;
+    QStringList pfValues;
+    pfNames  << tr("Failure probability") << tr("Hasofer reliability index");
+    pfValues << QString::number(eventResult.getEventProbability())
+             << QString::number(eventResult.getHasoferReliabilityIndex());
+    pageLayout->addWidget(new ParametersWidget(tr("Failure probability"), pfNames, pfValues, true, true), 0, Qt::AlignTop);
+
+    // optimization result
+    auto * groupBox       = new QGroupBox(tr("Optimization result"));
+    auto * groupBoxLayout = new QVBoxLayout(groupBox);
+
+    QStringList optNames;
+    QStringList optValues;
+    optNames << tr("Calls number") << tr("Absolute error") << tr("Relative error")
+             << tr("Residual error") << tr("Constraint error");
+    optValues << QString::number(eventResult.getOptimizationResult().getCallsNumber())
+              << QString::number(eventResult.getOptimizationResult().getAbsoluteError())
+              << QString::number(eventResult.getOptimizationResult().getRelativeError())
+              << QString::number(eventResult.getOptimizationResult().getResidualError())
+              << QString::number(eventResult.getOptimizationResult().getConstraintError());
+
+    auto * table = new ParametersTableView(optNames, optValues, true, true);
+    if (maximumEvaluationNumber_ > 0 && eventResult.getOptimizationResult().getCallsNumber() == maximumEvaluationNumber_)
+    {
+      table->model()->setData(table->model()->index(0, 1), QIcon(":/images/task-attention.png"), Qt::DecorationRole);
+      table->model()->setData(table->model()->index(0, 1), tr("Maximum iterations number reached"), Qt::ToolTipRole);
+    }
+    groupBoxLayout->addWidget(table);
+    pageLayout->addWidget(groupBox, 0, Qt::AlignTop);
+    pageLayout->addStretch();
+    summaryOptimizationStack_->addWidget(page);
+  }
+  tabLayout->addWidget(summaryOptimizationStack_);
+
+  scrollArea->setWidget(tab);
+  addTab(scrollArea, tr("Summary"));
+
+  // Single design point tab with a stacked widget ----------------------------------------
+  tab = new QWidget;
+  tabLayout = new QVBoxLayout(tab);
+  scrollArea = new QScrollArea;
+  scrollArea->setWidgetResizable(true);
+
+  designPointStack_ = new QStackedWidget;
+  for (UnsignedInteger i = 0; i < collection.getSize(); ++i)
+  {
+    const FORMResult& eventResult = collection[i];
+
+    auto * page       = new QWidget;
+    auto * pageLayout = new QVBoxLayout(page);
+
+    auto * groupBox       = new QGroupBox(tr("Design point"));
+    auto * groupBoxLayout = new QVBoxLayout(groupBox);
+
+    auto * resultsTable = new CopyableTableView;
+    resultsTable->horizontalHeader()->hide();
+    resultsTable->verticalHeader()->hide();
+
+    const Description inDescription(eventResult.getLimitStateVariable().getFunction().getInputDescription());
+    const UnsignedInteger inDimension = inDescription.getSize();
+    auto * resultsTableModel = new CustomStandardItemModel(inDimension + 2, 4, resultsTable);
+    resultsTable->setModel(resultsTableModel);
+
+    resultsTableModel->setNotEditableHeaderItem(0, 0, tr("Variable"));
+    resultsTable->setSpan(0, 0, 2, 1);
+    resultsTableModel->setNotEditableHeaderItem(0, 1, tr("Importance factors"));
+    resultsTable->setSpan(0, 1, 2, 1);
+    resultsTableModel->setNotEditableHeaderItem(0, 2, tr("Coordinates"));
+    resultsTableModel->setNotEditableHeaderItem(1, 2, tr("Standard space"));
+    resultsTableModel->setNotEditableHeaderItem(1, 3, tr("Physical space"));
+
+    PointWithDescription importanceFactors(eventResult.getImportanceFactors());
+    importanceFactors.setDescription(inDescription);
+
+    for (UnsignedInteger j = 0; j < inDimension; ++j)
+    {
+      resultsTableModel->setNotEditableItem(j + 2, 0, QString::fromUtf8(inDescription[j].c_str()));
+      resultsTableModel->setNotEditableItem(j + 2, 1, importanceFactors[j]);
+      resultsTableModel->setNotEditableItem(j + 2, 2, eventResult.getStandardSpaceDesignPoint()[j]);
+      resultsTableModel->setNotEditableItem(j + 2, 3, eventResult.getPhysicalSpaceDesignPoint()[j]);
+    }
+
+    resultsTable->resizeToContents();
+    resultsTable->setSpan(0, 2, 1, 2);
+    groupBoxLayout->addWidget(resultsTable);
+    pageLayout->addWidget(groupBox, 0, Qt::AlignTop);
+
+    // importance factors pie chart
+    auto * pieGroupBox   = new QGroupBox(tr("Importance factors pie chart"));
+    auto * pieGroupBoxLayout = new QVBoxLayout(pieGroupBox);
+    auto * pieChart = new PieChartView(importanceFactors);
+    pieChart->setPlotName(tr("importanceFactors"));
+    pieGroupBoxLayout->addWidget(pieChart, 0, Qt::AlignCenter);
+    pageLayout->addWidget(pieGroupBox, 0, Qt::AlignTop);
+    pageLayout->addStretch();
+
+    designPointStack_->addWidget(page);
+  }
+  tabLayout->addWidget(designPointStack_);
+
+  scrollArea->setWidget(tab);
+  addTab(scrollArea, tr("Design point"));
+
+  // parameters widget
   if (parametersWidget_)
     addTab(parametersWidget_, tr("Parameters"));
 }

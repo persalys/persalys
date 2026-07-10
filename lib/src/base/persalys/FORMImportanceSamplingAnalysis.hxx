@@ -25,6 +25,7 @@
 #include "ApproximationAnalysis.hxx"
 
 #include <openturns/FORMResult.hxx>
+#include <openturns/MultiFORMResult.hxx>
 
 namespace PERSALYS
 {
@@ -34,7 +35,7 @@ class PERSALYS_BASE_API FORMImportanceSamplingAnalysis : public ImportanceSampli
 
 public:
   /** Default constructor */
-  FORMImportanceSamplingAnalysis();
+  FORMImportanceSamplingAnalysis() = default;
   /** Constructor with parameters */
   FORMImportanceSamplingAnalysis(const OT::String& name, const LimitState& limitState);
 
@@ -42,6 +43,7 @@ public:
   FORMImportanceSamplingAnalysis * clone() const override;
 
   OT::FORMResult getFORMResult() const;
+  OT::MultiFORMResult getMultiFORMResult() const;
 
   Parameters getParameters() const override;
   OT::String getPythonScript() const override;
@@ -61,6 +63,8 @@ protected:
 
 private:
   OT::FORMResult FORMResult_;
+  OT::MultiFORMResult multiFORMResult_;
+
 };
 }
 #endif

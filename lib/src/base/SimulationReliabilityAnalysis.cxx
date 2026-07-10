@@ -32,6 +32,20 @@ using namespace OT;
 namespace PERSALYS
 {
 
+struct SimuReliabilityAnalysisStruct
+{
+  SimuReliabilityAnalysisStruct(SimulationReliabilityAnalysis* analysis, SimulationInterface simulation)
+    : analysis_(analysis)
+    , simulation_(simulation)
+  {
+  };
+
+  virtual ~SimuReliabilityAnalysisStruct() = default;
+
+  SimulationReliabilityAnalysis * analysis_;
+  SimulationInterface simulation_;
+};
+
 /* Default constructor */
 SimulationReliabilityAnalysis::SimulationReliabilityAnalysis()
   : ReliabilityAnalysis()
@@ -59,24 +73,9 @@ SimulationReliabilityAnalysis* SimulationReliabilityAnalysis::clone() const
   return new SimulationReliabilityAnalysis(*this);
 }
 
-
-struct SimuReliabilityAnalysisStruct
-{
-  SimuReliabilityAnalysisStruct(SimulationReliabilityAnalysis* analysis, SimulationInterface simulation)
-    : analysis_(analysis)
-    , simulation_(simulation)
-  {
-  };
-
-  virtual ~SimuReliabilityAnalysisStruct() {};
-
-  SimulationReliabilityAnalysis * analysis_;
-  SimulationInterface simulation_;
-};
-
 void SimulationReliabilityAnalysis::UpdateProgressValue(double percent, void * data)
 {
-  SimuReliabilityAnalysisStruct * analysisStruct = static_cast<SimuReliabilityAnalysisStruct*>(data);
+  auto * analysisStruct = static_cast<SimuReliabilityAnalysisStruct*>(data);
   if (!analysisStruct)
     return;
 
@@ -129,6 +128,18 @@ void SimulationReliabilityAnalysis::setBlockSize(const UnsignedInteger size)
 }
 
 
+bool SimulationReliabilityAnalysis::getComputeIndividualEventProbabilities() const
+{
+  return computeIndividualEventProbabilities_;
+}
+
+
+void SimulationReliabilityAnalysis::setComputeIndividualEventProbabilities(bool compute)
+{
+  computeIndividualEventProbabilities_ = compute;
+}
+
+
 void SimulationReliabilityAnalysis::initialize()
 {
   AnalysisImplementation::initialize();
@@ -141,16 +152,20 @@ void SimulationReliabilityAnalysis::launch()
   // initialization
   RandomGenerator::SetSeed(getSeed());
 
-  Description outputName = {getLimitState().getOutputName()};
-
-  // get function
-  MemoizeFunction function(getPhysicalModel().getRestrictedFunction(outputName));
-  function.enableHistory();
-  function.clearHistory();
-
   // create OT::Event
-  ThresholdEvent event(CompositeRandomVector(function, getPhysicalModel().getInputRandomVector()), getLimitState().getOperator(), getLimitState().getThreshold());
-  event.setDescription(outputName);
+  Collection<Function> functions;
+  RandomVector event = getLimitState().getThresholdEvent(functions);
+
+  Collection<MemoizeFunction> memoFunctions;
+  for (auto & func : functions)
+  {
+    const auto * memoFunc = dynamic_cast<MemoizeFunction*>(func.getImplementation().get());
+    if (!memoFunc)
+      throw InternalException(HERE) << "Expected a MemoizeFunction in getThresholdEvent";
+    memoFunc->enableHistory();
+    memoFunc->clearHistory();
+    memoFunctions.add(*memoFunc);
+  }
 
   // create OT::Simulation
   SimulationInterface algo = getSimulationAlgorithm(event);
@@ -162,10 +177,10 @@ void SimulationReliabilityAnalysis::launch()
     algo.setConvergenceStrategy(Compact(getMaximumCalls())); // TODO: propose in wizard the convergence sample's size?
     maximumOuterSampling = static_cast<UnsignedInteger>(ceil(1.0 * getMaximumCalls() / getBlockSize()));
   }
+  
   algo.setMaximumOuterSampling(maximumOuterSampling);
   algo.setMaximumCoefficientOfVariation(getMaximumCoefficientOfVariation());
   algo.setBlockSize(getBlockSize());
-
   if (getMaximumElapsedTime() > 0)
     algo.setMaximumTimeDuration(getMaximumElapsedTime());
   algo.setStopCallback(&AnalysisImplementation::Stop, this);
@@ -174,6 +189,12 @@ void SimulationReliabilityAnalysis::launch()
 
   // run algo
   algo.run();
+
+  Scalar elapsedTime = algo.getResult().getTimeDuration();
+
+  Collection<ProbabilitySimulationResult> individualEventResults;
+  if (getLimitState().isSystemLimitState() && computeIndividualEventProbabilities_)
+    individualEventResults = computeIndividualEventResults(functions, elapsedTime);
 
   // set results
   // get convergence graph at level 0.95
@@ -186,24 +207,80 @@ void SimulationReliabilityAnalysis::launch()
     }
   }
 
-  Sample outSample = function.getOutputHistory();
-  outSample.setDescription(function.getOutputDescription());
-  Sample inSample = function.getInputHistory();
-  inSample.setDescription(function.getInputDescription());
+  Collection<Sample> inSamples(memoFunctions.getSize());
+  Collection<Sample> outSamples(memoFunctions.getSize());
 
+  for (UnsignedInteger i = 0; i < memoFunctions.getSize(); ++i)
+  {
+    inSamples[i] = memoFunctions[i].getInputHistory();
+    inSamples[i].setDescription(memoFunctions[i].getInputDescription());
+    outSamples[i] = memoFunctions[i].getOutputHistory();
+    outSamples[i].setDescription(memoFunctions[i].getOutputDescription());
+  }
+  
   result_ = SimulationReliabilityResult(algo.getResult(),
-                                        outSample,
+                                        inSamples,
+                                        outSamples,
                                         graph.getDrawables()[0].getData(),
                                         graph.getDrawables()[1].getData(),
-                                        graph.getDrawables()[2].getData(),
-                                        inSample);
+                                        graph.getDrawables()[2].getData());
 
   result_.designOfExperiment_.setPhysicalModel(getPhysicalModel());
-  result_.elapsedTime_ = algo.getResult().getTimeDuration();
+  result_.designOfExperiment_.setType(DesignOfExperiment::Type::MC);
+  result_.elapsedTime_ = elapsedTime;
 
-  function.disableHistory();
+  result_.perEventSimulationResults_ = individualEventResults;
+
+  for (const auto & memoFunc : memoFunctions)
+  {
+    memoFunc.disableHistory();
+  }
 }
 
+Collection<ProbabilitySimulationResult> SimulationReliabilityAnalysis::computeIndividualEventResults(Collection<Function> functions, Scalar & elapsedTime)
+{
+  Collection<MemoizeFunction> memoFunctions;
+  UnsignedInteger maxSampleSize = 0;
+  for (auto & func : functions)
+  {
+    const auto * memoFunc = dynamic_cast<MemoizeFunction*>(func.getImplementation().get());
+    if (!memoFunc)
+      throw InternalException(HERE) << "Expected a MemoizeFunction in getThresholdEvent";
+    if (memoFunc->getOutputHistory().getSize() > maxSampleSize)
+      maxSampleSize = memoFunc->getOutputHistory().getSize();
+    memoFunctions.add(*memoFunc);
+  }
+
+  const auto maxOuterSampling = static_cast<UnsignedInteger>(ceil(static_cast<double>(maxSampleSize) / static_cast<double>(getBlockSize())));
+
+  Collection<ProbabilitySimulationResult> individualEventResults(memoFunctions.getSize());
+
+  const Description outputNames = getLimitState().getOutputNames();
+  const Collection<ComparisonOperator> operators = getLimitState().getOperators();
+  const Point thresholds = getLimitState().getThresholds();
+
+  for (UnsignedInteger i = 0; i < outputNames.getSize(); ++i)
+  {
+    RandomGenerator::SetSeed(getSeed());
+
+    RandomVector subEvent = ThresholdEvent(CompositeRandomVector(memoFunctions[i], getPhysicalModel().getInputRandomVector()), operators[i], thresholds[i]);
+    subEvent.setDescription(Description(1, outputNames[i]));
+    SimulationInterface algo = getSimulationAlgorithm(subEvent);
+    
+    algo.setMaximumOuterSampling(maxOuterSampling);
+    algo.setBlockSize(getBlockSize());
+    if (getMaximumElapsedTime() > 0)
+      algo.setMaximumTimeDuration(getMaximumElapsedTime() - elapsedTime);
+    algo.setStopCallback(&AnalysisImplementation::Stop, this);
+
+    algo.run();
+
+    individualEventResults[i] = algo.getResult();
+    elapsedTime += algo.getResult().getTimeDuration();
+  }
+
+  return individualEventResults;
+}
 
 
 SimulationReliabilityResult SimulationReliabilityAnalysis::getResult() const
@@ -218,6 +295,7 @@ Parameters SimulationReliabilityAnalysis::getParameters() const
 
   param.add("Block size", getBlockSize());
   param.add("Seed", getSeed());
+  param.add("Compute individual event probabilities", computeIndividualEventProbabilities_ ? "true" : "false");
 
   return param;
 }
@@ -237,6 +315,8 @@ String SimulationReliabilityAnalysis::getPythonScript() const
   oss << getName() << ".setBlockSize(" << getBlockSize() << ")\n";
 
   oss << getName() << ".setSeed(" << getSeed() << ")\n";
+  if (computeIndividualEventProbabilities_)
+    oss << getName() << ".setComputeIndividualEventProbabilities(True)\n";
 
   return oss;
 }
@@ -267,6 +347,7 @@ void SimulationReliabilityAnalysis::save(Advocate & adv) const
   WithStopCriteriaAnalysis::save(adv);
   adv.saveAttribute("seed_", seed_);
   adv.saveAttribute("blockSize_", blockSize_);
+  adv.saveAttribute("computeIndividualEventProbabilities_", computeIndividualEventProbabilities_);
   adv.saveAttribute("result_", result_);
 }
 
@@ -278,6 +359,8 @@ void SimulationReliabilityAnalysis::load(Advocate & adv)
   WithStopCriteriaAnalysis::load(adv);
   adv.loadAttribute("seed_", seed_);
   adv.loadAttribute("blockSize_", blockSize_);
+  if (adv.hasAttribute("computeIndividualEventProbabilities_"))
+    adv.loadAttribute("computeIndividualEventProbabilities_", computeIndividualEventProbabilities_);
   adv.loadAttribute("result_", result_);
 }
 }

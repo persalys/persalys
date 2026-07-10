@@ -27,7 +27,7 @@ Create the limit state:
 Process the reliability analysis:
 
 >>> analysis = persalys.ImportanceSamplingAnalysis('myAnalysis', limitState)
->>> analysis.setStandardSpaceDesignPoint([-1.59388,0.998942])
+>>> analysis.setStandardSpaceDesignPoints([[-1.59388,0.998942]])
 >>> analysis.run()
 
 Get the result:
@@ -37,20 +37,20 @@ Get the result:
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::ImportanceSamplingAnalysis::getStandardSpaceDesignPoint
+%feature("docstring") PERSALYS::ImportanceSamplingAnalysis::getStandardSpaceDesignPoints
 "Accessor to standard space design point.
 
 Returns
 -------
-point : :py:class:`openturns.Point`
+point : :py:class:`openturns.Sample`
     Standard space design point. It is the mean of the Normal distribution used to sample."
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::ImportanceSamplingAnalysis::setStandardSpaceDesignPoint
+%feature("docstring") PERSALYS::ImportanceSamplingAnalysis::setStandardSpaceDesignPoints
 "Accessor to standard space design point.
 
 Parameters
 ----------
-point : sequence of float
-    Standard space design point. It is the mean of the Normal distribution used to sample"
+points : class:`openturns.Sample`
+    Standard space design points. It is the mean of the Normal distribution used to sample."

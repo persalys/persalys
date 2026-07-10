@@ -23,7 +23,10 @@ R[0, 1] = -0.2
 copula = ot.NormalCopula(ot.NormalCopula.GetCorrelationFromSpearmanCorrelation(R))
 myPhysicalModel.addCopula(['L', 'I'], copula)
 myStudy.add(myPhysicalModel)
-limitState1 = persalys.LimitState('limitState1', myPhysicalModel, 'y', ot.Greater(), 30)
+outputNames = ['y']
+operators = [ot.Greater()]
+thresholds = [30]
+limitState1 = persalys.LimitState('limitState1', myPhysicalModel, outputNames, operators, thresholds, persalys.LimitState.Union)
 myStudy.add(limitState1)
 mySobol = persalys.SobolAnalysis('mySobol', myPhysicalModel)
 mySobol.setMaximumCalls(1000)

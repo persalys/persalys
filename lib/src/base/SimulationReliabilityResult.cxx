@@ -20,7 +20,12 @@
  */
 #include "persalys/SimulationReliabilityResult.hxx"
 
+#include <persalys/EvaluationResult.hxx>
+
 #include <openturns/PersistentObjectFactory.hxx>
+
+#include <map>
+#include <limits>
 
 using namespace OT;
 
@@ -29,33 +34,75 @@ namespace PERSALYS
 
 CLASSNAMEINIT(SimulationReliabilityResult)
 
-static Factory<SimulationReliabilityResult> Factory_SimulationReliabilityResult;
-
-/* Default constructor */
-SimulationReliabilityResult::SimulationReliabilityResult()
-  : EvaluationResult()
-{
-}
+const static Factory<SimulationReliabilityResult> Factory_SimulationReliabilityResult;
 
 
 /* Constructor with parameters */
 SimulationReliabilityResult::SimulationReliabilityResult(const ProbabilitySimulationResult& simulationResults,
-    const Sample& outputSample,
+    const Collection<Sample> &inSamples,
+    const Collection<Sample> &outSamples,
     const Sample& convergenceSample,
     const Sample& convergenceSampleLowerBound,
-    const Sample& convergenceSampleUpperBound,
-    const Sample& inputSample
-                                                        )
+    const Sample& convergenceSampleUpperBound)
   : EvaluationResult()
+  , inputSamples_(inSamples)
+  , outputSamples_(outSamples)
   , simulationResult_(simulationResults)
   , convergenceSample_(convergenceSample)
   , convergenceSampleLowerBound_(convergenceSampleLowerBound)
   , convergenceSampleUpperBound_(convergenceSampleUpperBound)
 {
-  designOfExperiment_.setOutputSample(outputSample);
-  designOfExperiment_.setInputSample(inputSample);
-}
+  if (inSamples.getSize() != outSamples.getSize())
+    throw InvalidArgumentException(HERE) << "Input and output sample collections must have the same size.";
 
+  std::map<Point, UnsignedInteger> inputPointToRow;
+  std::map<String, UnsignedInteger> outputDescriptionToColumn;
+
+  for (const auto & sample : outSamples)
+  {
+    const String desc = sample.getDescription()[0];
+    if (outputDescriptionToColumn.find(desc) == outputDescriptionToColumn.end())
+      outputDescriptionToColumn[desc] = outputDescriptionToColumn.size();
+  }
+
+  const UnsignedInteger numberOfEvents = inSamples.getSize();
+  const UnsignedInteger numberOfOutputs = outputDescriptionToColumn.size();
+
+  Sample mergedInSample(0, inSamples[0].getDimension());
+  Sample mergedOutSample(0, numberOfOutputs);
+
+  for (UnsignedInteger k = 0; k < numberOfEvents; ++k)
+  {
+    Sample inSample   = inSamples[k];
+    Sample outSample  = outSamples[k];
+
+    if (inSample.getSize() != outSample.getSize())
+      throw InvalidArgumentException(HERE) << "Input and output samples must have the same size for each event.";
+
+    for (UnsignedInteger i = 0; i < inSample.getSize(); ++i)
+    {
+      Point inputPoint = inSample[i];
+      if (inputPointToRow.find(inputPoint) == inputPointToRow.end())
+      {
+        inputPointToRow[inputPoint] = inputPointToRow.size();
+        mergedInSample.add(inputPoint);
+        mergedOutSample.add(Point(numberOfOutputs, std::numeric_limits<Scalar>::quiet_NaN()));
+      }
+
+      mergedOutSample(inputPointToRow[inputPoint], outputDescriptionToColumn[outSample.getDescription()[0]]) = outSample[i][0];
+    }
+  }
+
+  Description mergedOutDescription(numberOfOutputs);
+  for (const auto & [str, idx] : outputDescriptionToColumn)
+    mergedOutDescription[idx] = str;
+  
+  mergedOutSample.setDescription(mergedOutDescription);
+  mergedInSample.setDescription(inSamples[0].getDescription());
+
+  designOfExperiment_.setInputSample(mergedInSample);
+  designOfExperiment_.setOutputSample(mergedOutSample);
+}
 
 /* Virtual constructor */
 SimulationReliabilityResult* SimulationReliabilityResult::clone() const
@@ -87,6 +134,30 @@ Sample SimulationReliabilityResult::getConvergenceSampleUpperBound() const
   return convergenceSampleUpperBound_;
 }
 
+Collection<Sample> SimulationReliabilityResult::getInputSamples() const
+{
+  return inputSamples_;
+}
+
+Collection<Sample> SimulationReliabilityResult::getOutputSamples() const
+{
+  return outputSamples_;
+}
+
+ProbabilitySimulationResult SimulationReliabilityResult::getPerEventSimulationResult(UnsignedInteger eventIndex) const
+{
+  if (eventIndex >= perEventSimulationResults_.getSize())
+    throw InvalidArgumentException(HERE) << "Event index out of range: " << eventIndex;
+  
+  return perEventSimulationResults_[eventIndex];
+}
+
+
+bool SimulationReliabilityResult::hasPerEventSimulationResults() const
+{
+  return perEventSimulationResults_.getSize() > 0;
+}
+
 
 /* String converter */
 String SimulationReliabilityResult::__repr__() const
@@ -107,6 +178,9 @@ void SimulationReliabilityResult::save(Advocate& adv) const
   adv.saveAttribute("convergenceSample_", convergenceSample_);
   adv.saveAttribute("convergenceSampleLowerBound_", convergenceSampleLowerBound_);
   adv.saveAttribute("convergenceSampleUpperBound_", convergenceSampleUpperBound_);
+  adv.saveAttribute("inputSamples_", inputSamples_);
+  adv.saveAttribute("outputSamples_", outputSamples_);
+  adv.saveAttribute("perEventSimulationResults_", perEventSimulationResults_);
 }
 
 
@@ -124,6 +198,19 @@ void SimulationReliabilityResult::load(Advocate& adv)
     Sample outS;
     adv.loadAttribute("outputSample_", outS);
     designOfExperiment_.setOutputSample(outS);
+  }
+  if (adv.hasAttribute("inputSamples_"))
+  {
+    // Persalys 20.1+
+    adv.loadAttribute("inputSamples_", inputSamples_);
+    adv.loadAttribute("outputSamples_", outputSamples_);
+    if (adv.hasAttribute("perEventSimulationResults_"))
+      adv.loadAttribute("perEventSimulationResults_", perEventSimulationResults_);
+  }
+  else
+  {
+    inputSamples_ = Collection<Sample>(1, designOfExperiment_.getInputSample());
+    outputSamples_ = Collection<Sample>(1, designOfExperiment_.getOutputSample());
   }
 }
 }

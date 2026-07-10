@@ -32,10 +32,6 @@ namespace PERSALYS
 
 ReliabilityIntroPage::ReliabilityIntroPage(QWidget * parent)
   : QWizardPage(parent)
-  , limitStatesComboBox_(0)
-  , limitStatesComboBoxModel_(0)
-  , limitStateLabel_(0)
-  , methodGroup_(0)
 {
   setTitle(tr("Reliability methods"));
 
@@ -178,6 +174,8 @@ void ReliabilityIntroPage::changeLimitStateLabel(int index)
   {
     const LimitState limitState = variant.value<LimitState>();
     limitStateLabel_->setText(limitState.__str__().c_str());
+
+    methodGroup_->button(ReliabilityIntroPage::SORM)->setEnabled(!limitState.isSystemLimitState());
   }
 }
 }

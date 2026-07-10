@@ -19,6 +19,7 @@
  *
  */
 #include "persalys/MonteCarloReliabilityAnalysis.hxx"
+#include "persalys/BaseTools.hxx"
 
 #include <openturns/ProbabilitySimulationAlgorithm.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
@@ -31,7 +32,7 @@ namespace PERSALYS
 
 CLASSNAMEINIT(MonteCarloReliabilityAnalysis)
 
-static Factory<MonteCarloReliabilityAnalysis> Factory_MonteCarloReliabilityAnalysis;
+const static Factory<MonteCarloReliabilityAnalysis> Factory_MonteCarloReliabilityAnalysis;
 
 /* Default constructor */
 MonteCarloReliabilityAnalysis::MonteCarloReliabilityAnalysis()
@@ -67,7 +68,7 @@ Parameters MonteCarloReliabilityAnalysis::getParameters() const
   Parameters param;
 
   param.add("Algorithm", "Monte Carlo");
-  param.add("Output of interest", getLimitState().getOutputName());
+  param.add("Outputs of interest", Parameters::GetOTDescriptionStr(getLimitState().getOutputNames(), false, false));
   param.add(WithStopCriteriaAnalysis::getParameters());
   param.add(SimulationReliabilityAnalysis::getParameters());
 

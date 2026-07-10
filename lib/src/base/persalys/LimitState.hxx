@@ -23,8 +23,6 @@
 
 #include "LimitStateImplementation.hxx"
 
-#include <openturns/Less.hxx>
-
 namespace PERSALYS
 {
 class PERSALYS_BASE_API LimitState : public OT::TypedInterfaceObject<LimitStateImplementation>
@@ -32,23 +30,38 @@ class PERSALYS_BASE_API LimitState : public OT::TypedInterfaceObject<LimitStateI
   CLASSNAME
 
 public:
-  typedef OT::Pointer<LimitStateImplementation>       Implementation;
+  using Implementation = OT::Pointer<LimitStateImplementation>;
+  using Type = LimitStateImplementation::Type;
+  using ComparisonOperatorCollection = LimitStateImplementation::ComparisonOperatorCollection;
 
   /** Default constructor */
   LimitState();
-  /** Constructor with parameters */
-  LimitState(const OT::String & name, const PhysicalModel & physicalModel,
-             const OT::String & outputName = "",
-             const OT::ComparisonOperator & failure = OT::Less(),
-             const double & threshold = 0.);
+
+  /** Constructor for regular limit state */
+  LimitState( const OT::String & name, 
+              const PhysicalModel & physicalModel,
+              const OT::String & outputName = "",
+              const OT::ComparisonOperator & failure = OT::Less(),
+              const double & threshold = 0.);
+  
+  /** Constructor for system limit state */
+  LimitState( const OT::String & name, 
+              const PhysicalModel & physicalModel,
+              const OT::Description & outputNames,
+              const ComparisonOperatorCollection & operators, 
+              const OT::Point & thresholds,
+              const Type type = Type::Union);
+  
   /** Default constructor */
   LimitState(const LimitStateImplementation & implementation);
   /** Constructor from implementation */
   LimitState(const Implementation & p_implementation);
+
 #ifndef SWIG
   /** Constructor from implementation pointer */
   LimitState(LimitStateImplementation * p_implementation);
 #endif
+
   /** Comparison operator */
   OT::Bool operator ==(const LimitState & other) const;
   OT::Bool operator !=(const LimitState & other) const;
@@ -58,16 +71,45 @@ public:
 
   PhysicalModel getPhysicalModel() const;
 
-  OT::String getOutputName() const;
-  void setOutputName(const OT::String & outputName);
+  OT::Description getOutputNames() const;
+  void setOutputNames(const OT::Description & outputNames);
+  void setOutputName(OT::UnsignedInteger index, const OT::String & outputName);
 
-  OT::ComparisonOperator getOperator() const;
-  void setOperator(const OT::ComparisonOperator & comparisonOperator);
+  ComparisonOperatorCollection getOperators() const;
+  OT::ComparisonOperator getOperator(OT::UnsignedInteger index) const;
+  void setOperators(const ComparisonOperatorCollection & operators);
+  void setOperator(OT::UnsignedInteger index, const OT::ComparisonOperator & comparisonOperator);
 
-  double getThreshold() const;
-  void setThreshold(const double & threshold);
+  OT::Point getThresholds() const;
+  double getThreshold(OT::UnsignedInteger index) const;
+  void setThresholds(const OT::Point & thresholds);
+  void setThreshold(OT::UnsignedInteger index, const double & threshold);
+
+  void setType(const Type type);
+  Type getType() const;
+
+  bool isSystemLimitState() const;
+  OT::UnsignedInteger getNumberOfFailureEvents() const;
 
   bool isValid() const;
+
+  void addFailureEvent( const OT::String & variableName,
+                        const OT::ComparisonOperator & comparisonOperator = OT::Less(),
+                        const double & threshold = 0.0 );
+  void removeFailureEvent(OT::UnsignedInteger index);
+
+  #ifndef SWIG
+  /** Get the threshold event corresponding to the limit state
+   * 
+   * @param functions A collection in which will be added every function used to build 
+   * the threshold event in the form of a MemoizedFunction.
+   */
+  OT::RandomVector getThresholdEvent(OT::Collection<OT::Function> &functions) const;
+  #endif
+  OT::RandomVector getThresholdEvent() const;
+
+  /** Get the the threshold event constructed specifically for importance sampling */
+  OT::RandomVector asComposedEvent() const;
 
   OT::String getPythonScript() const;
 

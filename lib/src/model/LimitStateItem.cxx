@@ -92,6 +92,10 @@ void LimitStateItem::update(Observable* /*source*/, const String & message)
   {
     emit thresholdChanged();
   }
+  else if (message == "typeChanged")
+  {
+    emit typeChanged();
+  }
   else if (message == "analysisLaunched")
   {
     analysisInProgress_ = true;

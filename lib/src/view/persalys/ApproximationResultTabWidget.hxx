@@ -24,10 +24,12 @@
 #include "persalys/ReliabilityAnalysis.hxx"
 
 #include <openturns/FORMResult.hxx>
+#include <openturns/MultiFORMResult.hxx>
 #include <openturns/SORMResult.hxx>
 
 #include <QTabWidget>
 #include <QScrollArea>
+#include <QStackedWidget>
 
 namespace PERSALYS
 {
@@ -36,25 +38,39 @@ class PERSALYS_VIEW_API ApproximationResultTabWidget : public QTabWidget
   Q_OBJECT
 
 public:
-  enum Method {FORM, SORM};
+  enum Method {FORM, SORM, SystemFORM};
 
   ApproximationResultTabWidget(const OT::FORMResult& result,
                                const ReliabilityAnalysis& analysis,
-                               QWidget* parent = 0);
+                               QWidget* parent = nullptr);
+  ApproximationResultTabWidget(const OT::MultiFORMResult& result,
+                               const ReliabilityAnalysis& analysis,
+                               const OT::Description& outputNames,
+                               QWidget* parent = nullptr);
   ApproximationResultTabWidget(const OT::SORMResult& result,
                                const ReliabilityAnalysis& analysis,
-                               QWidget* parent = 0);
+                               QWidget* parent = nullptr);
+
+public slots:
+  /** Switch the visible per-event content (system FORM only). */
+  void setCurrentEvent(int index);
 
 protected:
   void buildInterface();
+  void buildSystemFORMInterface();
 
 private:
-  Method method_;
-  OT::FORMResult formResult_;
-  OT::SORMResult sormResult_;
-  OT::AnalyticalResult result_;
-  QScrollArea * parametersWidget_;
-  OT::UnsignedInteger maximumEvaluationNumber_;
+  Method                  method_;
+  OT::FORMResult          formResult_;
+  OT::SORMResult          sormResult_;
+  OT::AnalyticalResult    result_;
+  OT::MultiFORMResult     multiFORMResult_;
+  OT::Description         outputNames_;
+  QScrollArea           * parametersWidget_         = nullptr;
+  OT::UnsignedInteger     maximumEvaluationNumber_  = 0;
+  // System FORM: stacked widgets driven by limit state selection
+  QStackedWidget        * summaryOptimizationStack_ = nullptr;
+  QStackedWidget        * designPointStack_         = nullptr;
 };
 }
 #endif

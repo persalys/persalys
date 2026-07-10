@@ -23,6 +23,9 @@
 
 #include "PhysicalModel.hxx"
 
+#include <openturns/Less.hxx>
+#include <openturns/RandomVector.hxx>
+
 namespace PERSALYS
 {
 class PERSALYS_BASE_API LimitStateImplementation : public OT::PersistentObject, public Observable
@@ -30,15 +33,28 @@ class PERSALYS_BASE_API LimitStateImplementation : public OT::PersistentObject, 
   CLASSNAME
 
 public:
-  typedef OT::Pointer<LimitStateImplementation>       Implementation;
+  enum Type { Union, Intersection };
+
+  using ComparisonOperatorCollection = OT::Collection<OT::ComparisonOperator>;
 
   /** Default constructor */
   LimitStateImplementation();
-  /** Constructor with parameters */
-  LimitStateImplementation(const OT::String & name, const PhysicalModel & physicalModel,
-                           const OT::String & outputName,
-                           const OT::ComparisonOperator & failure, const double & threshold);
 
+  /** Constructor for regular limit state */
+  LimitStateImplementation(const OT::String & name, 
+                           const PhysicalModel & physicalModel,
+                           const OT::String & outputName,
+                           const OT::ComparisonOperator & failure,
+                           const double & threshold);
+  
+  /** Constructor for system limit state */
+  LimitStateImplementation( const OT::String & name,
+                            const PhysicalModel & physicalModel,
+                            const OT::Description & outputNames,
+                            const ComparisonOperatorCollection & operators,
+                            const OT::Point & thresholds,
+                            const Type type = Type::Union);
+  
   /** Virtual constructor */
   LimitStateImplementation * clone() const override;
 
@@ -50,16 +66,45 @@ public:
 
   PhysicalModel getPhysicalModel() const;
 
-  OT::String getOutputName() const;
-  void setOutputName(const OT::String & outputName);
+  OT::Description getOutputNames() const;
+  void setOutputNames(const OT::Description & outputNames);
+  void setOutputName(OT::UnsignedInteger index, const OT::String & outputName);
 
-  OT::ComparisonOperator getOperator() const;
-  void setOperator(const OT::ComparisonOperator & comparisonOperator);
+  ComparisonOperatorCollection getOperators() const;
+  OT::ComparisonOperator getOperator(OT::UnsignedInteger index) const;
+  void setOperators(const ComparisonOperatorCollection & operators);
+  void setOperator(OT::UnsignedInteger index, const OT::ComparisonOperator & comparisonOperator);
 
-  double getThreshold() const;
-  void setThreshold(const double & threshold);
+  OT::Point getThresholds() const;
+  double getThreshold(OT::UnsignedInteger index) const;
+  void setThresholds(const OT::Point & thresholds);
+  void setThreshold(OT::UnsignedInteger index, const double & threshold);
+
+  void setType(const Type type);
+  Type getType() const;
+
+  void addFailureEvent( const OT::String & variableName, 
+                    const OT::ComparisonOperator & comparisonOperator = OT::Less(), 
+                    const double & threshold = 0.0);
+  void removeFailureEvent(OT::UnsignedInteger index);
+
+  bool isSystemLimitState() const;
+  OT::UnsignedInteger getNumberOfFailureEvents() const;
 
   bool isValid() const;
+
+  #ifndef SWIG
+  /** Get the threshold event corresponding to the limit state
+   * 
+   * @param functions A collection in which will be added every function used to build 
+   * the threshold event in the form of a MemoizedFunction.
+   */
+  OT::RandomVector getThresholdEvent(OT::Collection<OT::Function> &functions) const;
+  #endif
+  OT::RandomVector getThresholdEvent() const;
+
+  /** Get the the threshold event constructed specifically for importance sampling */
+  OT::RandomVector asComposedEvent() const;
 
   OT::String getPythonScript() const;
 
@@ -75,10 +120,11 @@ public:
 
 private:
   PhysicalModel physicalModel_;
-  OT::Function function_;
-  OT::String outputName_;
-  OT::ComparisonOperator operator_;
-  double threshold_;
+  OT::Description outputNames_;
+  OT::PersistentCollection<OT::ComparisonOperator> operators_;
+  OT::Point thresholds_;
+  Type type_ = Type::Union;
 };
 }
+
 #endif

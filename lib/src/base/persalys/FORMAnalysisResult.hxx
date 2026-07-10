@@ -24,6 +24,7 @@
 #include "AnalysisResult.hxx"
 
 #include <openturns/FORMResult.hxx>
+#include <openturns/MultiFORMResult.hxx>
 
 namespace PERSALYS
 {
@@ -35,15 +36,20 @@ public:
   friend class FORMAnalysis;
 
   /** Default constructor */
-  FORMAnalysisResult();
+  FORMAnalysisResult() = default;
 
   /** Constructor with parameters */
   FORMAnalysisResult(const OT::FORMResult& formResult);
+  FORMAnalysisResult(const OT::MultiFORMResult& multiFormResult);
 
   /** Virtual constructor */
   FORMAnalysisResult * clone() const override;
 
+  OT::Scalar getEventProbability() const;
+  OT::Scalar getGeneralisedReliabilityIndex() const;
+
   OT::FORMResult getFORMResult() const;
+  OT::MultiFORMResult getMultiFORMResult() const;
 
   /** String converter */
   OT::String __repr__() const override;
@@ -54,8 +60,10 @@ public:
   /** Method load() reloads the object from the StorageManager */
   void load(OT::Advocate & adv) override;
 
-protected:
+private:
   OT::FORMResult formResult_;
+  OT::MultiFORMResult multiFormResult_;
+  bool isSystemFormResult_ = false;
 };
 }
 #endif

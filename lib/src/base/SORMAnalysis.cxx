@@ -32,7 +32,7 @@ namespace PERSALYS
 
 CLASSNAMEINIT(SORMAnalysis)
 
-static Factory<SORMAnalysis> Factory_SORMAnalysis;
+const static Factory<SORMAnalysis> Factory_SORMAnalysis;
 
 /* Default constructor */
 SORMAnalysis::SORMAnalysis()
@@ -71,14 +71,17 @@ void SORMAnalysis::launch()
 {
   if (!getPhysicalModel().getDistribution().isContinuous())
     throw InvalidArgumentException(HERE) << "The model distribution must have continuous marginals.";
+  
+  if (getLimitState().isSystemLimitState())
+    throw InvalidArgumentException(HERE) << "SORM analysis is not implemented for system limit state.";
 
-  const Description outputName(1, getLimitState().getOutputName());
+  const Description outputName{getLimitState().getOutputNames()};
 
   // get function
   Function function(getPhysicalModel().getRestrictedFunction(outputName));
 
   // create OT::Event
-  ThresholdEvent event(CompositeRandomVector(function, getPhysicalModel().getInputRandomVector()), getLimitState().getOperator(), getLimitState().getThreshold());
+  ThresholdEvent event(CompositeRandomVector(function, getPhysicalModel().getInputRandomVector()), getLimitState().getOperators()[0], getLimitState().getThresholds()[0]);
   event.setDescription(outputName);
 
   OptimizationAlgorithm solver(getOptimizationAlgorithm());
@@ -111,7 +114,7 @@ Parameters SORMAnalysis::getParameters() const
   Parameters param;
 
   param.add("Algorithm", "SORM");
-  param.add("Output of interest", getLimitState().getOutputName());
+  param.add("Output of interest", getLimitState().getOutputNames()[0]);
   param.add("Optimization algorithm", getOptimizationAlgorithm().getImplementation()->getClassName());
   param.add("Physical starting point", getPhysicalStartingPoint());
   param.add("Maximum number of calls", getOptimizationAlgorithm().getMaximumCallsNumber());
