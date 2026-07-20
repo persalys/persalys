@@ -140,6 +140,110 @@ void DataAnalysisWindow::buildInterface()
 }
 
 
+void DataAnalysisWindow::buildLazyTab(int index)
+{
+  if (lazyTabsBuilt_.contains(index))
+    return;
+
+  // --- deferred PV tab block: create all PV tabs on first access ---
+  if (pvPlaceholderStart_ >= 0 && index >= pvPlaceholderStart_)
+  {
+    tabWidget_->blockSignals(true);
+
+    // save any non-PV tabs that come after the PV block (Parameters, Model)
+    const int afterStart = pvPlaceholderStart_ + pvPlaceholderCount_;
+    const int totalBefore = tabWidget_->count();
+    QList<QWidget*> afterWidgets;
+    QStringList afterTexts;
+    QSet<int> afterTabBuilt;
+    for (int i = afterStart; i < totalBefore; ++i)
+    {
+      afterWidgets.append(tabWidget_->widget(i));
+      afterTexts.append(tabWidget_->tabText(i));
+      if (lazyTabsBuilt_.contains(i))
+        afterTabBuilt.insert(i - afterStart);
+    }
+
+    // remove after-tabs and PV placeholders (reverse order)
+    for (int i = totalBefore - 1; i >= afterStart; --i)
+      tabWidget_->removeTab(i);
+    for (int i = afterStart - 1; i >= pvPlaceholderStart_; --i)
+      tabWidget_->removeTab(i);
+
+    // create all PV tabs (they are appended at the end)
+#ifdef PERSALYS_HAVE_PARAVIEW
+    addParaviewWidgetsTabs();
+#endif
+
+    // mark the newly created PV tabs as built
+    for (int i = pvPlaceholderStart_; i < tabWidget_->count(); ++i)
+      lazyTabsBuilt_.insert(i);
+
+    // re-add the non-PV tabs that were saved
+    for (int i = 0; i < afterWidgets.size(); ++i)
+    {
+      tabWidget_->addTab(afterWidgets[i], afterTexts[i]);
+      const int newIndex = tabWidget_->count() - 1;
+      if (afterTabBuilt.contains(i))
+        lazyTabsBuilt_.insert(newIndex);
+    }
+
+    // PV block is no longer tracked separately
+    pvPlaceholderStart_ = -1;
+    pvPlaceholderCount_ = 0;
+
+    tabWidget_->setCurrentIndex(index);
+    tabWidget_->blockSignals(false);
+    return;
+  }
+
+  const QString tabText = tabWidget_->tabText(index);
+  tabWidget_->blockSignals(true);
+  lazyTabsBuilt_.insert(index);
+  tabWidget_->removeTab(index);
+
+  const int oldCount = tabWidget_->count();
+
+  if (tabText == tr("PDF/CDF"))
+    addPDF_CDFTab();
+  else if (tabText == tr("Box plots"))
+    addBoxPlotTab();
+  else if (tabText == tr("Dependence"))
+    addDependenceTab();
+  else if (tabText == tr("Table"))
+    addTableTab();
+  else if (tabText == tr("Plot matrix"))
+    addPlotMatrixTab();
+  else if (tabText == tr("Scatter plot"))
+    addScatterPlotsTab();
+  else if (tabText == tr("Parameters") && parametersWidget_)
+    tabWidget_->addTab(parametersWidget_, tr("Parameters"));
+  else if (tabText == tr("Model") && modelDescriptionWidget_)
+    tabWidget_->addTab(modelDescriptionWidget_, tr("Model"));
+  else
+  {
+    tabWidget_->blockSignals(false);
+    return;
+  }
+
+  // if no tab was added (e.g. conditional add*Tab that decided to skip)
+  if (tabWidget_->count() == oldCount)
+  {
+    tabWidget_->insertTab(index, new QWidget, tabText);
+    tabWidget_->blockSignals(false);
+    return;
+  }
+
+  // move the newly added tab to the right position
+  QWidget *newWidget = tabWidget_->widget(tabWidget_->count() - 1);
+  const QString newText = tabWidget_->tabText(tabWidget_->count() - 1);
+  tabWidget_->removeTab(tabWidget_->count() - 1);
+  tabWidget_->insertTab(index, newWidget, newText);
+  tabWidget_->setCurrentIndex(index);
+  tabWidget_->blockSignals(false);
+}
+
+
 void DataAnalysisWindow::fillListWidget()
 {
   variablesListWidget_->addItems(outputNames_ + inputNames_);
@@ -154,47 +258,54 @@ void DataAnalysisWindow::fillListWidget()
 
 void DataAnalysisWindow::fillTabWidget()
 {
-  // tab: Summary
+  // tab: Summary (eager, shown first)
   addSummaryTab();
   if (designOfExperiment_.getSample().getSize() > 1)
   {
-    // tab: PDF/CDF
-    addPDF_CDFTab();
-    // tab: box plots
-    addBoxPlotTab();
-    // tab: correlation
-    addDependenceTab();
+    // lazy tabs
+    tabWidget_->addTab(new QWidget, tr("PDF/CDF"));
+    tabWidget_->addTab(new QWidget, tr("Box plots"));
+    tabWidget_->addTab(new QWidget, tr("Dependence"));
   }
 #ifdef PERSALYS_HAVE_PARAVIEW
   if (SubWindow::SupportsOpenGL_3_2())
   {
-    addParaviewWidgetsTabs();
     canUseParaview_ = true;
   }
 #endif
-  if (!canUseParaview_ && doMultivariate_)
+  if (canUseParaview_ && doMultivariate_)
   {
-    // tab: Table --------------------------------
-    addTableTab();
+    // PV tabs are built lazily on first click via buildLazyTab
+    pvPlaceholderStart_ = tabWidget_->count();
+    tabWidget_->addTab(new QWidget, tr("Table"));
+    ++pvPlaceholderCount_;
     if (designOfExperiment_.getSample().getDimension() > 1 && designOfExperiment_.getSample().getSize() > 1)
     {
-      // tab: plot matrix
-      addPlotMatrixTab();
-      // tab: scatter plots
-      addScatterPlotsTab();
+      tabWidget_->addTab(new QWidget, tr("Parallel coordinates plot"));
+      ++pvPlaceholderCount_;
+      tabWidget_->addTab(new QWidget, tr("Plot matrix"));
+      ++pvPlaceholderCount_;
+      tabWidget_->addTab(new QWidget, tr("Scatter plot"));
+      ++pvPlaceholderCount_;
+    }
+  }
+  else if (doMultivariate_)
+  {
+    tabWidget_->addTab(new QWidget, tr("Table"));
+    if (designOfExperiment_.getSample().getDimension() > 1 && designOfExperiment_.getSample().getSize() > 1)
+    {
+      tabWidget_->addTab(new QWidget, tr("Plot matrix"));
+      tabWidget_->addTab(new QWidget, tr("Scatter plot"));
     }
   }
 
-  // tab: Parameters --------------------------------
   if (parametersWidget_)
-    tabWidget_->addTab(parametersWidget_, tr("Parameters"));
-
-  // tab : model description --------------------------------
+    tabWidget_->addTab(new QWidget, tr("Parameters"));
   if (modelDescriptionWidget_)
-    tabWidget_->addTab(modelDescriptionWidget_, tr("Model"));
+    tabWidget_->addTab(new QWidget, tr("Model"));
 
-  //
   connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(updateVariablesListVisibility(int)));
+  connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(buildLazyTab(int)));
 }
 
 

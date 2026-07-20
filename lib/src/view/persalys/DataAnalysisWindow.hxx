@@ -30,6 +30,7 @@
 #endif
 
 #include <QGroupBox>
+#include <QSet>
 
 namespace PERSALYS
 {
@@ -61,6 +62,7 @@ protected:
 
 public slots:
   virtual void updateVariablesListVisibility(int indexTab);
+  void buildLazyTab(int index);
 signals:
   void stateChanged(int);
 
@@ -95,6 +97,9 @@ private:
   WidgetBoundToDockWidget * boundPlotMatrixWidget_ = nullptr;
   int plotMatrixTabIndex_ = -1;
   bool canUseParaview_ = false;
+  int pvPlaceholderStart_ = -1;
+  int pvPlaceholderCount_ = 0;
+  QSet<int> lazyTabsBuilt_;
 };
 }
 #endif
