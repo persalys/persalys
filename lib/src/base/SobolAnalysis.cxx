@@ -436,11 +436,13 @@ bool SobolAnalysis::CanBeLaunched(String &errorMessage, const PhysicalModel &phy
 {
   if (!PhysicalModelAnalysis::CanBeLaunched(errorMessage, physicalModel))
     return false;
+  
   if (!physicalModel.hasStochasticInputs())
     errorMessage = "The model must have stochastic inputs.";
-  // pm must have independent copula
   if (!physicalModel.getCopula().hasIndependentCopula())
     errorMessage = "The model must have an independent copula to compute a sensitivity analysis but here inputs are dependent.";
+  if (physicalModel.getInputDimension() <= 1)
+    errorMessage = "The model must have at least 2 inputs.";
 
   return errorMessage.empty();
 }
