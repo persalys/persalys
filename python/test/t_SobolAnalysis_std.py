@@ -64,6 +64,41 @@ analysis3.run()
 
 result3 = analysis3.getResult()
 print("result=", result3)
+
+# Sobol - test BatchFailedException handling ##
+
+x0_fail = persalys.Input("x0_fail", ot.Normal())
+x1_fail = persalys.Input("x1_fail", ot.Normal())
+y0_fail = persalys.Output("y0_fail")
+
+failCode = """def _exec(x0_fail, x1_fail):
+    if abs(x0_fail) >= 1.9:
+        raise ValueError('x0_fail is too large')
+    y0_fail = x0_fail + x1_fail
+    return y0_fail
+"""
+failModel = persalys.PythonPhysicalModel("failModel", [x0_fail, x1_fail], [y0_fail], failCode)
+failModel.setParallel(False)
+
+analysis4 = persalys.SobolAnalysis("aSobol4", failModel)
+analysis4.setSeed(11)
+analysis4.setReplicationSize(3)
+analysis4.setBlockSize(6)
+
+analysis4.run()
+
+result4 = analysis4.getResult()
+# the run stopped on a BatchFailedException: a warning message is set
+assert len(analysis4.getWarningMessage()) > 0
+
+# the points that succeeded, even within the batch that raised the exception, were recovered
+doe4 = result4.getDesignOfExperiment()
+assert doe4.getSample().getSize() == 65
+
+# indices could not be computed since the algorithm stopped on the exception
+assert result4.getFirstOrderIndices().getSize() == 0
+assert result4.getTotalIndices().getSize() == 0
+
 persalys.Study.Add(myStudy)
 # script
 script = myStudy.getPythonScript()

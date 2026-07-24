@@ -27,8 +27,10 @@
 #include <openturns/ResourceMap.hxx>
 #include <openturns/MemoizeFunction.hxx>
 #include <openturns/DatabaseFunction.hxx>
+#include <openturns/BatchFailedException.hxx>
 
 #include <limits>
+#include <set>
 
 using namespace OT;
 
@@ -199,6 +201,10 @@ void SobolAnalysis::launch()
   MemoizeFunction function(getPhysicalModel().getRestrictedFunction(getInterestVariables()));
   function.enableHistory();
   function.clearHistory();
+  // enable the cache so that the evaluations that succeeded in a batch which raised a
+  // BatchFailedException can still be recovered, even though they could not be added to the history
+  function.enableCache();
+  function.clearCache();
 
   // initialization
   RandomGenerator::SetSeed(getSeed());
@@ -222,12 +228,22 @@ void SobolAnalysis::launch()
 
   // run algo
   bool computeIndices = true;
+  UnsignedInteger failedSampleSize = 0;
   try
   {
     algo.run();
   }
+  catch (const BatchFailedException &ex)
+  {
+    // Python models can throw BatchFailedException
+    warningMessage_ = ex.what();
+    computeIndices = false;
+    failedSampleSize = ex.getFailedIndices().getSize();
+  }
   catch (const std::exception& ex)
   {
+    // SymbolicModel throws NotDefinedException if there is an evaluation error and falls here
+    // (from OT::SymbolicParserExprTkPolicy::operator() in SymbolicParserExprTk.cxx)
     warningMessage_ = ex.what();
     computeIndices = false;
     if (!function.getInputHistory().getSize())
@@ -237,9 +253,34 @@ void SobolAnalysis::launch()
     }
   }
 
+  // recover the evaluations that succeeded within a batch that raised a BatchFailedException:
+  // they were stored in the cache even though the exception prevented them from being added to the history.
+  // The cache is internally sorted/deduplicated by input value (not insertion order), so it cannot be
+  // aligned with the history by index: recovered points must be identified by value, i.e. points present
+  // in the cache but not already present in the history.
+  Sample recoveredInputSample(0, function.getInputDimension());
+  Sample recoveredOutputSample(0, function.getOutputDimension());
+  const Sample cacheInput(function.getCacheInput());
+  const Sample cacheOutput(function.getCacheOutput());
+  const Sample historyInput(function.getInputHistory());
+  if (cacheInput.getSize() > historyInput.getSize())
+  {
+    std::set<Point> historyPoints;
+    for (UnsignedInteger i = 0; i < historyInput.getSize(); ++i)
+      historyPoints.insert(historyInput[i]);
+    for (UnsignedInteger i = 0; i < cacheInput.getSize(); ++i)
+    {
+      if (!historyPoints.count(cacheInput[i]))
+      {
+        recoveredInputSample.add(cacheInput[i]);
+        recoveredOutputSample.add(cacheOutput[i]);
+      }
+    }
+  }
+
   // set results
   result_.outputNames_ = getInterestVariables();
-  result_.callsNumber_ = function.getOutputHistory().getSize();
+  result_.callsNumber_ = function.getOutputHistory().getSize() + recoveredOutputSample.getSize() + failedSampleSize;
   result_.elapsedTime_ = algo.getResult().getTimeDuration();
 
   result_.firstOrderIndices_ = Sample(0, nbInputs);
@@ -319,9 +360,13 @@ void SobolAnalysis::launch()
   DesignOfExperiment doe;
 
   Sample inSample = function.getInputHistory();
+  if (recoveredInputSample.getSize())
+    inSample.add(recoveredInputSample);
   inSample.setDescription(function.getInputDescription());
   doe.setInputSample(inSample);
   Sample outSample = function.getOutputHistory();
+  if (recoveredOutputSample.getSize())
+    outSample.add(recoveredOutputSample);
   outSample.setDescription(function.getOutputDescription());
   doe.setOutputSample(outSample);
   doe.setPhysicalModel(getPhysicalModel());
