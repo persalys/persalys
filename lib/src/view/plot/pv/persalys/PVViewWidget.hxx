@@ -7,6 +7,7 @@
 #include <vtkTable.h>
 #include <vtkDoubleArray.h>
 #include <vtkStringArray.h>
+#include <vtkCommand.h>
 
 #include <QMainWindow>
 #include <QAction>
@@ -89,6 +90,7 @@ protected:
   QList< pqOutputPort * > ports_;
   QList< vtkSmartPointer<vtkTable> > tables_;
   QList< vtkSmartPointer<vtkSMProxy> > producerBases_;
+  vtkSmartPointer<vtkCommand> selectionObserver_;
 public:
   static const char SERIES_VISIBILITY_PROP[];
 };

@@ -11,6 +11,7 @@
 #include <pqView.h>
 #include <pqSMAdaptor.h>
 #include <pqSaveScreenshotReaction.h>
+#include <pqSelectionManager.h>
 
 #include <vtkSMSourceProxy.h>
 #include <vtkPVTrivialProducer.h>
@@ -32,6 +33,24 @@
 #include <QEvent>
 
 using namespace OT;
+
+namespace
+{
+class PVViewSelectionCommand : public vtkCommand
+{
+public:
+  static PVViewSelectionCommand* New() { return new PVViewSelectionCommand; }
+  void SetView(pqView* v) { view_ = v; }
+  void Execute(vtkObject*, unsigned long, void*) override
+  {
+    if (view_)
+      view_->render();
+  }
+
+private:
+  QPointer<pqView> view_;
+};
+}
 
 namespace PERSALYS
 {
@@ -60,11 +79,29 @@ PVViewWidget::PVViewWidget(QWidget *parent, PVServerManagerInterface *smb, const
   pvWid->installEventFilter(this);
   QVBoxLayout * lay = new QVBoxLayout(this);
   lay->addWidget(pvWid);
+
+  // prevent pqSelectionManager from connecting to this view's selected signal,
+  // which would cause cross-window selection clearing. selection propagation
+  // between linked views is handled by vtkSMSelectionLink instead.
+  QObject::connect(&pqActiveObjects::instance(), &pqActiveObjects::viewChanged,
+    this, [this](pqView* v) {
+      if (v != this->getView()) return;
+      if (auto* selMgr = qobject_cast<pqSelectionManager*>(
+            pqApplicationCore::instance()->manager("SelectionManager")))
+        QObject::disconnect(v, SIGNAL(selected(pqOutputPort*)), selMgr, SLOT(select(pqOutputPort*)));
+    });
 }
 
 
 PVViewWidget::~PVViewWidget()
 {
+  // remove VTK observers to prevent callbacks on dangling clientData
+  for (int i = 0; i < producerBases_.size(); ++i)
+  {
+    auto* producer = vtkSMSourceProxy::SafeDownCast(producerBases_[i].GetPointer());
+    if (producer && selectionObserver_)
+      producer->RemoveObserver(selectionObserver_);
+  }
 }
 
 
@@ -104,14 +141,6 @@ QMainWindow * PVViewWidget::findMWInHierachy()
 
 bool PVViewWidget::eventFilter(QObject *obj, QEvent *event)
 {
-  if (obj == getView()->widget() && event->type() == QEvent::Paint)
-  {
-    // set active view : ugly to do this here...
-    // avoid the problem of synchronization of the selection between the bound widgets
-    QWidget * wdg = qobject_cast<QWidget*>(obj);
-    if (wdg && this->isAncestorOf(wdg) && pqActiveObjects::instance().activeView() != getView())
-      pqActiveObjects::instance().setActiveView(getView());
-  }
   return QObject::eventFilter(obj, event);
 }
 
@@ -134,6 +163,7 @@ void PVViewWidget::setArrayData(const std::vector< std::vector<T> >& valuesByCol
   pqObjectBuilder * builder(pqApplicationCore::instance()->getObjectBuilder());
   pqServer * serv(smb_->fetchServer());
   // create a new source
+  pqView* oldActiveView = pqActiveObjects::instance().activeView();
   pqActiveObjects::instance().setActiveView(getView());
   pqPipelineSource * mySourceProducer(builder->createSource("sources", "PVTrivialProducer", serv));
   producerBases_.append(mySourceProducer->getProxy());
@@ -145,11 +175,25 @@ void PVViewWidget::setArrayData(const std::vector< std::vector<T> >& valuesByCol
   realProducer->SetOutput(tables_[tables_.size() - 1]);
   mySourceProducer->updatePipeline();
   ports_.append(mySourceProducer->getOutputPort(0));
+
+  // observe selection changes to automatically render this view when
+  // selection is propagated from linked views (vtkSMSelectionLink)
+  selectionObserver_ = vtkSmartPointer<PVViewSelectionCommand>::New();
+  static_cast<PVViewSelectionCommand*>(selectionObserver_.GetPointer())->SetView(getView());
+  producer->AddObserver(vtkCommand::SelectionChangedEvent, selectionObserver_);
+
   // create a new representation
   pqDataRepresentation * newRepr(builder->createDataRepresentation(mySourceProducer->getOutputPort(0), getView(), getRepresentationName()));
   vtkSMViewProxy::RepresentationVisibilityChanged(newRepr->getViewProxy(), newRepr->getProxy(), true);
   newRepr->setVisible(true);
-  // update view
+  // restore previous active view
+  if (oldActiveView)
+    pqActiveObjects::instance().setActiveView(oldActiveView);
+  // ensure this view is never connected to pqSelectionManager to prevent
+  // cross-window selection clearing
+  if (auto* selMgr = qobject_cast<pqSelectionManager*>(
+        pqApplicationCore::instance()->manager("SelectionManager")))
+    QObject::disconnect(getView(), SIGNAL(selected(pqOutputPort*)), selMgr, SLOT(select(pqOutputPort*)));
   getView()->resetDisplay();
   getView()->render();
 }
