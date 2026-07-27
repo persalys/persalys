@@ -10,6 +10,9 @@
 #include <pqSpreadSheetView.h>
 #include <pqApplicationCore.h>
 #include <vtkSMSourceProxy.h>
+#include <vtkSMViewProxy.h>
+#include <vtkSpreadSheetView.h>
+#include <vtkObjectBase.h>
 #include <vtkSelection.h>
 #include <vtkSelectionNode.h>
 #include <vtkIdTypeArray.h>
@@ -131,6 +134,27 @@ QWidget * PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(PVSpreadSheetViewWid
     }
     else
       throw OT::InternalException(HERE) << "Cannot find header layout from PVSpreadSheetViewWidget";
+
+    // preserve original column order instead of alphabetical sorting
+    vtkSMViewProxy* viewProxy = view->getViewProxy();
+    if (viewProxy)
+    {
+      vtkObjectBase* clientSideObj = viewProxy->GetClientSideObject();
+      vtkSpreadSheetView* ssView = vtkSpreadSheetView::SafeDownCast(clientSideObj);
+      if (ssView)
+      {
+        std::vector<std::string> orderedColumns;
+        OT::Description desc = sample.getDescription();
+        orderedColumns.reserve(desc.getSize() + (errorDesc.getSize() ? 1 : 0));
+        for (OT::UnsignedInteger i = 0; i < desc.getSize(); ++i)
+          orderedColumns.push_back(desc[i]);
+        if (errorDesc.getSize())
+          orderedColumns.push_back(QObject::tr("Error message").toStdString());
+        ssView->SetOrderedColumnList(orderedColumns);
+        ssView->OrderColumnsByList(true);
+      }
+    }
+
     connect(pvWidget, SIGNAL(copyDataRequested()), decorator, SLOT(copyToClipboard()));
   }
 
