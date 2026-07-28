@@ -30,7 +30,7 @@ namespace PERSALYS
 class PERSALYS_BASE_API SimulationInterface : public OT::TypedInterfaceObject<OT::ProbabilitySimulationAlgorithm>
 {
 public:
-  typedef OT::Pointer<OT::ProbabilitySimulationAlgorithm> Implementation;
+  using Implementation = OT::Pointer<OT::ProbabilitySimulationAlgorithm>;
 
   /** Default constructor */
   SimulationInterface();
@@ -69,12 +69,12 @@ public:
   OT::Graph drawProbabilityConvergence(const OT::Scalar level = OT::ResourceMap::GetAsScalar("ProbabilitySimulationResult-DefaultConfidenceLevel")) const;
 
   /** Progress callback */
-  typedef void (*ProgressCallback)(OT::Scalar, void * data);
-  void setProgressCallback(ProgressCallback callBack, void * data = 0);
+  using ProgressCallback = void (*)(OT::Scalar, void *);
+  void setProgressCallback(ProgressCallback callBack, void * data = nullptr);
 
   /** Stop callback */
-  typedef OT::Bool (*StopCallback)(void * data);
-  void setStopCallback(StopCallback callBack, void * data = 0);
+  using StopCallback = OT::Bool (*)(void * data);
+  void setStopCallback(StopCallback callBack, void * data = nullptr);
 };
 }
 #endif

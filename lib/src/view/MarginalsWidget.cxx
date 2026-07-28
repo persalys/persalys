@@ -177,10 +177,12 @@ void MarginalsWidget::buildInterface()
 
   QGroupBox * valueGroupBox = new QGroupBox(tr("Parameters"));
   QGridLayout * valueGroupBoxLayout = new QGridLayout(valueGroupBox);
-  valueGroupBoxLayout->addWidget(new QLabel(tr("Value")), 0, 0);
+  QLabel * valueLabel = new QLabel(tr("Value"));
+  valueGroupBoxLayout->addWidget(valueLabel, 0, 0);
   valueForDeterministicVariable_ = new ValueLineEdit;
   valueForDeterministicVariable_->setEnabled(false);
   valueForDeterministicVariable_->setObjectName("valueDeterministicVar");
+  valueLabel->setBuddy(valueForDeterministicVariable_);
   valueGroupBoxLayout->addWidget(valueForDeterministicVariable_, 0, 1);
   valueGroupBoxLayout->setSizeConstraint(QLayout::SetMaximumSize);
 
@@ -242,6 +244,7 @@ void MarginalsWidget::buildInterface()
   selectParametersTypeCombo_->setObjectName("paramTypeCombo");
   connect(selectParametersTypeCombo_, SIGNAL(currentIndexChanged(int)), this, SLOT(typeDistributionParametersChanged(int)));
   lay->addWidget(selectParametersTypeCombo_, 0, 1, 1, 2);
+  typeLabel->setBuddy(selectParametersTypeCombo_);
   if (failSoftMode_)
   {
     typeLabel->hide();

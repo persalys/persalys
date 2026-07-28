@@ -140,6 +140,7 @@ void GraphConfigurationWidget::addXYAxisTabs(const bool xAxisWithLabels)
       QToolButton * resetButton = new QToolButton;
       resetButton->setIcon(QIcon(":/images/view-refresh.svg"));
       resetButton->setToolTip(tr("Reset axis ranges"));
+      resetButton->setAccessibleName(tr("Reset axis ranges"));
       connect(resetButton, &QToolButton::clicked, [this]()
       {
         plotWidgets_[plotIndex_]->resetAxisRanges();

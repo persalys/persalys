@@ -38,7 +38,7 @@ public:
     : QComboBox(parent)
     , neverWheelEvent_(neverWheelEvent)
   {
-    setFocusPolicy(Qt::ClickFocus);
+    setFocusPolicy(Qt::StrongFocus);
   }
 
   void wheelEvent(QWheelEvent *e) override

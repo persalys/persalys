@@ -133,7 +133,7 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
 
   DiagramPushButton * sensitivityButton = new DiagramPushButton;
   sensitivityButton->setText(tr("Sobol\nSensitivity"));
-  sensitivityButton->setWhatsThis(tr("Two methods : Sobol and SRC"));
+  sensitivityButton->setWhatsThis(tr("Sensitivity analysis"));
   connect(sensitivityButton, SIGNAL(clicked(bool)), physicalModelDiagramItem->newSensitivityAnalysis_, SIGNAL(triggered()));
   connect(physicalModelDiagramItem, SIGNAL(dependenceValidityChanged(bool, QString)), sensitivityButton, SLOT(setEnabled(bool, QString)));
 

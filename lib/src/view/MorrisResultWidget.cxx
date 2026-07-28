@@ -127,10 +127,11 @@ void MorrisResultWidget::buildInterface()
   const Scalar maxPoint = std::max(maxStdEffect, maxMeanStarEffect) * 1.02;
   points1[0] = QPointF(0., 0.);
   points1[1] = QPointF(maxPoint, maxPoint);
-  plotMuStarSigma->plotCurve(points1, QPen(Qt::blue), QwtPlotCurve::Lines, 0, tr("cv = 1"), true);
+  // Okabe-Ito: dark blue (selected), vermillion (unselected) — luminance-distinct
+  plotMuStarSigma->plotCurve(points1, QPen(QColor("#0072B2")), QwtPlotCurve::Lines, 0, tr("cv = 1"), true);
   // - curve cv = 0.5
   points1[1] = QPointF(maxPoint, 0.5 * maxPoint);
-  plotMuStarSigma->plotCurve(points1, QPen(Qt::blue, 1, Qt::DashDotLine), QwtPlotCurve::Lines, 0, tr("cv = 0.5"), true);
+  plotMuStarSigma->plotCurve(points1, QPen(QColor("#0072B2"), 1, Qt::DashDotLine), QwtPlotCurve::Lines, 0, tr("cv = 0.5"), true);
 
   // set plot (µ*, µ)
   plotMuStarMu->setTitle(tr("Mean (µ) and mean of the absolute value (µ*) of the elementary effects"));
@@ -145,21 +146,22 @@ void MorrisResultWidget::buildInterface()
   const Scalar maxPoint2 = std::max(maxMeanEffect, maxMeanStarEffect) * 1.02;
   points[0] = QPointF(0., 0.);
   points[1] = QPointF(maxPoint2, maxPoint2);
-  plotMuStarMu->plotCurve(points, QPen(Qt::blue), QwtPlotCurve::Lines, 0, tr("µ = ± µ*"), true);
+  plotMuStarMu->plotCurve(points, QPen(QColor("#0072B2")), QwtPlotCurve::Lines, 0, tr("µ = ± µ*"), true);
   // - curve µ = 0.5 µ*
   points[1] = QPointF(maxPoint2, maxPoint2 * 0.5);
-  plotMuStarMu->plotCurve(points, QPen(Qt::blue, 1, Qt::DashDotLine), QwtPlotCurve::Lines, 0, tr("µ = ± 0.5 µ*"), true);
+  plotMuStarMu->plotCurve(points, QPen(QColor("#0072B2"), 1, Qt::DashDotLine), QwtPlotCurve::Lines, 0, tr("µ = ± 0.5 µ*"), true);
   // - curve µ = -µ*
   points[1] = QPointF(maxPoint2, - maxPoint2);
-  plotMuStarMu->plotCurve(points, QPen(Qt::blue), QwtPlotCurve::Lines, 0, "", true);
+  plotMuStarMu->plotCurve(points, QPen(QColor("#0072B2")), QwtPlotCurve::Lines, 0, "", true);
   // - curve µ = -0.5 µ*
   points[1] = QPointF(maxPoint2, - maxPoint2 * 0.5);
-  plotMuStarMu->plotCurve(points, QPen(Qt::blue, 1, Qt::DashDotLine), QwtPlotCurve::Lines, 0, "", true);
+  plotMuStarMu->plotCurve(points, QPen(QColor("#0072B2"), 1, Qt::DashDotLine), QwtPlotCurve::Lines, 0, "", true);
 
   // points markers for plot (µ*, σ) and (µ*, µ)
   for (UnsignedInteger i = 0; i < nbInVar; ++i)
   {
-    const QPen markerPen = (result_.getInputsSelection(outputIndex_)[i] > 0 ? QPen(Qt::blue) : QPen(Qt::red));
+    // Amber (#E69F00) for selected: clearly distinct from blue reference lines and vermillion unselected
+    const QPen markerPen = (result_.getInputsSelection(outputIndex_)[i] > 0 ? QPen(QColor("#E69F00")) : QPen(QColor("#D55E00")));
 
     // markers graph (µ*, σ)
     const QPointF pt(result_.getMeanAbsoluteElementaryEffects(outputIndex_)[i], result_.getStandardDeviationElementaryEffects(outputIndex_)[i]);
@@ -234,7 +236,7 @@ void MorrisResultWidget::updateSelectedPointsFromTable()
 {
   for (UnsignedInteger i = 0; i < result_.getInputsSelection(outputIndex_).getSize(); ++i)
   {
-    const QPen markerPen = result_.getInputsSelection(outputIndex_)[i] > 0 ? QPen(Qt::blue) : QPen(Qt::red);
+    const QPen markerPen = result_.getInputsSelection(outputIndex_)[i] > 0 ? QPen(QColor("#E69F00")) : QPen(QColor("#D55E00"));
     markersMuSigma_[i]->updateSymbolColor(markerPen);
     markersMuMu_[i]->updateSymbolColor(markerPen);
   }
@@ -247,8 +249,8 @@ void MorrisResultWidget::updateSelectedPointsFromMuSigma()
   Indices selection(markersMuSigma_.size());
   for (int i = 0; i < markersMuSigma_.size(); ++i)
   {
-    selection[i] = markersMuSigma_[i]->symbol()->pen().color() == Qt::red ? 0 : 1;
-    markersMuMu_[i]->updateSymbolColor(selection[i] > 0 ? QPen(Qt::blue) : QPen(Qt::red));
+    selection[i] = markersMuSigma_[i]->symbol()->pen().color() == QColor("#D55E00") ? 0 : 1;
+    markersMuMu_[i]->updateSymbolColor(selection[i] > 0 ? QPen(QColor("#E69F00")) : QPen(QColor("#D55E00")));
   }
   result_.setInputsSelection(outputIndex_, selection);
   emit resetTableModel();
@@ -261,8 +263,8 @@ void MorrisResultWidget::updateSelectedPointsFromMuMu()
   Indices selection(markersMuMu_.size());
   for (int i = 0; i < markersMuMu_.size(); ++i)
   {
-    selection[i] = markersMuMu_[i]->symbol()->pen().color() == Qt::red ? 0 : 1;
-    markersMuSigma_[i]->updateSymbolColor(selection[i] > 0 ? QPen(Qt::blue) : QPen(Qt::red));
+    selection[i] = markersMuMu_[i]->symbol()->pen().color() == QColor("#D55E00") ? 0 : 1;
+    markersMuSigma_[i]->updateSymbolColor(selection[i] > 0 ? QPen(QColor("#E69F00")) : QPen(QColor("#D55E00")));
   }
   result_.setInputsSelection(outputIndex_, selection);
   emit resetTableModel();
@@ -278,8 +280,8 @@ void MorrisResultWidget::updateNoEffectBoundary(const double value)
   for (int i = 0; i < markersMuSigma_.size(); ++i)
   {
     selection[i] = markersMuSigma_[i]->xValue() <= value ? 0 : 1;
-    markersMuSigma_[i]->updateSymbolColor(selection[i] > 0 ? QPen(Qt::blue) : QPen(Qt::red));
-    markersMuMu_[i]->updateSymbolColor(selection[i] > 0 ? QPen(Qt::blue) : QPen(Qt::red));
+    markersMuSigma_[i]->updateSymbolColor(selection[i] > 0 ? QPen(QColor("#E69F00")) : QPen(QColor("#D55E00")));
+    markersMuMu_[i]->updateSymbolColor(selection[i] > 0 ? QPen(QColor("#E69F00")) : QPen(QColor("#D55E00")));
   }
   result_.setInputsSelection(outputIndex_, selection);
 
@@ -295,7 +297,7 @@ void MorrisResultWidget::updateLabels()
   UnsignedInteger unselectedCounter = 0;
   for (int i = 0; i < markersMuMu_.size(); ++i)
   {
-    if (markersMuMu_[i]->symbol()->pen().color() == Qt::blue)
+    if (markersMuMu_[i]->symbol()->pen().color() == QColor("#E69F00"))
       ++selectedCounter;
     else
       ++unselectedCounter;

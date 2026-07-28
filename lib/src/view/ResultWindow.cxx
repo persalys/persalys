@@ -28,17 +28,30 @@
 namespace PERSALYS
 {
 
+/** Format a single limit-state event as "outputName op threshold". */
+QString ResultWindow::FormatLimitStateEntry(const OT::String & outputName,
+                                     const OT::ComparisonOperator & op,
+                                     double threshold)
+{
+  QString opStr;
+  const OT::String opName = op.getImplementation()->getClassName();
+  if      (opName == "LessOrEqual")    opStr = "<=";
+  else if (opName == "Greater")        opStr = ">";
+  else if (opName == "GreaterOrEqual") opStr = ">=";
+  else                                 opStr = "<";
+  return QString("%1 %2 %3")
+    .arg(QString::fromUtf8(outputName.c_str()), opStr, QString::number(threshold));
+}
+
 ResultWindow::ResultWindow(Item * item, QWidget * parent)
   : SubWindow(item, parent)
-  , parametersWidget_(0)
-  , modelDescriptionWidget_(0)
 {
   // model description widget
   if (item)
   {
-    AnalysisItem * analysisItem = dynamic_cast<AnalysisItem*>(item);
+    const auto * analysisItem = dynamic_cast<AnalysisItem*>(item);
     if (analysisItem)
-      setModelDescription(analysisItem->getAnalysis());
+      ResultWindow::setModelDescription(analysisItem->getAnalysis());
   }
 }
 

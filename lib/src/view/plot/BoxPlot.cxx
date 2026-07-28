@@ -114,18 +114,19 @@ void BoxPlot::addBoxPlot(const DataAnalysisResult &result, const UnsignedInteger
   // draw median
   double xMedian[2] = {x - 0.1, x + 0.1};
   double yMedian[2] = {median, median};
-  plotCurve(index, xMedian, yMedian, 2, QPen(Qt::red));
+  // Okabe-Ito: vermillion for median (stands out), dark blue for box edges
+  plotCurve(index, xMedian, yMedian, 2, QPen(QColor("#D55E00")));
 
   // draw box
   double yUpperQuartile[2] = {upperQuartile, upperQuartile};
-  plotCurve(index, xMedian, yUpperQuartile, 2, QPen(Qt::blue));
+  plotCurve(index, xMedian, yUpperQuartile, 2, QPen(QColor("#0072B2")));
   double yLowerQuartile[2] = {lowerQuartile, lowerQuartile};
-  plotCurve(index, xMedian, yLowerQuartile, 2, QPen(Qt::blue));
+  plotCurve(index, xMedian, yLowerQuartile, 2, QPen(QColor("#0072B2")));
   double xLeftSide[2] = {x - 0.1, x - 0.1};
   double yBoxSides[2] = {lowerQuartile, upperQuartile};
-  plotCurve(index, xLeftSide, yBoxSides, 2, QPen(Qt::blue));
+  plotCurve(index, xLeftSide, yBoxSides, 2, QPen(QColor("#0072B2")));
   double xRightSide[2] = {x + 0.1, x + 0.1};
-  plotCurve(index, xRightSide, yBoxSides, 2, QPen(Qt::blue));
+  plotCurve(index, xRightSide, yBoxSides, 2, QPen(QColor("#0072B2")));
 
   // draw whiskers
   double xWhiskers[2] = {x, x};
@@ -154,7 +155,7 @@ void BoxPlot::addBoxPlot(const DataAnalysisResult &result, const UnsignedInteger
     yOutliers[i] = outliers[i];
   }
 
-  plotCurve(index, xOutliers, yOutliers, dim, QPen(Qt::blue), QwtPlotCurve::NoCurve, new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, QPen(Qt::blue), QSize(5, 5)));
+  plotCurve(index, xOutliers, yOutliers, dim, QPen(QColor("#0072B2")), QwtPlotCurve::NoCurve, new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, QPen(QColor("#0072B2")), QSize(5, 5)));
   delete[] xOutliers;
   delete[] yOutliers;
 

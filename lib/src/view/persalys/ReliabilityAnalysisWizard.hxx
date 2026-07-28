@@ -46,10 +46,10 @@ protected:
   void buildInterface();
 
 private:
-  QList<LimitState> limitStateList_;
-  ReliabilityIntroPage * introPage_;
-  SimulationReliabilityPage * simulationPage_;
-  ApproximationReliabilityPage * approximationPage_;
+  QList<LimitState>               limitStateList_;
+  ReliabilityIntroPage          * introPage_          = nullptr;
+  SimulationReliabilityPage     * simulationPage_     = nullptr;
+  ApproximationReliabilityPage  * approximationPage_  = nullptr;
 };
 }
 #endif

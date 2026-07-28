@@ -31,15 +31,18 @@ class PERSALYS_BASE_API ImportanceSamplingAnalysis : public SimulationReliabilit
 
 public:
   /** Default constructor */
-  ImportanceSamplingAnalysis();
+  ImportanceSamplingAnalysis() = default;
+  
   /** Constructor with parameters */
   ImportanceSamplingAnalysis(const OT::String& name, const LimitState& limitState);
 
   /** Virtual constructor */
   ImportanceSamplingAnalysis * clone() const override;
 
-  OT::Point getStandardSpaceDesignPoint() const;
-  void setStandardSpaceDesignPoint(const OT::Point& point);
+  OT::Sample getStandardSpaceDesignPoints() const;
+  void setStandardSpaceDesignPoints(const OT::Sample& points);
+
+  void setComputeIndividualEventProbabilities(bool compute) override;
 
   Parameters getParameters() const override;
   OT::String getPythonScript() const override;
@@ -57,7 +60,7 @@ protected:
   SimulationInterface getSimulationAlgorithm(const OT::RandomVector & event) override;
 
 private:
-  OT::Point standardSpaceDesignPoint_;
+  OT::Sample standardSpaceDesignPoints_;
 };
 }
 #endif

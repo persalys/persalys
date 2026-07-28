@@ -37,7 +37,7 @@ public:
   /** Default constructor */
   FORMAnalysis();
   /** Constructor with parameters */
-  FORMAnalysis(const OT::String& name, const LimitState& limitState);
+  FORMAnalysis(const OT::String& name, const LimitState& limitState, bool useISEvent = false);
 
   /** Virtual constructor */
   FORMAnalysis * clone() const override;
@@ -63,6 +63,7 @@ protected:
 
 private:
   FORMAnalysisResult result_;
+  OT::Bool useISEvent_ = false;
 };
 }
 #endif

@@ -25,6 +25,12 @@
 #include "persalys/FORMAnalysis.hxx"
 #include "persalys/SORMAnalysis.hxx"
 
+#include <openturns/Less.hxx>
+#include <openturns/LessOrEqual.hxx>
+#include <openturns/Greater.hxx>
+#include <openturns/GreaterOrEqual.hxx>
+
+#include <QSet>
 #include <QSplitter>
 #include <QVBoxLayout>
 #include <QDebug>
@@ -34,27 +40,37 @@ using namespace OT;
 
 namespace PERSALYS
 {
-
 ApproximationResultWindow::ApproximationResultWindow(AnalysisItem* item, QWidget * parent)
   : ResultWindow(item, parent)
 {
-  QString outputName;
-  ApproximationResultTabWidget * tabWidget = 0;
+  QStringList limitStateNameList;
+  ApproximationResultTabWidget * tabWidget = nullptr;
+  bool isSystem = false;
 
   // get analysis pointer
-  FORMAnalysis * formAnalysis_ptr = dynamic_cast<FORMAnalysis*>(item->getAnalysis().getImplementation().get());
-  SORMAnalysis * sormAnalysis_ptr = dynamic_cast<SORMAnalysis*>(item->getAnalysis().getImplementation().get());
+  const auto * formAnalysis_ptr = dynamic_cast<FORMAnalysis*>(item->getAnalysis().getImplementation().get());
+  const auto * sormAnalysis_ptr = dynamic_cast<SORMAnalysis*>(item->getAnalysis().getImplementation().get());
 
   // FORM result widget
   if (formAnalysis_ptr)
   {
-    outputName = QString::fromUtf8(formAnalysis_ptr->getLimitState().getOutputName().c_str());
-    tabWidget = new ApproximationResultTabWidget(formAnalysis_ptr->getResult().getFORMResult(), *formAnalysis_ptr, this);
+    const LimitState & ls = formAnalysis_ptr->getLimitState();
+    const Description outputNames = ls.getOutputNames();
+    isSystem = ls.isSystemLimitState();
+    for (UnsignedInteger i = 0; i < outputNames.getSize(); ++i)
+      limitStateNameList << FormatLimitStateEntry(outputNames[i], ls.getOperator(i), ls.getThreshold(i));
+
+    if (isSystem)
+      tabWidget = new ApproximationResultTabWidget(formAnalysis_ptr->getResult().getMultiFORMResult(), *formAnalysis_ptr, outputNames, this);
+    else
+      tabWidget = new ApproximationResultTabWidget(formAnalysis_ptr->getResult().getFORMResult(), *formAnalysis_ptr, this);
   }
   // SORM result widget
   else if (sormAnalysis_ptr)
   {
-    outputName = QString::fromUtf8(sormAnalysis_ptr->getLimitState().getOutputName().c_str());
+    const LimitState & ls = sormAnalysis_ptr->getLimitState();
+    const Description outputNames = ls.getOutputNames();
+    limitStateNameList << FormatLimitStateEntry(outputNames[0], ls.getOperator(0), ls.getThreshold(0));
     tabWidget = new ApproximationResultTabWidget(sormAnalysis_ptr->getResult().getSORMResult(), *sormAnalysis_ptr, this);
   }
   else
@@ -75,22 +91,36 @@ ApproximationResultWindow::ApproximationResultWindow(AnalysisItem* item, QWidget
   // main splitter
   QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
 
-  // - output
-  QGroupBox * outputsGroupBox = new QGroupBox(tr("Output"));
-  QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
+  // Limit state selection groupbox — only for system events (>1 limit state)
+  if (isSystem)
+  {
+    auto * outputsGroupBox       = new QGroupBox(tr("Limit state"));
+    auto * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
+    auto * outputsListWidget     = new VariablesListWidget;
+    outputsListWidget->addItems(limitStateNameList);
+    outputsListWidget->setCurrentRow(0);
+    outputsLayoutGroupBox->addWidget(outputsListWidget);
 
-  VariablesListWidget * outputsListWidget = new VariablesListWidget;
-  outputsListWidget->addItems(QStringList() << outputName);
-  outputsListWidget->setCurrentRow(0);
-  outputsLayoutGroupBox->addWidget(outputsListWidget);
+    mainWidget->addWidget(outputsGroupBox);
+    mainWidget->setStretchFactor(0, 1);
 
-  mainWidget->addWidget(outputsGroupBox);
-  mainWidget->setStretchFactor(0, 1);
+    // Wire limit state selection to dynamic tabs
+    connect(outputsListWidget, &VariablesListWidget::currentRowChanged,
+            tabWidget, &ApproximationResultTabWidget::setCurrentEvent);
+
+    // Per-event tabs in system FORM: Summary (0), Design point (1)
+    const QSet<int> perEventTabs{0, 1};
+    connect(tabWidget, &QTabWidget::currentChanged, outputsGroupBox,
+            [outputsGroupBox, perEventTabs](int idx) {
+              outputsGroupBox->setVisible(perEventTabs.contains(idx));
+            });
+    // Initial state: tab 0 (Summary) is per-event → visible (default)
+  }
 
   if (tabWidget)
   {
     mainWidget->addWidget(tabWidget);
-    mainWidget->setStretchFactor(1, 10);
+    mainWidget->setStretchFactor(isSystem ? 1 : 0, 10);
   }
   widgetLayout->addWidget(mainWidget, 1);
 }

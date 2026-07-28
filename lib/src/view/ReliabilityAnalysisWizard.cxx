@@ -33,10 +33,6 @@ namespace PERSALYS
 
 ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(const Analysis& analysis, const bool isGeneralWizard, QWidget* parent)
   : AnalysisWizard(analysis, parent)
-  , limitStateList_()
-  , introPage_(0)
-  , simulationPage_(0)
-  , approximationPage_(0)
 {
   const LimitState limitState = dynamic_cast<ReliabilityAnalysis*>(analysis_.getImplementation().get())->getLimitState();
 
@@ -44,7 +40,7 @@ ReliabilityAnalysisWizard::ReliabilityAnalysisWizard(const Analysis& analysis, c
   {
     if (Observer * obs = limitState.getImplementation().get()->getObserver("Study"))
     {
-      StudyImplementation * study = dynamic_cast<StudyImplementation*>(obs);
+      const auto * study = dynamic_cast<StudyImplementation*>(obs);
       Q_ASSERT(study);
       for (UnsignedInteger i = 0; i < study->getLimitStates().getSize(); ++i)
       {

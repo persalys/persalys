@@ -73,16 +73,19 @@ class PERSALYS_VIEW_API ResultWindow : public SubWindow
   Q_OBJECT
 
 public:
-  ResultWindow(Item * item, QWidget *parent = nullptr);
+  explicit ResultWindow(Item * item, QWidget *parent = nullptr);
+
+  static QString FormatLimitStateEntry(const OT::String & outputName,
+    const OT::ComparisonOperator & op,
+    double threshold);
 
 protected:
   virtual void setParameters(const Analysis& analysis, const QString& title);
   virtual void setModelDescription(const Analysis& analysis);
-//   QString getModelDescription(const Analysis& analysis);
 
 protected:
-  QScrollArea * parametersWidget_;
-  QWidget * modelDescriptionWidget_;
+  QScrollArea * parametersWidget_       = nullptr;
+  QWidget     * modelDescriptionWidget_ = nullptr;
 };
 }
 #endif

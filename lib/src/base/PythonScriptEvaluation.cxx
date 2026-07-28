@@ -31,6 +31,11 @@
 #include <openturns/BatchFailedException.hxx>
 
 #include <filesystem>
+#include <iomanip>
+#include <random>
+#include <sstream>
+#include <string>
+#include <cstdint>
 
 using namespace OT;
 
@@ -40,7 +45,7 @@ std::size_t PythonScriptEvaluation::LastCodeHash_ = 0;
 
 CLASSNAMEINIT(PythonScriptEvaluation)
 
-static Factory<PythonScriptEvaluation> Factory_PythonScriptEvaluation;
+static const Factory<PythonScriptEvaluation> Factory_PythonScriptEvaluation;
 
 /* Default constructor */
 PythonScriptEvaluation::PythonScriptEvaluation()
@@ -211,9 +216,23 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
   PyDict_SetItemString(dict, "X", inputSample.get());
 
   // code has to be separate
-  std::filesystem::path tempDir = std::filesystem::temp_directory_path() / ("persalys_" + std::to_string(codeHash_));
+  
+  std::random_device rd;
+  std::mt19937_64 gen(rd());
+
+  std::uniform_int_distribution<uint64_t> dist;
+
+  std::ostringstream ss;
+  ss << std::hex;
+
+  for(int i = 0 ; i < 2 ; ++i)
+    ss << std::setw(16) << std::setfill('0') << dist(gen);
+  
+  const std::string uuid = ss.str();
+
+  std::filesystem::path tempDir = std::filesystem::temp_directory_path() / ("persalys_" + uuid);
   std::filesystem::create_directory(tempDir);
-  std::string code_mod = "code" + std::to_string(codeHash_);
+  std::string code_mod = "code" + uuid;
   std::ofstream code_file;
   code_file.open((tempDir / (code_mod + ".py")).string());
   code_file << code_ << "\n";

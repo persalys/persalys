@@ -167,6 +167,14 @@ void ErrorWidget::usePadding(bool on)
 
 void ErrorWidget::applyStyle(MessageType type, bool useFrame)
 {
+  // Update accessible name so screen readers announce the severity
+  if (type == Error)
+    setAccessibleName(tr("Error"));
+  else if (type == Warning)
+    setAccessibleName(tr("Warning"));
+  else
+    setAccessibleName(tr("Information"));
+
   QString styleSheet = "QPlainTextEdit { background-color: transparent; font-weight: bold; ";
 
   QString color = "black";

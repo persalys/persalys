@@ -29,21 +29,18 @@ namespace PERSALYS
 
 CLASSNAMEINIT(FORMAnalysisResult)
 
-static Factory<FORMAnalysisResult> Factory_FORMAnalysisResult;
+const static Factory<FORMAnalysisResult> Factory_FORMAnalysisResult;
 
-/* Default constructor */
-FORMAnalysisResult::FORMAnalysisResult()
-  : AnalysisResult()
-  , formResult_()
+/* Constructor with parameters */
+FORMAnalysisResult::FORMAnalysisResult(const FORMResult& formResult)
+  : formResult_(formResult)
 {
 
 }
 
-
-/* Constructor with parameters */
-FORMAnalysisResult::FORMAnalysisResult(const FORMResult& formResult)
-  : AnalysisResult()
-  , formResult_(formResult)
+FORMAnalysisResult::FORMAnalysisResult(const MultiFORMResult& multiFormResult)
+  : multiFormResult_(multiFormResult)
+  , isSystemFormResult_(true)
 {
 
 }
@@ -54,19 +51,47 @@ FORMAnalysisResult* FORMAnalysisResult::clone() const
   return new FORMAnalysisResult(*this);
 }
 
+Scalar FORMAnalysisResult::getEventProbability() const
+{
+  if (isSystemFormResult_)
+    return multiFormResult_.getEventProbability();
+  else
+    return formResult_.getEventProbability();
+}
+
+Scalar FORMAnalysisResult::getGeneralisedReliabilityIndex() const
+{
+  if (isSystemFormResult_)
+    return multiFormResult_.getGeneralisedReliabilityIndex();
+  else
+    return formResult_.getGeneralisedReliabilityIndex();
+}
+
 
 FORMResult FORMAnalysisResult::getFORMResult() const
 {
+  if (isSystemFormResult_)
+    throw InvalidArgumentException(HERE) << "This result is a MultiFORMResult, not a FORMResult";
+  
   return formResult_;
+}
+
+MultiFORMResult FORMAnalysisResult::getMultiFORMResult() const
+{
+  if (!isSystemFormResult_)
+    throw InvalidArgumentException(HERE) << "This result is a FORMResult, not a MultiFORMResult";
+  
+  return multiFormResult_;
 }
 
 
 /* String converter */
-String FORMAnalysisResult::__repr__() const
+OT::String FORMAnalysisResult::__repr__() const
 {
   OSS oss;
   oss << "class=" << GetClassName()
-      << " name=" << getName();
+      << " name=" << getName()
+      << " isSystemFormResult=" << (isSystemFormResult_ ? "true" : "false");
   return oss;
 }
 
@@ -76,6 +101,8 @@ void FORMAnalysisResult::save(Advocate & adv) const
 {
   AnalysisResult::save(adv);
   adv.saveAttribute("formResult_", formResult_);
+  adv.saveAttribute("multiFormResult_", multiFormResult_);
+  adv.saveAttribute("isSystemFormResult_", isSystemFormResult_);
 }
 
 
@@ -84,5 +111,10 @@ void FORMAnalysisResult::load(Advocate & adv)
 {
   AnalysisResult::load(adv);
   adv.loadAttribute("formResult_", formResult_);
+  if (adv.hasAttribute("multiFormResult_"))
+  {
+    adv.loadAttribute("multiFormResult_", multiFormResult_);
+    adv.loadAttribute("isSystemFormResult_", isSystemFormResult_);
+  }
 }
 }

@@ -33,7 +33,7 @@ class FakePlotMarker : public QwtPlotMarker
 public:
   FakePlotMarker(PlotWidget *plotWidget, const QPen pen)
   {
-    setSymbol(new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, pen, QSize(5, 5)));
+    setSymbol(new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, pen, QSize(12, 12)));
     setItemAttribute(QwtPlotItem::Legend, true);
     setVisible(false);
     attach(plotWidget);
@@ -46,7 +46,7 @@ class PlotMarker : public QwtPlotMarker
 public:
   PlotMarker(PlotWidget *plotWidget, const QPen &pen, const QPointF &pt, const QwtText &label)
   {
-    setSymbol(new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, pen, QSize(5, 5)));
+    setSymbol(new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, pen, QSize(12, 12)));
     setValue(pt);
     setLabel(label);
     setLabelAlignment(Qt::AlignRight | Qt::AlignBottom);
@@ -55,7 +55,7 @@ public:
 
   void updateSymbolColor(const QPen &pen)
   {
-    setSymbol(new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, pen, QSize(5, 5)));
+    setSymbol(new QwtSymbol(QwtSymbol::Cross, Qt::NoBrush, pen, QSize(12, 12)));
   }
 };
 

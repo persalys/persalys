@@ -33,6 +33,7 @@ DocumentationToolButton::DocumentationToolButton(const QString& urlLink, const F
   if (type == FileTools::docOT)
     toolTip = tr("Open the OpenTURNS documentation");
   setToolTip(toolTip);
+  setAccessibleName(toolTip);
 
   if (!urlLink.isEmpty())
     connect(this, SIGNAL(clicked()), this, SLOT(openUrl()));

@@ -1,0 +1,67 @@
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    env:
+      MAKEFLAGS: -j4
+    steps:
+      - uses: actions/checkout@v7
+      - uses: docker/setup-buildx-action@v3
+      - name: Build Docker image (cached)
+        uses: docker/build-push-action@v6
+        with:
+          context: docker/linux
+          tags: persalys/linux
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          load: true
+      - name: Build persalys
+        run: docker run --rm --volume "${{ github.workspace }}:/io" persalys/linux sh -c "/io/docker/linux/run_docker_build.sh $(id -u):$(id -g)"
+
+  mingw:
+    runs-on: ubuntu-latest
+    env:
+      MAKEFLAGS: -j4
+    steps:
+      - uses: actions/checkout@v7
+      - uses: docker/setup-buildx-action@v3
+      - name: Build Docker image (cached)
+        uses: docker/build-push-action@v6
+        with:
+          context: docker/mingw
+          tags: persalys/mingw
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          load: true
+      - name: Build persalys
+        run: docker run --rm --volume "${{ github.workspace }}:/io" persalys/mingw sh -c "/io/docker/mingw/run_docker_build.sh $(id -u):$(id -g)"
+
+  fedora:
+    runs-on: ubuntu-latest
+    env:
+      MAKEFLAGS: -j4
+    steps:
+      - uses: actions/checkout@v7
+      - uses: docker/setup-buildx-action@v3
+      - name: Build Docker image (cached)
+        uses: docker/build-push-action@v6
+        with:
+          context: docker/fedora
+          tags: persalys/fedora
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          load: true
+      - name: Build persalys
+        run: docker run --rm --volume "${{ github.workspace }}:/io" persalys/fedora sh -c "/io/docker/fedora/run_docker_build.sh"
+

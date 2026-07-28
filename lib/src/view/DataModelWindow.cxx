@@ -106,6 +106,7 @@ void DataModelWindow::buildInterface()
   QToolButton * reloadButton = new QToolButton;
   reloadButton->setIcon(QIcon(":/images/view-refresh.png"));
   reloadButton->setToolTip(tr("Reload file"));
+  reloadButton->setAccessibleName(tr("Reload file"));
   connect(reloadButton, &QToolButton::clicked, this, &DataModelWindow::refreshTable);
   hboxLayout->addWidget(reloadButton);
 
@@ -126,6 +127,7 @@ void DataModelWindow::buildInterface()
   typeComboBox_->addItem(tr("Morris"), static_cast<int>(DataModel::MORRIS));
   const int currentTypeIndex = typeComboBox_->findData(static_cast<int>(dataModel_->getType()));
   typeComboBox_->setCurrentIndex(currentTypeIndex >= 0 ? currentTypeIndex : 0);
+  typeLabel->setBuddy(typeComboBox_);
   typeLayout->addWidget(typeComboBox_, 1);
   typeLayout->addStretch();
   mainGridLayout->addLayout(typeLayout, ++row, 0);

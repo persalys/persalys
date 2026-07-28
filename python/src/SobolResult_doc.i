@@ -3,16 +3,6 @@
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::SobolResult::getInputNames
-"Input variables names accessor.
-
-Returns
--------
-sample : :py:class:`openturns.Description`
-    Input variables names"
-
-// ---------------------------------------------------------------------
-
 %feature("docstring") PERSALYS::SobolResult::getOutputNames
 "Output variables names accessor.
 
@@ -20,6 +10,16 @@ Returns
 -------
 sample : :py:class:`openturns.Description`
     Output variables names"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::SobolResult::getInputNames
+"Input variables names accessor.
+
+Returns
+-------
+sample : :py:class:`openturns.Description`
+    Input variables names"
 
 // ---------------------------------------------------------------------
 
@@ -44,22 +44,64 @@ indices : :py:class:`openturns.Sample`
 // ---------------------------------------------------------------------
 
 %feature("docstring") PERSALYS::SobolResult::getFirstOrderIndicesInterval
-"First order indices interval accessor.
+"First order indices confidence interval accessor.
 
 Returns
 -------
 interval : sequence of :py:class:`openturns.Interval`
-    First order indices interval"
+    First order indices confidence interval"
 
 // ---------------------------------------------------------------------
 
 %feature("docstring") PERSALYS::SobolResult::getTotalIndicesInterval
-"Total indices interval accessor.
+"Total indices confidence interval accessor.
 
 Returns
 -------
 interval : sequence of :py:class:`openturns.Interval`
-    Total indices interval"
+    Total indices confidence interval"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::SobolResult::getAggregatedFirstOrderIndices
+"Aggregated first order indices accessor.
+
+Returns
+-------
+indices : :py:class:`openturns.Point`
+    Aggregated first order indices"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::SobolResult::getAggregatedTotalIndices
+"Aggregated total indices accessor.
+
+Returns
+-------
+indices : :py:class:`openturns.Point`
+    Aggregated total indices"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::SobolResult::getAggregatedFirstOrderIndicesInterval
+"Aggregated first order indices confidence interval accessor.
+
+Returns
+-------
+interval : :py:class:`openturns.Interval`
+    Aggregated first order indices confidence interval"
+
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::SobolResult::getAggregatedTotalIndicesInterval
+"Aggregated total indices confidence interval accessor.
+
+Returns
+-------
+interval : :py:class:`openturns.Interval`
+    Aggregated total indices confidence interval"
+
 
 // ---------------------------------------------------------------------
 
@@ -73,16 +115,6 @@ length : float
 
 // ---------------------------------------------------------------------
 
-%feature("docstring") PERSALYS::SobolResult::getElapsedTime
-"Elapsed time in seconds to perform the analysis.
-
-Returns
--------
-time : int
-    Elapsed time in seconds to perform the analysis"
-
-// ---------------------------------------------------------------------
-
 %feature("docstring") PERSALYS::SobolResult::getCallsNumber
 "Number of calls accessor.
 
@@ -90,3 +122,13 @@ Returns
 -------
 calls : int
     Number of function calls"
+
+// ---------------------------------------------------------------------
+
+%feature("docstring") PERSALYS::SobolResult::getElapsedTime
+"Elapsed time in seconds to perform the analysis.
+
+Returns
+-------
+time : int
+    Elapsed time in seconds to perform the analysis"

@@ -140,6 +140,110 @@ void DataAnalysisWindow::buildInterface()
 }
 
 
+void DataAnalysisWindow::buildLazyTab(int index)
+{
+  if (lazyTabsBuilt_.contains(index))
+    return;
+
+  // --- deferred PV tab block: create all PV tabs on first access ---
+  if (pvPlaceholderStart_ >= 0 && index >= pvPlaceholderStart_)
+  {
+    tabWidget_->blockSignals(true);
+
+    // save any non-PV tabs that come after the PV block (Parameters, Model)
+    const int afterStart = pvPlaceholderStart_ + pvPlaceholderCount_;
+    const int totalBefore = tabWidget_->count();
+    QList<QWidget*> afterWidgets;
+    QStringList afterTexts;
+    QSet<int> afterTabBuilt;
+    for (int i = afterStart; i < totalBefore; ++i)
+    {
+      afterWidgets.append(tabWidget_->widget(i));
+      afterTexts.append(tabWidget_->tabText(i));
+      if (lazyTabsBuilt_.contains(i))
+        afterTabBuilt.insert(i - afterStart);
+    }
+
+    // remove after-tabs and PV placeholders (reverse order)
+    for (int i = totalBefore - 1; i >= afterStart; --i)
+      tabWidget_->removeTab(i);
+    for (int i = afterStart - 1; i >= pvPlaceholderStart_; --i)
+      tabWidget_->removeTab(i);
+
+    // create all PV tabs (they are appended at the end)
+#ifdef PERSALYS_HAVE_PARAVIEW
+    addParaviewWidgetsTabs();
+#endif
+
+    // mark the newly created PV tabs as built
+    for (int i = pvPlaceholderStart_; i < tabWidget_->count(); ++i)
+      lazyTabsBuilt_.insert(i);
+
+    // re-add the non-PV tabs that were saved
+    for (int i = 0; i < afterWidgets.size(); ++i)
+    {
+      tabWidget_->addTab(afterWidgets[i], afterTexts[i]);
+      const int newIndex = tabWidget_->count() - 1;
+      if (afterTabBuilt.contains(i))
+        lazyTabsBuilt_.insert(newIndex);
+    }
+
+    // PV block is no longer tracked separately
+    pvPlaceholderStart_ = -1;
+    pvPlaceholderCount_ = 0;
+
+    tabWidget_->setCurrentIndex(index);
+    tabWidget_->blockSignals(false);
+    return;
+  }
+
+  const QString tabText = tabWidget_->tabText(index);
+  tabWidget_->blockSignals(true);
+  lazyTabsBuilt_.insert(index);
+  tabWidget_->removeTab(index);
+
+  const int oldCount = tabWidget_->count();
+
+  if (tabText == tr("PDF/CDF"))
+    addPDF_CDFTab();
+  else if (tabText == tr("Box plots"))
+    addBoxPlotTab();
+  else if (tabText == tr("Dependence"))
+    addDependenceTab();
+  else if (tabText == tr("Table"))
+    addTableTab();
+  else if (tabText == tr("Plot matrix"))
+    addPlotMatrixTab();
+  else if (tabText == tr("Scatter plot"))
+    addScatterPlotsTab();
+  else if (tabText == tr("Parameters") && parametersWidget_)
+    tabWidget_->addTab(parametersWidget_, tr("Parameters"));
+  else if (tabText == tr("Model") && modelDescriptionWidget_)
+    tabWidget_->addTab(modelDescriptionWidget_, tr("Model"));
+  else
+  {
+    tabWidget_->blockSignals(false);
+    return;
+  }
+
+  // if no tab was added (e.g. conditional add*Tab that decided to skip)
+  if (tabWidget_->count() == oldCount)
+  {
+    tabWidget_->insertTab(index, new QWidget, tabText);
+    tabWidget_->blockSignals(false);
+    return;
+  }
+
+  // move the newly added tab to the right position
+  QWidget *newWidget = tabWidget_->widget(tabWidget_->count() - 1);
+  const QString newText = tabWidget_->tabText(tabWidget_->count() - 1);
+  tabWidget_->removeTab(tabWidget_->count() - 1);
+  tabWidget_->insertTab(index, newWidget, newText);
+  tabWidget_->setCurrentIndex(index);
+  tabWidget_->blockSignals(false);
+}
+
+
 void DataAnalysisWindow::fillListWidget()
 {
   variablesListWidget_->addItems(outputNames_ + inputNames_);
@@ -154,47 +258,54 @@ void DataAnalysisWindow::fillListWidget()
 
 void DataAnalysisWindow::fillTabWidget()
 {
-  // tab: Summary
+  // tab: Summary (eager, shown first)
   addSummaryTab();
   if (designOfExperiment_.getSample().getSize() > 1)
   {
-    // tab: PDF/CDF
-    addPDF_CDFTab();
-    // tab: box plots
-    addBoxPlotTab();
-    // tab: correlation
-    addDependenceTab();
+    // lazy tabs
+    tabWidget_->addTab(new QWidget, tr("PDF/CDF"));
+    tabWidget_->addTab(new QWidget, tr("Box plots"));
+    tabWidget_->addTab(new QWidget, tr("Dependence"));
   }
 #ifdef PERSALYS_HAVE_PARAVIEW
   if (SubWindow::SupportsOpenGL_3_2())
   {
-    addParaviewWidgetsTabs();
     canUseParaview_ = true;
   }
 #endif
-  if (!canUseParaview_ && doMultivariate_)
+  if (canUseParaview_ && doMultivariate_)
   {
-    // tab: Table --------------------------------
-    addTableTab();
+    // PV tabs are built lazily on first click via buildLazyTab
+    pvPlaceholderStart_ = tabWidget_->count();
+    tabWidget_->addTab(new QWidget, tr("Table"));
+    ++pvPlaceholderCount_;
     if (designOfExperiment_.getSample().getDimension() > 1 && designOfExperiment_.getSample().getSize() > 1)
     {
-      // tab: plot matrix
-      addPlotMatrixTab();
-      // tab: scatter plots
-      addScatterPlotsTab();
+      tabWidget_->addTab(new QWidget, tr("Parallel coordinates plot"));
+      ++pvPlaceholderCount_;
+      tabWidget_->addTab(new QWidget, tr("Plot matrix"));
+      ++pvPlaceholderCount_;
+      tabWidget_->addTab(new QWidget, tr("Scatter plot"));
+      ++pvPlaceholderCount_;
+    }
+  }
+  else if (doMultivariate_)
+  {
+    tabWidget_->addTab(new QWidget, tr("Table"));
+    if (designOfExperiment_.getSample().getDimension() > 1 && designOfExperiment_.getSample().getSize() > 1)
+    {
+      tabWidget_->addTab(new QWidget, tr("Plot matrix"));
+      tabWidget_->addTab(new QWidget, tr("Scatter plot"));
     }
   }
 
-  // tab: Parameters --------------------------------
   if (parametersWidget_)
-    tabWidget_->addTab(parametersWidget_, tr("Parameters"));
-
-  // tab : model description --------------------------------
+    tabWidget_->addTab(new QWidget, tr("Parameters"));
   if (modelDescriptionWidget_)
-    tabWidget_->addTab(modelDescriptionWidget_, tr("Model"));
+    tabWidget_->addTab(new QWidget, tr("Model"));
 
-  //
   connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(updateVariablesListVisibility(int)));
+  connect(tabWidget_, SIGNAL(currentChanged(int)), this, SLOT(buildLazyTab(int)));
 }
 
 
@@ -492,23 +603,25 @@ void DataAnalysisWindow::addDependenceTab()
         if (std::abs(C(i, j)) > epsilon)
         {
           if (C(i, j) < -0.7)
-            item->setBackground(QBrush("#7caef4"));  //dark blue
+            // #3082d0: L~21%, black text contrast 5.2:1 — passes WCAG AA
+            item->setBackground(QBrush("#3082d0"));  //dark blue
           else if (C(i, j) >= -0.7 && C(i, j) < -0.3)
-            item->setBackground(QBrush("#b0cef8"));  //blue
+            item->setBackground(QBrush("#7ab3f2"));  //sky blue (L~71%)
           else if (C(i, j) >= -0.3 && C(i, j) < 0.)
-            item->setBackground(QBrush("#e4eefc"));  //light blue
+            item->setBackground(QBrush("#d4e8fb"));  //light sky blue (L~91%)
           else if (C(i, j) > 0. && C(i, j) <= 0.3)
-            item->setBackground(QBrush("#fadec3"));  //light orange
+            item->setBackground(QBrush("#fadec3"));  //light peach (L~93%)
           else if (C(i, j) > 0.3 && C(i, j) <= 0.7)
-            item->setBackground(QBrush("#f4b87c"));  //orange
+            item->setBackground(QBrush("#f09a3e"));  //amber (L~59%)
           else if (C(i, j) > 0.7)
-            item->setBackground(QBrush("#ee9235"));  //dark orange
+            item->setBackground(QBrush("#c96d0a"));  //dark amber (L~41%)
         }
       }
       else
       {
         item->setText("1.");
         item->setBackground(Qt::black);
+        item->setForeground(Qt::white);  // white text needed: black-on-black = invisible
       }
       tableModel->setItem(i, j, item);
     }
@@ -532,7 +645,7 @@ void DataAnalysisWindow::addDependenceTab()
          << "-0.7 ≤ ρ < -0.3"
          << "ρ < -0.7";
   QStringList colors;
-  colors << "#ee9235" << "#f4b87c" << "#fadec3" << "#ffffff" << "#e4eefc" << "#b0cef8" << "#7caef4";
+  colors << "#c96d0a" << "#f09a3e" << "#fadec3" << "#ffffff" << "#d4e8fb" << "#7ab3f2" << "#3082d0";
 
   QTableView * colorTable = new QTableView;
   colorTable->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -540,6 +653,7 @@ void DataAnalysisWindow::addDependenceTab()
   colorTable->setFocusPolicy(Qt::NoFocus);
   colorTable->setSelectionMode(QAbstractItemView::NoSelection);
   colorTable->setShowGrid(false);
+  colorTable->setAccessibleName(tr("Color legend for Spearman's coefficient"));
 
   QStandardItemModel * colorTableModel = new QStandardItemModel(labels.size(), 1, colorTable);
   for (int i = 0; i < labels.size(); ++i)
@@ -735,20 +849,21 @@ void DataAnalysisWindow::addParaviewWidgetsTabs()
       // input sample
       samples.add(inSample);
       PVXYChartViewWidget * sampleScatterPlotWidget = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get());
-      sampleScatterPlotWidget->setData(inSample, Qt::green);
+      // Okabe-Ito palette: bluish-green for evaluated, vermillion for failed, grey for non-evaluated
+      sampleScatterPlotWidget->setData(inSample, QColor("#009E73"));
       sampleScatterPlotWidget->setRepresentationLabels(QVector<QString>(inSampleDim, tr("Evaluated points")).toList(), 0);
       // failed input sample
       if (failedInSampleSize)
       {
         samples.add(failedInputSample_);
-        sampleScatterPlotWidget->setData(failedInputSample_, Qt::red);
+        sampleScatterPlotWidget->setData(failedInputSample_, QColor("#D55E00"));
         sampleScatterPlotWidget->setRepresentationLabels(QVector<QString>(inSampleDim, tr("Failed points")).toList(), 1);
       }
       // not evaluated points
       if (notEvalInSampleSize)
       {
         samples.add(notEvaluatedInputSample_);
-        sampleScatterPlotWidget->setData(notEvaluatedInputSample_, Qt::blue);
+        sampleScatterPlotWidget->setData(notEvaluatedInputSample_, QColor("#999999"));
         sampleScatterPlotWidget->setRepresentationLabels(QVector<QString>(inSampleDim, tr("Non-evaluated points")).toList(), failedInSampleSize > 0 ? 2 : 1);
       }
       sampleScatterPlotWidget->setAxisTitles(inputNames_, inAxisTitles_);

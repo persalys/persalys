@@ -29,7 +29,10 @@ Create the model:
 
 Create the design of experiments:
 
->>> myDOE = persalys.GridDesignOfExperiment('myDOE', myPhysicalModel)"
+>>> levels = [3, 4]
+>>> bounds = [[200., 60000.], [400., 90000.]]
+>>> values = [ot.Box([levels[i] - 2], ot.Interval(bounds[i][0], bounds[i][1])).generate().asPoint() for i in range(len(levels))]
+>>> myDOE = persalys.GridDesignOfExperiment('myDOE', myPhysicalModel, values)"
 
 // ---------------------------------------------------------------------
 

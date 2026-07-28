@@ -41,8 +41,6 @@ public:
 
   LimitState getLimitState() const;
 
-  void setInterestVariables(const OT::Description& outputsNames) override;
-
   void run() override;
   bool canBeLaunched(OT::String &errorMessage) const override;
 

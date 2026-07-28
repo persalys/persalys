@@ -33,16 +33,19 @@ class PERSALYS_BASE_API SimulationReliabilityResult : public EvaluationResult
 
 public:
   friend class SimulationReliabilityAnalysis;
+  friend class FORMImportanceSamplingAnalysis;
 
   /** Default constructor */
-  SimulationReliabilityResult();
+  SimulationReliabilityResult() = default;
+
   /** Constructor with parameters */
   SimulationReliabilityResult(const OT::ProbabilitySimulationResult& simulationResults,
-                              const OT::Sample& outputSample,
+                              const OT::Collection<OT::Sample> &inSamples,
+                              const OT::Collection<OT::Sample> &outSamples,
                               const OT::Sample& convergenceSample,
                               const OT::Sample& convergenceSampleLowerBound,
-                              const OT::Sample& convergenceSampleUpperBound,
-                              const OT::Sample& inputSample = OT::Sample());
+                              const OT::Sample& convergenceSampleUpperBound
+                            );
 
   /** Virtual constructor */
   SimulationReliabilityResult * clone() const override;
@@ -51,6 +54,11 @@ public:
   OT::Sample getConvergenceSample() const;
   OT::Sample getConvergenceSampleLowerBound() const;
   OT::Sample getConvergenceSampleUpperBound() const;
+  OT::Collection<OT::Sample> getInputSamples() const;
+  OT::Collection<OT::Sample> getOutputSamples() const;
+
+  bool hasPerEventSimulationResults() const;
+  OT::ProbabilitySimulationResult getPerEventSimulationResult(OT::UnsignedInteger eventIndex) const;
 
   /** String converter */
   OT::String __repr__() const override;
@@ -62,7 +70,10 @@ public:
   void load(OT::Advocate & adv) override;
 
 private:
+  OT::PersistentCollection<OT::Sample> inputSamples_;
+  OT::PersistentCollection<OT::Sample> outputSamples_;
   OT::ProbabilitySimulationResult simulationResult_;
+  OT::PersistentCollection<OT::ProbabilitySimulationResult> perEventSimulationResults_;
   OT::Sample convergenceSample_;
   OT::Sample convergenceSampleLowerBound_;
   OT::Sample convergenceSampleUpperBound_;

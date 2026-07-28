@@ -24,6 +24,9 @@
 #include "persalys/ResultWindow.hxx"
 #include "persalys/SimulationReliabilityResult.hxx"
 
+#include <QStackedWidget>
+#include <QTabWidget>
+
 namespace PERSALYS
 {
 class PERSALYS_VIEW_API SimulationReliabilityResultWindow : public ResultWindow
@@ -31,7 +34,7 @@ class PERSALYS_VIEW_API SimulationReliabilityResultWindow : public ResultWindow
   Q_OBJECT
 
 public:
-  SimulationReliabilityResultWindow(AnalysisItem * item, QWidget *parent = nullptr);
+  explicit SimulationReliabilityResultWindow(AnalysisItem * item, QWidget *parent = nullptr);
 
 protected:
   void buildInterface();
@@ -40,9 +43,13 @@ protected:
   QWidget * getConvergenceTab();
 
 private:
-  SimulationReliabilityResult result_;
-  TitleLabel * titleLabel_;
-  QTabWidget * formTabWidget_;
+  SimulationReliabilityResult   result_;
+  TitleLabel                  * titleLabel_           = nullptr;
+  QTabWidget                  * formTabWidget_        = nullptr;
+  QStackedWidget              * histogramStack_       = nullptr;
+  QStackedWidget              * summaryPerEventStack_ = nullptr;
+  QStringList                   limitStateNames_;
+  QVector<double>               eventThresholds_;
 };
 }
 #endif

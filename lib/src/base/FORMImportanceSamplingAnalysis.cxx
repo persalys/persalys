@@ -21,6 +21,7 @@
 #include "persalys/FORMImportanceSamplingAnalysis.hxx"
 
 #include "persalys/FORMAnalysis.hxx"
+#include "persalys/BaseTools.hxx"
 
 #include <openturns/PersistentObjectFactory.hxx>
 
@@ -31,15 +32,7 @@ namespace PERSALYS
 
 CLASSNAMEINIT(FORMImportanceSamplingAnalysis)
 
-static Factory<FORMImportanceSamplingAnalysis> Factory_FORMImportanceSamplingAnalysis;
-
-/* Default constructor */
-FORMImportanceSamplingAnalysis::FORMImportanceSamplingAnalysis()
-  : ImportanceSamplingAnalysis()
-  , ApproximationAnalysis()
-{
-}
-
+const static Factory<FORMImportanceSamplingAnalysis> Factory_FORMImportanceSamplingAnalysis;
 
 /* Constructor with parameters */
 FORMImportanceSamplingAnalysis::FORMImportanceSamplingAnalysis(const String& name,
@@ -50,13 +43,11 @@ FORMImportanceSamplingAnalysis::FORMImportanceSamplingAnalysis(const String& nam
   setPhysicalStartingPoint(limitState.getPhysicalModel().getDistribution().getMean());
 }
 
-
 /* Virtual constructor */
 FORMImportanceSamplingAnalysis* FORMImportanceSamplingAnalysis::clone() const
 {
   return new FORMImportanceSamplingAnalysis(*this);
 }
-
 
 void FORMImportanceSamplingAnalysis::initialize()
 {
@@ -66,11 +57,10 @@ void FORMImportanceSamplingAnalysis::initialize()
   notifyProgress();
 }
 
-
 void FORMImportanceSamplingAnalysis::launch()
 {
   // FORM analysis
-  FORMAnalysis formAnalysis("aFORMAnalysis", getLimitState());
+  FORMAnalysis formAnalysis("aFORMAnalysis", getLimitState(), true);
   optimizationAlgorithm_.setStopCallback(&AnalysisImplementation::Stop, this);
   optimizationAlgorithm_.setProgressCallback(&AnalysisImplementation::UpdateProgressValue, this);
   formAnalysis.setOptimizationAlgorithm(getOptimizationAlgorithm());
@@ -89,7 +79,10 @@ void FORMImportanceSamplingAnalysis::launch()
       throw InternalException(HERE) << "FORM result empty.\n";
 
     // set FORM result
-    FORMResult_ = formAnalysis.getResult().getFORMResult();
+    if (getLimitState().isSystemLimitState() && getLimitState().getType() != LimitState::Type::Intersection)
+      multiFORMResult_ = formAnalysis.getResult().getMultiFORMResult();
+    else
+       FORMResult_ = formAnalysis.getResult().getFORMResult();
   }
   catch (const std::exception &ex)
   {
@@ -103,24 +96,37 @@ void FORMImportanceSamplingAnalysis::launch()
   }
 
   // Importance sampling
-  setStandardSpaceDesignPoint(FORMResult_.getStandardSpaceDesignPoint());
+  if (!FORMResult_.getStandardSpaceDesignPoint().isEmpty())
+    setStandardSpaceDesignPoints(Sample(1, FORMResult_.getStandardSpaceDesignPoint()));
+  else
+  {
+    const Collection<FORMResult> formResults = multiFORMResult_.getFORMResultCollection();
+    Sample designPoints(formResults.getSize(), formResults[0].getStandardSpaceDesignPoint().getDimension());
+    for (UnsignedInteger i = 0; i < formResults.getSize(); ++i)
+      designPoints[i] = formResults[i].getStandardSpaceDesignPoint();
+    setStandardSpaceDesignPoints(designPoints);
+  }
   ImportanceSamplingAnalysis::launch();
+  result_.designOfExperiment_.setType(DesignOfExperiment::Type::UK);
 }
-
 
 FORMResult FORMImportanceSamplingAnalysis::getFORMResult() const
 {
   return FORMResult_;
 }
 
+MultiFORMResult FORMImportanceSamplingAnalysis::getMultiFORMResult() const
+{
+  return multiFORMResult_;
+}
 
 Parameters FORMImportanceSamplingAnalysis::getParameters() const
 {
   Parameters param;
 
   param.add("Algorithm", "FORM - Importance sampling");
-  param.add("Output of interest", getLimitState().getOutputName());
-  param.add("Design point (standard space)", getStandardSpaceDesignPoint());
+  param.add("Outputs of interest", Parameters::GetOTDescriptionStr(getLimitState().getOutputNames(), false, false));
+  param.add("Design points (standard space)", Parameters::GetOTSampleStr(getStandardSpaceDesignPoints()));
   param.add(WithStopCriteriaAnalysis::getParameters());
   param.add(SimulationReliabilityAnalysis::getParameters());
 
@@ -163,6 +169,7 @@ void FORMImportanceSamplingAnalysis::save(Advocate & adv) const
   ImportanceSamplingAnalysis::save(adv);
   ApproximationAnalysis::save(adv);
   adv.saveAttribute("FORMResult_", FORMResult_);
+  adv.saveAttribute("multiFORMResult_", multiFORMResult_);
 }
 
 
@@ -172,5 +179,7 @@ void FORMImportanceSamplingAnalysis::load(Advocate & adv)
   ImportanceSamplingAnalysis::load(adv);
   ApproximationAnalysis::load(adv);
   adv.loadAttribute("FORMResult_", FORMResult_);
+  if (adv.hasAttribute("multiFORMResult_"))
+    adv.loadAttribute("multiFORMResult_", multiFORMResult_);
 }
 }

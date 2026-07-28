@@ -767,9 +767,12 @@ public:
     const double minLevel = levels[0];
     const double intervalWidth = maxLevel - minLevel;
 
+    // Colorblind-safe sequential colormap: avoids green (confused with red by
+    // protanopes/deuteranopes). Uses luminance variation as the primary cue.
+    // darkBlue -> blue -> lightBlue -> paleYellow -> yellow -> orange -> red -> darkRed
     if (levels.size() > 2) addColorStop((levels[1] - minLevel) / intervalWidth, Qt::blue);
-    if (levels.size() > 3) addColorStop((levels[2] - minLevel) / intervalWidth, Qt::cyan);
-    if (levels.size() > 4) addColorStop((levels[3] - minLevel) / intervalWidth, Qt::green);
+    if (levels.size() > 3) addColorStop((levels[2] - minLevel) / intervalWidth, QColor("#92c5de")); // light steel blue (replaces cyan)
+    if (levels.size() > 4) addColorStop((levels[3] - minLevel) / intervalWidth, QColor("#ffffbf")); // pale yellow (replaces green)
     if (levels.size() > 9) addColorStop((levels[levels.size() - 5] - minLevel) / intervalWidth, Qt::yellow);
     if (levels.size() > 7) addColorStop((levels[levels.size() - 3] - minLevel) / intervalWidth, "#ffb000"); // orange
     if (levels.size() > 6) addColorStop((levels[levels.size() - 2] - minLevel) / intervalWidth, Qt::red);

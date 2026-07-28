@@ -157,7 +157,7 @@ void PhysicalModelWindowWidget::addDefinitionTab()
   outputButtonsLayout->addWidget(timeInfo);
   outputsLayout->addLayout(outputButtonsLayout);
   outputButtonsLayout->addStretch();
-  connect(this, &PhysicalModelWindowWidget::evaluateOutputsRequested, [ = ] ()
+  connect(this, &PhysicalModelWindowWidget::evaluateOutputsRequested, [this, timeInfo] ()
   {
     timeInfo->clear();
     evaluateOutputs();

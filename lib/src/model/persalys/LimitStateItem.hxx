@@ -50,6 +50,7 @@ signals:
   void outputListChanged();
   void operatorChanged();
   void thresholdChanged();
+  void typeChanged();
 
 private:
   LimitState limitState_;

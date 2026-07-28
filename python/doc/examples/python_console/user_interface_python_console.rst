@@ -33,7 +33,7 @@ You can also create a study directly in Python and add it to the tree view:
     study_1 = persalys.Study("Study_1")
     persalys.Study.Add(study_1)
 
-.. image:: /user_manual/graphical_interface/python_console/step_1.png
+.. image:: step_1.png
     :align: center
 
 Remove study_1:
@@ -49,7 +49,7 @@ You can access the model in Python with:
 
     model = study_0.getPhysicalModelByName("SymbolicModel_0")
 
-.. image:: /user_manual/graphical_interface/python_console/step_2.png
+.. image:: step_2.png
     :align: center
 
 Add a distribution to your first input. You can check it in Python via:
@@ -60,7 +60,7 @@ Add a distribution to your first input. You can check it in Python via:
     print(x0.isStochastic())
     print(x0.getDistribution())
 
-.. image:: /user_manual/graphical_interface/python_console/step_3.png
+.. image:: step_3.png
     :align: center
 
 Now create a Monte Carlo central tendency analysis and run it. You can retrieve the analysis using:
@@ -76,7 +76,7 @@ You can check the result with:
     result = mcAnalysis.getImplementation().getResult()
     print(result)
 
-.. image:: /user_manual/graphical_interface/python_console/step_4.png
+.. image:: step_4.png
     :align: center
 
 Now that we have covered the basic usage of the Python console,

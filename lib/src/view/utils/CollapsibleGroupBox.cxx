@@ -95,6 +95,7 @@ void CollapsibleGroupBox::setTitle(const QString& title)
   d->shortcutId = grabShortcut(QKeySequence::mnemonic(title));
 
   setAccessibleName(title);
+  setAccessibleDescription(d->isExpanded ? tr("expanded") : tr("collapsed"));
 
   emit titleChanged();
 }
@@ -115,6 +116,9 @@ void CollapsibleGroupBox::setExpanded(bool expanded)
 
   d->isExpanded = expanded;
   emit expandedChanged();
+
+  // Update accessible description so screen readers announce the state
+  setAccessibleDescription(d->isExpanded ? tr("expanded") : tr("collapsed"));
 
   d->updateChildrenVisibility(d->isExpanded);
 

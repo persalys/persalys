@@ -192,8 +192,8 @@ CalibrationResultWindow::CalibrationResultWindow(AnalysisItem *item, QWidget *pa
         pdfSamplePrior[1][2*i+1] = 0.1 * pdfSamplePosterior.getMarginal(2*i+1).getMax()[0];
     }
 
-    pvWidget->setData(pdfSamplePrior, Qt::red);
-    pvWidget->setData(pdfSamplePosterior, Qt::green);
+    pvWidget->setData(pdfSamplePrior, QColor("#D55E00"));   // vermillion (Okabe-Ito)
+    pvWidget->setData(pdfSamplePosterior, QColor("#009E73")); // bluish-green (Okabe-Ito)
     if (result_.getCalibrationResult().isBayesian())
     {
       pvWidget->setRepresentationLabels(QVector<QString>(nbInputs * 2, tr("Prior")).toList(), 0);
@@ -253,13 +253,14 @@ QTabWidget * CalibrationResultWindow::getPredictionTabWidget(const UnsignedInteg
   (void)i;
 #ifdef PERSALYS_HAVE_PARAVIEW
 
+  // Okabe-Ito colorblind-safe palette: blue / vermillion / bluish-green
   QMap<QString, QColor> Colors_ = {
-    {QObject::tr("Data"), Qt::blue},
-    {QObject::tr("Prior"), Qt::red},
-    {QObject::tr("Posterior"), Qt::green},
-    {QObject::tr("Observations"), Qt::blue},
-    {QObject::tr("Initial"), Qt::red},
-    {QObject::tr("Calibrated"), Qt::green}
+    {QObject::tr("Data"),         QColor("#0072B2")},  // dark blue
+    {QObject::tr("Prior"),        QColor("#D55E00")},  // vermillion
+    {QObject::tr("Posterior"),    QColor("#009E73")},  // bluish-green
+    {QObject::tr("Observations"), QColor("#0072B2")},  // dark blue
+    {QObject::tr("Initial"),      QColor("#D55E00")},  // vermillion
+    {QObject::tr("Calibrated"),   QColor("#009E73")}   // bluish-green
   };
 
   // get descriptions
@@ -404,8 +405,8 @@ QTabWidget * CalibrationResultWindow::getPredictionTabWidget(const UnsignedInteg
   PlotWidget * qqPlot = new PlotWidget(tr("qqPlot"));
   SimpleGraphSetting * qqPlotSettingWidget = new SimpleGraphSetting(qqPlot, this);
   qqPlotSettingWidget->hide();
-  qqPlot->plotCurve(qqPlotGraph.getDrawable(1).getData(), QPen(Qt::blue, 5), QwtPlotCurve::Dots);
-  qqPlot->plotCurve(qqPlotGraph.getDrawable(0).getData(), QPen(Qt::red, 1, Qt::DashDotLine));
+  qqPlot->plotCurve(qqPlotGraph.getDrawable(1).getData(), QPen(QColor("#0072B2"), 5), QwtPlotCurve::Dots);
+  qqPlot->plotCurve(qqPlotGraph.getDrawable(0).getData(), QPen(QColor("#D55E00"), 1, Qt::DashDotLine));
 
   qqPlot->setAxisTitle(QwtPlot::xBottom, tr("Residuals"));
   qqPlot->setAxisTitle(QwtPlot::yLeft, tr("Standard normal quantiles"));
