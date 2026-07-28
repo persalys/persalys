@@ -1,0 +1,235 @@
+# Valgrind suppression file for Persalys.
+#
+# These suppressions silence known, non-actionable leaks that originate deep
+# inside third-party libraries used by Persalys (OpenMPI, hwloc, libpciaccess,
+# CPython, fontconfig, X11 ICE/SM session management, LLVM). They happen once
+# during process startup (MPI_Init, Py_Initialize, Qt/X11 init) and are not
+# caused by Persalys's own code, nor do they grow with usage.
+#
+# Usage:
+#   valgrind --leak-check=full --show-leak-kinds=all \
+#            --suppressions=utils/valgrind-persalys.supp \
+#            build/main/persalys
+
+{
+   persalys-openmpi-orte-init
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible,reachable
+   fun:malloc
+   ...
+   fun:orte_init
+}
+
+{
+   persalys-openmpi-orte-init-calloc
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible,reachable
+   fun:calloc
+   ...
+   fun:orte_init
+}
+
+{
+   persalys-openmpi-orte-finalize
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible,reachable
+   fun:malloc
+   ...
+   fun:orte_finalize
+}
+
+{
+   persalys-openmpi-mpi-init
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible,reachable
+   fun:malloc
+   ...
+   fun:ompi_mpi_init
+}
+
+{
+   persalys-openmpi-op-init
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible,reachable
+   fun:malloc
+   ...
+   fun:ompi_op_base_op_select
+}
+
+{
+   persalys-hwloc-topology-load-malloc
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible,reachable
+   fun:malloc
+   ...
+   fun:hwloc_topology_load
+}
+
+{
+   persalys-hwloc-topology-load-calloc
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible,reachable
+   fun:calloc
+   ...
+   fun:hwloc_topology_load
+}
+
+{
+   persalys-hwloc-topology-load-realloc
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible,reachable
+   fun:realloc
+   ...
+   fun:hwloc_topology_load
+}
+
+{
+   persalys-hwloc-backend-alloc
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible,reachable
+   fun:malloc
+   ...
+   fun:hwloc_backend_alloc
+}
+
+{
+   persalys-python-initialize-malloc
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible,reachable
+   fun:malloc
+   ...
+   fun:Py_InitializeFromConfig
+}
+
+{
+   persalys-python-initialize-calloc
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible,reachable
+   fun:calloc
+   ...
+   fun:Py_InitializeFromConfig
+}
+
+{
+   persalys-fontconfig-fontlist
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible,reachable
+   fun:malloc
+   ...
+   fun:FcFontList
+}
+
+{
+   persalys-fontconfig-default-substitute
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible,reachable
+   fun:malloc
+   ...
+   fun:FcDefaultSubstitute
+}
+
+{
+   persalys-fontconfig-default-langs
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible,reachable
+   fun:malloc
+   ...
+   fun:FcGetDefaultLangs
+}
+
+{
+   persalys-x11-ice-register
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible,reachable
+   fun:malloc
+   ...
+   fun:IceRegisterForProtocolSetup
+}
+
+{
+   persalys-llvm-cl-option
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible,reachable
+   fun:_Znw*
+   ...
+   fun:_ZN4llvm2cl6Option11addArgumentEv
+}
+
+{
+   persalys-dl-loader-reachable
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:calloc
+   ...
+   fun:_dl_new_object
+}
+
+{
+   persalys-openmpi-progress-thread
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible,reachable
+   fun:malloc
+   ...
+   fun:event_base_loop
+   ...
+   fun:start_thread
+}
+
+{
+   persalys-pthread-tls-possibly-lost
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:calloc
+   ...
+   fun:_dl_allocate_tls
+   ...
+   fun:pthread_create*
+}
+
+{
+   persalys-vtkloguru-thread-name
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible,reachable
+   fun:malloc
+   ...
+   fun:_ZN9vtkloguru15set_thread_nameEPKc
+}
+
+{
+   persalys-x11-locale-init
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible,reachable
+   fun:malloc
+   ...
+   fun:_XlcCreateLC
+}
+
+{
+   persalys-x11-locale-init-open
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible,reachable
+   fun:malloc
+   ...
+   fun:_XOpenLC
+}
+
+{
+   persalys-bagplot-plugin-static-init
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible,reachable
+   fun:malloc
+   ...
+   obj:*BagPlotViewsAndFilters*
+   ...
+   fun:call_init.part.0
+}
+
+{
+   persalys-paraview-pipeline-context-menu-behavior
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible,reachable
+   fun:_Znwm
+   ...
+   fun:_ZN29pqPipelineContextMenuBehaviorC1EP7QObject
+   fun:_ZN19pqParaViewBehaviorsC1EP11QMainWindowP7QObject
+}
