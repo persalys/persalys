@@ -523,7 +523,6 @@ void FieldModelEvaluationResultWidget::addWidgetsTabs()
   const QStringList outNames(QtOT::DescriptionToStringList(processSample_.getField(0).getValues().getDescription()));
   const QString meshParamName = QString::fromUtf8(processSample_.getMesh().getDescription()[0].c_str());
   const Description meshNodesNames(Description::BuildDefault(nbNodes, processSample_.getMesh().getDescription()[0]));
-  const Description colors(Drawable().BuildDefaultPalette(nbInputPt));
 
   // first tab --------------------------------
   QWidget * tab = new QWidget;
@@ -540,7 +539,7 @@ void FieldModelEvaluationResultWidget::addWidgetsTabs()
     {
       Sample sample(processSample_.getMesh().getVertices());
       sample.stack(processSample_.getField(in).getValues().getMarginal(out));
-      plotWidget->plotCurve(sample, QPen(colors[in].c_str()).color(), QwtPlotCurve::Lines, 0, tr("Input %1").arg(in));
+      plotWidget->plotCurve(sample, QPen(QColor(128, 128, 128, 76)), QwtPlotCurve::Lines, 0, tr("Input %1").arg(in));
     }
     plotWidget->setTitle(nbInputPt == 1 ? tr("Trajectory") : tr("Trajectories"));
     plotWidget->setAxisTitle(QwtPlot::yLeft, outNames[out]);
@@ -772,6 +771,10 @@ void FieldModelEvaluationResultWidget::addParaviewWidgetsTabs()
     outPVGraph->setAxisTitle(vtkAxis::LEFT, currentOutName[0]);
     outPVGraph->setXAxisData(meshParamName[0]);
     outPVGraph->setAxisToShow(fieldSamplet.getDescription());
+    outPVGraph->setRepresentationColor(QColor(128, 128, 128), 0);
+    outPVGraph->setSeriesOpacity(0.3);
+    outPVGraph->enableSelectionHighlighting(true);
+    outPVGraph->setShowLegend(false);
 
     TrajectoriesSettingWidget * scatterSettingWidget = new TrajectoriesSettingWidget(outPVGraph,
         QtOT::DescriptionToStringList(fieldSamplet.getDescription()),

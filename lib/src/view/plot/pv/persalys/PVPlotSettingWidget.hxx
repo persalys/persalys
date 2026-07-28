@@ -40,12 +40,17 @@ public:
 
 protected:
   void addSelectDataWidget(const QString &labelName, const QList<bool> &checked = QList<bool>());
+  virtual void onSelectionCountChanged(int count);
   void addRankWidget(const bool checkState);
   void addQWTWidget(const bool checkState);
   void addExportLayout();
 
 signals:
   void displayQWTPlotMatrix(bool);
+
+protected slots:
+  void onSelectionCountChangedFromIndices(QList<int>);
+  void onSelectionCountChangedFromNames(QStringList);
 
 protected:
   PVViewWidget * pvViewWidget_;

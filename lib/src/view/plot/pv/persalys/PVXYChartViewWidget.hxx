@@ -8,6 +8,7 @@
 #include <vtkChartLegend.h>
 
 #include <QSet>
+#include <QTimer>
 
 namespace PERSALYS
 {
@@ -40,6 +41,8 @@ public:
   void setSerieColors(const QMap<QString, QColor>& colors);
   void setSerieLineStyles(const QMap<QString, int>& styles);
   void setRepresentationColor(const QColor& color, const int reprIndex = 0);
+  void setSeriesOpacity(double opacity);
+  void enableSelectionHighlighting(bool enable);
   QColor getRepresentationColor(const int reprIndex = 0) const;
   void setMarkerStyle(const int markerStyle);
   int getMarkerStyle() const;
@@ -56,6 +59,9 @@ public slots:
 signals:
   void axisHasBeenModified();
 
+private slots:
+  void pollSelection();
+
 public:
   static const QMap<Type, const char*> PV_VIEW_TYPE;
   static const QMap<Type, const char*> PV_REPRESENTATION_TYPE;
@@ -68,6 +74,8 @@ protected:
 private:
   Type type_;
   QList<QColor> reprColors_;
+  QTimer* selectionTimer_ = nullptr;
+  QList<bool> previousSelection_;
 };
 }
 #endif

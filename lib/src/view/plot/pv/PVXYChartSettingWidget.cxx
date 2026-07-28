@@ -74,6 +74,12 @@ PVXYChartSettingWidget::PVXYChartSettingWidget(PVXYChartViewWidget *pvViewWidget
 }
 
 
+void PVXYChartSettingWidget::onSelectionCountChanged(int count)
+{
+  pvXYViewWidget_->setShowLegend(count <= MaxVisibleVariableNumber);
+}
+
+
 void PVXYChartSettingWidget::addXYAxisTabs()
 {
   for (int i = 0; i < 2; ++i)
@@ -365,6 +371,8 @@ ScatterSettingWidget::ScatterSettingWidget(PVXYChartViewWidget *pvViewWidget,
 
   if (pvXYViewWidget_->getNumberOfRepresentations() > 1)
     addSelectDataWidget(tr("Data"));
+  else
+    onSelectionCountChanged(pvXYViewWidget_->getNumberOfRepresentations());
 
   // rank checkBox
   if (rankSamples_.getSize())
@@ -466,6 +474,8 @@ MultiPDFSettingWidget::MultiPDFSettingWidget(PVXYChartViewWidget *pvViewWidget,
 
   if (pvXYViewWidget_->getNumberOfRepresentations() > 1)
     addSelectDataWidget(tr("Data"));
+  else
+    onSelectionCountChanged(pvXYViewWidget_->getNumberOfRepresentations());
 
   // axis, plot properties
   addMarkerTab(pvXYViewWidget_->getNumberOfRepresentations() == 1);

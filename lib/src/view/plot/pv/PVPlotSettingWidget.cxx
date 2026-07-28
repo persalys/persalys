@@ -95,10 +95,14 @@ void PVPlotSettingWidget::addSelectDataWidget(const QString &labelName, const QL
   }
   ListWidgetWithCheckBox * reprListWidget = new ListWidgetWithCheckBox("-- " + tr("Select") + " --", reprNames, visibleReprNames, this);
   if (pvViewWidget_->getNumberOfRepresentations() > 1)
+  {
     connect(reprListWidget, SIGNAL(checkedItemsChanged(QList<int>)), pvViewWidget_, SLOT(setRepresentationVisibility(QList<int>)));
+    connect(reprListWidget, SIGNAL(checkedItemsChanged(QList<int>)), this, SLOT(onSelectionCountChangedFromIndices(QList<int>)));
+  }
   else
   {
     connect(reprListWidget, SIGNAL(checkedItemsChanged(QStringList)), pvViewWidget_, SLOT(setAxisToShow(QStringList)));
+    connect(reprListWidget, SIGNAL(checkedItemsChanged(QStringList)), this, SLOT(onSelectionCountChangedFromNames(QStringList)));
     if (plotNames_ != visibleReprNames) pvViewWidget_->setAxisToShow(visibleReprNames);
   }
 
@@ -106,6 +110,25 @@ void PVPlotSettingWidget::addSelectDataWidget(const QString &labelName, const QL
   comboBox->setView(reprListWidget);
 
   frameLayout_->addWidget(comboBox, rowGrid, 1);
+
+  onSelectionCountChanged(visibleReprNames.size());
+}
+
+
+void PVPlotSettingWidget::onSelectionCountChanged(int)
+{
+}
+
+
+void PVPlotSettingWidget::onSelectionCountChangedFromIndices(QList<int> items)
+{
+  onSelectionCountChanged(items.size());
+}
+
+
+void PVPlotSettingWidget::onSelectionCountChangedFromNames(QStringList items)
+{
+  onSelectionCountChanged(items.size());
 }
 
 

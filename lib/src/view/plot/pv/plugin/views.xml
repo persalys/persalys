@@ -178,7 +178,25 @@
           <RequiredProperties>
             <Property function="Input" name="Input" />
             <Property function="FieldDataSelection" name="AttributeType" />
-            <Property function="CompositeIndexSelection" name="CompositeDataSetIndex" />
+            <Property function="CompositeDataSetIndex" name="CompositeDataSetIndex" />
+          </RequiredProperties>
+        </ChartSeriesSelectionDomain>
+      </StringVectorProperty>
+      <StringVectorProperty command="SetOpacity"
+                            clean_command="ClearOpacities"
+                            element_types="2 1"
+                            name="SeriesOpacity"
+                            number_of_elements_per_command="2"
+                            repeat_command="1">
+        <Documentation>Set the series line/bar opacity.</Documentation>
+        <ChartSeriesSelectionDomain name="array_list"
+                                    hide_partial_arrays="0"
+                                    default_mode="value"
+                                    default_value="1.0">
+          <RequiredProperties>
+            <Property function="Input" name="Input" />
+            <Property function="FieldDataSelection" name="AttributeType" />
+            <Property function="CompositeDataSetIndex" name="CompositeDataSetIndex" />
           </RequiredProperties>
         </ChartSeriesSelectionDomain>
       </StringVectorProperty>
@@ -229,7 +247,7 @@
           <InputProperty command="SetInputConnection"
                          name="OriginalSelectionInput"/>
         </RepresentationProxy>
-      </SubProxy>
+       </SubProxy>
 
       <StringVectorProperty command="SetSeriesLabelPrefix"
                             name="SeriesLabelPrefix"
@@ -304,6 +322,8 @@
                   function="SeriesVisibility" />
         <Property name="SeriesColor"
                   function="SeriesColor" />
+        <Property name="SeriesOpacity"
+                  function="SeriesOpacity" />
         <Property name="SeriesLineThickness"
                   function="SeriesLineThickness" />
         <Property name="SeriesLineStyle"

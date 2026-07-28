@@ -13,8 +13,11 @@
 #include <vtkAxis.h>
 #include <vtkContextScene.h>
 #include <vtkXYChartRepresentation.h>
+#include <vtkPlot.h>
+#include <vtkIdTypeArray.h>
 
 #include <QEvent>
+#include <QTimer>
 #include <pqCoreUtilities.h>
 
 using namespace OT;
@@ -368,6 +371,98 @@ void PVXYChartViewWidget::setRepresentationColor(const QColor& color, const int 
 
   if (reprColors_.size() == numberOfRepr)
     reprColors_[reprIndex] = color;
+}
+
+
+void PVXYChartViewWidget::setSeriesOpacity(double opacity)
+{
+  for (int repr_ind = 0; repr_ind < getView()->getNumberOfRepresentations(); repr_ind++)
+  {
+    vtkSMProperty* idvp(getView()->getRepresentation(repr_ind)->getProxy()->GetProperty("SeriesOpacity"));
+    QList<QVariant> value = pqSMAdaptor::getMultipleElementProperty(idvp);
+    vtkSMPropertyHelper smph(idvp);
+
+    for (int cc = 0; cc < value.size() / 2; cc++)
+    {
+      smph.Set(2 * cc + 1, (OSS() << opacity).str().c_str());
+    }
+
+    getView()->getRepresentation(repr_ind)->getProxy()->UpdateProperty("SeriesOpacity");
+  }
+  getView()->resetDisplay();
+}
+
+
+void PVXYChartViewWidget::enableSelectionHighlighting(bool enable)
+{
+  if (enable)
+  {
+    if (!selectionTimer_)
+    {
+      selectionTimer_ = new QTimer(this);
+      connect(selectionTimer_, &QTimer::timeout, this, &PVXYChartViewWidget::pollSelection);
+    }
+    selectionTimer_->start(100);
+  }
+  else
+  {
+    if (selectionTimer_)
+      selectionTimer_->stop();
+  }
+}
+
+
+void PVXYChartViewWidget::pollSelection()
+{
+  if (!chartXY_ || chartXY_->GetNumberOfPlots() == 0)
+    return;
+
+  const int nbPlots = chartXY_->GetNumberOfPlots();
+  if (previousSelection_.size() != nbPlots)
+  {
+    previousSelection_.clear();
+    for (int i = 0; i < nbPlots; ++i)
+      previousSelection_ << false;
+  }
+
+  bool changed = false;
+  for (int i = 0; i < nbPlots; ++i)
+  {
+    vtkPlot* plot = chartXY_->GetPlot(i);
+    if (!plot) continue;
+
+    vtkIdTypeArray* selection = plot->GetSelection();
+    const bool isSelected = (selection && selection->GetNumberOfTuples() > 0);
+    if (isSelected != previousSelection_[i])
+    {
+      changed = true;
+      previousSelection_[i] = isSelected;
+    }
+  }
+
+  if (!changed)
+    return;
+
+  QMap<QString, QColor> colors;
+  for (int i = 0; i < nbPlots; ++i)
+  {
+    vtkPlot* plot = chartXY_->GetPlot(i);
+    if (!plot) continue;
+
+    const QString seriesName = QString::fromStdString(plot->GetLabel());
+    if (seriesName.isEmpty()) continue;
+
+    if (previousSelection_[i])
+    {
+      colors[seriesName] = QColor(255, 0, 0);
+    }
+    else
+    {
+      colors[seriesName] = QColor(128, 128, 128);
+    }
+  }
+
+  setSerieColors(colors);
 }
 
 

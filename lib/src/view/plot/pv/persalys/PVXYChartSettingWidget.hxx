@@ -44,6 +44,7 @@ public:
 protected:
   void addXYAxisTabs();
   void addMarkerTab(const bool canChangeColor);
+  void onSelectionCountChanged(int count) override;
 
 public slots:
   void updateLineEdits();
