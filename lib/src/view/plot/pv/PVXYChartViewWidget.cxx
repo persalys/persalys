@@ -137,7 +137,16 @@ void PVXYChartViewWidget::showChart(const QString& varX, const QString& varY)
   // pair
   QPair<QString, QString> varPair(varX, varY);
   if (chartsTitle_.contains(varPair))
+  {
     chartXY_->SetTitle(chartsTitle_[varPair].toStdString());
+    // Also set the view proxy's ChartTitle property
+    vtkSMProperty* chartTitleProp = getView()->getProxy()->GetProperty("ChartTitle");
+    if (chartTitleProp)
+    {
+      vtkSMPropertyHelper(chartTitleProp).Set(chartsTitle_[varPair].toStdString().c_str());
+      getView()->getProxy()->UpdateProperty("ChartTitle");
+    }
+  }
   if (axisLabels_.contains(varX))
     chartXY_->GetAxis(vtkAxis::BOTTOM)->SetTitle(axisLabels_[varX].toStdString());
   if (axisLabels_.contains(varY))
@@ -242,9 +251,14 @@ void PVXYChartViewWidget::setChartTitle(const QString &title, const QString &var
   chartXY_->GetScene()->SetDirty(true);
   // chart title
   QPair<QString, QString> pair(varX, varY);
-  if (chartsTitle_.contains(pair))
-    chartsTitle_[pair] = title;
+  chartsTitle_[pair] = title;
   chartXY_->SetTitle(title.toStdString());
+  vtkSMProperty* chartTitleProp = getView()->getProxy()->GetProperty("ChartTitle");
+  if (chartTitleProp)
+  {
+    vtkSMPropertyHelper(chartTitleProp).Set(title.toStdString().c_str());
+    getView()->getProxy()->UpdateProperty("ChartTitle");
+  }
 }
 
 
