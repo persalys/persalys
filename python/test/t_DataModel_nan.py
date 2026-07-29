@@ -62,3 +62,8 @@ study.add(model_4)
 analysis_4 = persalys.DataAnalysis("analysis_4", model_4)
 study.add(analysis_4)
 analysis_4.run()
+
+study.save("DataModel_nan.xml")
+persalys.Study.Remove(study)
+study = persalys.Study.Open("DataModel_nan.xml")
+persalys.Study.Add(study)
