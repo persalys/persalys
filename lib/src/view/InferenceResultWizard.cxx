@@ -41,6 +41,8 @@ InferenceResultWizard::InferenceResultWizard(const Study& study, QWidget* parent
 {
   buildInterface();
   resize(1440, 900);
+  // below this size the PDF plot and the parameters table can overlap
+  setMinimumSize(900, 650);
 }
 
 

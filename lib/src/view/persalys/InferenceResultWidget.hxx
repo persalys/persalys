@@ -31,14 +31,14 @@
 #include "persalys/ParametersTableView.hxx"
 
 #include <QTabWidget>
-#include <QScrollArea>
 #include <QLabel>
+#include <QScrollArea>
 
 #include "persalys/QtTools.hxx" // for Q_DECLARE_METATYPE(OT::Distribution)
 
 namespace PERSALYS
 {
-class PERSALYS_VIEW_API InferenceResultWidget : public QScrollArea
+class PERSALYS_VIEW_API InferenceResultWidget : public QWidget
 {
   Q_OBJECT
 
@@ -66,6 +66,8 @@ private:
   FittingTestResult       currentFittingTestResult_;
   ExportableTableView     * distTableView_              = nullptr;
   CustomStandardItemModel * distTableModel_             = nullptr;
+  int                     distTableMaxWidth_            = 0;
+  QScrollArea             * leftScrollArea_             = nullptr;
   CopyableTableView       * distParamTableView_         = nullptr;
   CustomStandardItemModel * distParamTableModel_        = nullptr;
   DocumentationToolButton * infoButton_                 = nullptr;

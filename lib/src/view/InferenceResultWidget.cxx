@@ -38,6 +38,9 @@
 #include <QHeaderView>
 #include <QDesktopServices>
 #include <QLabel>
+#include <QScrollArea>
+#include <QScrollBar>
+#include <QTimer>
 
 using namespace OT;
 
@@ -45,7 +48,7 @@ namespace PERSALYS
 {
 
 InferenceResultWidget::InferenceResultWidget(const bool displayPDF_QQPlot, QWidget* parent)
-  : QScrollArea(parent)
+  : QWidget(parent)
   , displayPDF_QQPlot_(displayPDF_QQPlot)
 {
   buildInterface();
@@ -54,12 +57,19 @@ InferenceResultWidget::InferenceResultWidget(const bool displayPDF_QQPlot, QWidg
 
 void InferenceResultWidget::buildInterface()
 {
-  setWidgetResizable(true);
+  auto * mainLayout = new QHBoxLayout(this);
 
-  auto * mainWidget = new QWidget;
-  auto * mainLayout = new QHBoxLayout(mainWidget);
-  auto * leftLayout = new QVBoxLayout;
-  mainLayout->addLayout(leftLayout);
+  // only the left column (size/distributions table) scrolls: the tab widget
+  // with the graphs is added directly to mainLayout below, so it is never
+  // pushed down or clipped by an outer scrollbar
+  leftScrollArea_   = new QScrollArea;
+  auto * leftWidget = new QWidget;
+  auto * leftLayout = new QVBoxLayout(leftWidget);
+  leftScrollArea_->setWidgetResizable(true);
+  leftScrollArea_->setWidget(leftWidget);
+  // keep the left column at the width of its content (+ margin): all the
+  // extra horizontal space goes to the graphs on the right
+  leftScrollArea_->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Expanding);
 
   // -- sizes table
   auto * sizeGroupBox = new QGroupBox(tr("Sample size"));
@@ -76,7 +86,7 @@ void InferenceResultWidget::buildInterface()
   // --- table view
   distTableView_ = new ExportableTableView;
 
-  RadioButtonDelegate * delegate = new RadioButtonDelegate(2, distTableView_);
+  auto * delegate = new RadioButtonDelegate(2, distTableView_);
   distTableView_->setItemDelegateForColumn(0, delegate);
   distTableView_->setSelectionMode(QAbstractItemView::NoSelection);
   distTableView_->verticalHeader()->hide();
@@ -96,6 +106,8 @@ void InferenceResultWidget::buildInterface()
   leftLayout->addWidget(distGroupBox, 0, Qt::AlignLeft);
   leftLayout->addStretch();
 
+  mainLayout->addWidget(leftScrollArea_);
+
   // -- distribution parameters table
   // --- table view
   distParamTableView_ = new CopyableTableView;
@@ -114,11 +126,11 @@ void InferenceResultWidget::buildInterface()
   {
     tabWidget_ = new QTabWidget;
 
-    QScrollArea * scrollArea = new QScrollArea;
+    auto * scrollArea = new QScrollArea;
     scrollArea->setWidgetResizable(true);
 
     // tab PDF/CDF
-    ResizableStackedWidget * pdf_cdfStackedWidget = new ResizableStackedWidget;
+    auto * pdf_cdfStackedWidget = new ResizableStackedWidget;
 
     // --- pdf
     pdf_cdfStackedWidget->addWidget(pdfPlot_);
@@ -146,10 +158,10 @@ void InferenceResultWidget::buildInterface()
     // tab QQ plot
     scrollArea = new QScrollArea;
     scrollArea->setWidgetResizable(true);
-    WidgetBoundToDockWidget * plotWidget = new WidgetBoundToDockWidget(this);
-    QVBoxLayout * plotWidgetLayout = new QVBoxLayout(plotWidget);
+    auto * plotWidget = new WidgetBoundToDockWidget(this);
+    auto * plotWidgetLayout = new QVBoxLayout(plotWidget);
 
-    DocumentationToolButton * infoQQPlotButton = new DocumentationToolButton("theory/data_analysis/graphical_fitting_test.html", FileTools::docOT);
+    auto * infoQQPlotButton = new DocumentationToolButton("theory/data_analysis/graphical_fitting_test.html", FileTools::docOT);
     plotWidgetLayout->addWidget(infoQQPlotButton);
 
     // --- qq plot
@@ -160,7 +172,7 @@ void InferenceResultWidget::buildInterface()
     plotWidgetLayout->addWidget(qqPlotWarningLabel_, 1);
 
     // --- GraphConfigurationWidget
-    SimpleGraphSetting * qqPlotSettingWidget = new SimpleGraphSetting(qqPlot_, this);
+    auto * qqPlotSettingWidget = new SimpleGraphSetting(qqPlot_, this);
     qqPlotSettingWidget->hide();
     plotWidget->setDockWidget(qqPlotSettingWidget);
 
@@ -170,8 +182,8 @@ void InferenceResultWidget::buildInterface()
     // tab Parameters
     scrollArea = new QScrollArea;
     scrollArea->setWidgetResizable(true);
-    QWidget * paramWidget = new QWidget;
-    QVBoxLayout * paramGroupBoxLayout = new QVBoxLayout(paramWidget);
+    auto * paramWidget = new QWidget;
+    auto * paramGroupBoxLayout = new QVBoxLayout(paramWidget);
     paramGroupBoxLayout->addWidget(distParamTableView_);
     // button to open the OT documentation
     infoButton_ = new DocumentationToolButton("", FileTools::docOT);
@@ -184,20 +196,19 @@ void InferenceResultWidget::buildInterface()
     scrollArea->setWidget(paramWidget);
     tabWidget_->addTab(scrollArea, tr("Parameters"));
 
-    mainLayout->addWidget(tabWidget_);
+    mainLayout->addWidget(tabWidget_, 1);
   }
   else
   {
-    QGroupBox * paramGroupBox = new QGroupBox(tr("Distribution parameters"));
-    QVBoxLayout * paramGroupBoxLayout = new QVBoxLayout(paramGroupBox);
+    auto * paramGroupBox = new QGroupBox(tr("Distribution parameters"));
+    auto * paramGroupBoxLayout = new QVBoxLayout(paramGroupBox);
     paramGroupBoxLayout->addWidget(distParamTableView_);
     analysisErrorMessageLabel_ = new ErrorWidget;
     paramGroupBoxLayout->addWidget(analysisErrorMessageLabel_);
     paramGroupBoxLayout->addWidget(pdfPlot_);
     paramGroupBoxLayout->addStretch();
-    mainLayout->addWidget(paramGroupBox);
+    mainLayout->addWidget(paramGroupBox, 1);
   }
-  setWidget(mainWidget);
 }
 
 
@@ -296,7 +307,7 @@ void InferenceResultWidget::updateDistributionTable(const double level, const In
 
   // resize
   distTableView_->resizeColumnsToContents();
-  int titleWidth = distTableView_->horizontalHeader()->sectionSize(1);
+  int titleWidth = distTableView_->horizontalHeader()->sectionSize(2);
   // first: clear item at (0,2) because the text is too wide:
   // resizeColumnsToContents takes into account the text of item at (0,2)
   // to resize the column 2, even if there is a setSpan(0, 2, 1, 2)
@@ -305,16 +316,62 @@ void InferenceResultWidget::updateDistributionTable(const double level, const In
   const int section2Size = distTableView_->horizontalHeader()->sectionSize(2);
   distTableModel_->setNotEditableHeaderItem(0, 2, testName);
   distTableView_->setSpan(0, 2, 1, 2);
-  const int subTitlesWidth = distTableView_->horizontalHeader()->sectionSize(1) + distTableView_->horizontalHeader()->sectionSize(2);
+  const int subTitlesWidth = distTableView_->horizontalHeader()->sectionSize(2) + distTableView_->horizontalHeader()->sectionSize(3);
   const int widthCorrection = titleWidth - subTitlesWidth;
   if (widthCorrection > 0)
   {
-    // fix the table width
-    distTableView_->horizontalHeader()->resizeSection(2, distTableView_->horizontalHeader()->sectionSize(2) + widthCorrection);
-    distTableView_->setMinimumWidth(distTableView_->minimumWidth() + widthCorrection);
+    // fix the table width: grow the last spanned column (acceptation) so
+    // the test name header text is not truncated. Use setFixedWidth (not
+    // just setMinimumWidth) because resizeToContents() above already pinned
+    // minimum == maximum (via setFixedSize) to the narrower, uncorrected
+    // width: bumping only the minimum would conflict with that maximum.
+    distTableView_->horizontalHeader()->resizeSection(3, distTableView_->horizontalHeader()->sectionSize(3) + widthCorrection);
+    distTableView_->setFixedWidth(distTableView_->minimumWidth() + widthCorrection);
   }
   // fix wrong behavior on Windows
   distTableView_->horizontalHeader()->resizeSection(2, section2Size);
+
+  // keep the distributions table width stable across variables: never shrink
+  // below the widest table already displayed, so switching between variables
+  // doesn't repeatedly resize the left panel.
+  // Use horizontalHeader()->length() (sum of the actual section widths) rather
+  // than distTableView_->width(): the widget's width only reflects setFixedWidth()
+  // calls above once a layout pass has happened, whereas length() is updated
+  // synchronously by resizeSection() and is therefore reliable right away.
+  const int verticalHeaderWidth = distTableView_->verticalHeader()->isHidden() ? 0 : distTableView_->verticalHeader()->sizeHint().width();
+  const QMargins tableMargins(distTableView_->contentsMargins());
+  const int tableContentWidth = distTableView_->horizontalHeader()->length() + verticalHeaderWidth
+                                 + tableMargins.left() + tableMargins.right();
+  distTableMaxWidth_ = std::max(distTableMaxWidth_, tableContentWidth);
+  if (tableContentWidth < distTableMaxWidth_)
+  {
+    // grow the last column (Acceptation) to absorb the missing width,
+    // instead of leaving a blank gap to the right of the table
+    const int extra = distTableMaxWidth_ - tableContentWidth;
+    distTableView_->horizontalHeader()->resizeSection(3, distTableView_->horizontalHeader()->sectionSize(3) + extra);
+    distTableView_->setFixedWidth(distTableMaxWidth_);
+  }
+
+  // QScrollArea::sizeHint() is internally capped to a fixed maximum size,
+  // so it cannot be relied on (through the size policy) to grow the left
+  // panel to fit a wide table: its width must be set explicitly instead,
+  // otherwise the widest table ends up clipped behind a scrollbar.
+  // This is deferred to the next event loop iteration: right after the very
+  // first call, the contained widgets have not been shown/laid out yet and
+  // report an undersized sizeHint, which would wrongly freeze the panel
+  // width too small (subsequent calls would no longer be able to grow it,
+  // since the widest-width tracking above never shrinks it back).
+  QTimer::singleShot(0, this, [this]()
+  {
+    if (leftScrollArea_ && leftScrollArea_->widget())
+    {
+      const int requiredWidth = leftScrollArea_->widget()->sizeHint().width()
+                                 + 2 * leftScrollArea_->frameWidth()
+                                 + leftScrollArea_->verticalScrollBar()->sizeHint().width();
+      leftScrollArea_->setMinimumWidth(requiredWidth);
+      leftScrollArea_->setMaximumWidth(requiredWidth);
+    }
+  });
 }
 
 
