@@ -307,3 +307,12 @@ assert result_formis.getSimulationResult().getProbabilityEstimate() > 0.0
 # -------------------------------------------------------
 script = myStudy.getPythonScript()
 exec(script)
+
+# -------------------------------------------------------
+# 9. Save/Load Study round-trip
+# -------------------------------------------------------
+filename = "test_system_reliability_analysis.xml"
+myStudy.save(filename)
+persalys.Study.Remove(myStudy)
+myStudy = persalys.Study.Open(filename)
+persalys.Study.Add(myStudy)

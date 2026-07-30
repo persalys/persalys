@@ -35,7 +35,7 @@ namespace PERSALYS
 CLASSNAMEINIT(SimulationReliabilityResult)
 
 const static Factory<SimulationReliabilityResult> Factory_SimulationReliabilityResult;
-
+const static Factory<PersistentCollection<ProbabilitySimulationResult> > Factory_PersistentCollection_ProbabilitySimulationResult;
 
 /* Constructor with parameters */
 SimulationReliabilityResult::SimulationReliabilityResult(const ProbabilitySimulationResult& simulationResults,
