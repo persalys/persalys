@@ -358,12 +358,6 @@ void PhysicalModelDiagramItem::appendPhysicalModelItem()
 
 void PhysicalModelDiagramItem::appendProbabilisticModelItem()
 {
-  // check
-  if(String errorMessage; !DesignOfExperimentEvaluation::CanBeLaunched(errorMessage, physicalModel_))
-  {
-    emit showErrorMessageRequested(QString(errorMessage.c_str()));
-    return;
-  }
   // do nothing if the item already exists
   QModelIndexList listIndexes = model()->match(this->index(), Qt::UserRole, "ProbabilisticModelItem", 1, Qt::MatchRecursive);
   if (listIndexes.size() == 1 && listIndexes[0].parent() == this->index())
