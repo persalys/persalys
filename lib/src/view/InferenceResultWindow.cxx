@@ -45,21 +45,21 @@ InferenceResultWindow::InferenceResultWindow(AnalysisItem* item, QWidget * paren
 
 void InferenceResultWindow::buildInterface()
 {
-  QVBoxLayout * widgetLayout = new QVBoxLayout(this);
+  auto * widgetLayout = new QVBoxLayout(this);
 
   widgetLayout->addWidget(new TitleLabel(tr("Marginals inference"), "user_manual/graphical_interface/data_analysis/user_manual_data_analysis.html#marginalsinferenceresult"));
 
-  QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
+  auto * mainWidget = new QSplitter(Qt::Horizontal);
 
   // table variables
   QStringList variablesNames;
   for (UnsignedInteger i = 0; i < result_.getFittingTestResultCollection().getSize(); ++i)
     variablesNames << QString::fromUtf8(result_.getFittingTestResultCollection()[i].getVariableName().c_str());
 
-  QGroupBox * variablesGroupBox = new QGroupBox(tr("Variables"));
-  QVBoxLayout * variablesLayoutGroupBox = new QVBoxLayout(variablesGroupBox);
+  auto * variablesGroupBox = new QGroupBox(tr("Variables"));
+  auto * variablesLayoutGroupBox = new QVBoxLayout(variablesGroupBox);
 
-  VariablesListWidget * listVariables = new VariablesListWidget;
+  auto * listVariables = new VariablesListWidget;
   listVariables->addItems(variablesNames);
   connect(listVariables, SIGNAL(currentTextChanged(QString)), this, SLOT(updateInferenceResultWidget(QString)));
   variablesLayoutGroupBox->addWidget(listVariables);

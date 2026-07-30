@@ -32,7 +32,7 @@ class PERSALYS_VIEW_API WidgetBoundToDockWidget : public QWidget
   Q_OBJECT
 
 public:
-  WidgetBoundToDockWidget(QWidget* parent = 0);
+  explicit WidgetBoundToDockWidget(QWidget* parent = nullptr);
 
   WidgetBoundToDockWidget(QWidget *mainObject, QWidget *dockWidget, QWidget *parent);
 
@@ -52,7 +52,7 @@ signals:
   void hideDockWidgetRequested(QWidget*);
 
 private:
-  QWidget * dockWidget_;
+  QWidget * dockWidget_ = nullptr;
 };
 }
 #endif

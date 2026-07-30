@@ -31,9 +31,8 @@ namespace PERSALYS
 
 WidgetBoundToDockWidget::WidgetBoundToDockWidget(QWidget *parent)
   : QWidget(parent)
-  , dockWidget_(0)
 {
-  MainWidget * mainWidget = findMainWidgetInHierachy();
+  const MainWidget * mainWidget = findMainWidgetInHierachy();
   if (!mainWidget)
     LOGWARN("No main window found ! no graph settings will be displayed");
   else
@@ -47,7 +46,7 @@ WidgetBoundToDockWidget::WidgetBoundToDockWidget(QWidget *parent)
 WidgetBoundToDockWidget::WidgetBoundToDockWidget(QWidget *mainObject, QWidget *dockWidget, QWidget *parent)
   : WidgetBoundToDockWidget(parent)
 {
-  QVBoxLayout * widgetLayout = new QVBoxLayout(this);
+  auto * widgetLayout = new QVBoxLayout(this);
   widgetLayout->addWidget(mainObject);
   setDockWidget(dockWidget);
 }
@@ -58,12 +57,11 @@ MainWidget * WidgetBoundToDockWidget::findMainWidgetInHierachy()
   QObject * curPar(parent());
   while (curPar)
   {
-    MainWidget * isMW(qobject_cast<MainWidget *>(curPar));
-    if (isMW)
+    if (MainWidget * isMW(qobject_cast<MainWidget *>(curPar)); isMW)
       return isMW;
     curPar = curPar->parent();
   }
-  return 0;
+  return nullptr;
 }
 
 
