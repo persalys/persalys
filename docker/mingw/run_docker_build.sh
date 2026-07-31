@@ -24,9 +24,9 @@ make tests
 cp ${MOD_PREFIX}/bin/*.dll ${MOD_PREFIX}/Lib/site-packages/persalys/
 cp ${MINGW_PREFIX}/bin/*.dll ${MOD_PREFIX}/bin
 rm ${MOD_PREFIX}/bin/python*.dll && cp ${MINGW_PREFIX}/bin/python${PYMAJMIN}.dll ${MOD_PREFIX}/bin
+cp -r ${MINGW_PREFIX}/lib/qt6/plugins/{platforms,imageformats} lib/test
 OPENTURNS_NUM_THREADS=2 WINEPATH="${MINGW_PREFIX}/bin;${MOD_PREFIX}/bin" xvfb-run -s "-screen 0 1024x768x24" ctest --output-on-failure --timeout 200 ${MAKEFLAGS}
-
-cp -r ${MINGW_PREFIX}/lib/qt/plugins/{platforms,imageformats} ${MOD_PREFIX}/lib
+cp -r ${MINGW_PREFIX}/lib/qt6/plugins/{platforms,imageformats} ${MOD_PREFIX}/lib
 cp -rv ${MINGW_PREFIX}/bin/paraview*/plugins/BagPlotViewsAndFilters ${MOD_PREFIX}/bin
 cp /usr/${ARCH}-w64-mingw32/etc/openturns/openturns.conf ${MOD_PREFIX}/Lib/site-packages/persalys/
 VERSION=`cat /io/VERSION`
