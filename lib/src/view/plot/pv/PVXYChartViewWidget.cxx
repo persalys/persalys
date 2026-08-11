@@ -120,6 +120,9 @@ void PVXYChartViewWidget::setXAxisData(const QString& varX)
     getView()->getRepresentation(reprInd)->getProxy()->UpdateProperty("XArrayName");
   }
   chartXY_->GetAxis(vtkAxis::BOTTOM)->SetTitle(axisLabels_[varX].toStdString());
+
+  // set internal parameter to be able to update automatically the plot
+  chartXY_->GetScene()->SetDirty(true);
 }
 
 
