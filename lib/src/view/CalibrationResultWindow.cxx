@@ -58,36 +58,30 @@ CalibrationResultWindow::CalibrationResultWindow(AnalysisItem *item, QWidget *pa
   , result_()
   , observations_()
 {
-  const CalibrationAnalysis * analysis = dynamic_cast<const CalibrationAnalysis*>(item->getAnalysis().getImplementation().get());
+  const auto * analysis = dynamic_cast<const CalibrationAnalysis*>(item->getAnalysis().getImplementation().get());
   if (!analysis)
     throw InvalidArgumentException(HERE) << "CalibrationResultWindow: the analysis is not a CalibrationAnalysis";
 
-  result_ = analysis->getResult();
+  result_       = analysis->getResult();
   observations_ = analysis->getObservations();
 
   // parameters widget
-  setParameters(item->getAnalysis(), tr("Calibration parameters"));
-
-  // get variable names
-  const Description calibratedInputNames(analysis->getCalibratedInputs());
-  PhysicalModel model(observations_.getPhysicalModel());
-  QStringList calibratedInAxisTitles_(QtOT::GetVariableAxisLabels(model, calibratedInputNames));
+  ResultWindow::setParameters(item->getAnalysis(), tr("Calibration parameters"));
 
   // build window
-
-  QVBoxLayout * widgetLayout = new QVBoxLayout(this);
+  auto * widgetLayout = new QVBoxLayout(this);
 
   // title
   widgetLayout->addWidget(new TitleLabel(tr("Calibration"), "user_manual/graphical_interface/deterministic_analysis/user_manual_deterministic_analysis.html#calibrationresult"));
 
   // main splitter
-  QSplitter * mainWidget = new QSplitter(Qt::Horizontal);
+  auto * mainWidget = new QSplitter(Qt::Horizontal);
 
   // - list outputs
-  QGroupBox * outputsGroupBox = new QGroupBox(tr("Output"));
-  QVBoxLayout * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
+  auto * outputsGroupBox = new QGroupBox(tr("Output"));
+  auto * outputsLayoutGroupBox = new QVBoxLayout(outputsGroupBox);
 
-  VariablesListWidget * outputsListWidget = new VariablesListWidget;
+  auto * outputsListWidget = new VariablesListWidget;
   outputsListWidget->addItems(QtOT::DescriptionToStringList(observations_.getOutputSample().getDescription()));
   outputsListWidget->setCurrentRow(0);
   outputsLayoutGroupBox->addWidget(outputsListWidget);
@@ -95,28 +89,63 @@ CalibrationResultWindow::CalibrationResultWindow(AnalysisItem *item, QWidget *pa
   mainWidget->addWidget(outputsGroupBox);
   mainWidget->setStretchFactor(0, 1);
 
-  // tab widget
-  QTabWidget * tabWidget = new QTabWidget;
+  auto * tabWidget = new QTabWidget;
 
-  // first tab --------------------------------
-  QTabWidget * tabThetaWidget = new QTabWidget;
+  // tab: Theta --------------------------------------------
+  tabWidget->addTab(getThetaTabWidget(analysis), tr("θ"));
 
-  QWidget * tab = new QWidget;
-  QVBoxLayout * tabLayout = new QVBoxLayout(tab);
+  // tab: Prediction ---------------------------------------
+#ifdef PERSALYS_HAVE_PARAVIEW
+  if (SubWindow::SupportsOpenGL_3_2())
+  {
+    auto * predictionStackedWidget = new ResizableStackedWidget;
+    const UnsignedInteger nbOutput = observations_.getOutputSample().getDimension();
 
-  QScrollArea * scrollArea = new QScrollArea;
-  scrollArea->setWidgetResizable(true);
+    for (UnsignedInteger out = 0; out < nbOutput; ++out)
+      predictionStackedWidget->addWidget(getPredictionTabWidget(out));
+    
+    connect(outputsListWidget, SIGNAL(currentRowChanged(int)), predictionStackedWidget, SLOT(setCurrentIndex(int)));
+
+    tabWidget->addTab(predictionStackedWidget, tr("Prediction"));
+  }
+#endif
+
+  // tab : Parameters --------------------------------------
+  if (parametersWidget_)
+    tabWidget->addTab(parametersWidget_, tr("Parameters"));
+
+  // tab : model ---------- --------------------------------
+  if (modelDescriptionWidget_)
+    tabWidget->addTab(modelDescriptionWidget_, tr("Model"));
+
+  mainWidget->addWidget(tabWidget);
+  mainWidget->setStretchFactor(1, 10);
+
+  widgetLayout->addWidget(mainWidget, 1);
+}
+
+QTabWidget * CalibrationResultWindow::getThetaTabWidget(const CalibrationAnalysis * analysis)
+{
+  auto * thetaTabWidget = new QTabWidget;
+
+  // tab: Optimal -----------------------------------------
+  auto * optimalTab       = new QWidget;
+  auto * optimalTabLayout = new QVBoxLayout(optimalTab);
+
+  auto * optimalTabScrollArea = new QScrollArea;
+  optimalTabScrollArea->setWidgetResizable(true);
 
   // optimal value
-  QGroupBox * thetaGroupBox = new QGroupBox(tr("Optimal θ"));
-  QVBoxLayout * thetaGroupBoxLayout = new QVBoxLayout(thetaGroupBox);
+  auto * thetaGroupBox        = new QGroupBox(tr("Optimal θ"));
+  auto * thetaGroupBoxLayout  = new QVBoxLayout(thetaGroupBox);
 
   // table view
-  CopyableTableView * thetaTableView = new CopyableTableView;
+  auto * thetaTableView = new CopyableTableView;
   thetaTableView->verticalHeader()->hide();
+  
   // table model
-  const UnsignedInteger nbInputs = result_.getCalibrationResult().getParameterMAP().getSize();
-  CustomStandardItemModel * thetaTableModel = new CustomStandardItemModel(nbInputs, 3, thetaTableView);
+  const int nbInputs = (int) result_.getCalibrationResult().getParameterMAP().getSize();
+  auto * thetaTableModel = new CustomStandardItemModel(nbInputs, 3, thetaTableView);
   thetaTableView->setModel(thetaTableModel);
 
   // horizontal header
@@ -124,11 +153,11 @@ CalibrationResultWindow::CalibrationResultWindow(AnalysisItem *item, QWidget *pa
   thetaTableModel->setHorizontalHeaderLabels(QStringList() << tr("Input") << tr("Value") << tr("Confidence interval at") + " " + level + "%");
 
   // theta and confidence interval
-  for (UnsignedInteger i = 0; i < nbInputs; ++i)
+  for (int i = 0; i < nbInputs; ++i)
   {
     thetaTableModel->setNotEditableItem(i, 0, analysis->getCalibratedInputs()[i].c_str());
     thetaTableModel->setNotEditableItem(i, 1, result_.getCalibrationResult().getParameterMAP()[i]);
-    if (result_.getConfidenceInterval().getDimension() == nbInputs)
+    if ((int) result_.getConfidenceInterval().getDimension() == nbInputs)
       thetaTableModel->setNotEditableItem(i, 2, result_.getConfidenceInterval().getMarginal(i).__str__().c_str());
     else
       thetaTableModel->setNotEditableItem(i, 2, tr("Not available"));
@@ -138,34 +167,39 @@ CalibrationResultWindow::CalibrationResultWindow(AnalysisItem *item, QWidget *pa
   thetaTableView->resizeToContents();
 
   thetaGroupBoxLayout->addWidget(thetaTableView);
-  tabLayout->addWidget(thetaGroupBox, 0, Qt::AlignTop);
+  optimalTabLayout->addWidget(thetaGroupBox, 0, Qt::AlignTop);
 
   QString labelText = tr("Observation error standard deviation:")+"\n";
   labelText += QString("σ = ")
     + QString::number(result_.getCalibrationResult().getObservationsError().getStandardDeviation()[0]);
 
-  QLabel * label = new QLabel(labelText);
+  auto * label = new QLabel(labelText);
   label->setTextInteractionFlags(Qt::TextSelectableByMouse);
-  tabLayout->addWidget(label);
+  optimalTabLayout->addWidget(label);
 
-  tabLayout->addStretch();
-  scrollArea->setWidget(tab);
+  optimalTabLayout->addStretch();
+  optimalTabScrollArea->setWidget(optimalTab);
 
-  const GridLayout parameterDistributionsGraph(result_.getCalibrationResult().drawParameterDistributions());
+  thetaTabWidget->addTab(optimalTabScrollArea, tr("Optimal"));
 
-  tabThetaWidget->addTab(scrollArea, tr("Optimal"));
-  tabWidget->addTab(tabThetaWidget, "θ");
-
+  // tab: PDF -----------------------------------------
 #ifdef PERSALYS_HAVE_PARAVIEW
   if (SubWindow::SupportsOpenGL_3_2())
   {
-    // - PDF
-    PVXYChartViewWidget * pvWidget = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get(), PVXYChartViewWidget::Trajectories);
-    Sample pdfSamplePrior; // can not initialize size to DefaultPointNumber because of possible discrete distribution
-    Sample pdfSamplePosterior; // can not initialize size to DefaultPointNumber because of possible discrete distribution
+    // variable names
+    const Description calibratedInputNames(analysis->getCalibratedInputs());
+    PhysicalModel model(observations_.getPhysicalModel());
+    QStringList calibratedInAxisTitles_(QtOT::GetVariableAxisLabels(model, calibratedInputNames));
+
+    const GridLayout parameterDistributionsGraph(result_.getCalibrationResult().drawParameterDistributions());
+
+    auto * pvWidget = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get(), PVXYChartViewWidget::Trajectories);
+    Sample pdfSamplePrior;      // can not initialize size to DefaultPointNumber because of possible discrete distribution
+    Sample pdfSamplePosterior;  // can not initialize size to DefaultPointNumber because of possible discrete distribution
     Description sampleDescription;
     QStringList pdfNames;
-    for (UnsignedInteger i = 0; i < nbInputs; ++i)
+
+    for (int i = 0; i < nbInputs; ++i)
     {
       if (i == 0)
       {
@@ -188,11 +222,11 @@ CalibrationResultWindow::CalibrationResultWindow(AnalysisItem *item, QWidget *pa
     if(pdfSamplePrior.getSize() == 1)
     {
       pdfSamplePrior.add(pdfSamplePrior[0]);
-      for (UnsignedInteger i = 0; i < nbInputs; ++i)
+      for (int i = 0; i < nbInputs; ++i)
         pdfSamplePrior[1][2*i+1] = 0.1 * pdfSamplePosterior.getMarginal(2*i+1).getMax()[0];
     }
 
-    pvWidget->setData(pdfSamplePrior, QColor("#D55E00"));   // vermillion (Okabe-Ito)
+    pvWidget->setData(pdfSamplePrior, QColor("#D55E00"));     // vermillion (Okabe-Ito)
     pvWidget->setData(pdfSamplePosterior, QColor("#009E73")); // bluish-green (Okabe-Ito)
     if (result_.getCalibrationResult().isBayesian())
     {
@@ -204,7 +238,7 @@ CalibrationResultWindow::CalibrationResultWindow(AnalysisItem *item, QWidget *pa
       pvWidget->setRepresentationLabels(QVector<QString>(nbInputs * 2, tr("Initial")).toList(), 0);
       pvWidget->setRepresentationLabels(QVector<QString>(nbInputs * 2, tr("Calibrated")).toList(), 1);
     }
-    for (UnsignedInteger i = 0; i < nbInputs; ++i)
+    for (int i = 0; i < nbInputs; ++i)
     {
       const QString varX(calibratedInputNames[i].c_str());
       const QString varY((calibratedInputNames[i] + "pdf").c_str());
@@ -215,41 +249,18 @@ CalibrationResultWindow::CalibrationResultWindow(AnalysisItem *item, QWidget *pa
     pvWidget->setXAxisData(calibratedInputNames[0].c_str());
     pvWidget->setAxisToShow(Description(1, calibratedInputNames[0] + "pdf"));
 
-    MultiPDFSettingWidget * settingWidget = new MultiPDFSettingWidget(pvWidget, QtOT::DescriptionToStringList(calibratedInputNames), pdfNames);
+    auto * settingWidget = new MultiPDFSettingWidget(pvWidget, QtOT::DescriptionToStringList(calibratedInputNames), pdfNames);
 
-    tabThetaWidget->addTab(new WidgetBoundToDockWidget(pvWidget, settingWidget, this), tr("PDF"));
-
-    // tab : Prediction
-    ResizableStackedWidget * predictionStackedWidget = new ResizableStackedWidget;
-    // for each output
-    const UnsignedInteger nbOutput = observations_.getOutputSample().getDimension();
-    for (UnsignedInteger out = 0; out < nbOutput; ++out)
-    {
-      predictionStackedWidget->addWidget(getPredictionTabWidget(out));
-    }
-    connect(outputsListWidget, SIGNAL(currentRowChanged(int)), predictionStackedWidget, SLOT(setCurrentIndex(int)));
-    tabWidget->addTab(predictionStackedWidget, tr("Prediction"));
+    thetaTabWidget->addTab(new WidgetBoundToDockWidget(pvWidget, settingWidget, this), tr("PDF"));
   }
 #endif
 
-  // tab : PARAMETERS --------------------------------
-  if (parametersWidget_)
-    tabWidget->addTab(parametersWidget_, tr("Parameters"));
-
-  // tab : model description --------------------------------
-  if (modelDescriptionWidget_)
-    tabWidget->addTab(modelDescriptionWidget_, tr("Model"));
-
-  mainWidget->addWidget(tabWidget);
-  mainWidget->setStretchFactor(1, 10);
-
-  widgetLayout->addWidget(mainWidget, 1);
+  return thetaTabWidget;
 }
-
 
 QTabWidget * CalibrationResultWindow::getPredictionTabWidget(const UnsignedInteger i)
 {
-  QTabWidget * predTabWidget = new QTabWidget;
+  auto * predTabWidget = new QTabWidget;
   (void)i;
 #ifdef PERSALYS_HAVE_PARAVIEW
 
@@ -304,11 +315,11 @@ QTabWidget * CalibrationResultWindow::getPredictionTabWidget(const UnsignedInteg
   pqLinksModel * linksModel = pqApplicationCore::instance()->getLinksModel();
 
   // - table
-  PVSpreadSheetViewWidget * pvSpreadSheetWidget = new PVSpreadSheetViewWidget(this, PVServerManagerSingleton::Get());
+  auto * pvSpreadSheetWidget = new PVSpreadSheetViewWidget(this, PVServerManagerSingleton::Get());
   predTabWidget->addTab(PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(pvSpreadSheetWidget, sample, getItem()), tr("Table"));
 
   // - predictions vs observations
-  PVXYChartViewWidget * pvWidget = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get(), PVXYChartViewWidget::TrajectoriesPoints);
+  auto * pvWidget = new PVXYChartViewWidget(this, PVServerManagerSingleton::Get(), PVXYChartViewWidget::TrajectoriesPoints);
 
   pvWidget->PVViewWidget::setData(outputSamples);
   pvWidget->setSerieColors(Colors_);
@@ -320,7 +331,7 @@ QTabWidget * CalibrationResultWindow::getPredictionTabWidget(const UnsignedInteg
   pvWidget->setAxisTitle(vtkAxis::LEFT, tr("Predictions"));
   pvWidget->getLegend()->SetHorizontalAlignment(vtkChartLegend::LEFT);
 
-  TrajectoriesSettingWidget * chartSetting = new TrajectoriesSettingWidget(pvWidget, labels, this);
+  auto * chartSetting = new TrajectoriesSettingWidget(pvWidget, labels, this);
 
   // There are selection behavior errors if windows use the same links names: a link name must be unique.
   // The pointers are uniques, so we use them to create an unique name...find a better and easier way.
@@ -382,11 +393,11 @@ QTabWidget * CalibrationResultWindow::getPredictionTabWidget(const UnsignedInteg
 
   chartSetting = new TrajectoriesSettingWidget(pvWidget, labels, this);
 
-  QWidget *residualsTab = new QWidget;
-  QVBoxLayout *residualsLayout = new QVBoxLayout(residualsTab);
+  auto * residualsTab   = new QWidget;
+  auto *residualsLayout = new QVBoxLayout(residualsTab);
 
-  QWidget *graphContainer = new QWidget;
-  QVBoxLayout *graphLayout = new QVBoxLayout(graphContainer);
+  auto *graphContainer  = new QWidget;
+  auto *graphLayout     = new QVBoxLayout(graphContainer);
   graphLayout->setContentsMargins(0, 0, 0, 0);
   graphLayout->addWidget(new WidgetBoundToDockWidget(pvWidget, chartSetting, this));
   graphContainer->setLayout(graphLayout);
@@ -394,7 +405,7 @@ QTabWidget * CalibrationResultWindow::getPredictionTabWidget(const UnsignedInteg
 
   const double std = result_.getCalibrationResult().getObservationsError().getStandardDeviation()[i];
   QString stdLabel = tr("Residuals standard deviation (assuming gaussian distribution): σ = %1").arg(std);
-  QLabel * stdLabelWidget = new QLabel(stdLabel);
+  auto * stdLabelWidget = new QLabel(stdLabel);
   residualsLayout->addWidget(stdLabelWidget);
 
   predTabWidget->addTab(residualsTab, tr("Residuals"));
@@ -402,8 +413,8 @@ QTabWidget * CalibrationResultWindow::getPredictionTabWidget(const UnsignedInteg
   // - residuals QQ-plot
 
   Graph qqPlotGraph(result_.getCalibrationResult().drawResidualsNormalPlot().getGraph(0, i));
-  PlotWidget * qqPlot = new PlotWidget(tr("qqPlot"));
-  SimpleGraphSetting * qqPlotSettingWidget = new SimpleGraphSetting(qqPlot, this);
+  auto * qqPlot = new PlotWidget(tr("qqPlot"));
+  auto * qqPlotSettingWidget = new SimpleGraphSetting(qqPlot, this);
   qqPlotSettingWidget->hide();
   qqPlot->plotCurve(qqPlotGraph.getDrawable(1).getData(), QPen(QColor("#0072B2"), 5), QwtPlotCurve::Dots);
   qqPlot->plotCurve(qqPlotGraph.getDrawable(0).getData(), QPen(QColor("#D55E00"), 1, Qt::DashDotLine));
@@ -417,4 +428,5 @@ QTabWidget * CalibrationResultWindow::getPredictionTabWidget(const UnsignedInteg
 
   return predTabWidget;
 }
+
 }
