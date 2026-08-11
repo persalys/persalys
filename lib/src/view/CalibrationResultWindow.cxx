@@ -121,6 +121,12 @@ CalibrationResultWindow::CalibrationResultWindow(AnalysisItem *item, QWidget *pa
   mainWidget->addWidget(tabWidget);
   mainWidget->setStretchFactor(1, 10);
 
+  // hide output column when not on Prediction tab (output selection is only used in Prediction subtabs)
+  outputsGroupBox->setVisible(false);
+  connect(tabWidget, &QTabWidget::currentChanged, this, [outputsGroupBox, tabWidget](int index) {
+    outputsGroupBox->setVisible(tabWidget->tabText(index) == tr("Prediction"));
+  });
+
   widgetLayout->addWidget(mainWidget, 1);
 }
 
