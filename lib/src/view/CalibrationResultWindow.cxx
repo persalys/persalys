@@ -40,6 +40,7 @@
 #endif
 
 #include <openturns/KernelSmoothing.hxx>
+#include <openturns/NormalityTest.hxx>
 #include <openturns/ResourceMap.hxx>
 
 #include <QVBoxLayout>
@@ -175,13 +176,68 @@ QTabWidget * CalibrationResultWindow::getThetaTabWidget(const CalibrationAnalysi
   thetaGroupBoxLayout->addWidget(thetaTableView);
   optimalTabLayout->addWidget(thetaGroupBox, 0, Qt::AlignTop);
 
-  QString labelText = tr("Observation error standard deviation:")+"\n";
-  labelText += QString("σ = ")
-    + QString::number(result_.getCalibrationResult().getObservationsError().getStandardDeviation()[0]);
+  // residual results table
+  const bool isBayesian = result_.getCalibrationResult().isBayesian();
+  const UnsignedInteger nbOutput = observations_.getOutputSample().getDimension();
+  const int nbResidualCols = isBayesian ? 8 : 4;
 
-  auto * label = new QLabel(labelText);
-  label->setTextInteractionFlags(Qt::TextSelectableByMouse);
-  optimalTabLayout->addWidget(label);
+  auto * residualsGroupBox = new QGroupBox(tr("Residual results"));
+  auto * residualsGroupBoxLayout = new QVBoxLayout(residualsGroupBox);
+
+  auto * residualsTableView = new CopyableTableView;
+  residualsTableView->verticalHeader()->hide();
+
+  auto * residualsTableModel = new CustomStandardItemModel(nbOutput, nbResidualCols, residualsTableView);
+  residualsTableView->setModel(residualsTableModel);
+
+  if (isBayesian)
+    residualsTableModel->setHorizontalHeaderLabels(QStringList() << tr("Output")
+      << tr("σ(observations)") << tr("σ(residuals initial)") << tr("σ(residuals calibrated)")
+      << tr("CvM normality (calibrated)") << tr("CvM p-value")
+      << tr("RMSE initial") << tr("RMSE calibrated"));
+  else
+    residualsTableModel->setHorizontalHeaderLabels(QStringList() << tr("Output")
+      << tr("σ(observations)") << tr("σ(residuals)")
+      << tr("RMSE"));
+
+  for (UnsignedInteger out = 0; out < nbOutput; ++out)
+  {
+    const Sample outputObs(observations_.getOutputSample().getMarginal(out));
+    const Sample priorPred(result_.getCalibrationResult().getOutputAtPriorMean().getMarginal(out));
+    const Sample priorResiduals(outputObs - priorPred);
+
+    const double obsStd = result_.getCalibrationResult().getObservationsError().getStandardDeviation()[out];
+    const double priorResidualStd = priorResiduals.computeStandardDeviation()[0];
+    const double priorRMSE = std::sqrt(priorResiduals.computeRawMoment(2)[0]);
+
+    residualsTableModel->setNotEditableItem(out, 0, observations_.getOutputSample().getDescription()[out].c_str());
+    residualsTableModel->setNotEditableItem(out, 1, obsStd);
+
+    if (isBayesian)
+    {
+      const Sample postPred(result_.getCalibrationResult().getOutputAtPosteriorMean().getMarginal(out));
+      const Sample postResiduals(outputObs - postPred);
+      const double postResidualStd = postResiduals.computeStandardDeviation()[0];
+      const TestResult postCvM(NormalityTest::CramerVonMisesNormal(postResiduals, 0.05));
+      const double postRMSE = std::sqrt(postResiduals.computeRawMoment(2)[0]);
+
+      residualsTableModel->setNotEditableItem(out, 2, priorResidualStd);
+      residualsTableModel->setNotEditableItem(out, 3, postResidualStd);
+      residualsTableModel->setNotEditableItem(out, 4, postCvM.getBinaryQualityMeasure() ? tr("True") : tr("False"));
+      residualsTableModel->setNotEditableItem(out, 5, postCvM.getPValue());
+      residualsTableModel->setNotEditableItem(out, 6, priorRMSE);
+      residualsTableModel->setNotEditableItem(out, 7, postRMSE);
+    }
+    else
+    {
+      residualsTableModel->setNotEditableItem(out, 2, priorResidualStd);
+      residualsTableModel->setNotEditableItem(out, 3, priorRMSE);
+    }
+  }
+
+  residualsTableView->resizeToContents();
+  residualsGroupBoxLayout->addWidget(residualsTableView);
+  optimalTabLayout->addWidget(residualsGroupBox, 0, Qt::AlignTop);
 
   optimalTabLayout->addStretch();
   optimalTabScrollArea->setWidget(optimalTab);
