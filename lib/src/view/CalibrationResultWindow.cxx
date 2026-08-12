@@ -465,10 +465,25 @@ QTabWidget * CalibrationResultWindow::getPredictionTabWidget(const UnsignedInteg
   graphContainer->setLayout(graphLayout);
   residualsLayout->addWidget(graphContainer, 1);
 
-  const double std = result_.getCalibrationResult().getObservationsError().getStandardDeviation()[i];
-  QString stdLabel = tr("Residuals standard deviation (assuming gaussian distribution): σ = %1").arg(std);
-  auto * stdLabelWidget = new QLabel(stdLabel);
-  residualsLayout->addWidget(stdLabelWidget);
+  if (result_.getCalibrationResult().isBayesian())
+  {
+    const Sample priorResiduals(outputObs - result_.getCalibrationResult().getOutputAtPriorMean().getMarginal(i));
+    const double priorStd = priorResiduals.computeStandardDeviation()[0];
+    const Sample postResiduals(outputObs - result_.getCalibrationResult().getOutputAtPosteriorMean().getMarginal(i));
+    const double postStd = postResiduals.computeStandardDeviation()[0];
+
+    QString stdLabel = tr("Residuals standard deviation (initial): σ = %1").arg(priorStd) + "\n"
+                     + tr("Residuals standard deviation (calibrated): σ = %1").arg(postStd);
+    auto * stdLabelWidget = new QLabel(stdLabel);
+    residualsLayout->addWidget(stdLabelWidget);
+  }
+  else
+  {
+    const double std = result_.getCalibrationResult().getObservationsError().getStandardDeviation()[i];
+    QString stdLabel = tr("Residuals standard deviation (assuming gaussian distribution): σ = %1").arg(std);
+    auto * stdLabelWidget = new QLabel(stdLabel);
+    residualsLayout->addWidget(stdLabelWidget);
+  }
 
   predTabWidget->addTab(residualsTab, tr("Residuals"));
 
