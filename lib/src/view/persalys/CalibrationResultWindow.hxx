@@ -35,6 +35,8 @@ public:
   explicit CalibrationResultWindow(AnalysisItem *item, QWidget *parent = nullptr);
 
 protected:
+  /** Whether the predictions at the prior/posterior mean are available */
+  bool hasPredictions() const;
   QTabWidget * getThetaTabWidget(const CalibrationAnalysis * analysis);
   QTabWidget * getPredictionTabWidget(const OT::UnsignedInteger i);
 

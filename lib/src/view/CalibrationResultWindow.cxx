@@ -97,7 +97,7 @@ CalibrationResultWindow::CalibrationResultWindow(AnalysisItem *item, QWidget *pa
 
   // tab: Prediction ---------------------------------------
 #ifdef PERSALYS_HAVE_PARAVIEW
-  if (SubWindow::SupportsOpenGL_3_2())
+  if (SubWindow::SupportsOpenGL_3_2() && hasPredictions())
   {
     auto * predictionStackedWidget = new ResizableStackedWidget;
     const UnsignedInteger nbOutput = observations_.getOutputSample().getDimension();
@@ -130,6 +130,15 @@ CalibrationResultWindow::CalibrationResultWindow(AnalysisItem *item, QWidget *pa
 
   widgetLayout->addWidget(mainWidget, 1);
 }
+
+/* The predictions at the prior/posterior mean are not available in studies
+   created with old versions of the application */
+bool CalibrationResultWindow::hasPredictions() const
+{
+  const UnsignedInteger obsSize = observations_.getOutputSample().getSize();
+  return result_.getCalibrationResult().getOutputAtPriorMean().getSize() == obsSize;
+}
+
 
 QTabWidget * CalibrationResultWindow::getThetaTabWidget(const CalibrationAnalysis * analysis)
 {
@@ -179,7 +188,8 @@ QTabWidget * CalibrationResultWindow::getThetaTabWidget(const CalibrationAnalysi
   // residual results table
   const bool isBayesian = result_.getCalibrationResult().isBayesian();
   const UnsignedInteger nbOutput = observations_.getOutputSample().getDimension();
-  const int nbResidualCols = isBayesian ? 8 : 4;
+  const bool hasPosteriorPred = isBayesian && result_.getCalibrationResult().getOutputAtPosteriorMean().getSize() == observations_.getOutputSample().getSize();
+  const int nbResidualCols = hasPosteriorPred ? 8 : 4;
 
   auto * residualsGroupBox = new QGroupBox(tr("Residual results"));
   auto * residualsGroupBoxLayout = new QVBoxLayout(residualsGroupBox);
@@ -190,7 +200,7 @@ QTabWidget * CalibrationResultWindow::getThetaTabWidget(const CalibrationAnalysi
   auto * residualsTableModel = new CustomStandardItemModel(nbOutput, nbResidualCols, residualsTableView);
   residualsTableView->setModel(residualsTableModel);
 
-  if (isBayesian)
+  if (hasPosteriorPred)
     residualsTableModel->setHorizontalHeaderLabels(QStringList() << tr("Output")
       << tr("σ(observations)") << tr("σ(residuals initial)") << tr("σ(residuals calibrated)")
       << tr("CvM normality (calibrated)") << tr("CvM p-value")
@@ -203,17 +213,26 @@ QTabWidget * CalibrationResultWindow::getThetaTabWidget(const CalibrationAnalysi
   for (UnsignedInteger out = 0; out < nbOutput; ++out)
   {
     const Sample outputObs(observations_.getOutputSample().getMarginal(out));
-    const Sample priorPred(result_.getCalibrationResult().getOutputAtPriorMean().getMarginal(out));
-    const Sample priorResiduals(outputObs - priorPred);
 
     const double obsStd = result_.getCalibrationResult().getObservationsError().getStandardDeviation()[out];
-    const double priorResidualStd = priorResiduals.computeStandardDeviation()[0];
-    const double priorRMSE = std::sqrt(priorResiduals.computeRawMoment(2)[0]);
 
     residualsTableModel->setNotEditableItem(out, 0, observations_.getOutputSample().getDescription()[out].c_str());
     residualsTableModel->setNotEditableItem(out, 1, obsStd);
 
-    if (isBayesian)
+    if (!hasPredictions())
+    {
+      // the predictions are not available: the residuals can not be computed
+      for (int col = 2; col < nbResidualCols; ++col)
+        residualsTableModel->setNotEditableItem(out, col, tr("Not available"));
+      continue;
+    }
+
+    const Sample priorPred(result_.getCalibrationResult().getOutputAtPriorMean().getMarginal(out));
+    const Sample priorResiduals(outputObs - priorPred);
+    const double priorResidualStd = priorResiduals.computeStandardDeviation()[0];
+    const double priorRMSE = std::sqrt(priorResiduals.computeRawMoment(2)[0]);
+
+    if (hasPosteriorPred)
     {
       const Sample postPred(result_.getCalibrationResult().getOutputAtPosteriorMean().getMarginal(out));
       const Sample postResiduals(outputObs - postPred);
@@ -465,7 +484,7 @@ QTabWidget * CalibrationResultWindow::getPredictionTabWidget(const UnsignedInteg
   graphContainer->setLayout(graphLayout);
   residualsLayout->addWidget(graphContainer, 1);
 
-  if (result_.getCalibrationResult().isBayesian())
+  if (result_.getCalibrationResult().isBayesian() && result_.getCalibrationResult().getOutputAtPosteriorMean().getSize() == outputObs.getSize())
   {
     const Sample priorResiduals(outputObs - result_.getCalibrationResult().getOutputAtPriorMean().getMarginal(i));
     const double priorStd = priorResiduals.computeStandardDeviation()[0];
