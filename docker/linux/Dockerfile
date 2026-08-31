@@ -20,14 +20,15 @@ WORKDIR /usr/local/src
 RUN curl -fsSL https://ftp.gnu.org/gnu/bison/bison-3.8.2.tar.gz | tar xz && cd bison* && ./configure && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r bison*
 
 # swig
-RUN curl -fsSL https://github.com/swig/swig/archive/v4.4.1.tar.gz | tar xz && cd swig* \
+RUN curl -fsSL https://github.com/swig/swig/archive/v4.5.0.tar.gz | tar xz && cd swig* \
+ && sed -i "s|10.39|10.32|g" CMakeLists.txt \
  && cmake . && make install > /dev/null 2>&1 && swig -version && cd - && rm -r swig*
 
 # ipopt
 RUN curl -fsSL https://github.com/KarypisLab/GKlib/archive/refs/tags/METIS-v5.1.1-DistDGL-0.5.tar.gz | tar xz && cd GKlib* && curl -L https://github.com/KarypisLab/GKlib/commit/33b8c8bb.patch | patch -p1 && sed -i "s|march=native|march=nocona|g" GKlibSystem.cmake && cmake -DBUILD_SHARED_LIBS=ON . && make install > /dev/null 2>&1 && cd - && rm -r GKlib*
 RUN curl -fsSL https://github.com/KarypisLab/METIS/archive/v5.2.1.tar.gz | tar xz && cd METIS-5.2.1 && mkdir -p build/xinclude && sed -i "s|//#define IDXTYPEWIDTH 32|#define IDXTYPEWIDTH 32|g" include/metis.h && sed -i "s|//#define REALTYPEWIDTH 32|#define REALTYPEWIDTH 64|g" include/metis.h && cp include/metis.h include/CMakeLists.txt build/xinclude && echo "target_link_libraries(metis GKlib)" >> libmetis/CMakeLists.txt && sed -i "s|march=native|march=nocona|g" conf/gkbuild.cmake && cmake -DSHARED=ON . && make install > /dev/null 2>&1 && cd - && rm -r METIS*
 RUN curl -fsSL https://github.com/coin-or-tools/ThirdParty-Mumps/archive/releases/3.0.11.tar.gz | tar xz && cd ThirdParty-Mumps* && ./get.Mumps && FFLAGS="-O2 -fallow-argument-mismatch" ./configure --prefix=/usr/local && make -j1 > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r ThirdParty*
-RUN curl -fsSL https://github.com/coin-or/Ipopt/archive/releases/3.14.19.tar.gz | tar xz && cd Ipopt* && ./configure --prefix=/usr/local --without-hsl --disable-java && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Ipopt*
+RUN curl -fsSL https://github.com/coin-or/Ipopt/archive/releases/3.14.20.tar.gz | tar xz && cd Ipopt* && ./configure --prefix=/usr/local --without-hsl --disable-java && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r Ipopt*
 
 # bonmin
 RUN curl -fsSL https://github.com/coin-or/CoinUtils/archive/refs/tags/releases/2.11.13.tar.gz | tar xz && cd CoinUtils* && ./configure --prefix=/usr/local --with-blas-lib='-lblas' --with-lapack-lib='-llapack' --enable-dependency-linking && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r CoinUtils*
@@ -42,7 +43,7 @@ RUN curl -fsSL https://github.com/davisking/dlib/archive/v20.0.tar.gz | tar xz &
  && cmake -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=Release -B build . && cd build && make install > /dev/null 2>&1 && cd ../.. && rm -r dlib*
 
 # cminpack
-RUN curl -fsSL https://github.com/devernay/cminpack/archive/v1.3.11.tar.gz | tar xz && cd cminpack* \
+RUN curl -fsSL https://github.com/devernay/cminpack/archive/v1.3.14.tar.gz | tar xz && cd cminpack* \
  && cmake -DCMINPACK_LIB_INSTALL_DIR=lib -DBUILD_SHARED_LIBS=ON -DBUILD_EXAMPLES=OFF -DCMINPACK_PRECISION=d -DUSE_BLAS=OFF . && make install > /dev/null 2>&1 && cd - && rm -r cminpack*
 
 # nlopt
@@ -71,10 +72,10 @@ RUN curl -fsSL https://github.com/ceres-solver/ceres-solver/archive/2.2.0.tar.gz
  && make install > /dev/null 2>&1 && cd - && rm -r ceres*
 
 # tbb
-RUN curl -fsSL https://github.com/oneapi-src/oneTBB/archive/refs/tags/v2023.0.0.tar.gz | tar xz && cd oneTBB* && cmake -DTBB_TEST=OFF -DTBB_FILE_TRIM=OFF . && make install > /dev/null 2>&1 && cd - && rm -r oneTBB*
+RUN curl -fsSL https://github.com/oneapi-src/oneTBB/archive/refs/tags/v2023.1.0.tar.gz | tar xz && cd oneTBB* && cmake -DTBB_TEST=OFF -DTBB_FILE_TRIM=OFF . && make install > /dev/null 2>&1 && cd - && rm -r oneTBB*
 
 # primesieve
-RUN curl -fsSL https://github.com/kimwalisch/primesieve/archive/v12.14.tar.gz | tar xz && cd primesieve* && cmake -DBUILD_STATIC_LIBS=OFF -DWITH_MULTIARCH=OFF -DBUILD_PRIMESIEVE=OFF . && make install > /dev/null 2>&1 && cd - && rm -r primesieve*
+RUN curl -fsSL https://github.com/kimwalisch/primesieve/archive/v12.15.tar.gz | tar xz && cd primesieve* && cmake -DBUILD_STATIC_LIBS=OFF -DWITH_MULTIARCH=OFF -DBUILD_PRIMESIEVE=OFF . && make install > /dev/null 2>&1 && cd - && rm -r primesieve*
 
 # appimagetool
 RUN wget -q https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage -O appimagetool-x86_64.AppImage \
@@ -87,25 +88,25 @@ RUN curl -fsSL https://www.openssl.org/source/openssl-3.6.0.tar.gz | tar xz && c
  && ./config no-shared -fPIC --prefix=/opt/ssl && make depend > /dev/null 2>&1 && make > /dev/null 2>&1 && make install_sw > /dev/null 2>&1 && cd - && rm -r openssl*
 
 # libffi
-RUN curl -fsSL https://github.com/libffi/libffi/releases/download/v3.4.6/libffi-3.4.6.tar.gz | tar xz && cd libffi* \
+RUN curl -fsSL https://github.com/libffi/libffi/releases/download/v3.8.0/libffi-3.8.0.tar.gz | tar xz && cd libffi* \
  && CFLAGS="-fPIC" ./configure --disable-shared --disable-multi-os-directory --prefix=/opt/ffi && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r libffi*
 
 # python
-RUN curl -fsSL https://www.python.org/ftp/python/3.14.4/Python-3.14.4.tgz | tar xz && cd Python* \
+RUN curl -fsSL https://www.python.org/ftp/python/3.14.7/Python-3.14.7.tgz | tar xz && cd Python* \
  && ./configure --enable-shared --enable-optimizations PKG_CONFIG_PATH=/opt/ffi/lib/pkgconfig/:/opt/ssl/lib64/pkgconfig/ LDFLAGS="-Wl,-rpath /usr/local/lib -L/opt/ssl/lib64 -L/opt/ffi/lib" && make > /dev/null 2>&1 && make install > /dev/null 2>&1 \
  && python3 -V && python3 -c "import ssl; import ctypes" && cd - && rm -r Python*
 
 # pip
-RUN pip3 install "numpy<2.5" "scipy<1.18" matplotlib ipython sphinx numpydoc dill meson flake8 doc8 openpyxl cython setuptools paramiko --upgrade --quiet
+RUN pip3 install "numpy<2.6" "scipy<1.19" matplotlib ipython sphinx numpydoc dill meson flake8 doc8 openpyxl cython setuptools paramiko --upgrade --quiet
 
 # superlu
-RUN git clone -b v4.0.1 --depth 1 https://github.com/xiaoyeli/superlu_mt.git && cd superlu_mt \
+RUN git clone -b v4.0.2 --depth 1 https://github.com/xiaoyeli/superlu_mt.git && cd superlu_mt \
  && cmake -DPLAT="_OPENMP" -DBUILD_SHARED_LIBS=OFF -Denable_tests=OFF -Denable_examples=OFF \
     -DCMAKE_INSTALL_LIBDIR=lib -DSUPERLUMT_INSTALL_INCLUDEDIR=include . \
  && make install > /dev/null 2>&1 && cd - && rm -r superlu_mt
 
 # sundials
-RUN curl -fsSL https://github.com/LLNL/sundials/archive/v7.7.0.tar.gz | tar xz && cd sundials* \
+RUN curl -fsSL https://github.com/LLNL/sundials/archive/v7.9.0.tar.gz | tar xz && cd sundials* \
  && cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=ON -DBUILD_STATIC_LIBS=OFF -DSUNDIALS_ENABLE_C_EXAMPLES=OFF \
     -DSUNDIALS_ENABLE_LAPACK=ON -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON -DSUNDIALS_INDEX_SIZE=32 -DCMAKE_INSTALL_LIBDIR=lib \
     -DSUNDIALS_ENABLE_SUPERLUMT=ON -DSUPERLUMT_THREAD_TYPE=OPENMP -DSUPERLUMT_INCLUDE_DIR="/usr/local/include" \
@@ -120,13 +121,13 @@ RUN curl -fsSL https://github.com/modelon-community/fmi-library/archive/3.0.4.ta
  && make install -C build > /dev/null 2>&1 && cd - && rm -r fmi*
 
 # assimulo
-RUN curl -fsSL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.7.3.tar.gz | tar xz && cd Assimulo* \
+RUN curl -fsSL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.8.0.tar.gz | tar xz && cd Assimulo* \
  && sed -i "s|blas_OPENMP|blas|g" setup.py \
  && python3 setup.py install --sundials-home=/usr/local --lapack-home=/usr/lib64 --blas-home=/usr/lib64 --superlu-home=/usr/local > /dev/null 2>&1 \
  && cd - && python3 -c "import assimulo; import assimulo.solvers" && rm -r Assimulo*
 
 # pyfmi
-RUN curl -fsSL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.21.0.tar.gz | tar xz && cd PyFMI* \
+RUN curl -fsSL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.22.0.tar.gz | tar xz && cd PyFMI* \
  && python3 setup.py install --fmil-home=/usr/local > /dev/null 2>&1 && cd - && python3 -c "import pyfmi" && rm -r PyFMI*
 
 # libbacktrace
@@ -134,7 +135,7 @@ RUN git clone --depth 1 https://github.com/ianlancetaylor/libbacktrace.git && cd
  && autoreconf -fi && ./configure --enable-shared --disable-static && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r libbacktrace*
 
 # boost
-RUN curl -fsSL https://archives.boost.io/release/1.91.0/source/boost_1_91_0.tar.bz2 | tar xj && cd boost* \
+RUN curl -fsSL https://archives.boost.io/release/1.92.0/source/boost_1_92_0.tar.bz2 | tar xj && cd boost* \
  && ./bootstrap.sh --with-toolset=gcc --with-icu --with-python=/usr/local/bin/python3 \
  && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system ${MAKEFLAGS} install --with-graph --with-chrono --with-serialization --with-program_options --with-filesystem --with-regex > /dev/null 2>&1 && cd - && rm -r boost*
 
@@ -170,7 +171,7 @@ RUN curl -fsSL https://paraview.org/files/v6.1/ParaView-v6.1.1.tar.xz | tar xJ &
  && make install -C build > /dev/null 2>&1 && cd - && rm -r ParaView*
 
 # openturns
-RUN git clone -b v1.27.1 --depth 1 https://github.com/openturns/openturns.git && cd openturns \
+RUN git clone -b v1.27.3 --depth 1 https://github.com/openturns/openturns.git && cd openturns \
  && cmake -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 \
     -DPython_EXECUTABLE=/usr/local/bin/python3 -DCMAKE_INSTALL_LIBDIR=lib . \
  && make install > /dev/null 2>&1 && cd - && rm -r openturns*
@@ -181,7 +182,7 @@ RUN git clone -b v0.20 --depth 1 https://github.com/openturns/otmorris.git && cd
  && make install > /dev/null 2>&1 && cd - && rm -r otmorris*
 
 # otfmi
-RUN pip3 install git+https://github.com/openturns/otfmi@v0.18 --quiet && python3 -c "import otfmi"
+RUN pip3 install git+https://github.com/openturns/otfmi@v0.18.1 --quiet && python3 -c "import otfmi"
 
 # openmodelica
 RUN curl -fsSL https://github.com/OpenModelica/OpenModelica/releases/download/v1.26.8/OpenModelica-v1.26.8-src-with-submodules.zip | bsdtar -xf - && cd OpenModelica* \
