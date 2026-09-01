@@ -68,9 +68,9 @@ signals:
   void windowRequested(Item*);
 
   void exportRequested();
-  void saveRequested(StudyItem* item);
-  void saveAsRequested(StudyItem* item);
-  void closeRequested(StudyItem* item);
+  void saveRequested(QObject* item);
+  void saveAsRequested(QObject* item);
+  void closeRequested(QObject* item);
 
 
 protected:

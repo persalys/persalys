@@ -62,6 +62,10 @@ ItemFactory::~ItemFactory()
   parentStudyItem_ = nullptr;
 }
 
+StudyItem* ItemFactory::getParentStudyItem() const
+{
+  return qobject_cast<StudyItem*>(parentStudyItem_);
+}
 
 QString ItemFactory::getParentTitleType(const QString &objectName) const
 {
@@ -458,6 +462,8 @@ String ItemFactory::availableAnalysisName(const QString &baseName) const
 {
   if (!parentStudyItem_)
     return baseName.toStdString();
-  return parentStudyItem_->getStudy().getAvailableAnalysisName(baseName.toStdString());
+  if (auto * studyItem = getParentStudyItem())
+    return studyItem->getStudy().getAvailableAnalysisName(baseName.toStdString());
+  return baseName.toStdString();
 }
 }

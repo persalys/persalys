@@ -64,9 +64,9 @@ signals:
   void messageChanged(QString);
   void progressValueChanged(int);
   void modifyAnalysisRequested(AnalysisItem*);
-  void dataExtractionWizardRequested(StudyItem*, Analysis);
+  void dataExtractionWizardRequested(QObject*, Analysis);
   void pythonMetamodelExportRequested(PhysicalModel);
-  void evaluationsImportRequested(const StudyItem*, const Analysis&);
+  void evaluationsImportRequested(const QObject*, const Analysis&);
 
   void numberDesignEvaluationChanged(bool);
   void designEvaluationUpdated(bool);

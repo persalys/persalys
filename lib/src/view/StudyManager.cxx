@@ -20,6 +20,7 @@
  */
 #include "persalys/StudyManager.hxx"
 
+#include "persalys/StudyItem.hxx"
 #include "persalys/WindowFactory.hxx"
 
 #include "persalys/AnalysisWindow.hxx"
@@ -96,8 +97,9 @@ void StudyManager::createStudy()
 // --------------- WIZARD CREATION ---------------
 
 
-void StudyManager::openAnalysisWizard(StudyItem *item, const Analysis &analysis, const bool isGeneralWizard)
+void StudyManager::openAnalysisWizard(QObject *obj, const Analysis &analysis, const bool isGeneralWizard)
 {
+  auto * item = qobject_cast<StudyItem*>(obj);
   Q_ASSERT(item);
 
   String errorMessage = "";
@@ -150,8 +152,9 @@ void StudyManager::openDesignOfExperimentEvaluationWizard(const Analysis& analys
   }
 }
 
-void StudyManager::openImportEvaluationsWizard(const StudyItem *item, const Analysis &analysis)
+void StudyManager::openImportEvaluationsWizard(const QObject *obj, const Analysis &analysis)
 {
+  auto * item = qobject_cast<StudyItem*>(const_cast<QObject*>(obj));
 
   QPointer<ImportEvaluationsWizard> wizard(new ImportEvaluationsWizard(analysis, mainWidget_));
   wizard->setAttribute(Qt::WA_DeleteOnClose);
@@ -204,8 +207,9 @@ void StudyManager::openImportEvaluationsWizard(const StudyItem *item, const Anal
   wizard->open();
 }
 
-void StudyManager::openObservationsWizard(StudyItem *item, const PhysicalModel &physicalModel, const QString &obsName)
+void StudyManager::openObservationsWizard(QObject *obj, const PhysicalModel &physicalModel, const QString &obsName)
 {
+  auto * item = qobject_cast<StudyItem*>(obj);
   Q_ASSERT(item);
   ObservationsWizard * wizard = new ObservationsWizard(physicalModel, obsName.toStdString(), mainWidget_);
 
@@ -218,8 +222,9 @@ void StudyManager::openObservationsWizard(StudyItem *item, const PhysicalModel &
 }
 
 
-void StudyManager::openExtractDataFieldWizard(StudyItem *item, const Analysis &analysis)
+void StudyManager::openExtractDataFieldWizard(QObject *obj, const Analysis &analysis)
 {
+  auto * item = qobject_cast<StudyItem*>(obj);
   Q_ASSERT(item);
   ExtractDataFieldWizard * wizard = new ExtractDataFieldWizard(analysis, mainWidget_);
 
@@ -231,8 +236,9 @@ void StudyManager::openExtractDataFieldWizard(StudyItem *item, const Analysis &a
   }
 }
 
-void StudyManager::openMetamodelExportWizard(StudyItem *item, const Analysis& analysis, const bool isGeneralWizard)
+void StudyManager::openMetamodelExportWizard(QObject *obj, const Analysis& analysis, const bool isGeneralWizard)
 {
+  auto * item = qobject_cast<StudyItem*>(obj);
   Q_ASSERT(item);
 
   QPointer<MetaModelExportWizard> wizard{new MetaModelExportWizard(analysis, isGeneralWizard, mainWidget_)};
@@ -250,8 +256,9 @@ void StudyManager::openMetamodelExportWizard(StudyItem *item, const Analysis& an
   wizard->open();
 }
 
-void StudyManager::openDesignOfExperimentExportWizard(const StudyItem *item)
+void StudyManager::openDesignOfExperimentExportWizard(const QObject *obj)
 {
+  auto * item = qobject_cast<StudyItem*>(const_cast<QObject*>(obj));
   Q_ASSERT(item);
   
   QPointer<DesignOfExperimentExportWizard> wizard{new DesignOfExperimentExportWizard(item, mainWidget_)};
@@ -285,8 +292,9 @@ void StudyManager::openProperties(Item* item) const
 
 // --------------- OPEN ANALYSIS WINDOW ---------------
 
-void StudyManager::openAnalysisWindow(StudyItem *item, const Analysis &analysis)
+void StudyManager::openAnalysisWindow(QObject *obj, const Analysis &analysis)
 {
+  auto * item = qobject_cast<StudyItem*>(obj);
   Q_ASSERT(item);
   String errorMessage = "";
   if (!analysis.canBeLaunched(errorMessage))
@@ -312,24 +320,24 @@ void StudyManager::createWindow(Item *item)
   connect(item, SIGNAL(showErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
   connect(item, SIGNAL(changeCurrentItemRequested(QModelIndex)), mainWidget_->getStudyTree(), SLOT(setCurrentIndex(QModelIndex)));
 
-  connect(item, SIGNAL(wizardRequested(StudyItem*, Analysis, bool)), this, SLOT(openAnalysisWizard(StudyItem*, Analysis, bool)));
+  connect(item, SIGNAL(wizardRequested(QObject*, Analysis, bool)), this, SLOT(openAnalysisWizard(QObject*, Analysis, bool)));
   connect(item, SIGNAL(doeEvaluationWizardRequested(Analysis, bool)), this, SLOT(openDesignOfExperimentEvaluationWizard(Analysis, bool)));
-  connect(item, SIGNAL(mmExportWizardRequested(StudyItem*, Analysis, bool)), this, SLOT(openMetamodelExportWizard(StudyItem*, Analysis, bool)));
+  connect(item, SIGNAL(mmExportWizardRequested(QObject*, Analysis, bool)), this, SLOT(openMetamodelExportWizard(QObject*, Analysis, bool)));
   connect(item, &ItemFactory::doeExportWizardRequested, this, &StudyManager::openDesignOfExperimentExportWizard);
   connect(item, &Item::openPropertiesRequested, [item, this] () {
     openProperties(item);
   });
-  connect(item, SIGNAL(observationsWizardRequested(StudyItem*, PhysicalModel, QString)), this, SLOT(openObservationsWizard(StudyItem*, PhysicalModel, QString)));
+  connect(item, SIGNAL(observationsWizardRequested(QObject*, PhysicalModel, QString)), this, SLOT(openObservationsWizard(QObject*, PhysicalModel, QString)));
 
-  connect(item, SIGNAL(analysisRequested(StudyItem*, Analysis)), this, SLOT(openAnalysisWindow(StudyItem*, Analysis)));
+  connect(item, SIGNAL(analysisRequested(QObject*, Analysis)), this, SLOT(openAnalysisWindow(QObject*, Analysis)));
 
   connect(item, SIGNAL(windowRequested(Item*)), this, SLOT(createWindow(Item*)));
   connect(item, SIGNAL(windowRequested(AnalysisItem*)), this, SLOT(createAnalysisWindow(AnalysisItem*)));
 
   connect(item, SIGNAL(exportRequested()), this, SLOT(exportPythonScript()));
-  connect(item, SIGNAL(saveRequested(StudyItem*)), this, SLOT(save(StudyItem*)));
-  connect(item, SIGNAL(saveAsRequested(StudyItem*)), this, SLOT(saveAs(StudyItem*)));
-  connect(item, SIGNAL(closeRequested(StudyItem*)), this, SLOT(close(StudyItem*)));
+  connect(item, SIGNAL(saveRequested(QObject*)), this, SLOT(save(QObject*)));
+  connect(item, SIGNAL(saveAsRequested(QObject*)), this, SLOT(saveAs(QObject*)));
+  connect(item, SIGNAL(closeRequested(QObject*)), this, SLOT(close(QObject*)));
 
   // window
   SubWindow * window = WindowFactory::GetWindow(item, mainWidget_);
@@ -347,9 +355,9 @@ void StudyManager::createAnalysisWindow(AnalysisItem* item, const bool createCon
     // connections
     connect(item, SIGNAL(showErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
     connect(item, SIGNAL(modifyAnalysisRequested(AnalysisItem*)), this, SLOT(modifyAnalysis(AnalysisItem*)));
-    connect(item, SIGNAL(dataExtractionWizardRequested(StudyItem*, Analysis)), this, SLOT(openExtractDataFieldWizard(StudyItem*, Analysis)));
+    connect(item, SIGNAL(dataExtractionWizardRequested(QObject*, Analysis)), this, SLOT(openExtractDataFieldWizard(QObject*, Analysis)));
     connect(item, SIGNAL(windowRequested(AnalysisItem*, bool)), this, SLOT(createAnalysisWindow(AnalysisItem*, bool)));
-    connect(item, SIGNAL(wizardRequested(StudyItem*, Analysis)), this, SLOT(openAnalysisWizard(StudyItem*, Analysis)));
+    connect(item, SIGNAL(wizardRequested(QObject*, Analysis)), this, SLOT(openAnalysisWizard(QObject*, Analysis)));
     connect(item, SIGNAL(doeEvaluationWizardRequested(Analysis)), this, SLOT(openDesignOfExperimentEvaluationWizard(Analysis)));
     connect(item, SIGNAL(pythonMetamodelExportRequested(PhysicalModel)), this, SLOT(exportMetamodelPython(PhysicalModel)));
     connect(item, &AnalysisItem::evaluationsImportRequested, this,  &StudyManager::openImportEvaluationsWizard);
@@ -539,8 +547,9 @@ void StudyManager::saveAsCurrent()
 }
 
 
-bool StudyManager::save(StudyItem* studyItem)
+bool StudyManager::save(QObject* obj)
 {
+  auto * studyItem = qobject_cast<StudyItem*>(obj);
   if (!studyItem)
   {
     qDebug() << "StudyManager::save : item NULL\n";
@@ -561,8 +570,9 @@ bool StudyManager::save(StudyItem* studyItem)
 }
 
 
-bool StudyManager::saveAs(StudyItem* studyItem)
+bool StudyManager::saveAs(QObject* obj)
 {
+  auto * studyItem = qobject_cast<StudyItem*>(obj);
   if (!studyItem)
   {
     qDebug() << "StudyManager::saveAs : item NULL\n";
@@ -635,8 +645,9 @@ void StudyManager::open(const QString& recentFileName)
 
 // --------------- CLOSE FILE ---------------
 
-bool StudyManager::close(StudyItem* studyItem)
+bool StudyManager::close(QObject* obj)
 {
+  auto * studyItem = qobject_cast<StudyItem*>(obj);
   if (!studyItem)
   {
     qDebug() << "StudyManager::close : item NULL\n";

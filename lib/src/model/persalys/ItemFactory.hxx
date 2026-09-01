@@ -40,10 +40,11 @@ public:
   ItemFactory();
   ~ItemFactory() override;
 
-  StudyItem * getParentStudyItem()
+  StudyItem * getParentStudyItem() const;
+  QObject * getParentStudyItemAsQObject() const
   {
     return parentStudyItem_;
-  };
+  }
   OT::String availableAnalysisName(const QString &baseName) const;
   QString getParentTitleType(const QString &objectName) const;
   Item * getTitleItem(const QString &objectName);
@@ -53,7 +54,7 @@ public:
   {
     try
     {
-      emit wizardRequested(getParentStudyItem(), createAnalysis(analysisName, input), isGeneralWizard);
+      emit wizardRequested(getParentStudyItemAsQObject(), createAnalysis(analysisName, input), isGeneralWizard);
     }
     catch (const std::exception & e)
     {
@@ -71,17 +72,17 @@ public:
 
 signals:
   void showErrorMessageRequested(const QString & message);
-  void wizardRequested(StudyItem*, const Analysis&, const bool isGeneralWizard = false);
+  void wizardRequested(QObject*, const Analysis&, const bool isGeneralWizard = false);
   void doeEvaluationWizardRequested(const Analysis&, const bool isGeneralWizard = false);
-  void mmExportWizardRequested(StudyItem*, const Analysis&, const bool isGeneralWizard = false);
-  void doeExportWizardRequested(const StudyItem*);
+  void mmExportWizardRequested(QObject*, const Analysis&, const bool isGeneralWizard = false);
+  void doeExportWizardRequested(const QObject*);
   void wizardRequested(const PhysicalModel&);
   void openPropertiesRequested();
-  void observationsWizardRequested(StudyItem*, const PhysicalModel& physicalModel, const QString& obsName);
-  void analysisRequested(StudyItem*, const Analysis&);
+  void observationsWizardRequested(QObject*, const PhysicalModel& physicalModel, const QString& obsName);
+  void analysisRequested(QObject*, const Analysis&);
 
 protected:
-  StudyItem * parentStudyItem_      = nullptr;
+  QObject * parentStudyItem_      = nullptr;
 
   QAction * newSymbolicModel_       = nullptr;
   QAction * newPythonModel_         = nullptr;

@@ -44,18 +44,18 @@ public slots:
   void createStudy();
 
   // open wizards
-  void openAnalysisWizard(StudyItem* item, const Analysis& analysis, const bool isGeneralWizard = false);
+  void openAnalysisWizard(QObject* item, const Analysis& analysis, const bool isGeneralWizard = false);
   void openDesignOfExperimentEvaluationWizard(const Analysis& analysis, const bool isGeneralWizard = false);
-  void openObservationsWizard(StudyItem*, const PhysicalModel& physicalModel, const QString& obsName);
-  void openExtractDataFieldWizard(StudyItem *item, const Analysis& analysis);
-  void openMetamodelExportWizard(StudyItem *item, const Analysis& model, const bool isGeneralWizard = false);
-  void openDesignOfExperimentExportWizard(const StudyItem *item);
+  void openObservationsWizard(QObject*, const PhysicalModel& physicalModel, const QString& obsName);
+  void openExtractDataFieldWizard(QObject *item, const Analysis& analysis);
+  void openMetamodelExportWizard(QObject *item, const Analysis& model, const bool isGeneralWizard = false);
+  void openDesignOfExperimentExportWizard(const QObject *item);
   void openProperties(Item* item) const;
   void modifyAnalysis(AnalysisItem* item);
-  void openImportEvaluationsWizard(const StudyItem *item, const Analysis &analysis);
+  void openImportEvaluationsWizard(const QObject *item, const Analysis &analysis);
 
   // open windows
-  void openAnalysisWindow(StudyItem* item, const Analysis& analysis);
+  void openAnalysisWindow(QObject* item, const Analysis& analysis);
 
   // create windows
   void createWindow(Item *item);
@@ -67,10 +67,10 @@ public slots:
   void exportMetamodelPython(const PhysicalModel & metamodel);
   void saveCurrent();
   void saveAsCurrent();
-  bool save(StudyItem* item);
-  bool saveAs(StudyItem* item);
+  bool save(QObject* item);
+  bool saveAs(QObject* item);
   void open(const QString& fileName = "");
-  bool close(StudyItem* item);
+  bool close(QObject* item);
   bool closeCurrent();
   bool closeAll();
 signals:
