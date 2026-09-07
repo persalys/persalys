@@ -20,8 +20,7 @@ WORKDIR /usr/local/src
 RUN curl -fsSL https://ftp.gnu.org/gnu/bison/bison-3.8.2.tar.gz | tar xz && cd bison* && ./configure && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r bison*
 
 # swig
-RUN curl -fsSL https://github.com/swig/swig/archive/v4.5.0.tar.gz | tar xz && cd swig* \
- && sed -i "s|10.39|10.32|g" CMakeLists.txt \
+RUN curl -fsSL https://github.com/swig/swig/archive/v4.5.1.tar.gz | tar xz && cd swig* \
  && cmake . && make install > /dev/null 2>&1 && swig -version && cd - && rm -r swig*
 
 # ipopt
@@ -182,7 +181,7 @@ RUN git clone -b v0.20 --depth 1 https://github.com/openturns/otmorris.git && cd
  && make install > /dev/null 2>&1 && cd - && rm -r otmorris*
 
 # otfmi
-RUN pip3 install git+https://github.com/openturns/otfmi@v0.18.1 --quiet && python3 -c "import otfmi"
+RUN pip3 install git+https://github.com/openturns/otfmi@v0.18.2 --quiet && python3 -c "import otfmi"
 
 # openmodelica
 RUN curl -fsSL https://github.com/OpenModelica/OpenModelica/releases/download/v1.26.8/OpenModelica-v1.26.8-src-with-submodules.zip | bsdtar -xf - && cd OpenModelica* \

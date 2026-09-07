@@ -47,17 +47,17 @@ cp /usr/${ARCH}-w64-mingw32/etc/openturns/openturns.conf Lib/site-packages/opent
 rm Lib/site-packages/openturns/{libvtk,libboost,Qt,python}*.dll
 cp -rv /usr/${ARCH}-w64-mingw32/Lib/site-packages/otmorris Lib/site-packages
 
-curl -fSsL https://anaconda.org/conda-forge/pyfmi/2.21.0/download/win-64/pyfmi-2.21.0-np2py314h4d390f2_0.conda | bsdtar -x && tar -xf pkg-pyfmi-2.21.0-np2py314h4d390f2_0.tar.zst
-curl -fSsL https://anaconda.org/conda-forge/assimulo/3.7.3/download/win-64/assimulo-3.7.3-np2py314h164fa03_0.conda | bsdtar -x && tar -xf pkg-assimulo-3.7.3-np2py314h164fa03_0.tar.zst
-curl -fSsL https://anaconda.org/conda-forge/sundials/7.6.0/download/win-64/sundials-7.6.0-h5352411_1.conda | bsdtar -x && tar -xf pkg-sundials-7.6.0-h5352411_1.tar.zst
+curl -fSsL https://anaconda.org/conda-forge/pyfmi/2.22.0/download/win-64/pyfmi-2.22.0-np2py314h4d390f2_0.conda | bsdtar -x && tar -xf pkg-pyfmi-2.22.0-np2py314h4d390f2_0.tar.zst
+curl -fSsL https://anaconda.org/conda-forge/assimulo/3.8.0/download/win-64/assimulo-3.8.0-np2py314h0fc33ed_1.conda | bsdtar -x && tar -xf pkg-assimulo-3.8.0-np2py314h0fc33ed_1.tar.zst
+curl -fSsL https://anaconda.org/conda-forge/sundials/7.8.0/download/win-64/sundials-7.8.0-h5352411_0.conda | bsdtar -x && tar -xf pkg-sundials-7.8.0-h5352411_0.tar.zst
 cp -r Library/bin/*.dll . && rm -r Library info pkg-*.zst info-*.zst
 
 cd Lib
-curl -fSsL https://anaconda.org/conda-forge/otfmi/0.17.1/download/noarch/otfmi-0.17.1-pyhcf101f3_0.conda | bsdtar -x && tar -xf pkg-otfmi-0.17.1-pyhcf101f3_0.tar.zst
+curl -fSsL https://anaconda.org/conda-forge/otfmi/0.18.2/download/noarch/otfmi-0.18.2-pyh5ded981_0.conda | bsdtar -x && tar -xf pkg-otfmi-0.18.2-pyh5ded981_0.tar.zst
 cd site-packages
 
 python -m pip install --target . --platform win_amd64 --python-version ${PYMAJMIN:0:1}.${PYMAJMIN:1} --only-binary=:all: \
-  pip "numpy<2.5" "scipy<1.18" pandas openpyxl jinja2 pythonfmu paramiko dill
+  pip "numpy<2.6" "scipy<1.19" pandas openpyxl jinja2 pythonfmu paramiko dill
 cd ../..
 mkdir Scripts && echo -e 'import sys\nfrom pip import main\nsys.exit(main())\n' > Scripts/pip.py && echo -e 'python %~dp0pip.py %*' > Scripts/pip.bat
 cd /tmp/build
