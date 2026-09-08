@@ -186,10 +186,8 @@ QTabWidget * CalibrationResultWindow::getThetaTabWidget(const CalibrationAnalysi
   optimalTabLayout->addWidget(thetaGroupBox, 0, Qt::AlignTop);
 
   // residual results table
-  const bool isBayesian = result_.getCalibrationResult().isBayesian();
-  const UnsignedInteger nbOutput = observations_.getOutputSample().getDimension();
-  const bool hasPosteriorPred = isBayesian && result_.getCalibrationResult().getOutputAtPosteriorMean().getSize() == observations_.getOutputSample().getSize();
-  const int nbResidualCols = hasPosteriorPred ? 8 : 4;
+  const int nbOutput = (int) observations_.getOutputSample().getDimension();
+  const int nbResidualCols = 8;
 
   auto * residualsGroupBox = new QGroupBox(tr("Residual results"));
   auto * residualsGroupBoxLayout = new QVBoxLayout(residualsGroupBox);
@@ -200,17 +198,13 @@ QTabWidget * CalibrationResultWindow::getThetaTabWidget(const CalibrationAnalysi
   auto * residualsTableModel = new CustomStandardItemModel(nbOutput, nbResidualCols, residualsTableView);
   residualsTableView->setModel(residualsTableModel);
 
-  if (hasPosteriorPred)
-    residualsTableModel->setHorizontalHeaderLabels(QStringList() << tr("Output")
-      << tr("σ(observations)") << tr("σ(residuals initial)") << tr("σ(residuals calibrated)")
-      << tr("CvM normality (calibrated)") << tr("CvM p-value")
-      << tr("RMSE initial") << tr("RMSE calibrated"));
-  else
-    residualsTableModel->setHorizontalHeaderLabels(QStringList() << tr("Output")
-      << tr("σ(observations)") << tr("σ(residuals)")
-      << tr("RMSE"));
+  residualsTableModel->setHorizontalHeaderLabels(QStringList() << tr("Output")
+    << tr("σ(ε)") << tr("σ(residuals) initial") << tr("σ(residuals) calibrated")
+    << tr("Normality test on calibrated residuals") << tr("Normality test p-value")
+    << tr("RMSE initial") << tr("RMSE calibrated"));
+  residualsTableModel->setHeaderData(4, Qt::Horizontal, tr("Cramér–von Mises test"), Qt::ToolTipRole);
 
-  for (UnsignedInteger out = 0; out < nbOutput; ++out)
+  for (int out = 0; out < nbOutput; ++out)
   {
     const Sample outputObs(observations_.getOutputSample().getMarginal(out));
 
@@ -227,31 +221,24 @@ QTabWidget * CalibrationResultWindow::getThetaTabWidget(const CalibrationAnalysi
       continue;
     }
 
+    // priorPred is the sample of the evaluation of the observed inputs by the model with the initial parameters
     const Sample priorPred(result_.getCalibrationResult().getOutputAtPriorMean().getMarginal(out));
     const Sample priorResiduals(outputObs - priorPred);
     const double priorResidualStd = priorResiduals.computeStandardDeviation()[0];
     const double priorRMSE = std::sqrt(priorResiduals.computeRawMoment(2)[0]);
 
-    if (hasPosteriorPred)
-    {
-      const Sample postPred(result_.getCalibrationResult().getOutputAtPosteriorMean().getMarginal(out));
-      const Sample postResiduals(outputObs - postPred);
-      const double postResidualStd = postResiduals.computeStandardDeviation()[0];
-      const TestResult postCvM(NormalityTest::CramerVonMisesNormal(postResiduals, 0.05));
-      const double postRMSE = std::sqrt(postResiduals.computeRawMoment(2)[0]);
+    const Sample postPred(result_.getCalibrationResult().getOutputAtPosteriorMean().getMarginal(out));
+    const Sample postResiduals(outputObs - postPred);
+    const double postResidualStd = postResiduals.computeStandardDeviation()[0];
+    const TestResult postCvM(NormalityTest::CramerVonMisesNormal(postResiduals, 0.05));
+    const double postRMSE = std::sqrt(postResiduals.computeRawMoment(2)[0]);
 
-      residualsTableModel->setNotEditableItem(out, 2, priorResidualStd);
-      residualsTableModel->setNotEditableItem(out, 3, postResidualStd);
-      residualsTableModel->setNotEditableItem(out, 4, postCvM.getBinaryQualityMeasure() ? tr("True") : tr("False"));
-      residualsTableModel->setNotEditableItem(out, 5, postCvM.getPValue());
-      residualsTableModel->setNotEditableItem(out, 6, priorRMSE);
-      residualsTableModel->setNotEditableItem(out, 7, postRMSE);
-    }
-    else
-    {
-      residualsTableModel->setNotEditableItem(out, 2, priorResidualStd);
-      residualsTableModel->setNotEditableItem(out, 3, priorRMSE);
-    }
+    residualsTableModel->setNotEditableItem(out, 2, priorResidualStd);
+    residualsTableModel->setNotEditableItem(out, 3, postResidualStd);
+    residualsTableModel->setNotEditableItem(out, 4, postCvM.getBinaryQualityMeasure() ? tr("True") : tr("False"));
+    residualsTableModel->setNotEditableItem(out, 5, postCvM.getPValue());
+    residualsTableModel->setNotEditableItem(out, 6, priorRMSE);
+    residualsTableModel->setNotEditableItem(out, 7, postRMSE);
   }
 
   residualsTableView->resizeToContents();
