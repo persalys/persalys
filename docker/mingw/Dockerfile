@@ -1,6 +1,7 @@
 FROM openturns/archlinux-mingw:latest
 
 RUN yay -Syu --noconfirm mingw-w64-qwt-qt5 mingw-w64-mesa mingw-w64-libbacktrace-git
+RUN sudo pacman -U --noconfirm https://archive.archlinux.org/packages/p/protobuf/protobuf-36.0-1-x86_64.pkg.tar.zst && echo -e '[options]\nIgnorePkg = protobuf' | sudo tee -a /etc/pacman.conf
 RUN yay -Syu --noconfirm mingw-w64-paraview > /dev/null 2>&1
 
 ENV ARCH=x86_64 PYMAJMIN=314
