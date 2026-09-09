@@ -6,3 +6,4 @@ build*/
 .vscode
 CMakeLists.txt.user
 .cache
+.clinerules
