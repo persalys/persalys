@@ -31,6 +31,7 @@ public:
   double getAxisRangeMinimum(const vtkAxis::Location ax);
   double getAxisRangeMaximum(const vtkAxis::Location ax);
   void setAxisRange(const vtkAxis::Location ax, const double minValue, const double maxValue);
+  void setXAxisRangeMargin(const double margin);
   QString getAxisTitle(const vtkAxis::Location ax, const QString& varX, const QString& varY);
   void setAxisTitle(const vtkAxis::Location ax, const QString& title, const QString& varX = "", const QString& varY = "");
 
@@ -72,10 +73,12 @@ protected:
   QMap<QPair<QString, QString>, QString > chartsTitle_;
   QMap<QString, QString> axisLabels_;
 private:
+  void applyXAxisRangeMargin(const QString& varX);
   Type type_;
   QList<QColor> reprColors_;
   QTimer* selectionTimer_ = nullptr;
   QList<bool> previousSelection_;
+  double xAxisRangeMargin_ = 0.;
 };
 }
 #endif

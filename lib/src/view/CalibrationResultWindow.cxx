@@ -317,6 +317,12 @@ QTabWidget * CalibrationResultWindow::getThetaTabWidget(const CalibrationAnalysi
     pvWidget->setXAxisData(calibratedInputNames[0].c_str());
     pvWidget->setAxisToShow(Description(1, calibratedInputNames[0] + "pdf"));
 
+    // For non-bayesian calibration, the initial parameter is a single point drawn
+    // as a vertical line: add a margin to the X axis so that this line is not
+    // stuck to the left or right edge of the graph.
+    if (!result_.getCalibrationResult().isBayesian())
+      pvWidget->setXAxisRangeMargin(0.05);
+
     auto * settingWidget = new MultiPDFSettingWidget(pvWidget, QtOT::DescriptionToStringList(calibratedInputNames), pdfNames);
 
     thetaTabWidget->addTab(new WidgetBoundToDockWidget(pvWidget, settingWidget, this), tr("PDF"));
@@ -391,6 +397,7 @@ QTabWidget * CalibrationResultWindow::getPredictionTabWidget(const UnsignedInteg
 
   pvWidget->PVViewWidget::setData(outputSamples);
   pvWidget->setSerieColors(Colors_);
+  pvWidget->setMarkerSize(6);
 //   pvWidget->setSerieLineStyles(QMap<QString, int>{{tr("Data"), 1}}); // if line : pb with log scale (points order)
   pvWidget->setXAxisData(tr("Observations"));
   pvWidget->setAxisToShow(outDescription);
@@ -415,6 +422,7 @@ QTabWidget * CalibrationResultWindow::getPredictionTabWidget(const UnsignedInteg
   pvWidget->setAxisTitles(obsInNames, obsInLabels);
   pvWidget->setChartTitle(tr("Predictions vs inputs"));
   pvWidget->setSerieColors(Colors_);
+  pvWidget->setMarkerSize(6);
   pvWidget->setXAxisData(observations_.getInputSample().getDescription()[0].c_str());
   pvWidget->setAxisToShow(outDescription);
   pvWidget->setAxisTitle(vtkAxis::LEFT, tr("Predictions"));
