@@ -77,6 +77,9 @@ PVViewWidget::PVViewWidget(QWidget *parent, PVServerManagerInterface *smb, const
   this->installEventFilter(this);
   QWidget * pvWid(getView()->widget());
   pvWid->installEventFilter(this);
+  // QTBUG-147605: inserting a non-raster (GL) widget into an already-visible
+  // TLW recreates the native window. Keep RHI on the child hierarchy.
+  pvWid->setAttribute(Qt::WA_NativeWindow);
   QVBoxLayout * lay = new QVBoxLayout(this);
   lay->addWidget(pvWid);
 
