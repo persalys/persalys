@@ -8,7 +8,7 @@ import openturns.testing as ott
 # testcase using ansys connector
 key_platform = platform.system()
 dict_exe = {
-    "Linux": ["dummyAnsys", "./dummyAnsys"],
+    key_platform: ["dummyAnsys", "./dummyAnsys"],
     "Windows": ["dummyAnsys.exe", "dummyAnsys.exe"],
 }
 
