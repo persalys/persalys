@@ -1,10 +1,12 @@
 linux:
+  timeout: 2h
   script:
     - ./utils/build_locally.sh linux
   except:
     - tags
 
 mingw:
+  timeout: 2h
   script:
     - ./utils/build_locally.sh mingw
   except:
