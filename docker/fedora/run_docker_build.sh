@@ -5,7 +5,7 @@ cd /tmp
 cmake \
   -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 \
   -DCMAKE_INSTALL_PREFIX=$PWD/build/install \
-  -DPERSALYS_QT_MAJOR_VERSION=6 \
+  -DPERSALYS_QT_MAJOR_VERSION=5 \
   -B build /io
 cd build
 make install
