@@ -24,7 +24,7 @@ jobs:
           context: docker/linux
           tags: persalys/linux
           cache-from: type=gha,scope=linux
-          cache-to: type=gha,scope=linux,mode=max
+          cache-to: ${{ github.event_name == 'push' && 'type=gha,scope=linux,mode=max' || '' }}
           load: true
       - name: Build persalys
         run: docker run --rm --volume "${{ github.workspace }}:/io" persalys/linux sh -c "/io/docker/linux/run_docker_build.sh $(id -u):$(id -g)"
@@ -42,7 +42,7 @@ jobs:
           context: docker/mingw
           tags: persalys/mingw
           cache-from: type=gha,scope=mingw
-          cache-to: type=gha,scope=mingw,mode=max
+          cache-to: ${{ github.event_name == 'push' && 'type=gha,scope=mingw,mode=max' || '' }}
           load: true
       - name: Build persalys
         run: docker run --rm --volume "${{ github.workspace }}:/io" persalys/mingw sh -c "/io/docker/mingw/run_docker_build.sh $(id -u):$(id -g)"
@@ -60,7 +60,7 @@ jobs:
           context: docker/fedora
           tags: persalys/fedora
           cache-from: type=gha,scope=fedora
-          cache-to: type=gha,scope=fedora,mode=max
+          cache-to: ${{ github.event_name == 'push' && 'type=gha,scope=fedora,mode=max' || '' }}
           load: true
       - name: Build persalys
         run: docker run --rm --volume "${{ github.workspace }}:/io" persalys/fedora sh -c "/io/docker/fedora/run_docker_build.sh"
