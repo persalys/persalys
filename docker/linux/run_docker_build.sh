@@ -23,9 +23,8 @@ make install
 make tests
 xvfb-run -s "-screen 0 1024x768x24" ctest --output-on-failure --timeout 30 -j8
 
-cd /tmp/persalys.AppDir/usr/share/doc/persalys/; zip -r /tmp/persalys-doc.zip ./html/*; cd -
-
 cd /tmp
+tar -czf persalys-doc.tar.gz -C /tmp/persalys.AppDir/usr/share/doc/persalys/ html/
 
 rm -r persalys.AppDir/usr/include/persalys
 
@@ -141,6 +140,6 @@ appimagetool -v persalys.AppDir ${APPIMAGE_FILE}
 # copy to host with same permission
 if test -n "${UID_GID}"
 then
-  sudo chown ${UID_GID} ${APPIMAGE_FILE} persalys-doc.zip
-  sudo cp -p ${APPIMAGE_FILE} persalys-doc.zip /io
+  sudo chown ${UID_GID} ${APPIMAGE_FILE} persalys-doc.tar.gz
+  sudo cp -p ${APPIMAGE_FILE} persalys-doc.tar.gz /io
 fi

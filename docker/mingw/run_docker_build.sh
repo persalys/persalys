@@ -31,7 +31,7 @@ cp -rv ${MINGW_PREFIX}/bin/paraview*/plugins/BagPlotViewsAndFilters ${MOD_PREFIX
 cp /usr/${ARCH}-w64-mingw32/etc/openturns/openturns.conf ${MOD_PREFIX}/Lib/site-packages/persalys/
 VERSION=`cat /io/VERSION`
 cp /io/distro/windows/* .
-bsdtar -xf persalys-doc.zip
+tar xzf persalys-doc.tar.gz
 
 # bundle installer
 cd /tmp

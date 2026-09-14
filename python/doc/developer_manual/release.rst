@@ -9,7 +9,7 @@ Release process
 
 3. Update Changelog
 
-4. Update distro/windows/persalys-doc.zip
+4. Update distro/windows/persalys-doc.tar.gz
 
 5. Upload tagged docker images (utils/docker_push.sh X.Y)
 
