@@ -10,7 +10,7 @@ RUN yum -y install almalinux-release-devel epel-release && yum config-manager --
   mesa-libGL-devel mesa-libEGL-devel mesa-libGLU-devel mesa-libGLw-devel mesa-dri-drivers \
   xcb-util-devel xcb-util-renderutil-devel xcb-util-keysyms-devel xcb-util-image-devel xcb-util-wm-devel xcb-util-cursor-devel \
   texlive-collection-latexrecommended texlive-pdftex texlive-latex-bin texlive-anyfontsize tex-preview pandoc dvisvgm \
-  gcc-toolset-14-gcc-c++ gcc-toolset-14-gcc-gfortran glibc-locale-source gdb && localedef -i en_US -f UTF-8 en_US.UTF-8
+  gcc-toolset-14-gcc-c++ gcc-toolset-14-gcc-gfortran glibc-locale-source gdb && localedef -i en_US -f UTF-8 en_US.UTF-8 && mktexfmt latex.fmt
 
 ENV LANG="en_US.utf8" MAKEFLAGS="-j8"
 ENV PATH=/opt/rh/gcc-toolset-14/root/usr/bin:$PATH LD_LIBRARY_PATH=/opt/rh/gcc-toolset-14/root/usr/lib64:/usr/local/lib
@@ -50,10 +50,10 @@ RUN curl -fsSL https://github.com/stevengj/nlopt/archive/v2.11.0.tar.gz | tar xz
  && cmake -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_UNITY_BUILD=ON -DNLOPT_PYTHON=OFF -DNLOPT_OCTAVE=OFF -DNLOPT_GUILE=OFF -DNLOPT_JAVA=OFF . && make install > /dev/null 2>&1 && cd - && rm -r nlopt*
 
 # hdf5
-RUN curl -fsSL https://github.com/HDFGroup/hdf5/archive/refs/tags/2.1.1.tar.gz | tar xz && cd hdf5* && cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DHDF5_BUILD_CPP_LIB=ON -DBUILD_TESTING=OFF -DHDF5_BUILD_TOOLS=OFF -DHDF5_BUILD_EXAMPLES=OFF -DHDF5_BUILD_UTILS=OFF -DBUILD_STATIC_LIBS=OFF -DHDF5_ENABLE_ZLIB_SUPPORT=ON -B build . && cd build && make install > /dev/null 2>&1 && cd ../.. && rm -r hdf5*
+RUN curl -fsSL https://github.com/HDFGroup/hdf5/archive/refs/tags/2.2.0.tar.gz | tar xz && cd hdf5* && cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DHDF5_BUILD_CPP_LIB=ON -DBUILD_TESTING=OFF -DHDF5_BUILD_TOOLS=OFF -DHDF5_BUILD_EXAMPLES=OFF -DHDF5_BUILD_UTILS=OFF -DBUILD_STATIC_LIBS=OFF -DHDF5_ENABLE_ZLIB_SUPPORT=ON -B build . && cd build && make install > /dev/null 2>&1 && cd ../.. && rm -r hdf5*
 
 # nanoflann
-RUN curl -fsSL https://github.com/jlblancoc/nanoflann/archive/refs/tags/v1.9.0.tar.gz | tar xz && cd nanoflann* && cmake -DNANOFLANN_BUILD_EXAMPLES=OFF -DNANOFLANN_BUILD_TESTS=OFF . && make install && cd - && rm -r nanoflann*
+RUN curl -fsSL https://github.com/jlblancoc/nanoflann/archive/refs/tags/1.12.1.tar.gz | tar xz && cd nanoflann* && cmake -DNANOFLANN_BUILD_EXAMPLES=OFF -DNANOFLANN_BUILD_TESTS=OFF . && make install && cd - && rm -r nanoflann*
 
 # eigen
 RUN curl -fsSL https://gitlab.com/libeigen/eigen/-/archive/3.4.1/eigen-3.4.1.tar.bz2 | tar xj && cd eigen* \
@@ -126,7 +126,7 @@ RUN curl -fsSL https://github.com/modelon-community/Assimulo/archive/Assimulo-3.
  && cd - && python3 -c "import assimulo; import assimulo.solvers" && rm -r Assimulo*
 
 # pyfmi
-RUN curl -fsSL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.22.0.tar.gz | tar xz && cd PyFMI* \
+RUN curl -fsSL https://github.com/modelon-community/PyFMI/archive/PyFMI-2.23.0.tar.gz | tar xz && cd PyFMI* \
  && python3 setup.py install --fmil-home=/usr/local > /dev/null 2>&1 && cd - && python3 -c "import pyfmi" && rm -r PyFMI*
 
 # libbacktrace
@@ -184,7 +184,7 @@ RUN git clone -b v0.20 --depth 1 https://github.com/openturns/otmorris.git && cd
 RUN pip3 install git+https://github.com/openturns/otfmi@v0.18.2 --quiet && python3 -c "import otfmi"
 
 # openmodelica
-RUN curl -fsSL https://github.com/OpenModelica/OpenModelica/releases/download/v1.26.8/OpenModelica-v1.26.8-src-with-submodules.zip | bsdtar -xf - && cd OpenModelica* \
+RUN curl -fsSL https://github.com/OpenModelica/OpenModelica/releases/download/v1.27.1/OpenModelica-v1.27.1-src-with-submodules.zip | bsdtar -xf - && cd OpenModelica* \
  && cmake -DCMAKE_BUILD_TYPE=Release -DOM_ENABLE_GUI_CLIENTS=OFF -DCMAKE_INSTALL_PREFIX=/usr/local/ \
           -DOM_OMC_ENABLE_FORTRAN=OFF -DOM_OMC_ENABLE_MOO=OFF -DOM_OMC_ENABLE_OPTIMIZATION=OFF -DOM_USE_CCACHE=OFF -B build . \
  && make install -C build > /dev/null 2>&1 && cd - && rm -r OpenModelica*
