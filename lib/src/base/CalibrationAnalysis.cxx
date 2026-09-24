@@ -20,9 +20,6 @@
  */
 #include "persalys/CalibrationAnalysis.hxx"
 #include "persalys/DistributionDictionary.hxx"
-#ifdef PERSALYS_HAVE_ADAO_CPP_LAYER
-# include "persalys/AdaoCalibration.hxx"
-#endif
 
 #include <openturns/JointDistribution.hxx>
 #include <openturns/PersistentObjectFactory.hxx>
@@ -253,66 +250,45 @@ void CalibrationAnalysis::runCalibrationAlgorithm(const Function &paramFunction)
   const Point thetaPrior(priorDistribution_.getMean());
   const CovarianceMatrix priorCovariance(priorDistribution_.getCovariance());
 
-#ifdef PERSALYS_HAVE_ADAO_CPP_LAYER
-  char *calibrationEngineSystem(std::getenv("PERSALYS_CALIBRATION_ENGINE"));
-  String calibrationEngine;
-  if(calibrationEngineSystem)
-    calibrationEngine = calibrationEngineSystem;
-  if (calibrationEngine == "adao")
+  if (getMethodName() == "LeastSquaresLinear")
   {
-    AdaoCalibration algo(getMethodName(),
-                         paramFunction,
-                         getObservations().getInputSample(),
-                         getObservations().getOutputSample(),
-                         thetaPrior,
-                         priorCovariance,
-                         errorCovariance_);
+    LinearLeastSquaresCalibration algo(paramFunction,
+                                       getObservations().getInputSample(),
+                                       getObservations().getOutputSample(),
+                                       thetaPrior,
+                                       ResourceMap::GetAsString("LinearLeastSquaresCalibration-Method"));
     algo.run();
     result_.calibrationResult_ = algo.getResult();
   }
-  else
-#endif
+  else if (getMethodName() == "GaussianLinear")
   {
-    if (getMethodName() == "LeastSquaresLinear")
-    {
-      LinearLeastSquaresCalibration algo(paramFunction,
-                                         getObservations().getInputSample(),
-                                         getObservations().getOutputSample(),
-                                         thetaPrior,
-                                         ResourceMap::GetAsString("LinearLeastSquaresCalibration-Method"));
-      algo.run();
-      result_.calibrationResult_ = algo.getResult();
-    }
-    else if (getMethodName() == "GaussianLinear")
-    {
-      GaussianLinearCalibration algo(paramFunction,
-                                     getObservations().getInputSample(),
-                                     getObservations().getOutputSample(),
-                                     thetaPrior,
-                                     priorCovariance,
-                                     errorCovariance_,
-                                     ResourceMap::GetAsString("GaussianLinearCalibration-Method"));
-      algo.run();
-      result_.calibrationResult_ = algo.getResult();
-    }
-    else if (getMethodName() == "LeastSquaresNonlinear")
-    {
-      NonLinearLeastSquaresCalibration algo(paramFunction,
-                                            getObservations().getInputSample(),
-                                            getObservations().getOutputSample(),
-                                            thetaPrior);
-      runNonLinearAlgorithm(algo);
-    }
-    else if (getMethodName() == "GaussianNonlinear")
-    {
-      GaussianNonLinearCalibration algo(paramFunction,
-                                        getObservations().getInputSample(),
-                                        getObservations().getOutputSample(),
-                                        thetaPrior,
-                                        priorCovariance,
-                                        errorCovariance_);
-      runNonLinearAlgorithm(algo);
-    }
+    GaussianLinearCalibration algo(paramFunction,
+                                   getObservations().getInputSample(),
+                                   getObservations().getOutputSample(),
+                                   thetaPrior,
+                                   priorCovariance,
+                                   errorCovariance_,
+                                   ResourceMap::GetAsString("GaussianLinearCalibration-Method"));
+    algo.run();
+    result_.calibrationResult_ = algo.getResult();
+  }
+  else if (getMethodName() == "LeastSquaresNonlinear")
+  {
+    NonLinearLeastSquaresCalibration algo(paramFunction,
+                                          getObservations().getInputSample(),
+                                          getObservations().getOutputSample(),
+                                          thetaPrior);
+    runNonLinearAlgorithm(algo);
+  }
+  else if (getMethodName() == "GaussianNonlinear")
+  {
+    GaussianNonLinearCalibration algo(paramFunction,
+                                      getObservations().getInputSample(),
+                                      getObservations().getOutputSample(),
+                                      thetaPrior,
+                                      priorCovariance,
+                                      errorCovariance_);
+    runNonLinearAlgorithm(algo);
   }
 }
 

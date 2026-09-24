@@ -95,10 +95,6 @@ if (SalomeYACS_FOUND)
   set_source_files_properties (YACSPhysicalModel.cxx YACSEvaluation.cxx YACSCouplingPhysicalModel.cxx PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON)
 endif ()
 
-if (AdaoCppLayer_FOUND)
-  list (APPEND BASE_SOURCEFILES AdaoCalibration.cxx)
-endif ()
-
 ot_install_header_file ( PersalysResourceMap.hxx )
 ot_install_header_file ( DistributionDictionary.hxx )
 ot_install_header_file ( BaseTools.hxx )

@@ -126,13 +126,6 @@ if (USE_SALOME)
     include_directories (${YACS_INCLUDE_DIRS})
     list (APPEND PERSALYS_PUBLIC_LIBRARIES ydefx)
   endif ()
-
-  find_package (AdaoCppLayer)
-  if (AdaoCppLayer_FOUND)
-    list (APPEND PERSALYS_DEFINITIONS -DPERSALYS_HAVE_ADAO_CPP_LAYER)
-    include_directories (${AdaoCppLayer_INCLUDE_DIRS})
-    list (APPEND PERSALYS_PRIVATE_LIBRARIES ${AdaoCppLayer_LIBRARIES})
-  endif ()
 endif ()
 
 if (USE_OTFMI)

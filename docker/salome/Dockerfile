@@ -1,6 +1,12 @@
 FROM debian:11
 
-RUN apt-get -y update && apt-get -y install file gdb git g++ cmake python3 python3-pip swig libxml2-dev doxygen graphviz libgraphviz-dev libhdf5-dev libcppunit-dev curl libboost-chrono-dev libboost-filesystem-dev libboost-date-time-dev libboost-program-options-dev libboost-regex-dev libboost-thread-dev libssl-dev pkgconf libqt5svg5-dev libqt5x11extras5-dev qtbase5-dev qttools5-dev liblapack-dev mesa-common-dev libfreetype6-dev tk-dev libxmu-dev libx11-dev libxi-dev sudo libcminpack-dev net-tools xvfb procps xterm gdb vim locales wget bison flex texinfo libqwt-qt5-dev
+#RUN apt-get -y install shellutils
+RUN printf '%s\n' \
+  'deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20260701T000000Z bullseye main' \
+  'deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20260701T000000Z bullseye-updates main' \
+  'deb [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/20260701T000000Z bullseye-security main' > /etc/apt/sources.list
+
+RUN apt-get -o Acquire::Check-Valid-Until=false -y update && apt-get -y install file gdb git g++ cmake python3 python3-pip swig libxml2-dev doxygen graphviz libgraphviz-dev libhdf5-dev libcppunit-dev curl libboost-chrono-dev libboost-filesystem-dev libboost-date-time-dev libboost-program-options-dev libboost-regex-dev libboost-thread-dev libssl-dev pkgconf libqt5svg5-dev libqt5x11extras5-dev qtbase5-dev qttools5-dev liblapack-dev mesa-common-dev libfreetype6-dev tk-dev libxmu-dev libx11-dev libxi-dev sudo libcminpack-dev net-tools xvfb procps xterm gdb vim locales wget bison flex texinfo libqwt-qt5-dev
 
 # locale
 RUN echo "en_US.UTF-8 UTF-8\nfr_FR.UTF-8 UTF-8" >> /etc/locale.gen && locale-gen
@@ -46,7 +52,7 @@ RUN git clone -b V9_15_0 --depth 1 https://github.com/SalomePlatform/configurati
 
 # salome-boostrap
 RUN git clone -b V9_15_0 --depth 1 https://github.com/SalomePlatform/salome_bootstrap.git && cd salome_bootstrap && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DCMAKE_INSTALL_PREFIX=/home/devel/local . && make install > /dev/null 2>&1
-ENV PYTHONPATH=/home/devel/src/salome_bootstrap/__SALOME_BOOTSTRAP__/:$PYTHONPATH
+ENV PYTHONPATH=/home/devel/src/salome_bootstrap/__SALOME_BOOTSTRAP__/
 ENV SALOMEBOOTSTRAP_ROOT_DIR=/home/devel/local
 
 # salome-kernel
@@ -67,12 +73,6 @@ RUN git clone -b V9_15_0 --depth 1 https://github.com/SalomePlatform/ydefx.git &
  && curl -L https://github.com/SalomePlatform/ydefx/commit/2340979.patch | patch -p1 \
  && sed -i "s|P120K:SALOME|P12H8:SALOME|g" src/pydefx/configuration.py \
  && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DSalomeKERNEL_DIR=/home/devel/local/salome_adm/cmake_files -DCMAKE_INSTALL_PREFIX=/home/devel/local -DKERNEL_ROOT_DIR=/home/devel/local . && make install > /dev/null 2>&1 && cd - && rm -r ydefx*
-
-# adao
-RUN git clone -b V9_15_0 --depth 1 https://github.com/SalomePlatform/adao.git && cd adao && CURRENT_SOFTWARE_INSTALL_DIR=/usr/local cmake -DADAO_BUILD_DOC=OFF -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration . && make > /dev/null 2>&1 && sudo make install > /dev/null 2>&1 && cd - && sudo rm -r adao*
-
-# adao_interface
-RUN git clone -b V9_15_0 --depth 1 https://github.com/SalomePlatform/adao_interface.git && cd adao_interface && cmake -DCONFIGURATION_ROOT_DIR=/home/devel/src/configuration -DPY2CPP_ROOT_DIR=/home/devel/local -DCMAKE_INSTALL_PREFIX=/home/devel/local . && make install > /dev/null 2>&1 && cd - && sudo rm -r adao*
 
 # finalize install
 ENV LD_LIBRARY_PATH=/usr/local/lib/:/home/devel/local/lib/:/home/devel/local/lib/salome:/home/devel/local/__RUN_SALOME__/lib/salome/
