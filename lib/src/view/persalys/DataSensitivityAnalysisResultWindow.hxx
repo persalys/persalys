@@ -48,6 +48,7 @@ private:
 
 protected:
   DataSensitivityAnalysisResult result_;
+  OT::String analysisWarningMessage_;
   DesignOfExperiment designOfExperiment_;
   QStringList inputNames_;
   QStringList inAxisTitles_;

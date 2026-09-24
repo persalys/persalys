@@ -53,6 +53,7 @@ void DataSensitivityAnalysisResultWindow::initialize(const AnalysisItem* item)
   DataSensitivityAnalysis analysis = *dynamic_cast<DataSensitivityAnalysis*>(item->getAnalysis().getImplementation().get());
   result_ = analysis.getResult();
   designOfExperiment_ = result_.getDesignOfExperiment();
+  analysisWarningMessage_ = item->getAnalysis().getWarningMessage();
 }
 
 void DataSensitivityAnalysisResultWindow::initializeVariablesNames()
@@ -141,12 +142,16 @@ void DataSensitivityAnalysisResultWindow::buildInterface()
 
   widgetLayout->addWidget(mainWidget, 1);
 
-  // Display warning message if not empty
+  // Display warning messages in a single widget if not empty
+  QStringList warnings;
   if (!result_.isIndependent())
+    warnings << QString::fromStdString(result_.getIndependenceWarningMessage());
+  if (!analysisWarningMessage_.empty())
+    warnings << QString::fromStdString(analysisWarningMessage_);
+  if (!warnings.isEmpty())
   {
-    auto message = QString::fromStdString(result_.getIndependenceWarningMessage());
     auto * warningLabel = new ErrorWidget;
-    warningLabel->setMessage(message, ErrorWidget::Warning);
+    warningLabel->setMessage(warnings.join("\n"), ErrorWidget::Warning);
     warningLabel->setHeight(80); // fixed height because message can be long if there are many dependent inputs
     widgetLayout->addWidget(warningLabel);
   }

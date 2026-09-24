@@ -37,6 +37,7 @@
 #include <openturns/ComposedFunction.hxx>
 #include <openturns/DistanceToDomainFunction.hxx>
 #include <openturns/OSS.hxx>
+#include <limits>
 
 using namespace OT;
 
@@ -398,7 +399,7 @@ bool DataSensitivityAnalysis::hasValidResult() const
     if (conditionalHSICParameters_.computePermutationPValues())
       hasValidResult = hasValidResult && !result_.conditionalPValuesPermutation_.isEmpty();
   }
-  
+
   return hasValidResult;
 }
 
@@ -554,7 +555,7 @@ void DataSensitivityAnalysis::computeGlobalHSICIndices()
     const Point stdDevs = sample.computeStandardDeviation();
     for(UnsignedInteger i = 0; i < globalCovarianceModels_.getSize(); ++i)
     {
-      if (stdDevs[i] == 0.)
+      if (!(stdDevs[i] > 0.))
         throw InvalidArgumentException(HERE) << "The standard deviation of variable " << sample.getDescription()[i] << " is zero, the covariance model parameters cannot be estimated.";
       globalCovarianceModels_[i].setScale(Point{stdDevs[i]});
     }
@@ -571,35 +572,82 @@ void DataSensitivityAnalysis::computeGlobalHSICIndices()
   const UnsignedInteger nbOutputs = outSample.getDimension();
   const UnsignedInteger nbInputs  = inSample.getDimension();
 
-  result_.globalHSICIndices_ = PersistentCollection<Point>(nbOutputs);
-  result_.globalR2HSICIndices_ = PersistentCollection<Point>(nbOutputs);
+  // Use local collections and assign only on success so a failure
+  // (e.g. in OpenTURNS) does not leave a partially-filled result
+  // which would later crash the result window (out-of-bound access).
+  PersistentCollection<Point> hsicIndices(nbOutputs);
+  PersistentCollection<Point> r2Indices(nbOutputs);
+  PersistentCollection<Point> pValuesAsymptotic;
+  PersistentCollection<Point> pValuesPermutation;
   if (globalHSICParameters_.computeAsymptoticPValues())
-    result_.globalPValuesAsymptotic_ = PersistentCollection<Point>(nbOutputs);
+    pValuesAsymptotic = PersistentCollection<Point>(nbOutputs);
   if (globalHSICParameters_.computePermutationPValues())
-    result_.globalPValuesPermutation_ = PersistentCollection<Point>(nbOutputs);
-  
+    pValuesPermutation = PersistentCollection<Point>(nbOutputs);
+
   Indices covarianceModelIndices(nbInputs + 1u);
   covarianceModelIndices.fill();
 
   for (UnsignedInteger i = 0 ; i < nbOutputs ; ++i)
   {
-    
+
     covarianceModelIndices[nbInputs] = nbInputs + i; // the last covariance model is for the output variable
 
     auto estimator = HSICEstimatorGlobalSensitivity(
-      globalCovarianceModels_.select(covarianceModelIndices), 
-      inSample, 
-      outSample.getMarginal(i), 
+      globalCovarianceModels_.select(covarianceModelIndices),
+      inSample,
+      outSample.getMarginal(i),
       stat
     );
 
-    result_.globalHSICIndices_[i] = estimator.getHSICIndices();
-    result_.globalR2HSICIndices_[i] = estimator.getR2HSICIndices();
+    hsicIndices[i] = estimator.getHSICIndices();
+    r2Indices[i] = estimator.getR2HSICIndices();
     if (globalHSICParameters_.computeAsymptoticPValues())
-      result_.globalPValuesAsymptotic_[i] = estimator.getPValuesAsymptotic();
+    {
+      try
+      {
+        pValuesAsymptotic[i] = estimator.getPValuesAsymptotic();
+      }
+      catch (const std::exception & ex)
+      {
+        // e.g. constant input: asymptotic Gamma approximation fails in OpenTURNS
+        // ("Lambda MUST be positive") for the joint estimator. Retry per input so that
+        // only the faulty inputs get NaN instead of the whole vector.
+        Point fallback(nbInputs, std::numeric_limits<Scalar>::quiet_NaN());
+        Description faultyInputs;
+        for (UnsignedInteger j = 0; j < nbInputs; ++j)
+        {
+          try
+          {
+            Collection<CovarianceModel> covPair;
+            covPair.add(globalCovarianceModels_[j]);
+            covPair.add(globalCovarianceModels_[nbInputs + i]);
+            HSICEstimatorGlobalSensitivity singleEstimator(covPair, inSample.getMarginal(Indices(1, j)), outSample.getMarginal(i), stat);
+            fallback[j] = singleEstimator.getPValuesAsymptotic()[0];
+          }
+          catch (const std::exception &)
+          {
+            faultyInputs.add(inSample.getDescription()[j]);
+          }
+        }
+        pValuesAsymptotic[i] = fallback;
+        OSS msg;
+        msg << "Could not compute joint asymptotic p-values for output '" << outSample.getDescription()[i]
+          << "': " << ex.what();
+        if (!faultyInputs.isEmpty())
+          msg << " Failing input variable(s): " << faultyInputs.__str__();
+        msg << ".\n";
+        warningMessage_ += msg.str();
+      }
+    }
     if (globalHSICParameters_.computePermutationPValues())
-      result_.globalPValuesPermutation_[i] = estimator.getPValuesPermutation();
+      pValuesPermutation[i] = estimator.getPValuesPermutation();
   }
+  result_.globalHSICIndices_ = hsicIndices;
+  result_.globalR2HSICIndices_ = r2Indices;
+  if (globalHSICParameters_.computeAsymptoticPValues())
+    result_.globalPValuesAsymptotic_ = pValuesAsymptotic;
+  if (globalHSICParameters_.computePermutationPValues())
+    result_.globalPValuesPermutation_ = pValuesPermutation;
 }
 
 void DataSensitivityAnalysis::computeTargetHSICIndices()
@@ -615,13 +663,13 @@ void DataSensitivityAnalysis::computeTargetHSICIndices()
   
   if (targetCovarianceModels_.getSize() != nbInputs + nbOutputs)
     throw InvalidArgumentException(HERE) << "The number of covariance models for target HSIC indices (" << targetCovarianceModels_.getSize() << ") must be equal to the number of variables (" << nbInputs + nbOutputs << ").";
-  
+
   if (computeCovModelParameters_)
   {
     const Point stdDevs = inSample.computeStandardDeviation();
     for(UnsignedInteger i = 0; i < nbInputs ; ++i)
     {
-      if (stdDevs[i] == 0.)
+      if (!(stdDevs[i] > 0.))
         throw InvalidArgumentException(HERE) << "The standard deviation of variable " << designOfExperiment_.getSample().getDescription()[i] << " is zero, the covariance model parameters cannot be estimated.";
       targetCovarianceModels_[i].setScale(Point{stdDevs[i]});
     }
@@ -630,7 +678,7 @@ void DataSensitivityAnalysis::computeTargetHSICIndices()
       Sample outputMarginal = outSample.getMarginal(i);
       Sample filteredOutputMarginal = filterFunctions_[i](outputMarginal);
       Point stdDevsFiltered = filteredOutputMarginal.computeStandardDeviation();
-      if (stdDevsFiltered[0] == 0.)
+      if (!(stdDevsFiltered[0] > 0.))
         throw InvalidArgumentException(HERE) << "The standard deviation of the filtered output variable "<< outSample.getDescription()[i] << " is zero, the covariance model parameters cannot be estimated.";
       targetCovarianceModels_[nbInputs + i].setScale(Point{stdDevsFiltered[0]});
     }
@@ -642,13 +690,15 @@ void DataSensitivityAnalysis::computeTargetHSICIndices()
   else
     stat = HSICVStat();
 
-  result_.targetHSICIndices_ = PersistentCollection<Point>(nbOutputs);
-  result_.targetR2HSICIndices_ = PersistentCollection<Point>(nbOutputs);
+  PersistentCollection<Point> hsicIndices(nbOutputs);
+  PersistentCollection<Point> r2Indices(nbOutputs);
+  PersistentCollection<Point> pValuesAsymptotic;
+  PersistentCollection<Point> pValuesPermutation;
   if (targetHSICParameters_.computeAsymptoticPValues())
-    result_.targetPValuesAsymptotic_ = PersistentCollection<Point>(nbOutputs);
+    pValuesAsymptotic = PersistentCollection<Point>(nbOutputs);
   if (targetHSICParameters_.computePermutationPValues())
-    result_.targetPValuesPermutation_ = PersistentCollection<Point>(nbOutputs);
-  
+    pValuesPermutation = PersistentCollection<Point>(nbOutputs);
+
   Indices covarianceModelIndices(nbInputs + 1u);
   covarianceModelIndices.fill();
 
@@ -657,20 +707,59 @@ void DataSensitivityAnalysis::computeTargetHSICIndices()
     covarianceModelIndices[nbInputs] = nbInputs + i; // the last covariance model is for the output variable
 
     auto estimator = HSICEstimatorTargetSensitivity(
-      targetCovarianceModels_.select(covarianceModelIndices), 
-      inSample, 
-      outSample.getMarginal(i), 
+      targetCovarianceModels_.select(covarianceModelIndices),
+      inSample,
+      outSample.getMarginal(i),
       stat,
       filterFunctions_[i]
     );
 
-    result_.targetHSICIndices_[i] = estimator.getHSICIndices();
-    result_.targetR2HSICIndices_[i] = estimator.getR2HSICIndices();
+    hsicIndices[i] = estimator.getHSICIndices();
+    r2Indices[i] = estimator.getR2HSICIndices();
     if (targetHSICParameters_.computeAsymptoticPValues())
-      result_.targetPValuesAsymptotic_[i] = estimator.getPValuesAsymptotic();
+    {
+      try
+      {
+        pValuesAsymptotic[i] = estimator.getPValuesAsymptotic();
+      }
+      catch (const std::exception & ex)
+      {
+        Point fallback(nbInputs, std::numeric_limits<Scalar>::quiet_NaN());
+        Description faultyInputs;
+        for (UnsignedInteger j = 0; j < nbInputs; ++j)
+        {
+          try
+          {
+            Collection<CovarianceModel> covPair;
+            covPair.add(targetCovarianceModels_[j]);
+            covPair.add(targetCovarianceModels_[nbInputs + i]);
+            HSICEstimatorTargetSensitivity singleEstimator(covPair, inSample.getMarginal(Indices(1, j)), outSample.getMarginal(i), stat, filterFunctions_[i]);
+            fallback[j] = singleEstimator.getPValuesAsymptotic()[0];
+          }
+          catch (const std::exception &)
+          {
+            faultyInputs.add(inSample.getDescription()[j]);
+          }
+        }
+        pValuesAsymptotic[i] = fallback;
+        OSS msg;
+        msg << "Could not compute joint asymptotic p-values for output '" << outSample.getDescription()[i]
+          << "': " << ex.what();
+        if (!faultyInputs.isEmpty())
+          msg << " Failing input variable(s): " << faultyInputs.__str__();
+        msg << ".\n";
+        warningMessage_ += msg.str();
+      }
+    }
     if (targetHSICParameters_.computePermutationPValues())
-      result_.targetPValuesPermutation_[i] = estimator.getPValuesPermutation();
+      pValuesPermutation[i] = estimator.getPValuesPermutation();
   }
+  result_.targetHSICIndices_ = hsicIndices;
+  result_.targetR2HSICIndices_ = r2Indices;
+  if (targetHSICParameters_.computeAsymptoticPValues())
+    result_.targetPValuesAsymptotic_ = pValuesAsymptotic;
+  if (targetHSICParameters_.computePermutationPValues())
+    result_.targetPValuesPermutation_ = pValuesPermutation;
 }
 
 void DataSensitivityAnalysis::computeConditionalHSICIndices()
@@ -686,23 +775,24 @@ void DataSensitivityAnalysis::computeConditionalHSICIndices()
   
   if (conditionalCovarianceModels_.getSize() != nbInputs + nbOutputs)
     throw InvalidArgumentException(HERE) << "The number of covariance models for conditional HSIC indices (" << conditionalCovarianceModels_.getSize() << ") must be equal to the number of variables (" << nbInputs + nbOutputs << ").";
-  
+
   if (computeCovModelParameters_)
   {
     const Point stDevs = designOfExperiment_.getSample().computeStandardDeviation();
     for(UnsignedInteger i = 0; i < nbInputs + nbOutputs; ++i)
     {
-      if (stDevs[i] == 0.)
+      if (!(stDevs[i] > 0.))
         throw InvalidArgumentException(HERE) << "The standard deviation of variable " << designOfExperiment_.getSample().getDescription()[i] << " is zero, the covariance model parameters cannot be estimated.";
       conditionalCovarianceModels_[i].setScale(Point{stDevs[i]});
     }
   }
 
-  result_.conditionalHSICIndices_ = PersistentCollection<Point>(nbOutputs);
-  result_.conditionalR2HSICIndices_ = PersistentCollection<Point>(nbOutputs);
+  PersistentCollection<Point> hsicIndices(nbOutputs);
+  PersistentCollection<Point> r2Indices(nbOutputs);
+  PersistentCollection<Point> pValuesPermutation;
   if (conditionalHSICParameters_.computePermutationPValues())
-    result_.conditionalPValuesPermutation_ = PersistentCollection<Point>(nbOutputs);
-  
+    pValuesPermutation = PersistentCollection<Point>(nbOutputs);
+
   Indices covarianceModelIndices(nbInputs + 1u);
   covarianceModelIndices.fill();
 
@@ -711,17 +801,21 @@ void DataSensitivityAnalysis::computeConditionalHSICIndices()
     covarianceModelIndices[nbInputs] = nbInputs + i; // the last covariance model is for the output variable
 
     auto estimator = HSICEstimatorConditionalSensitivity(
-      conditionalCovarianceModels_.select(covarianceModelIndices), 
-      inSample, 
-      outSample.getMarginal(i), 
+      conditionalCovarianceModels_.select(covarianceModelIndices),
+      inSample,
+      outSample.getMarginal(i),
       weightFunctions_[i]
     );
 
-    result_.conditionalHSICIndices_[i] = estimator.getHSICIndices();
-    result_.conditionalR2HSICIndices_[i] = estimator.getR2HSICIndices();
+    hsicIndices[i] = estimator.getHSICIndices();
+    r2Indices[i] = estimator.getR2HSICIndices();
     if (conditionalHSICParameters_.computePermutationPValues())
-      result_.conditionalPValuesPermutation_[i] = estimator.getPValuesPermutation();
+      pValuesPermutation[i] = estimator.getPValuesPermutation();
   }
+  result_.conditionalHSICIndices_ = hsicIndices;
+  result_.conditionalR2HSICIndices_ = r2Indices;
+  if (conditionalHSICParameters_.computePermutationPValues())
+    result_.conditionalPValuesPermutation_ = pValuesPermutation;
 }
 
 void DataSensitivityAnalysis::checkIndependance()
