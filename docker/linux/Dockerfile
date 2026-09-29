@@ -10,7 +10,7 @@ RUN yum -y install almalinux-release-devel epel-release && yum config-manager --
   mesa-libGL-devel mesa-libEGL-devel mesa-libGLU-devel mesa-libGLw-devel mesa-dri-drivers \
   xcb-util-devel xcb-util-renderutil-devel xcb-util-keysyms-devel xcb-util-image-devel xcb-util-wm-devel xcb-util-cursor-devel \
   texlive-collection-latexrecommended texlive-pdftex texlive-latex-bin texlive-anyfontsize tex-preview pandoc dvisvgm \
-  gcc-toolset-14-gcc-c++ gcc-toolset-14-gcc-gfortran glibc-locale-source gdb && localedef -i en_US -f UTF-8 en_US.UTF-8 && mktexfmt latex.fmt
+  gcc-toolset-14-gcc-c++ gcc-toolset-14-gcc-gfortran glibc-locale-source gdb && localedef -i en_US -f UTF-8 en_US.UTF-8
 
 ENV LANG="en_US.utf8" MAKEFLAGS="-j8"
 ENV PATH=/opt/rh/gcc-toolset-14/root/usr/bin:$PATH LD_LIBRARY_PATH=/opt/rh/gcc-toolset-14/root/usr/lib64:/usr/local/lib
@@ -193,3 +193,4 @@ RUN curl -fsSL https://github.com/OpenModelica/OpenModelica/releases/download/v1
 RUN useradd -m -d /home/devel -u 1000 -U -G users,tty -s /bin/bash devel
 RUN echo 'devel ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 USER devel
+RUN fmtutil-user --all
