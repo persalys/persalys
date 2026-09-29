@@ -307,6 +307,13 @@ const ydefx::JobParametersProxy& YACSEvaluation::jobParameters() const
   return jobParams_;
 }
 
+
+/** The job model is a python object which drives the execution of the job.*/
+void YACSEvaluation::setJobModel(const py2cpp::PyPtr& model)
+{
+  jobModel_ = model;
+}
+
 void YACSEvaluation::setDump(const OT::String & dump) const
 {
   dump_ = dump;

@@ -33,6 +33,16 @@ result : :py:class:'pydefx.parameters.Parameters'
 
 // ---------------------------------------------------------------------
 
+%feature("docstring") PERSALYS::YACSPhysicalModel::setJobModel
+"Set the job model which drives the execution of the job.
+
+Parameters
+----------
+model : :py:class:`pydefx.pystudy.PyStudy`
+    job model, e.g. `pydefx.PyStudy`, `pydefx.LocalStudy`"
+
+// ---------------------------------------------------------------------
+
 %feature("docstring") PERSALYS::YACSPhysicalModel::setUseYACS
 "Launching parameters accessor.
 

@@ -79,6 +79,9 @@ public:
   ydefx::JobParametersProxy& jobParameters();
   const ydefx::JobParametersProxy& jobParameters() const;
 
+  /** The job model is a python object which drives the execution of the job.*/
+  void setJobModel(const py2cpp::PyPtr& model);
+
   /** Generate script for JobParametersProxy */
   OT::String getJobParamsPythonScript(const OT::String & name) const;
 

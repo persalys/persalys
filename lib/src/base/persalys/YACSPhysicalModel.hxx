@@ -62,6 +62,9 @@ public:
   ydefx::JobParametersProxy& jobParameters();
   const ydefx::JobParametersProxy& jobParameters() const;
 
+  /** The job model is a python object which drives the execution of the job.*/
+  void setJobModel(const py2cpp::PyPtr& model);
+
   OT::String getPythonScript() const override;
 
   bool canBeInterrupted() const override;

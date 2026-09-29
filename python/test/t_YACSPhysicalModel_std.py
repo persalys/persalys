@@ -3,6 +3,7 @@
 import openturns as ot
 import openturns.testing as ott
 import persalys
+import pydefx
 
 
 pyscript = "def _exec(x, y, p):\n    w, z = 3*x+4*y+p,x+y+p\n    return w, z\n"
@@ -59,3 +60,7 @@ Y_ref = [[1, 1]]
 ott.assert_almost_equal(
     design.getResult().getDesignOfExperiment().getOutputSample(), Y_ref
 )
+
+# check low-level methods
+parameters = model.jobParameters()
+model.setJobModel(pydefx.PyStudy())
