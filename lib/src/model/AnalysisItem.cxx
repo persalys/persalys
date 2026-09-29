@@ -134,7 +134,7 @@ void AnalysisItem::buildActions()
     convertAction_->setEnabled(analysis_.getImplementation()->hasValidResult());
     appendAction(convertAction_);
 
-    if(analysisType.contains("DesignOfExperiment") || analysisType == "CalibrationAnalysis")
+    if(analysisType.contains("DesignOfExperiment"))
       return; // no remove action for these analyses
   }
 

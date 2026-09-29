@@ -15,6 +15,10 @@
 #include <vtkXYChartRepresentation.h>
 #include <vtkPlot.h>
 #include <vtkIdTypeArray.h>
+#include <vtkDataArray.h>
+
+#include <algorithm>
+#include <limits>
 
 #include <QEvent>
 #include <QTimer>
@@ -120,6 +124,9 @@ void PVXYChartViewWidget::setXAxisData(const QString& varX)
     getView()->getRepresentation(reprInd)->getProxy()->UpdateProperty("XArrayName");
   }
   chartXY_->GetAxis(vtkAxis::BOTTOM)->SetTitle(axisLabels_[varX].toStdString());
+
+  // set internal parameter to be able to update automatically the plot
+  chartXY_->GetScene()->SetDirty(true);
 }
 
 
@@ -155,6 +162,11 @@ void PVXYChartViewWidget::showChart(const QString& varX, const QString& varY)
   // recalculate automatically the axis bounds
   chartXY_->GetAxis(vtkAxis::LEFT)->SetBehavior(0);
   chartXY_->GetAxis(vtkAxis::BOTTOM)->SetBehavior(0);
+
+  // optionally add a margin around the X axis data range (e.g. to keep a
+  // vertical line located at an extreme value visible)
+  if (xAxisRangeMargin_ > 0.)
+    applyXAxisRangeMargin(varX);
 }
 
 
@@ -176,6 +188,45 @@ void PVXYChartViewWidget::setAxisRange(const vtkAxis::Location ax, const double 
   chartXY_->GetAxis(ax)->SetBehavior(1);
   chartXY_->GetAxis(ax)->SetMinimum(minValue - std::abs(0.05 * minValue));
   chartXY_->GetAxis(ax)->SetMaximum(maxValue + std::abs(0.05 * maxValue));
+  getView()->resetDisplay();
+}
+
+
+void PVXYChartViewWidget::setXAxisRangeMargin(const double margin)
+{
+  xAxisRangeMargin_ = margin;
+}
+
+
+void PVXYChartViewWidget::applyXAxisRangeMargin(const QString& varX)
+{
+  double xMin = std::numeric_limits<double>::max();
+  double xMax = std::numeric_limits<double>::lowest();
+  bool found = false;
+
+  // The X range is computed from the values of the column used as X axis,
+  // over all the representations (e.g. prior and posterior).
+  for (int reprInd = 0; reprInd < getNumberOfRepresentations(); ++reprInd)
+  {
+    vtkTable * table(getTable(reprInd));
+    if (!table)
+      continue;
+    vtkDataArray * xArray(vtkDataArray::SafeDownCast(table->GetColumnByName(varX.toStdString().c_str())));
+    if (!xArray || xArray->GetNumberOfTuples() == 0)
+      continue;
+    double range[2];
+    xArray->GetRange(range);
+    xMin = std::min(xMin, range[0]);
+    xMax = std::max(xMax, range[1]);
+    found = true;
+  }
+
+  if (!found || xMax <= xMin)
+    return;
+
+  const double margin = xAxisRangeMargin_ * (xMax - xMin);
+  chartXY_->GetAxis(vtkAxis::BOTTOM)->SetBehavior(1);
+  chartXY_->GetAxis(vtkAxis::BOTTOM)->SetRange(xMin - margin, xMax + margin);
   getView()->resetDisplay();
 }
 

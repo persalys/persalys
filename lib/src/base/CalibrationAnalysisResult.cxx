@@ -73,5 +73,17 @@ void CalibrationAnalysisResult::load(Advocate & adv)
   adv.loadAttribute("confidenceInterval_", confidenceInterval_);
   adv.loadAttribute("priorResidualsPDF_", priorResidualsPDF_);
   adv.loadAttribute("posteriorResidualsPDF_", posteriorResidualsPDF_);
+
+  // backward compatibility: the predictions at the prior/posterior mean were stored here
+  // before being available in OT::CalibrationResult
+  if (adv.hasAttribute("outputAtPrior_") && adv.hasAttribute("outputAtPosterior_"))
+  {
+    Sample outputAtPrior;
+    Sample outputAtPosterior;
+    adv.loadAttribute("outputAtPrior_", outputAtPrior);
+    adv.loadAttribute("outputAtPosterior_", outputAtPosterior);
+    if (outputAtPrior.getSize() && !calibrationResult_.getOutputAtPriorMean().getSize())
+      calibrationResult_.setOutputAtPriorAndPosteriorMean(outputAtPrior, outputAtPosterior);
+  }
 }
 }

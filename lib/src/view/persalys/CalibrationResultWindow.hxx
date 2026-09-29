@@ -32,9 +32,12 @@ class PERSALYS_VIEW_API CalibrationResultWindow : public ResultWindow
   Q_OBJECT
 
 public:
-  CalibrationResultWindow(AnalysisItem *item, QWidget *parent = nullptr);
+  explicit CalibrationResultWindow(AnalysisItem *item, QWidget *parent = nullptr);
 
 protected:
+  /** Whether the predictions at the prior/posterior mean are available */
+  bool hasPredictions() const;
+  QTabWidget * getThetaTabWidget(const CalibrationAnalysis * analysis);
   QTabWidget * getPredictionTabWidget(const OT::UnsignedInteger i);
 
 private:
