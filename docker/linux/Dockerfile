@@ -53,7 +53,7 @@ RUN curl -fsSL https://github.com/stevengj/nlopt/archive/v2.11.0.tar.gz | tar xz
 RUN curl -fsSL https://github.com/HDFGroup/hdf5/archive/refs/tags/2.2.0.tar.gz | tar xz && cd hdf5* && cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DHDF5_BUILD_CPP_LIB=ON -DBUILD_TESTING=OFF -DHDF5_BUILD_TOOLS=OFF -DHDF5_BUILD_EXAMPLES=OFF -DHDF5_BUILD_UTILS=OFF -DBUILD_STATIC_LIBS=OFF -DHDF5_ENABLE_ZLIB_SUPPORT=ON -B build . && cd build && make install > /dev/null 2>&1 && cd ../.. && rm -r hdf5*
 
 # nanoflann
-RUN curl -fsSL https://github.com/jlblancoc/nanoflann/archive/refs/tags/1.12.1.tar.gz | tar xz && cd nanoflann* && cmake -DNANOFLANN_BUILD_EXAMPLES=OFF -DNANOFLANN_BUILD_TESTS=OFF . && make install && cd - && rm -r nanoflann*
+RUN curl -fsSL https://github.com/jlblancoc/nanoflann/archive/refs/tags/2.0.1.tar.gz | tar xz && cd nanoflann* && cmake -DNANOFLANN_BUILD_EXAMPLES=OFF -DNANOFLANN_BUILD_TESTS=OFF . && make install && cd - && rm -r nanoflann*
 
 # eigen
 RUN curl -fsSL https://gitlab.com/libeigen/eigen/-/archive/3.4.1/eigen-3.4.1.tar.bz2 | tar xj && cd eigen* \
@@ -74,7 +74,7 @@ RUN curl -fsSL https://github.com/ceres-solver/ceres-solver/archive/2.2.0.tar.gz
 RUN curl -fsSL https://github.com/oneapi-src/oneTBB/archive/refs/tags/v2023.1.0.tar.gz | tar xz && cd oneTBB* && cmake -DTBB_TEST=OFF -DTBB_FILE_TRIM=OFF . && make install > /dev/null 2>&1 && cd - && rm -r oneTBB*
 
 # primesieve
-RUN curl -fsSL https://github.com/kimwalisch/primesieve/archive/v12.15.tar.gz | tar xz && cd primesieve* && cmake -DBUILD_STATIC_LIBS=OFF -DWITH_MULTIARCH=OFF -DBUILD_PRIMESIEVE=OFF . && make install > /dev/null 2>&1 && cd - && rm -r primesieve*
+RUN curl -fsSL https://github.com/kimwalisch/primesieve/archive/v12.16.tar.gz | tar xz && cd primesieve* && cmake -DBUILD_STATIC_LIBS=OFF -DWITH_MULTIARCH=OFF -DBUILD_PRIMESIEVE=OFF . && make install > /dev/null 2>&1 && cd - && rm -r primesieve*
 
 # appimagetool
 RUN wget -q https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage -O appimagetool-x86_64.AppImage \
@@ -91,7 +91,7 @@ RUN curl -fsSL https://github.com/libffi/libffi/releases/download/v3.8.0/libffi-
  && CFLAGS="-fPIC" ./configure --disable-shared --disable-multi-os-directory --prefix=/opt/ffi && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r libffi*
 
 # python
-RUN curl -fsSL https://www.python.org/ftp/python/3.14.7/Python-3.14.7.tgz | tar xz && cd Python* \
+RUN curl -fsSL https://www.python.org/ftp/python/3.14.8/Python-3.14.8.tgz | tar xz && cd Python* \
  && ./configure --enable-shared --enable-optimizations PKG_CONFIG_PATH=/opt/ffi/lib/pkgconfig/:/opt/ssl/lib64/pkgconfig/ LDFLAGS="-Wl,-rpath /usr/local/lib -L/opt/ssl/lib64 -L/opt/ffi/lib" && make > /dev/null 2>&1 && make install > /dev/null 2>&1 \
  && python3 -V && python3 -c "import ssl; import ctypes" && cd - && rm -r Python*
 
@@ -139,7 +139,7 @@ RUN curl -fsSL https://archives.boost.io/release/1.92.0/source/boost_1_92_0.tar.
  && ./b2 -q variant=release address-model=64 architecture=x86 debug-symbols=off threading=multi runtime-link=shared link=shared toolset=gcc --layout=system ${MAKEFLAGS} install --with-graph --with-chrono --with-serialization --with-program_options --with-filesystem --with-regex > /dev/null 2>&1 && cd - && rm -r boost*
 
 # pagmo
-RUN curl -fsSL https://github.com/esa/pagmo2/archive/refs/tags/v2.19.1.tar.gz | tar xz && cd pagmo* && cmake -DPAGMO_WITH_EIGEN3=ON -DCMAKE_UNITY_BUILD=ON . && make install > /dev/null 2>&1 && cd - && rm -r pagmo*
+RUN curl -fsSL https://github.com/esa/pagmo2/archive/refs/tags/v2.20.0.tar.gz | tar xz && cd pagmo* && cmake -DPAGMO_WITH_EIGEN3=ON -DCMAKE_UNITY_BUILD=ON . && make install > /dev/null 2>&1 && cd - && rm -r pagmo*
 
 # ninja
 RUN curl -fsSL https://github.com/ninja-build/ninja/archive/refs/tags/v1.11.1.tar.gz | tar xz && cd ninja* && cmake -DCMAKE_BUILD_TYPE=Release . && make install > /dev/null 2>&1 && cd - && rm -r ninja*
@@ -151,10 +151,10 @@ RUN curl -fsSL https://gitlab.freedesktop.org/wayland/wayland/-/releases/1.25.0/
 # qt
 RUN wget https://github.com/Kitware/CMake/releases/download/v3.27.9/cmake-3.27.9-linux-x86_64.sh && bash cmake-3.27.9-linux-x86_64.sh --skip-license --prefix=/usr/local
 ADD qtbase-freetype28.patch qtbase-icu59.patch ./
-RUN curl -fSsL https://download.qt.io/official_releases/qt/6.11/6.11.2/submodules/qtbase-everywhere-src-6.11.2.tar.xz | tar xJ && cd qtbase-everywhere* && patch -p1 -i ../qtbase-freetype28.patch && patch -p1 -R -i ../qtbase-icu59.patch && cmake -G Ninja -DCMAKE_INSTALL_PREFIX=/usr/local -DINSTALL_ARCHDATADIR=lib/qt -DQT_BUILD_TESTS=FALSE -DQT_BUILD_EXAMPLES=FALSE -DINPUT_xcb=yes -DINPUT_mimetype_database_compression=none -DCMAKE_MESSAGE_LOG_LEVEL=STATUS -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 . && ninja install ${MAKEFLAGS} > /dev/null 2>&1 && cd - && rm -r qtbase*
-RUN curl -fSsL https://download.qt.io/official_releases/qt/6.11/6.11.2/submodules/qt5compat-everywhere-src-6.11.2.tar.xz | tar xJ && cd qt5compat* && cmake -G Ninja -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_MESSAGE_LOG_LEVEL=STATUS -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 . && ninja install ${MAKEFLAGS} > /dev/null 2>&1 && cd - && rm -r qt5compat*
-RUN curl -fSsL https://download.qt.io/official_releases/qt/6.11/6.11.2/submodules/qtsvg-everywhere-src-6.11.2.tar.xz | tar xJ && cd qtsvg* && cmake -G Ninja -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_MESSAGE_LOG_LEVEL=STATUS -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 . && ninja install ${MAKEFLAGS} > /dev/null 2>&1 && cd - && rm -r qtsvg*
-RUN curl -fSsL https://download.qt.io/official_releases/qt/6.11/6.11.2/submodules/qttools-everywhere-src-6.11.2.tar.xz | tar xJ && cd qttools* && cmake -G Ninja -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_MESSAGE_LOG_LEVEL=STATUS -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=6 . && ninja install install ${MAKEFLAGS} > /dev/null 2>&1 && cd - && rm -r qttools*
+RUN curl -fSsL https://download.qt.io/official_releases/qt/6.12/6.12.0/submodules/qtbase-everywhere-src-6.12.0.tar.xz | tar xJ && cd qtbase-everywhere* && patch -p1 -i ../qtbase-freetype28.patch && patch -p1 -R -i ../qtbase-icu59.patch && cmake -G Ninja -DCMAKE_INSTALL_PREFIX=/usr/local -DINSTALL_ARCHDATADIR=lib/qt -DQT_BUILD_TESTS=FALSE -DQT_BUILD_EXAMPLES=FALSE -DINPUT_xcb=yes -DINPUT_mimetype_database_compression=none -DCMAKE_MESSAGE_LOG_LEVEL=STATUS -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 . && ninja install ${MAKEFLAGS} > /dev/null 2>&1 && cd - && rm -r qtbase*
+RUN curl -fSsL https://download.qt.io/official_releases/qt/6.12/6.12.0/submodules/qt5compat-everywhere-src-6.12.0.tar.xz | tar xJ && cd qt5compat* && cmake -G Ninja -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_MESSAGE_LOG_LEVEL=STATUS -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 . && ninja install ${MAKEFLAGS} > /dev/null 2>&1 && cd - && rm -r qt5compat*
+RUN curl -fSsL https://download.qt.io/official_releases/qt/6.12/6.12.0/submodules/qtsvg-everywhere-src-6.12.0.tar.xz | tar xJ && cd qtsvg* && cmake -G Ninja -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_MESSAGE_LOG_LEVEL=STATUS -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 . && ninja install ${MAKEFLAGS} > /dev/null 2>&1 && cd - && rm -r qtsvg*
+RUN curl -fSsL https://download.qt.io/official_releases/qt/6.12/6.12.0/submodules/qttools-everywhere-src-6.12.0.tar.xz | tar xJ && cd qttools* && cmake -G Ninja -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_MESSAGE_LOG_LEVEL=STATUS -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=6 . && ninja install install ${MAKEFLAGS} > /dev/null 2>&1 && cd - && rm -r qttools*
 
 # qwt
 RUN curl -fsSL https://downloads.sourceforge.net/qwt/qwt-6.3.0.tar.bz2 | tar xj && cd qwt* \
@@ -194,4 +194,4 @@ RUN curl -fsSL https://github.com/OpenModelica/OpenModelica/releases/download/v1
 RUN useradd -m -d /home/devel -u 1000 -U -G users,tty -s /bin/bash devel
 RUN echo 'devel ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 USER devel
-RUN fmtutil-user --all
+RUN fmtutil-user --all > /dev/null 2>&1
