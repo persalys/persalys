@@ -1,0 +1,33 @@
+diff --git a/src/gui/text/freetype/qfontengine_ft.cpp b/src/gui/text/freetype/qfontengine_ft.cpp
+index b43c60c689f..b7de23d75ee 100644
+--- a/src/gui/text/freetype/qfontengine_ft.cpp
++++ b/src/gui/text/freetype/qfontengine_ft.cpp
+@@ -312,6 +312,7 @@ QFreetypeFace *QFreetypeFace::getFace(const QFontEngine::FaceId &face_id,
+         // temporary FT_Face here which can be thrown away after. The bug has been fixed in
+         // Freetype 2.13.3.
+         if (tmpFace != nullptr) {
++#if (FREETYPE_MAJOR*10000 + FREETYPE_MINOR*100 + FREETYPE_PATCH) >= 20900
+             FT_MM_Var *var;
+             if (FT_Get_MM_Var(tmpFace, &var) == FT_Err_Ok) {
+                 for (FT_UInt i = 0; i < var->num_axis; ++i) {
+@@ -349,7 +350,7 @@ QFreetypeFace *QFreetypeFace::getFace(const QFontEngine::FaceId &face_id,
+ 
+                 FT_Done_MM_Var(qt_getFreetype(), var);
+             }
+-
++#endif
+             FT_Done_Face(tmpFace);
+         }
+ 
+@@ -424,9 +425,11 @@ QFreetypeFace *QFreetypeFace::getFace(const QFontEngine::FaceId &face_id,
+ void QFreetypeFace::cleanup()
+ {
+     hbFace.reset();
++#if (FREETYPE_MAJOR*10000 + FREETYPE_MINOR*100 + FREETYPE_PATCH) >= 20900
+     if (mm_var)
+         FT_Done_MM_Var(qt_getFreetype(), mm_var);
+     mm_var = nullptr;
++#endif
+     FT_Done_Face(face);
+     face = nullptr;
+ }

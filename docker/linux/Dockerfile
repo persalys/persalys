@@ -149,11 +149,12 @@ RUN curl -fsSL https://gitlab.freedesktop.org/wayland/wayland/-/releases/1.25.0/
  && meson build --buildtype=release -Ddocumentation=false && ninja -C build install > /dev/null 2>&1 && cd - && rm -r wayland*
 
 # qt
-RUN curl -fsSL https://ftp.fau.de/qtproject/archive/qt/5.15/5.15.19/submodules/qtbase-everywhere-opensource-src-5.15.19.tar.xz | tar xJ && cd qtbase* && ./configure -xcb -no-mimetype-database -confirm-license -opensource -prefix /usr/local -headerdir /usr/local/include/qt -archdatadir /usr/local/lib/qt -datadir /usr/local/share/qt -silent -nomake tests -nomake examples && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtbase*
-RUN curl -fsSL https://ftp.fau.de/qtproject/archive/qt/5.15/5.15.19/submodules/qtsvg-everywhere-opensource-src-5.15.19.tar.xz | tar xJ && cd qtsvg* && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtsvg*
-RUN curl -fsSL https://ftp.fau.de/qtproject/archive/qt/5.15/5.15.19/submodules/qtx11extras-everywhere-opensource-src-5.15.19.tar.xz | tar xJ && cd qtx11extras* && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtx11extras*
-RUN curl -fsSL https://ftp.fau.de/qtproject/archive/qt/5.15/5.15.19/submodules/qttools-everywhere-opensource-src-5.15.19.tar.xz | tar xJ && cd qttools* && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qttools*
-RUN curl -fsSL https://ftp.fau.de/qtproject/archive/qt/5.15/5.15.19/submodules/qtwayland-everywhere-opensource-src-5.15.19.tar.xz | tar xJ && cd qtwayland* && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qtwayland*
+RUN wget https://github.com/Kitware/CMake/releases/download/v3.27.9/cmake-3.27.9-linux-x86_64.sh && bash cmake-3.27.9-linux-x86_64.sh --skip-license --prefix=/usr/local
+ADD qtbase-freetype28.patch qtbase-icu59.patch ./
+RUN curl -fSsL https://download.qt.io/official_releases/qt/6.11/6.11.2/submodules/qtbase-everywhere-src-6.11.2.tar.xz | tar xJ && cd qtbase-everywhere* && patch -p1 -i ../qtbase-freetype28.patch && patch -p1 -R -i ../qtbase-icu59.patch && cmake -G Ninja -DCMAKE_INSTALL_PREFIX=/usr/local -DINSTALL_ARCHDATADIR=lib/qt -DQT_BUILD_TESTS=FALSE -DQT_BUILD_EXAMPLES=FALSE -DINPUT_xcb=yes -DINPUT_mimetype_database_compression=none -DCMAKE_MESSAGE_LOG_LEVEL=STATUS -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 . && ninja install ${MAKEFLAGS} > /dev/null 2>&1 && cd - && rm -r qtbase*
+RUN curl -fSsL https://download.qt.io/official_releases/qt/6.11/6.11.2/submodules/qt5compat-everywhere-src-6.11.2.tar.xz | tar xJ && cd qt5compat* && cmake -G Ninja -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_MESSAGE_LOG_LEVEL=STATUS -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 . && ninja install ${MAKEFLAGS} > /dev/null 2>&1 && cd - && rm -r qt5compat*
+RUN curl -fSsL https://download.qt.io/official_releases/qt/6.11/6.11.2/submodules/qtsvg-everywhere-src-6.11.2.tar.xz | tar xJ && cd qtsvg* && cmake -G Ninja -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_MESSAGE_LOG_LEVEL=STATUS -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 . && ninja install ${MAKEFLAGS} > /dev/null 2>&1 && cd - && rm -r qtsvg*
+RUN curl -fSsL https://download.qt.io/official_releases/qt/6.11/6.11.2/submodules/qttools-everywhere-src-6.11.2.tar.xz | tar xJ && cd qttools* && cmake -G Ninja -DCMAKE_INSTALL_PREFIX=/usr/local -DCMAKE_MESSAGE_LOG_LEVEL=STATUS -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=6 . && ninja install install ${MAKEFLAGS} > /dev/null 2>&1 && cd - && rm -r qttools*
 
 # qwt
 RUN curl -fsSL https://downloads.sourceforge.net/qwt/qwt-6.3.0.tar.bz2 | tar xj && cd qwt* \
@@ -162,7 +163,7 @@ RUN curl -fsSL https://downloads.sourceforge.net/qwt/qwt-6.3.0.tar.bz2 | tar xj 
  && qmake && make > /dev/null 2>&1 && make install > /dev/null 2>&1 && cd - && rm -r qwt*
 
 # paraview
-RUN curl -fsSL https://paraview.org/files/v6.1/ParaView-v6.1.1.tar.xz | tar xJ && cd ParaView* \
+RUN curl -fsSL https://paraview.org/files/v6.2/ParaView-v6.2.0.tar.xz | tar xJ && cd ParaView* \
  && cmake -DCMAKE_BUILD_TYPE=Release \
   -DPARAVIEW_ENABLE_EMBEDDED_DOCUMENTATION=OFF -DPARAVIEW_PLUGIN_DISABLE_XML_DOCUMENTATION=ON \
   -DPARAVIEW_USE_VISKORES=OFF -DPARAVIEW_USE_FORTRAN=OFF -DPARAVIEW_ENABLE_XDMF2=OFF \

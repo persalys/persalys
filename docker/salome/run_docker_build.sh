@@ -11,6 +11,7 @@ cd /tmp
 cmake \
   -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=32 \
   -DUSE_SALOME=ON \
+  -DPERSALYS_QT_MAJOR_VERSION=5 \
   -DSalomeKERNEL_DIR=/home/devel/local/salome_adm/cmake_files \
   -DSalomeYACS_DIR=/home/devel/local/adm/cmake/ \
   -Dydefx_DIR=/home/devel/local/salome_adm/cmake_files/ \

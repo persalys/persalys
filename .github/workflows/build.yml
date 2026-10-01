@@ -86,7 +86,6 @@ jobs:
           -DCMAKE_PREFIX_PATH="/opt/homebrew/opt/openblas;/opt/homebrew/opt/libxml2" \
           -DCMAKE_FRAMEWORK_PATH="$(brew --prefix qwt)/lib" \
           -DPython_EXECUTABLE=/opt/homebrew/bin/python3 \
-          -DPERSALYS_QT_MAJOR_VERSION=6 \
           -DUSE_PARAVIEW=OFF \
           -DCMAKE_CXX_FLAGS="-Wall -Wextra -Werror" \
           -DCMAKE_SWIG_FLAGS="-Werror" -DSWIG_COMPILE_FLAGS="-O1 -Wno-unused-parameter -Wno-unused-function" \

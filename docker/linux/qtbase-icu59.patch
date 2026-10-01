@@ -1,0 +1,67 @@
+From f1c3af04a478d909da98a15feefa4ec2e0eaa8ba Mon Sep 17 00:00:00 2001
+From: Marc Mutz <marc.mutz@qt.io>
+Date: Tue, 22 Jul 2025 22:04:32 +0200
+Subject: [PATCH] QLocale/ICU: static_assert(is_same<UChar,char16_t>) and
+ remove casts
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Since ICU 59, ICU's UChar is the same as char16_t in C++ mode¹, so we
+don't need the casts if we use QString::DataPointer::data() instead of
+QString::data() (that also avoids the detach attempt).
+
+Add a static_assert() to document the assumption.
+
+¹ https://icu.unicode.org/download/59 Release 59.1 on 2017-04-14,
+  so should be old enough.
+  (didn't find the release date of 59(.0), if there was one)
+
+Don't fix the indentation, since there's an untouched third line in
+each call and a follow-up commit will have to reindent this, anyway.
+
+Task-number: QTBUG-138583
+Pick-to: 6.10 6.9 6.8 6.5
+Change-Id: I9f4a83b7b93445a32e3275ae717fb4e8f5c6a397
+Reviewed-by: Thiago Macieira <thiago.macieira@intel.com>
+Reviewed-by: Giuseppe D'Angelo <giuseppe.dangelo@kdab.com>
+---
+ src/corelib/text/qlocale_icu.cpp | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/src/corelib/text/qlocale_icu.cpp b/src/corelib/text/qlocale_icu.cpp
+index fe0d6080f014..a10ae1c84b21 100644
+--- a/src/corelib/text/qlocale_icu.cpp
++++ b/src/corelib/text/qlocale_icu.cpp
+@@ -12,6 +12,9 @@
+ 
+ QT_BEGIN_NAMESPACE
+ 
++static_assert(std::is_same_v<UChar, char16_t>,
++              "Hmm... in C++ mode, ICU's UChar ought to be char16_t");
++
+ namespace QtIcuPrivate {
+ 
+ enum class CaseConversion : bool { Upper, Lower };
+@@ -39,8 +42,8 @@ static bool qt_u_strToCase(const QString &str, QString *out, const char *localeI
+             Q_UNREACHABLE_RETURN(R{0});
+         };
+ 
+-    size = caseFunc(reinterpret_cast<UChar *>(result.data()), result.size(),
+-            reinterpret_cast<const UChar *>(str.constData()), str.size(),
++    size = caseFunc(result.data_ptr().data(), result.size(),
++            str.data_ptr().data(), str.size(),
+             localeID, &status);
+ 
+     if (U_FAILURE(status) && status != U_BUFFER_OVERFLOW_ERROR)
+@@ -53,8 +56,8 @@ static bool qt_u_strToCase(const QString &str, QString *out, const char *localeI
+         result.resize(size);
+ 
+         status = U_ZERO_ERROR;
+-        size = caseFunc(reinterpret_cast<UChar *>(result.data()), result.size(),
+-            reinterpret_cast<const UChar *>(str.constData()), str.size(),
++        size = caseFunc(result.data_ptr().data(), result.size(),
++            str.data_ptr().data(), str.size(),
+             localeID, &status);
+ 
+         if (U_FAILURE(status))
