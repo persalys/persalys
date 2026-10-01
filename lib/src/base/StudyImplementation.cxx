@@ -58,6 +58,21 @@ StudyImplementation::StudyImplementation(const String& name)
 
 StudyImplementation::~StudyImplementation()
 {
+  // the study observes everything it contains (see the add methods), so it must stop
+  // doing so here: the objects it contains usually outlive it, and a single notify() on
+  // one of them would then call into a destroyed study. Only remove this observer, the
+  // others (an item of the graphical interface for instance) are not ours to remove.
+  for (UnsignedInteger i = 0; i < analyses_.getSize(); ++i)
+    analyses_[i].getImplementation()->removeObserver(this);
+  for (UnsignedInteger i = 0; i < limitStates_.getSize(); ++i)
+    limitStates_[i].getImplementation()->removeObserver(this);
+  for (UnsignedInteger i = 0; i < physicalModels_.getSize(); ++i)
+    physicalModels_[i].getImplementation()->removeObserver(this);
+  for (UnsignedInteger i = 0; i < dataModels_.getSize(); ++i)
+    dataModels_[i].getImplementation()->removeObserver(this);
+  for (UnsignedInteger i = 0; i < dataFieldModels_.getSize(); ++i)
+    dataFieldModels_[i].getImplementation()->removeObserver(this);
+
   analyses_.clear();
   limitStates_.clear();
   physicalModels_.clear();
