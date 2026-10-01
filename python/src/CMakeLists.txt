@@ -161,7 +161,7 @@ if (SalomeYACS_FOUND)
   set_property (TARGET persalys_python APPEND PROPERTY SWIG_COMPILE_DEFINITIONS PERSALYS_HAVE_YDEFX=1)
 endif ()
 
-install ( FILES __init__.py
+install ( FILES __init__.py _script_evaluation.py
           DESTINATION ${PERSALYS_PYTHON_MODULE_PATH}/persalys
         )
 
@@ -174,8 +174,8 @@ if (SPHINX_FOUND)
     execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/${module}.py ${PERSALYS_PYTHON_BUILD_MODULE_PATH}/persalys/${module}.py)
     execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_BINARY_DIR}/_${module}.so ${PERSALYS_PYTHON_BUILD_MODULE_PATH}/persalys/_${module}.so)
   endforeach ()
-  foreach (file __init__.py)
-    execute_process (COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/${file} ${PERSALYS_PYTHON_BUILD_MODULE_PATH}/persalys/${file})
+  foreach (file __init__.py _script_evaluation.py)
+    execute_process(COMMAND ${CMAKE_COMMAND} -E create_symlink ${CMAKE_CURRENT_SOURCE_DIR}/${file} ${PERSALYS_PYTHON_BUILD_MODULE_PATH}/persalys/${file})
   endforeach ()
 
   # sphinx configuration
