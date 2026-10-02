@@ -66,12 +66,13 @@ int main(int argc, char *argv[])
     std::cout << "python_dir=" << python_dir << std::endl;
   }
 
-#if BOOST_VERSION >= 108800
   std::unordered_map<std::string, std::string> env;
+#if BOOST_VERSION >= 108800
   for (const auto entry : boost::process::environment::current())
     env.emplace(entry.key().string(), entry.value().string());
 #else
-  boost::process::environment env = boost::this_process::environment();
+  for (const auto entry : boost::this_process::environment())
+    env.emplace(entry.get_name(), entry.to_string());
 #endif
 
   // localization
@@ -84,11 +85,12 @@ int main(int argc, char *argv[])
 
 #ifdef _WIN32
   // Python PATH
-  const char* env_path = std::getenv("PATH");
-  const std::string PATH = python_dir.string() + ";" + (python_dir / "Scripts").string() + (env_path ? std::string(";") + env_path : "");
-  env["PATH"] = PATH;
+  const std::string path_key = env.count("Path") ? "Path" : "PATH";
+  const std::string old_path = env[path_key];
+  const std::string new_path = python_dir.string() + ";" + (python_dir / "Scripts").string() + (old_path.size() ? std::string(";") + old_path : "");
+  env[path_key] = new_path;
   if (verbose)
-    std::cout << "PATH=" << PATH << std::endl;
+    std::cout << path_key << "=" << new_path << std::endl;
 
   // PYTHONHOME
   const std::string PYTHONHOME = python_dir.string();
@@ -97,8 +99,8 @@ int main(int argc, char *argv[])
     std::cout << "PYTHONHOME=" << PYTHONHOME << std::endl;
 
   // PYTHONUSERBASE
-  const char* env_appdata = std::getenv("APPDATA");
-  const fs::path pythonuserbase_dir = env_appdata ? (fs::canonical(env_appdata) / "Persalys") : fs::path();
+  const std::string env_appdata = env["APPDATA"];
+  const fs::path pythonuserbase_dir = env_appdata.size() ? (fs::canonical(env_appdata) / "Persalys") : fs::path();
   if (!pythonuserbase_dir.empty())
   {
     env["PYTHONUSERBASE"] = pythonuserbase_dir.string();
@@ -159,7 +161,11 @@ if (verbose)
   else
     proc.detach();
 #else
-  bp::child proc(persalys_exe, env);
+  std::vector<std::string> env_vector;
+  env_vector.reserve(env.size());
+  for (const auto & entry : env)
+    env_vector.push_back(entry.first + "=" + entry.second);
+  bp::child proc(persalys_exe, env_vector);
   if (wait)
   {
     proc.wait();
