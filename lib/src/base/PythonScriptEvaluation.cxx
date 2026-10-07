@@ -30,12 +30,8 @@
 #include <openturns/PythonWrappingFunctions.hxx>
 #include <openturns/BatchFailedException.hxx>
 
-#include <filesystem>
-#include <iomanip>
-#include <random>
 #include <sstream>
 #include <string>
-#include <cstdint>
 
 using namespace OT;
 
@@ -133,6 +129,48 @@ void PythonScriptEvaluation::resetCallsNumber()
 }
 
 
+namespace
+{
+
+/** Name of the module driving the worker processes evaluating a model. */
+const char * const EvaluationModuleName = "persalys._script_evaluation";
+
+
+/**
+ * @brief The Python module driving the worker processes evaluating a model.
+ *
+ * Everything concerning those processes, starting them, reusing them and
+ * distributing the points, is implemented there: see _script_evaluation.py. It is
+ * imported once, the module holding the pool between two evaluations.
+ */
+PyObject * GetEvaluationModule()
+{
+  static PyObject * module = nullptr;
+  if (!module)
+  {
+    module = PyImport_ImportModule(EvaluationModuleName);
+    handleException();
+  }
+  else
+    Py_INCREF(module); // the caller owns a reference
+  return module;
+}
+
+
+/** @brief Get an item of the tuple returned by the evaluation. */
+PyObject * GetTupleItem(PyObject * tuple, UnsignedInteger index, const String & what)
+{
+  if ((!PyTuple_Check(tuple)) || (PyTuple_Size(tuple) != 4))
+    throw InternalException(HERE) << "wrong result of the evaluation of the model: no " << what;
+  PyObject * const item = PyTuple_GetItem(tuple, index); // Borrowed reference.
+  if (item == nullptr)
+    throw InternalException(HERE) << "wrong result of the evaluation of the model: no " << what;
+  return item;
+}
+
+}
+
+
 /* Operator () */
 Point PythonScriptEvaluation::operator() (const Point & inP) const
 {
@@ -204,96 +242,35 @@ Sample PythonScriptEvaluation::operator() (const Sample & inS) const
   if (inDim != getInputDimension())
     throw InvalidDimensionException(HERE) << "Sample has incorrect dimension. Got " << inDim << ". Expected " << getInputDimension();
 
-  // build script
+  // the code and the points are handed over to Python, which takes care of the
+  // worker processes: it starts them once and reuses them for every batch
+  // evaluating the same code
   InterpreterUnlocker iul;
-  PyObject * module = PyImport_AddModule("__main__");// Borrowed reference.
-  PyObject * dict = PyModule_GetDict(module);// Borrowed reference.
 
-  // add input sample variable
-  ScopedPyObjectPointer inputSample(PyTuple_New(size));
+  ScopedPyObjectPointer module(GetEvaluationModule());
+  ScopedPyObjectPointer evaluate(PyObject_GetAttrString(module.get(), "evaluate"));
+  if (!evaluate.get())
+    throw InternalException(HERE) << "no evaluate function in " << EvaluationModuleName;
+
+  ScopedPyObjectPointer code(PyUnicode_FromString(code_.c_str()));
+  ScopedPyObjectPointer workers(PyLong_FromUnsignedLong(processNumber_));
+
+  // the points are given to the workers as tuples of values
+  ScopedPyObjectPointer points(PyTuple_New(size));
   for (UnsignedInteger i = 0; i < size; ++ i)
-    PyTuple_SetItem(inputSample.get(), i, convert< Point, _PySequence_ >(inS[i]));
-  PyDict_SetItemString(dict, "X", inputSample.get());
+    PyTuple_SetItem(points.get(), i, convert< Point, _PySequence_ >(inS[i]));
 
-  // code has to be separate
-  
-  std::random_device rd;
-  std::mt19937_64 gen(rd());
+  ScopedPyObjectPointer arguments(PyTuple_Pack(3, code.get(), points.get(), workers.get()));
 
-  std::uniform_int_distribution<uint64_t> dist;
-
-  std::ostringstream ss;
-  ss << std::hex;
-
-  for(int i = 0 ; i < 2 ; ++i)
-    ss << std::setw(16) << std::setfill('0') << dist(gen);
-  
-  const std::string uuid = ss.str();
-
-  std::filesystem::path tempDir = std::filesystem::temp_directory_path() / ("persalys_" + uuid);
-  std::filesystem::create_directory(tempDir);
-  std::string code_mod = "code" + uuid;
-  std::ofstream code_file;
-  code_file.open((tempDir / (code_mod + ".py")).string());
-  code_file << code_ << "\n";
-  code_file.close();
-
-  OSS oss;
-  oss << "import multiprocessing as mp\n";
-  oss << "from concurrent.futures import ProcessPoolExecutor, as_completed\n";
-  oss << "import os\n";
-  oss << "import sys\n";
-  oss << "sys.path.insert(0, r'" << tempDir.string() << "')\n";
-  oss << "import " << code_mod << "\n";
-  oss << "if __name__== '__main__':\n";
-  oss << "    if sys.platform == 'win32':\n";
-  oss << "        mp.set_executable(os.path.join(sys.exec_prefix, 'pythonw.exe'))\n";
-  oss << "    ctx = mp.get_context('fork') if 'fork' in mp.get_all_start_methods() else None\n";
-  const String max_workers = (processNumber_ > 0) ? std::to_string(processNumber_) : "None";
-  oss << "    with ProcessPoolExecutor(max_workers=" << max_workers << ", mp_context=ctx) as executor:\n";
-  oss << "        resu = {executor.submit(" << code_mod << "._exec, *x): x for x in X}\n";
-  oss << "        for future in resu:\n";
-  oss << "            try:\n";
-  oss << "                y = future.result()\n";
-  oss << "            except Exception as exc:\n";
-  oss << "                if hasattr(exc, 'message'):\n";
-  oss << "                    exc.message = exc.message + ' x = {}'.format(x)\n";
-  oss << "                pass\n";
-  if (outDim < 2)
-    oss << "        Y = [[task.result()] for task in resu if task.exception() is None]\n";
-  else
-    oss << "        Y = [task.result() for task in resu if task.exception() is None]\n";
-  oss << "        exception = [str(task.exception()) for task in resu if task.exception() is not None]\n";
-  oss << "        okIdx  = [i for i, task in enumerate(resu) if task.exception() is None]\n";
-  oss << "        nokIdx = [i for i, task in enumerate(resu) if task.exception() is not None]\n";
-
-  ScopedPyObjectPointer retValue(PyRun_String(oss.str().c_str(), Py_file_input, dict, dict));
-  std::filesystem::remove_all(tempDir);
+  ScopedPyObjectPointer retValue(PyObject_Call(evaluate.get(), arguments.get(), NULL));
   handleException();
 
-  // build output sample
-  PyObject * sampleResult = PyDict_GetItemString(dict, "Y");
-  if (sampleResult == NULL)
-    throw InternalException(HERE) << "no Y";
-  Sample outputSample(convert<_PySequence_, Sample>(sampleResult));
-
-  // get exception messages
-  PyObject * exceptionResult = PyDict_GetItemString(dict, "exception");
-  if (exceptionResult == NULL)
-    throw InternalException(HERE) << "no exception";
-  Description errorDesc(convert<_PySequence_, Description>(exceptionResult));
-
-  // get suceeded indices
-  PyObject * okIdxResult = PyDict_GetItemString(dict, "okIdx");
-  if (okIdxResult == NULL)
-    throw InternalException(HERE) << "no okIdx";
-  Indices okIdx(convert<_PySequence_, Indices>(okIdxResult));
-
-  // get failed indices
-  PyObject * nokIdxResult = PyDict_GetItemString(dict, "nokIdx");
-  if (nokIdxResult == NULL)
-    throw InternalException(HERE) << "no nokIdx";
-  Indices nokIdx(convert<_PySequence_, Indices>(nokIdxResult));
+  // what comes back: the outputs of the points that succeeded, their indices,
+  // the indices of the points that failed and the reason of each failure
+  Sample outputSample(convert<_PySequence_, Sample>(GetTupleItem(retValue.get(), 0, "result")));
+  Indices okIdx(convert<_PySequence_, Indices>(GetTupleItem(retValue.get(), 1, "succeeded indices")));
+  Indices nokIdx(convert<_PySequence_, Indices>(GetTupleItem(retValue.get(), 2, "failed indices")));
+  Description errorDesc(convert<_PySequence_, Description>(GetTupleItem(retValue.get(), 3, "failure messages")));
 
   // if all points failed, return an empty sample with correct dimension
   if(!outputSample.getSize())

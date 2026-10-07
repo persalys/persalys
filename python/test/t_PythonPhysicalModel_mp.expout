@@ -11,6 +11,21 @@ Sample :
 1 : [   400     74000       564.451 ]
 ZeroDivisionError occurred: True
 Error on the line 4 : True
+workers still running after the batch: True
+    [ G       ]
+0 : [ 361.268 ]
+1 : [ 564.451 ]
+    [ G       ]
+0 : [ 363.271 ]
+1 : [ 566.454 ]
+    [ G       ]
+0 : [ 365.274 ]
+1 : [ 568.457 ]
+callsNumber = 64
+firstOrderIndices = [0.956157, -0.125512]
+confidenceIntervalLength = 0.594243
+blockSize=2 gives the same result: True
+blockSize=8 gives the same result: True
 #!/usr/bin/env python
 
 import openturns as ot
