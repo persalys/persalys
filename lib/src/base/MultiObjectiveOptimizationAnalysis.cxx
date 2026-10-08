@@ -222,7 +222,7 @@ void MultiObjectiveOptimizationAnalysis::launch()
     else
     {
       Sample values;
-      for (Scalar val = std::ceil(lb); val <= ub; ++val)
+      for (SignedInteger val = std::ceil(lb); val <= std::floor(ub); ++ val)
       {
         const Point point(1, val);
         values.add(point);
