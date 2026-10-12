@@ -123,6 +123,14 @@ PhysicalModelDiagramWindow::PhysicalModelDiagramWindow(PhysicalModelDiagramItem 
 
   appendButton(doeExportButton, row, doeEvaluationButton);
 
+  DiagramPushButton * fakeButton = new DiagramPushButton;
+  fakeButton->setText(tr("Sensitivity\nQuantile\nMetamodel"));
+  fakeButton->setWhatsThis(tr("Export the design of experiment to access those analyses"));
+  fakeButton->setPlaceholder(true);
+  connect(physicalModelDiagramItem, &PhysicalModelDiagramItem::doeEvaluationNumberValidityChanged, fakeButton, &DiagramPushButton::setEnabled);
+
+  appendButton(fakeButton, row, doeExportButton);
+
   DiagramPushButton * probaModelButton = new DiagramPushButton;
   probaModelButton->setText(tr("Probabilistic\nmodel\ndefinition"));
   probaModelButton->setWhatsThis(tr("Define the stochastic input variables and the dependence"));
