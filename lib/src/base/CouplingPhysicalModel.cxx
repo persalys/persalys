@@ -226,7 +226,9 @@ import shutil
 import os
 import re
 import hashlib
+import shlex
 import struct
+import subprocess
 from pathlib import Path, PurePosixPath
 )";
 
@@ -417,13 +419,14 @@ String CouplingPhysicalModel::writeCode(const Description &inputNames, const Des
   code << "        \n";
   if(SSHHostname_.empty())
   {
-  code << "            if len(step.getEnvironmentKeys()) == 0:\n";
-  code << "                otct.execute(step.getCommand(), cwd=str(workdir), shell=step.getIsShell(), capture_output=True, timeout=timeout)\n";
-  code << "            else:\n";
+  code << "            env = None\n";
+  code << "            if len(step.getEnvironmentKeys()) > 0:\n";
   code << "                env = os.environ.copy()\n";
   code << "                for key, val in zip(step.getEnvironmentKeys(), step.getEnvironmentValues()):\n";
   code << "                    env[key] = val\n";
-  code << "                otct.execute(step.getCommand(), cwd=str(workdir), shell=step.getIsShell(), capture_output=True, timeout=timeout, env=env)\n";
+  code << "            pargs = step.getCommand() if step.getIsShell() else shlex.split(step.getCommand(), posix=(os.name == 'posix'))\n";
+  code << "            cf = subprocess.CREATE_NO_WINDOW if hasattr(subprocess, 'CREATE_NO_WINDOW') else 0\n";
+  code << "            subprocess.run(pargs, cwd=workdir, shell=step.getIsShell(), capture_output=True, timeout=timeout, check=True, env=env, creationflags=cf)\n";
   }
   else
   {
