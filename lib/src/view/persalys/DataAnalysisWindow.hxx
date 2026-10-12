@@ -66,6 +66,7 @@ protected:
   virtual void addScatterPlotsTab();
   virtual void addTableTab();
   void addErrorTable();
+  void addInputsDimensionRow(QStringList & namesList, QStringList & valuesList) const;
 
 public slots:
   virtual void updateVariablesListVisibility(int indexTab);

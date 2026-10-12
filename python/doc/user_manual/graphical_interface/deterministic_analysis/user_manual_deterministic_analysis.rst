@@ -298,7 +298,7 @@ when the user selects points on one of these representations, the same points ar
 automatically selected in the other tabs.
 
 - The **Summary** tab summarizes the results of the design, for a selected variable (left column):
-  sample size, minimum/maximum values, input values at
+  sample size, number of inputs, minimum/maximum values, input values at
   the extrema of the outputs, moments estimates and empirical quantiles.
   For Monte Carlo designs, the moments estimates also display the mean
   confidence intervals.

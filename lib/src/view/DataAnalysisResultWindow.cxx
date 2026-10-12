@@ -97,6 +97,8 @@ void DataAnalysisResultWindow::addSummaryTab()
     namesList << tr("Sample size");
     valuesList << QString::number(totalSampleSize);
 
+    addInputsDimensionRow(namesList, valuesList);
+
     namesList << tr("Valid marginal size");
     valuesList << QString::number(effetiveSize[variablesListWidget_->item(0)->data(Qt::UserRole).toInt()]);
 
@@ -108,6 +110,8 @@ void DataAnalysisResultWindow::addSummaryTab()
   {
     namesList << sampleSizeTitle_;
     valuesList << QString::number(totalSampleSize);
+
+    addInputsDimensionRow(namesList, valuesList);
   }
 
   auto * table = new ParametersTableView(namesList, valuesList, true, true);

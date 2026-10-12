@@ -356,6 +356,9 @@ void DataAnalysisWindow::addSummaryTab()
 
   valuesList << QString::number(totalSampleSize);
 
+  // - number of inputs
+  addInputsDimensionRow(namesList, valuesList);
+
   Indices changeColorIndex;
   // - elapsed time
   if (result_.getElapsedTime() > 0.)
@@ -1016,6 +1019,17 @@ void DataAnalysisWindow::updateVariablesListVisibility(int indexTab)
 {
   variablesGroupBox_->setVisible(indexTab == 0 || indexTab == 1);
 }
+
+void DataAnalysisWindow::addInputsDimensionRow(QStringList & namesList, QStringList & valuesList) const
+{
+  const OT::UnsignedInteger inputDimension = designOfExperiment_.getInputSample().getDimension();
+  if (!inputDimension)
+    return;
+
+  namesList << tr("Number of inputs");
+  valuesList << QString::number(inputDimension);
+}
+
 
 void DataAnalysisWindow::addErrorTable()
 {

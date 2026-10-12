@@ -57,7 +57,7 @@ when the user selects points on one of these representations, the same points ar
 automatically selected in the other tabs.
 
 - The **Summary** tab summarizes the results of the analysis, for a selected variable (left column):
-  sample size, elapsed time, moment estimates, empirical quantiles, minimum/maximum values, input
+  sample size, number of inputs, elapsed time, moment estimates, empirical quantiles, minimum/maximum values, input
   values at extremum.
 
 - The **PDF/CDF** tab presents the PDF/CDF of the variables
