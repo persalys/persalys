@@ -50,6 +50,11 @@ When the mouse pointer is hovered over a box, an information message appears at 
 the window in order to specify what sort of actions the box proposes. If the box is disabled the
 message indicates why the previous one is not valid.
 
+Some boxes are not actions but hints: they are drawn with a dashed border, a lighter
+background and an italic font, and they cannot be clicked. For instance, the
+**Sensitivity, Quantile, Metamodel, ...** box indicates the analyses that become
+available once a design of experiments has been evaluated and exported.
+
 On the screenshot above, the mouse points over the **Probabilistic model definition** box: here the
 action is **Define stochastic input variables and the dependence** (below the main window), but
 this action is available only if the user defines at least one input variable in the physical model. So,
