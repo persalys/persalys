@@ -260,12 +260,18 @@ void DataAnalysisWindow::fillTabWidget()
 {
   // tab: Summary (eager, shown first)
   addSummaryTab();
+  // the summary tab is built eagerly: mark it as already built so that
+  // buildLazyTab() does not remove it when the tab is re-selected
+  lazyTabsBuilt_.insert(0);
   if (designOfExperiment_.getSample().getSize() > 1)
   {
-    // lazy tabs
-    tabWidget_->addTab(new QWidget, tr("PDF/CDF"));
-    tabWidget_->addTab(new QWidget, tr("Box plots"));
-    tabWidget_->addTab(new QWidget, tr("Dependence"));
+    // lazy tabs: only add placeholders for tabs that can actually be built
+    if (hasPDF_CDFData())
+      tabWidget_->addTab(new QWidget, tr("PDF/CDF"));
+    if (hasBoxPlotData())
+      tabWidget_->addTab(new QWidget, tr("Box plots"));
+    if (doMultivariate_)
+      tabWidget_->addTab(new QWidget, tr("Dependence"));
   }
 #ifdef PERSALYS_HAVE_PARAVIEW
   if (SubWindow::SupportsOpenGL_3_2())
@@ -410,31 +416,10 @@ void DataAnalysisWindow::addSummaryTab()
   tabLayout->addWidget(parametersGroupBox, row, 0);
 
   // moments estimation
-  if (result_.getMean().getSize())
-  {
-    // we want to display output results before the input results
-    // input indices
-    Indices inInd(inputNames_.size());
-    inInd.fill();
-    // output indices
-    Indices ind(outputNames_.size());
-    ind.fill(inputNames_.size());
-    // indices with good order
-    ind.add(inInd);
-
-    MomentsEstimatesTableGroupBox * estimatesGroupBox = new MomentsEstimatesTableGroupBox(result_,
-        isConfidenceIntervalRequired_,
-        levelConfidenceInterval_,
-        ind);
-
-    tabLayout->addWidget(estimatesGroupBox, ++row, 0);
-    connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), estimatesGroupBox, SLOT(setCurrentIndexStackedWidget(int)));
-  }
+  addMomentsEstimatesToLayout(tabLayout, row);
 
   // min/max table
-  MinMaxTableGroupBox * minMaxTableGroupBox = new MinMaxTableGroupBox(designOfExperiment_, false);
-  tabLayout->addWidget(minMaxTableGroupBox, ++row, 0);
-  connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), minMaxTableGroupBox, SLOT(setCurrentIndexStackedWidget(int)));
+  addMinMaxTableToLayout(tabLayout, row, designOfExperiment_);
 
   tabLayout->setRowStretch(++row, 1);
   scrollArea->setWidget(tab);
@@ -442,9 +427,63 @@ void DataAnalysisWindow::addSummaryTab()
 }
 
 
+bool DataAnalysisWindow::addMomentsEstimatesToLayout(QGridLayout * layout, int & row) const
+{
+  if (!result_.getMean().getSize())
+    return false;
+
+  // we want to display output results before the input results
+  // input indices
+  Indices inInd(inputNames_.size());
+  inInd.fill();
+  // output indices
+  Indices ind(outputNames_.size());
+  ind.fill(inputNames_.size());
+  // indices with good order
+  ind.add(inInd);
+
+  MomentsEstimatesTableGroupBox * estimatesGroupBox = new MomentsEstimatesTableGroupBox(result_,
+      isConfidenceIntervalRequired_,
+      levelConfidenceInterval_,
+      ind);
+
+  layout->addWidget(estimatesGroupBox, ++row, 0);
+  connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), estimatesGroupBox, SLOT(setCurrentIndexStackedWidget(int)));
+
+  return true;
+}
+
+
+void DataAnalysisWindow::addMinMaxTableToLayout(QGridLayout * layout, int & row, const DesignOfExperiment & doe) const
+{
+  MinMaxTableGroupBox * minMaxTableGroupBox = new MinMaxTableGroupBox(doe, false);
+  layout->addWidget(minMaxTableGroupBox, ++row, 0);
+  connect(variablesListWidget_, SIGNAL(currentRowChanged(int)), minMaxTableGroupBox, SLOT(setCurrentIndexStackedWidget(int)));
+}
+
+
+DesignOfExperiment DataAnalysisWindow::getMultivariateDesignOfExperiment() const
+{
+  return designOfExperiment_;
+}
+
+
+bool DataAnalysisWindow::hasPDF_CDFData() const
+{
+  return result_.getPDF().getSize() && result_.getCDF().getSize();
+}
+
+
+bool DataAnalysisWindow::hasBoxPlotData() const
+{
+  return result_.getMedian().getSize() && result_.getFirstQuartile().getSize() &&
+      result_.getThirdQuartile().getSize() && result_.getOutliers().getSize();
+}
+
+
 void DataAnalysisWindow::addPDF_CDFTab()
 {
-  if (!result_.getPDF().getSize() || !result_.getCDF().getSize())
+  if (!hasPDF_CDFData())
     return;
 
   QScrollArea * scrollArea = new QScrollArea;
@@ -524,8 +563,7 @@ void DataAnalysisWindow::addPDF_CDFTab()
 
 void DataAnalysisWindow::addBoxPlotTab()
 {
-  if (!result_.getMedian().getSize() || !result_.getFirstQuartile().getSize() ||
-      !result_.getThirdQuartile().getSize() || !result_.getOutliers().getSize())
+  if (!hasBoxPlotData())
     return;
 
   QScrollArea * scrollArea = new QScrollArea;
@@ -567,7 +605,10 @@ void DataAnalysisWindow::addBoxPlotTab()
 
 void DataAnalysisWindow::addDependenceTab()
 {
-  const Sample sample = designOfExperiment_.getSample();
+  if (!doMultivariate_)
+    return;
+
+  const Sample sample = getMultivariateDesignOfExperiment().getSample();
   const CorrelationMatrix C(sample.computeSpearmanCorrelation());
   const UnsignedInteger dim = sample.getDimension();
 
@@ -682,9 +723,12 @@ void DataAnalysisWindow::addDependenceTab()
 
 void DataAnalysisWindow::addPlotMatrixTab()
 {
+  if (!doMultivariate_)
+    return;
+
   if (!boundPlotMatrixWidget_)
   {
-    const Sample sample{designOfExperiment_.getSample()};
+    const Sample sample{getMultivariateDesignOfExperiment().getSample()};
     PlotMatrixWidget * plotMatrixWidget = new PlotMatrixWidget(sample, sample);
     plotMatrixWidget->setInputNames(inputNames_);
     plotMatrixWidget->setOutputNames(outputNames_);
@@ -707,8 +751,12 @@ void DataAnalysisWindow::removePlotMatrixTab()
 
 void DataAnalysisWindow::addScatterPlotsTab()
 {
-  QVector<PlotWidget*> listScatterPlotWidgets = PlotWidget::GetListScatterPlots(designOfExperiment_.getInputSample(),
-      designOfExperiment_.getOutputSample(),
+  if (!doMultivariate_)
+    return;
+
+  const DesignOfExperiment doe = getMultivariateDesignOfExperiment();
+  QVector<PlotWidget*> listScatterPlotWidgets = PlotWidget::GetListScatterPlots(doe.getInputSample(),
+      doe.getOutputSample(),
       failedInputSample_,
       inputNames_,
       inAxisTitles_,

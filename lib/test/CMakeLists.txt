@@ -117,6 +117,7 @@ if (BUILD_GUI)
     set (_PLATFORM offscreen)
   endif ()
   ot_qt_check_test (MonteCarloResultWindow_std PLATFORM ${_PLATFORM})
+  ot_qt_check_test (DesignOfExperimentWindow_std PLATFORM ${_PLATFORM})
 endif ()
 
 add_custom_target ( cppcheck COMMAND ${CMAKE_CTEST_COMMAND} -R "^cppcheck_"

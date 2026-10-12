@@ -28,6 +28,7 @@ namespace PERSALYS
 class PERSALYS_VIEW_API DesignOfExperimentWindow : public DataAnalysisWindow
 {
   Q_OBJECT
+  friend class TestDesignOfExperimentWindow;
 
 public:
   explicit DesignOfExperimentWindow(AnalysisItem * item, QWidget *parent = nullptr);
