@@ -228,7 +228,6 @@ void DesignOfExperimentEvaluation::launch()
 
   // compute data analysis
   DataAnalysis dataAnalysis("", result_.designOfExperiment_);
-  dataAnalysis.setIsConfidenceIntervalRequired(false);
   dataAnalysis.run();
 
   // set result
@@ -257,7 +256,6 @@ void DesignOfExperimentEvaluation::setEvaluations(Sample &outputSample)
 
   // compute data analysis
   DataAnalysis dataAnalysis("", result_.designOfExperiment_);
-  dataAnalysis.setIsConfidenceIntervalRequired(false);
   dataAnalysis.run();
 
   // set result

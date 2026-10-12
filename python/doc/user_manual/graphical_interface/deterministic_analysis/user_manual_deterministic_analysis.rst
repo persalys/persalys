@@ -300,6 +300,8 @@ automatically selected in the other tabs.
 - The **Summary** tab summarizes the results of the design, for a selected variable (left column):
   sample size, minimum/maximum values, input values at
   the extrema of the outputs, moments estimates and empirical quantiles.
+  For Monte Carlo designs, the moments estimates also display the mean
+  confidence intervals.
 
 - The **PDF/CDF** tab presents the PDF/CDF of the variables
   together with a `kernel smoothing <http://openturns.github.io/openturns/latest/theory/data_analysis/kernel_smoothing.html>`_ representation.

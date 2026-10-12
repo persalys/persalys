@@ -46,6 +46,16 @@ void DesignOfExperimentWindow::initialize(const AnalysisItem* item)
   errorDescription_ = analysis.getErrorDescription();
   notEvaluatedInputSample_ = analysis.getNotEvaluatedInputSample();
 
+  // Monte Carlo designs contain iid points: confidence intervals are valid
+  // and stored in the result, so display them like in DataAnalysisResultWindow
+  if (designOfExperiment_.getType() == DataModel::MC)
+  {
+    isConfidenceIntervalRequired_ = true;
+    // DesignOfExperimentEvaluation has no confidence level setting:
+    // use the default level used by DataAnalysis to compute the interval
+    levelConfidenceInterval_ = 0.95;
+  }
+
   titleLabel_->setText(tr("Design of experiments"));
   titleLabel_->setDocLink("user_manual/graphical_interface/deterministic_analysis/user_manual_deterministic_analysis.html#doeevalresult");
 

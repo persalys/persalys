@@ -1,9 +1,12 @@
 #include "persalys/DesignOfExperimentWindow.hxx"
 #include "persalys/DesignOfExperimentDefinitionItem.hxx"
 #include "persalys/DesignOfExperimentEvaluation.hxx"
+#include "persalys/FixedDesignOfExperiment.hxx"
 #include "persalys/DataAnalysisResult.hxx"
 #include "persalys/SymbolicPhysicalModel.hxx"
 #include "persalys/PythonEnvironment.hxx"
+#include "persalys/MomentsEstimatesTableGroupBox.hxx"
+#include "persalys/CopyableTableView.hxx"
 
 #include <openturns/OTDistribution.hxx>
 #include "openturns/OTtestcode.hxx"
@@ -74,6 +77,40 @@ private slots:
 
     QVERIFY2(!tabTexts.contains("PDF/CDF"), "the PDF/CDF tab must not be present for a non evaluated design of experiments");
     QVERIFY2(!tabTexts.contains("Box plots"), "the Box plots tab must not be present for a non evaluated design of experiments");
+  }
+
+  void TestEvaluatedMonteCarloDesignOfExperiment() const
+  {
+    // create the model
+    Input X0("X0", 2.0, OT::Normal(), "X0");
+    Input X1("X1", 2.0, OT::Normal(), "X1");
+    Output Y0("Y0", "Y0");
+    OT::Description formula(1, "sin(X0)+8*X1");
+    SymbolicPhysicalModel model("model", {X0, X1}, {Y0}, formula);
+
+    // Monte Carlo design: confidence intervals are meaningful, the
+    // moments estimates table must have a CI column
+    const UnsignedInteger size = 100;
+    OT::RandomGenerator::SetSeed(0);
+    FixedDesignOfExperiment doeEval("doeEval", model);
+    Sample inSample = OT::Normal(2).getSample(size);
+    inSample.setDescription(model.getInputNames());
+    doeEval.setOriginalInputSample(inSample, DataModel::MC);
+    doeEval.run();
+
+    QVERIFY2(doeEval.getResult().getMeanConfidenceInterval().getFiniteLowerBound()[0], "the mean CI of a MC design of experiments must be finite");
+
+    DesignOfExperimentDefinitionItem item(doeEval);
+    DesignOfExperimentWindow window(&item);
+
+    // count the columns of the moments estimates table of the first variable
+    const MomentsEstimatesTableGroupBox * momentsGroupBox = window.findChild<MomentsEstimatesTableGroupBox *>();
+    QVERIFY2(momentsGroupBox != nullptr, "no moments estimates table found");
+    const ResizableStackedWidget * stackedWidget = momentsGroupBox->findChild<ResizableStackedWidget *>();
+    QVERIFY2(stackedWidget != nullptr, "no stacked widget found in the moments estimates table");
+    const auto * tableView = dynamic_cast<CopyableTableView *>(stackedWidget->currentWidget());
+    QVERIFY2(tableView != nullptr, "no moments estimates table view found");
+    QVERIFY2(tableView->model()->columnCount() == 3, "the moments estimates table of a MC design of experiments must contain a confidence interval column");
   }
 };
 }

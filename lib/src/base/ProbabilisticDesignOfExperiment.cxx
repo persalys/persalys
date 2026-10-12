@@ -233,7 +233,6 @@ Sample ProbabilisticDesignOfExperiment::generateInputSample(const UnsignedIntege
 
 void ProbabilisticDesignOfExperiment::launch()
 {
-  DesignOfExperimentEvaluation::launch();
   if (designName_ == "LHS")
   {
     result_.designOfExperiment_.setType(DesignOfExperiment::Type::RLHS);
@@ -250,6 +249,8 @@ void ProbabilisticDesignOfExperiment::launch()
   {
     result_.designOfExperiment_.setType(DesignOfExperiment::Type::MC);
   }
+  
+  DesignOfExperimentEvaluation::launch();
 }
 
 
