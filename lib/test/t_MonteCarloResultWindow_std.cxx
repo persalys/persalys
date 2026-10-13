@@ -133,6 +133,11 @@ private slots:
       bool isHidden = window.variablesGroupBox_->isHidden();
       QVERIFY2((i > 1) ? isHidden : !isHidden, "wrong list widget visibility");
     }
+    // re-select the summary tab: it must remain built (regression test)
+    const int tabCount = window.tabWidget_->count();
+    window.tabWidget_->setCurrentIndex(0);
+    QVERIFY2(window.tabWidget_->count() == tabCount, "summary tab disappeared after re-selecting it");
+    QVERIFY2(window.tabWidget_->tabText(0) == "Summary", "summary tab is no longer the first tab");
   }
 
   void TestBehaviorForAnalysis2()

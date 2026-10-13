@@ -30,6 +30,13 @@ anOTStudy.add(aDesign2)
 aDesign2.run()
 print("outs=", aDesign2.getResult().getDesignOfExperiment().getOutputSample())
 
+# Monte Carlo design: the mean confidence interval must be computed
+meanCI = aDesign2.getResult().getMeanConfidenceInterval()
+finiteBounds = meanCI.getFiniteLowerBound()
+assert len(finiteBounds) > 0, "MC design of experiments must provide a mean confidence interval"
+assert all(finiteBounds), "all the mean confidence interval bounds of a MC design of experiments must be finite"
+assert aDesign2.getResult().getDesignOfExperiment().getType() == persalys.DataModel.MC
+
 # Design of Experiment - imported - already evaluated##
 aDesign2_1 = persalys.ImportedDesignOfExperiment(
     "aDesign_2_1", model, filename, [0, 2], [1], persalys.DataModel.MC
@@ -59,6 +66,10 @@ anOTStudy.add(aDesign4)
 aDesign4.run()
 
 print("outs=", aDesign4.getResult().getDesignOfExperiment().getOutputSample())
+
+# Non Monte Carlo design: no mean confidence interval must be computed
+meanCI = aDesign4.getResult().getMeanConfidenceInterval()
+assert not any(meanCI.getFiniteLowerBound()), "a non MC design of experiments must not provide a mean confidence interval"
 
 # 3D Model to test Space filling algos
 X0 = persalys.Input("X0", 1, ot.Normal())

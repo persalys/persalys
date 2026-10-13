@@ -208,8 +208,9 @@ Parameters GridDesignOfExperiment::getParameters() const
 
 void GridDesignOfExperiment::launch()
 {
-  DesignOfExperimentEvaluation::launch();
+  // set the type before the base evaluation for consistency
   result_.designOfExperiment_.setType(DesignOfExperiment::Type::GRID);
+  DesignOfExperimentEvaluation::launch();
 }
 
 String GridDesignOfExperiment::getPythonScript() const

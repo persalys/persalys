@@ -32,6 +32,8 @@
 #include <QGroupBox>
 #include <QSet>
 
+class QGridLayout;
+
 namespace PERSALYS
 {
 class PERSALYS_VIEW_API DataAnalysisWindow : public ResultWindow
@@ -47,6 +49,11 @@ protected:
   virtual void fillListWidget();
   virtual void fillTabWidget();
   virtual void addSummaryTab();
+  bool addMomentsEstimatesToLayout(QGridLayout * layout, int & row) const;
+  void addMinMaxTableToLayout(QGridLayout * layout, int & row, const DesignOfExperiment & doe) const;
+  virtual DesignOfExperiment getMultivariateDesignOfExperiment() const;
+  bool hasPDF_CDFData() const;
+  bool hasBoxPlotData() const;
   void addPDF_CDFTab();
   void addBoxPlotTab();
   virtual void addDependenceTab();
@@ -59,6 +66,7 @@ protected:
   virtual void addScatterPlotsTab();
   virtual void addTableTab();
   void addErrorTable();
+  void addInputsDimensionRow(QStringList & namesList, QStringList & valuesList) const;
 
 public slots:
   virtual void updateVariablesListVisibility(int indexTab);

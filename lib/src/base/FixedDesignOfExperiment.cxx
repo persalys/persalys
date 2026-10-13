@@ -87,8 +87,10 @@ Sample FixedDesignOfExperiment::generateInputSample(const UnsignedInteger /*nbSi
 
 void FixedDesignOfExperiment::launch()
 {
-  DesignOfExperimentEvaluation::launch();
+  // set the type before the base evaluation so that the inner
+  // DataAnalysis computes the confidence interval for Monte Carlo designs
   result_.designOfExperiment_.setType(type_);
+  DesignOfExperimentEvaluation::launch();
 }
 
 

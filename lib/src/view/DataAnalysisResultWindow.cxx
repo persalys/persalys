@@ -23,8 +23,6 @@
 #include "persalys/DataAnalysis.hxx"
 #include "persalys/ErrorWidget.hxx"
 #include "persalys/ParametersTableView.hxx"
-#include "persalys/MomentsEstimatesTableGroupBox.hxx"
-#include "persalys/MinMaxTableGroupBox.hxx"
 
 #include <QGridLayout>
 
@@ -99,6 +97,8 @@ void DataAnalysisResultWindow::addSummaryTab()
     namesList << tr("Sample size");
     valuesList << QString::number(totalSampleSize);
 
+    addInputsDimensionRow(namesList, valuesList);
+
     namesList << tr("Valid marginal size");
     valuesList << QString::number(effetiveSize[variablesListWidget_->item(0)->data(Qt::UserRole).toInt()]);
 
@@ -110,6 +110,8 @@ void DataAnalysisResultWindow::addSummaryTab()
   {
     namesList << sampleSizeTitle_;
     valuesList << QString::number(totalSampleSize);
+
+    addInputsDimensionRow(namesList, valuesList);
   }
 
   auto * table = new ParametersTableView(namesList, valuesList, true, true);
@@ -133,67 +135,24 @@ void DataAnalysisResultWindow::addSummaryTab()
   parametersGroupBoxLayout->addWidget(table);
   tabLayout->addWidget(parametersGroupBox, row, 0);
 
-    // moments estimation
-  if (result_.getMean().getSize())
+  // moments estimation
+  if (addMomentsEstimatesToLayout(tabLayout, row))
   {
-    // we want to display output results before the input results
-    // input indices
-    Indices inInd(inputNames_.size());
-    inInd.fill();
-    // output indices
-    Indices ind(outputNames_.size());
-    ind.fill(inputNames_.size());
-    // indices with good order
-    ind.add(inInd);
+    // min/max table
+    if (doMultivariate_)
+      addMinMaxTableToLayout(tabLayout, row, getMultivariateDesignOfExperiment());
 
-    auto * estimatesGroupBox = new MomentsEstimatesTableGroupBox(result_,
-        isConfidenceIntervalRequired_,
-        levelConfidenceInterval_,
-        ind);
-
-    tabLayout->addWidget(estimatesGroupBox, ++row, 0);
-    connect(variablesListWidget_, &VariablesListWidget::currentRowChanged, estimatesGroupBox, &MomentsEstimatesTableGroupBox::setCurrentIndexStackedWidget);
-
-  // min/max table
-  if (doMultivariate_)
-  {
-    auto * minMaxTableGroupBox = new MinMaxTableGroupBox(result_.getMultivariateDoE(), false);
-    tabLayout->addWidget(minMaxTableGroupBox, ++row, 0);
-    connect(variablesListWidget_, &VariablesListWidget::currentRowChanged, minMaxTableGroupBox, &MinMaxTableGroupBox::setCurrentIndexStackedWidget);
-  }
-
-  tabLayout->setRowStretch(++row, 1);
-  scrollArea->setWidget(tab);
-  tabWidget_->addTab(scrollArea, tr("Summary"));
+    tabLayout->setRowStretch(++row, 1);
+    scrollArea->setWidget(tab);
+    tabWidget_->addTab(scrollArea, tr("Summary"));
   }
 }
 
-void DataAnalysisResultWindow::addDependenceTab()
+DesignOfExperiment DataAnalysisResultWindow::getMultivariateDesignOfExperiment() const
 {
-  if (!doMultivariate_)
-    return;
-  
-  designOfExperiment_ = result_.getMultivariateDoE();
-  DataAnalysisWindow::addDependenceTab();
-  designOfExperiment_ = result_.getDesignOfExperiment();
+  return result_.getMultivariateDoE();
 }
 
-void DataAnalysisResultWindow::addScatterPlotsTab()
-{
-  if (!doMultivariate_)
-    return;
-  
-  designOfExperiment_ = result_.getMultivariateDoE();
-  DataAnalysisWindow::addScatterPlotsTab();
-  designOfExperiment_ = result_.getDesignOfExperiment();
-}
-
-void DataAnalysisResultWindow::addPlotMatrixTab()
-{
-  designOfExperiment_ = result_.getMultivariateDoE();
-  DataAnalysisWindow::addPlotMatrixTab();
-  designOfExperiment_ = result_.getDesignOfExperiment();
-}
 
 #ifdef PERSALYS_HAVE_PARAVIEW
 
@@ -202,7 +161,7 @@ void DataAnalysisResultWindow::addParaviewWidgetsTabs()
   if (!doMultivariate_)
     return;
   
-  const Sample sample = result_.getMultivariateDoE().getSample();
+  const Sample sample = getMultivariateDesignOfExperiment().getSample();
 
   // table tab
   auto * pvSpreadSheetWidget = new PVSpreadSheetViewWidget(this, PVServerManagerSingleton::Get());
