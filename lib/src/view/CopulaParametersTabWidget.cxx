@@ -131,7 +131,7 @@ void CopulaParametersTabWidget::buildInterface()
   }
 
   scrollArea->setWidget(new WidgetBoundToDockWidget(pdf_StackedWidget, pdf_cdfPlotSettingWidget, this));
-  addTab(scrollArea, tr("PDF/CDF"));
+  addTab(scrollArea, tr("Distribution"));
 
   // tab Kendall plot
   scrollArea = new QScrollArea;
