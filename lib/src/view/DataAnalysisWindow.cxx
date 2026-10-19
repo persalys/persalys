@@ -204,7 +204,7 @@ void DataAnalysisWindow::buildLazyTab(int index)
 
   const int oldCount = tabWidget_->count();
 
-  if (tabText == tr("PDF/CDF"))
+  if (tabText == tr("Distribution"))
     addPDF_CDFTab();
   else if (tabText == tr("Box plots"))
     addBoxPlotTab();
@@ -267,7 +267,7 @@ void DataAnalysisWindow::fillTabWidget()
   {
     // lazy tabs: only add placeholders for tabs that can actually be built
     if (hasPDF_CDFData())
-      tabWidget_->addTab(new QWidget, tr("PDF/CDF"));
+      tabWidget_->addTab(new QWidget, tr("Distribution"));
     if (hasBoxPlotData())
       tabWidget_->addTab(new QWidget, tr("Box plots"));
     if (doMultivariate_)
@@ -560,7 +560,7 @@ void DataAnalysisWindow::addPDF_CDFTab()
   }
 
   scrollArea->setWidget(tabStackedWidget);
-  tabWidget_->addTab(scrollArea, tr("PDF/CDF"));
+  tabWidget_->addTab(scrollArea, tr("Distribution"));
 }
 
 

@@ -148,7 +148,7 @@ void CopulaInferenceResultWidget::buildInterface()
 
       // PDF/CDF tab
       QWidget * aWidget = new QWidget;
-      paramWidget->addTab(aWidget, tr("PDF/CDF"));
+      paramWidget->addTab(aWidget, tr("Distribution"));
       paramWidget->setTabEnabled(0, false);
       // Kendall tab
       aWidget = new QWidget;

@@ -153,7 +153,7 @@ void InferenceResultWidget::buildInterface()
     connect(pdf_cdfPlotSettingWidget_, SIGNAL(currentPlotChanged(int)), pdf_cdfStackedWidget, SLOT(setCurrentIndex(int)));
 
     scrollArea->setWidget(new WidgetBoundToDockWidget(pdf_cdfStackedWidget, pdf_cdfPlotSettingWidget_, this));
-    tabWidget_->addTab(scrollArea, tr("PDF/CDF"));
+    tabWidget_->addTab(scrollArea, tr("Distribution"));
 
     // tab QQ plot
     scrollArea = new QScrollArea;
