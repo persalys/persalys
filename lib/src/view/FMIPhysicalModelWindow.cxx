@@ -378,7 +378,6 @@ void FMIPhysicalModelWindow::loadModel(const FMUInfo & info)
   updateIOCount();
   filterTextEdit_->setText("");
   tabWidget_->setCurrentIndex(1);
-  updatePersistentEditor();
 }
 
 
@@ -424,7 +423,6 @@ void FMIPhysicalModelWindow::updateFilters()
         indices.append(i);
     proxyModel_->setIOFilter(indices);
   }
-  updatePersistentEditor();
 }
 
 
@@ -448,13 +446,6 @@ void FMIPhysicalModelWindow::updateIOCount()
     }
   }
   ioCountLabel_->setText(QString(tr("Selected variables: input:%1, output:%2")).arg(inVar).arg(outVar));
-}
-
-void FMIPhysicalModelWindow::updatePersistentEditor()
-{
-  // leave the comboboxes apparent to suggest the column is editable
-  for(int iRow = 0; iRow < proxyModel_->rowCount(proxyModel_->index(0, 4)); ++ iRow)
-    variablesTableView_->openPersistentEditor(proxyModel_->index(iRow, 4));
 }
 
 void FMIPhysicalModelWindow::clearFilters()

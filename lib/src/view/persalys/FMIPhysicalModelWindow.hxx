@@ -294,7 +294,6 @@ public slots:
   void selectImportFileDialogRequested();
   void loadModel(const FMUInfo & info);
   void updateFilters();
-  void updatePersistentEditor();
   void clearFilters();
   void updateIOCount();
   void treeSelect(const QModelIndex & current, const QModelIndex & previous);
