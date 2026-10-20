@@ -567,15 +567,14 @@ QVariant DataTableModel::data(const QModelIndex & index, int role) const
         return QString::fromUtf8(variableNames_[index.row()].c_str());
       case 1://description
       {
-        String varName(variableNames_[index.row()]);
-        String desc;
-        if (physicalModel_.hasInputNamed(varName))
-          desc = physicalModel_.getInputByName(varName).getDescription();
-        else if (physicalModel_.hasOutputNamed(varName))
-          desc = physicalModel_.getOutputByName(varName).getDescription();
-        else
-          desc = descriptions_[index.row()];
-        return QString::fromUtf8(desc.c_str());
+        // inputOutput_ is the cached IO state: use it instead of
+        // hasInputNamed()/hasOutputNamed() linear scans per cell
+        const OT::UnsignedInteger io = inputOutput_[index.row()];
+        if (io == 1)
+          return QString::fromUtf8(physicalModel_.getInputByName(variableNames_[index.row()]).getDescription().c_str());
+        else if (io == 2)
+          return QString::fromUtf8(physicalModel_.getOutputByName(variableNames_[index.row()]).getDescription());
+        return QString::fromUtf8(descriptions_[index.row()].c_str());
       }
       case 2://variability
       {
@@ -664,19 +663,16 @@ QVariant DataTableModel::data(const QModelIndex & index, int role) const
       case 5://value
       {
         Scalar value = 0.0;
-        String varName(variableNames_[index.row()]);
-        if (physicalModel_.hasInputNamed(varName))
-          value = physicalModel_.getInputByName(varName).getValue();
-        else if (physicalModel_.hasOutputNamed(varName))
-          value = physicalModel_.getOutputByName(varName).getValue();
-        else if (startKeys_.contains(varName))
+        const OT::UnsignedInteger io = inputOutput_[index.row()];
+        if (io == 1)
+          value = physicalModel_.getInputByName(variableNames_[index.row()]).getValue();
+        else if (io == 2)
+          value = physicalModel_.getOutputByName(variableNames_[index.row()]).getValue();
+        else
         {
-          for (UnsignedInteger i = 0; i < startKeys_.getSize(); ++i)
-            if (startKeys_[i] == varName)
-            {
-              value = startValues_[i];
-              break;
-            }
+          const auto it = startValuesMap_.find(variableNames_[index.row()]);
+          if (it != startValuesMap_.end())
+            value = it->second;
         }
         return QString::number(value, 'g', StudyTreeViewModel::DefaultSignificantDigits);
       }
@@ -821,6 +817,9 @@ void DataTableModel::loadData(const FMUInfo & info)
   inputOutput_ = Indices(causality_.getSize());
   startKeys_ = info.getStartKeys();
   startValues_ = info.getStartValues();
+  startValuesMap_.clear();
+  for (UnsignedInteger i = 0; i < startKeys_.getSize(); ++ i)
+    startValuesMap_[startKeys_[i]] = startValues_[i];
   insertRows(0, variableNames_.getSize());
   Indices causalityCount(7);
   for (UnsignedInteger i = 0; i < variableNames_.getSize(); ++ i)

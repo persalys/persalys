@@ -40,6 +40,8 @@
 #include <QTreeView>
 #include <QMouseEvent>
 
+#include <unordered_map>
+
 namespace PERSALYS
 {
 
@@ -86,6 +88,9 @@ private:
 
   OT::Description startKeys_;
   OT::Point startValues_;
+  // O(1) lookup of FMU start values: the linear scan of startKeys_
+  // inside data() made each cell access O(N)
+  std::unordered_map<std::string, double> startValuesMap_;
 };
 
 
