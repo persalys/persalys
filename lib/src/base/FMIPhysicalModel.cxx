@@ -176,19 +176,26 @@ void FMIPhysicalModel::reassignVariables(const Description & inputNames,
 
   code << "    return " << outputNamesUnderscoreStr << "\n";
 
-  // save values because setCode drops renamed variables
+  // save values/descriptions because setCode drops renamed variables
   std::map<String, Scalar> valueMap;
+  std::map<String, String> descriptionMap;
   for(UnsignedInteger i = 0; i < inputNames.getSize(); ++ i)
   {
     const String varName(inputNames[i]);
     if (hasInputNamed(varName))
+    {
       valueMap[varName] = getInputByName(varName).getValue();
+      descriptionMap[varName] = getInputByName(varName).getDescription();
+    }
   }
   for(UnsignedInteger i = 0; i < outputNames.getSize(); ++ i)
   {
     const String varName(outputNames[i]);
     if (hasOutputNamed(varName))
+    {
       valueMap[varName] = getOutputByName(varName).getValue();
+      descriptionMap[varName] = getOutputByName(varName).getDescription();
+    }
   }
 
   setCode(code);
@@ -202,6 +209,7 @@ void FMIPhysicalModel::reassignVariables(const Description & inputNames,
     {
       getInputByName(newName).setName(oldName);
       getInputByName(oldName).setValue(valueMap[oldName]);// restore lost value
+      getInputByName(oldName).setDescription(descriptionMap[oldName]);// restore lost description
     }
   }
   for(UnsignedInteger i = 0; i < outputNames.getSize(); ++ i)
@@ -212,6 +220,7 @@ void FMIPhysicalModel::reassignVariables(const Description & inputNames,
     {
       getOutputByName(newName).setName(oldName);
       getOutputByName(oldName).setValue(valueMap[oldName]);// restore lost value
+      getOutputByName(oldName).setDescription(descriptionMap[oldName]);// restore lost description
     }
   }
 }

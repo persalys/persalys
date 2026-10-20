@@ -566,16 +566,8 @@ QVariant DataTableModel::data(const QModelIndex & index, int role) const
       case 0://name
         return QString::fromUtf8(variableNames_[index.row()].c_str());
       case 1://description
-      {
-        // inputOutput_ is the cached IO state: use it instead of
-        // hasInputNamed()/hasOutputNamed() linear scans per cell
-        const OT::UnsignedInteger io = inputOutput_[index.row()];
-        if (io == 1)
-          return QString::fromUtf8(physicalModel_.getInputByName(variableNames_[index.row()]).getDescription().c_str());
-        else if (io == 2)
-          return QString::fromUtf8(physicalModel_.getOutputByName(variableNames_[index.row()]).getDescription());
+        // cached: data() must stay O(1) without physical model lookups
         return QString::fromUtf8(descriptions_[index.row()].c_str());
-      }
       case 2://variability
       {
         if (role == Qt::DisplayRole)
@@ -661,21 +653,8 @@ QVariant DataTableModel::data(const QModelIndex & index, int role) const
         return static_cast<int>(inputOutput_[index.row()]);
       }
       case 5://value
-      {
-        Scalar value = 0.0;
-        const OT::UnsignedInteger io = inputOutput_[index.row()];
-        if (io == 1)
-          value = physicalModel_.getInputByName(variableNames_[index.row()]).getValue();
-        else if (io == 2)
-          value = physicalModel_.getOutputByName(variableNames_[index.row()]).getValue();
-        else
-        {
-          const auto it = startValuesMap_.find(variableNames_[index.row()]);
-          if (it != startValuesMap_.end())
-            value = it->second;
-        }
-        return QString::number(value, 'g', StudyTreeViewModel::DefaultSignificantDigits);
-      }
+        // cached: data() must stay O(1) without physical model lookups
+        return QString::number(values_[index.row()], 'g', StudyTreeViewModel::DefaultSignificantDigits);
       default:
         break;
     }
@@ -698,16 +677,13 @@ bool DataTableModel::setData(const QModelIndex & index, const QVariant & value, 
       String description(value.toString().toUtf8().constData());
       if (description == descriptions_[index.row()]) return false;
       descriptions_[index.row()] = description;
-      String varName(variableNames_[index.row()]);
+      const String varName(variableNames_[index.row()]);
       physicalModel_.blockNotification("PhysicalModelDefinitionItem");
-      if (physicalModel_.hasInputNamed(varName))
-      {
+      const OT::UnsignedInteger io = inputOutput_[index.row()];
+      if (io == 1)
         physicalModel_.setInputDescription(varName, description);
-      }
-      else if (physicalModel_.hasOutputNamed(varName))
-      {
+      else if (io == 2)
         physicalModel_.setOutputDescription(varName, description);
-      }
       physicalModel_.blockNotification();
       break;
     }
@@ -728,40 +704,30 @@ bool DataTableModel::setData(const QModelIndex & index, const QVariant & value, 
 
       inputOutput_[index.row()] = inputOutput;
 
-      String varName(variableNames_[index.row()]);
+      const String varName(variableNames_[index.row()]);
 
       physicalModel_.blockNotification("PhysicalModelDefinitionItem");
       dynamic_cast<FMIPhysicalModel*>(physicalModel_.getImplementation().get())->reassignVariables(getInputVariableNames(), getOutputVariableNames());
-      if (physicalModel_.hasInputNamed(varName) && startKeys_.contains(varName))
+      // reassignVariables preserves values/descriptions of surviving variables
+      // (including dotted names); only the toggled row may need its FMU start
+      // value when it becomes newly enabled, or its display value reset when disabled
       {
-        for (UnsignedInteger i = 0; i < startKeys_.getSize(); ++i)
-          if (startKeys_[i] == varName)
-          {
-            physicalModel_.getInputByName(varName).setValue(startValues_[i]);
-            break;
-          }
-      }
-      if (physicalModel_.hasOutputNamed(varName) && startKeys_.contains(varName))
-      {
-        for (UnsignedInteger i = 0; i < startKeys_.getSize(); ++i)
-          if (startKeys_[i] == varName)
-          {
-            physicalModel_.getOutputByName(varName).setValue(startValues_[i]);
-            break;
-          }
-      }
-      // refresh descriptions
-      for (int i = 0; i < rowCount(); ++ i)
-      {
-        const String varName_i(variableNames_[i]);
-        if (physicalModel_.hasInputNamed(varName_i))
+        const auto it = startValuesMap_.find(varName);
+        const double startValue = (it != startValuesMap_.end() ? it->second : 0.0);
+        if (inputOutput == 1)
         {
-          physicalModel_.setInputDescription(varName_i, descriptions_[i]);
+          if (it != startValuesMap_.end())
+            physicalModel_.getInputByName(varName).setValue(it->second);
+          values_[index.row()] = physicalModel_.getInputByName(varName).getValue();
         }
-        else if (physicalModel_.hasOutputNamed(varName_i))
+        else if (inputOutput == 2)
         {
-          physicalModel_.setOutputDescription(varName_i, descriptions_[i]);
+          if (it != startValuesMap_.end())
+            physicalModel_.getOutputByName(varName).setValue(it->second);
+          values_[index.row()] = physicalModel_.getOutputByName(varName).getValue();
         }
+        else
+          values_[index.row()] = startValue;
       }
       physicalModel_.blockNotification();
 
@@ -772,12 +738,17 @@ bool DataTableModel::setData(const QModelIndex & index, const QVariant & value, 
     case 5://value
     {
       const double dvalue = value.toDouble();
-      String varName(variableNames_[index.row()]);
+      if (dvalue == values_[index.row()]) return false;
+      values_[index.row()] = dvalue;
+      const String varName(variableNames_[index.row()]);
       physicalModel_.blockNotification("PhysicalModelDefinitionItem");
-      if (physicalModel_.hasInputNamed(varName))
+      const OT::UnsignedInteger io = inputOutput_[index.row()];
+      if (io == 1)
         physicalModel_.getInputByName(varName).setValue(dvalue);
-      else if (physicalModel_.hasOutputNamed(varName))
+      else if (io == 2)
         physicalModel_.getOutputByName(varName).setValue(dvalue);
+      else
+        startValuesMap_[varName] = dvalue;
       physicalModel_.blockNotification();
       break;
     }
@@ -790,6 +761,14 @@ bool DataTableModel::setData(const QModelIndex & index, const QVariant & value, 
 
 void DataTableModel::updateOutputValues()
 {
+  // resync cached values for outputs in O(nIO) via row lookup
+  const OutputCollection outputs(physicalModel_.getOutputs());
+  for (OT::UnsignedInteger i = 0; i < outputs.getSize(); ++ i)
+  {
+    const auto it = rowByName_.find(outputs[i].getName());
+    if (it != rowByName_.end())
+      values_[it->second] = outputs[i].getValue();
+  }
   // refresh value column
   QModelIndex topleft = createIndex(0, 5);
   QModelIndex bottomright = createIndex(rowCount(), 5);
@@ -812,6 +791,7 @@ void DataTableModel::loadData(const FMUInfo & info)
   beginResetModel();
   variableNames_ = info.getVariableNames();
   descriptions_ = Description(variableNames_.getSize());
+  values_ = Point(variableNames_.getSize(), 0.0);
   causality_ = info.getCausality();
   variability_ = info.getVariability();
   inputOutput_ = Indices(causality_.getSize());
@@ -820,7 +800,28 @@ void DataTableModel::loadData(const FMUInfo & info)
   startValuesMap_.clear();
   for (UnsignedInteger i = 0; i < startKeys_.getSize(); ++ i)
     startValuesMap_[startKeys_[i]] = startValues_[i];
-  insertRows(0, variableNames_.getSize());
+  rowByName_.clear();
+  for (UnsignedInteger i = 0; i < variableNames_.getSize(); ++ i)
+    rowByName_[variableNames_[i]] = i;
+  // Build IO lookups once: per-row hasInputNamed()/getInputByName()
+  // scans made loadData O(N * nIO). Hoist collections to avoid
+  // per-iteration copies.
+  const InputCollection inputs(physicalModel_.getInputs());
+  const OutputCollection outputs(physicalModel_.getOutputs());
+  std::unordered_map<std::string, std::string> inputDescriptions;
+  std::unordered_map<std::string, double> inputValues;
+  for (UnsignedInteger i = 0; i < inputs.getSize(); ++ i)
+  {
+    inputDescriptions[inputs[i].getName()] = inputs[i].getDescription();
+    inputValues[inputs[i].getName()] = inputs[i].getValue();
+  }
+  std::unordered_map<std::string, std::string> outputDescriptions;
+  std::unordered_map<std::string, double> outputValues;
+  for (UnsignedInteger i = 0; i < outputs.getSize(); ++ i)
+  {
+    outputDescriptions[outputs[i].getName()] = outputs[i].getDescription();
+    outputValues[outputs[i].getName()] = outputs[i].getValue();
+  }
   Indices causalityCount(7);
   for (UnsignedInteger i = 0; i < variableNames_.getSize(); ++ i)
   {
@@ -828,16 +829,25 @@ void DataTableModel::loadData(const FMUInfo & info)
     if (causality > 6) throw InternalException(HERE) << "Invalid causality value: " << causality;
     ++ causalityCount[causality];
 
-    if (physicalModel_.hasInputNamed(variableNames_[i]))
+    const auto itIn = inputDescriptions.find(variableNames_[i]);
+    if (itIn != inputDescriptions.end())
     {
       inputOutput_[i] = 1;
-      descriptions_[i] = physicalModel_.getInputByName(variableNames_[i]).getDescription();
+      descriptions_[i] = itIn->second;
+      values_[i] = inputValues[variableNames_[i]];
+      continue;
     }
-    else if (physicalModel_.hasOutputNamed(variableNames_[i]))
+    const auto itOut = outputDescriptions.find(variableNames_[i]);
+    if (itOut != outputDescriptions.end())
     {
       inputOutput_[i] = 2;
-      descriptions_[i] = physicalModel_.getOutputByName(variableNames_[i]).getDescription();
+      descriptions_[i] = itOut->second;
+      values_[i] = outputValues[variableNames_[i]];
+      continue;
     }
+    const auto itStart = startValuesMap_.find(variableNames_[i]);
+    if (itStart != startValuesMap_.end())
+      values_[i] = itStart->second;
   }
   properties_.clear();
   properties_.add(info.getIdentifier());

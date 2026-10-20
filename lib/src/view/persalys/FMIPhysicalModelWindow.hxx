@@ -91,6 +91,11 @@ private:
   // O(1) lookup of FMU start values: the linear scan of startKeys_
   // inside data() made each cell access O(N)
   std::unordered_map<std::string, double> startValuesMap_;
+  // Cached display values: data() must not touch the physical model
+  // (getInput/OutputByName scans are O(nIO) per cell)
+  OT::Point values_;
+  // Row index by variable name for O(nIO) resync of output values
+  std::unordered_map<std::string, OT::UnsignedInteger> rowByName_;
 };
 
 
