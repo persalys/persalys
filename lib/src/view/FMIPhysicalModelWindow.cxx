@@ -222,6 +222,7 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
 
   // error message
   errorWidget_ = new ErrorWidget;
+  errorWidget_->setHeight(80); // fixed height with scrollbar because evaluation errors can be long (e.g. FMU tracebacks)
   variablesLayout->addWidget(errorWidget_);
 
   tabWidget_->addTab(variablesWidget, tr("Variables"));
