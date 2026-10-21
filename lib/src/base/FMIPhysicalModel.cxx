@@ -107,21 +107,30 @@ void FMIPhysicalModel::setFMUFileName(const String & fileName)
   Description allVars(fmuInfo_.getVariableNames());
   Indices allCausalities(fmuInfo_.getCausality());
 
+  // default IO selection follows the causality codes of the FMU version:
+  // FMI 1.0: INPUT(0), OUTPUT(1); FMI 2.0: INPUT(2), OUTPUT(3);
+  // FMI 3.0: INPUT(3), OUTPUT(4)
+  UnsignedInteger inputCausality = 2;
+  UnsignedInteger outputCausality = 3;
+  if (fmuInfo_.getFMIVersion() == "3.0")
+  {
+    inputCausality = 3;
+    outputCausality = 4;
+  }
+  else if (fmuInfo_.getFMIVersion() == "1.0")
+  {
+    inputCausality = 0;
+    outputCausality = 1;
+  }
+
   Description inputVars;
   Description outputVars;
   for (UnsignedInteger i = 0; i < allVars.getSize(); ++ i)
   {
-    switch (allCausalities[i])
-    {
-      case 2:// input
-        inputVars.add(allVars[i]);
-        break;
-      case 3:// output
-        outputVars.add(allVars[i]);
-        break;
-      default:
-        break;
-    }
+    if (allCausalities[i] == inputCausality)
+      inputVars.add(allVars[i]);
+    else if (allCausalities[i] == outputCausality)
+      outputVars.add(allVars[i]);
   }
 
   fmuFileName_ = fileName;

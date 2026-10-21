@@ -368,6 +368,11 @@ void FMIPhysicalModelWindow::loadModel(const FMUInfo & info)
 {
   variablesTableModel_->loadData(info);
 
+  // causality labels and I/O rules depend on the FMI version
+  causalityField_->resetItemNames(variablesTableModel_->getCausalityNames());
+  if (ioDelegate_)
+    ioDelegate_->setFMIVersion(QString::fromStdString(variablesTableModel_->getFMIVersion()));
+
   Description properties(variablesTableModel_->getProperties());
   for(int i = 0; i < propertiesTable_->model()->rowCount(); ++ i)
   {
@@ -491,8 +496,8 @@ void FMIPhysicalModelWindow::updateVariablesTableModel()
   proxyModel_->setDynamicSortFilter(true);
 
   variablesTableView_->setModel(proxyModel_);
-  QItemDelegate * delegate = new EnumDelegate(QStringList() << tr("Disabled") << tr("Input") << tr("Output"), variablesTableView_);
-  variablesTableView_->setItemDelegateForColumn(4, delegate);
+  ioDelegate_ = new EnumDelegate(QStringList() << tr("Disabled") << tr("Input") << tr("Output"), variablesTableView_);
+  variablesTableView_->setItemDelegateForColumn(4, ioDelegate_);
 
   QItemDelegate * fdelegate = new FloatDelegate(variablesTableView_);
   variablesTableView_->setItemDelegateForColumn(5, fdelegate);
@@ -601,34 +606,7 @@ QVariant DataTableModel::data(const QModelIndex & index, int role) const
       case 3://causality
       {
         if (role == Qt::DisplayRole)
-        {
-          switch(causality_[index.row()])
-          {
-            case 0:
-              return tr("Parameter");
-              break;
-            case 1:
-              return tr("Calculated parameter");
-              break;
-            case 2:
-              return tr("Input");
-              break;
-            case 3:
-              return tr("Output");
-              break;
-            case 4:
-              return tr("Local");
-              break;
-            case 5:
-              return tr("Independent");
-              break;
-            case 6:
-              return tr("Unknown");
-              break;
-            default:
-              break;
-          }
-        }
+          return getCausalityName(causality_[index.row()]);
         return static_cast<int>(causality_[index.row()]);
       }
       case 4://input/output
@@ -692,15 +670,49 @@ bool DataTableModel::setData(const QModelIndex & index, const QVariant & value, 
       int inputOutput = value.toInt();
       int oldInputOutput = static_cast<int>(inputOutput_[index.row()]);
       if (inputOutput == oldInputOutput) return false;
-      int causality = causality_[index.row()];
+      const int causality = causality_[index.row()];
       if ((inputOutput < 0) || (inputOutput > 2)) return false;
-      // FMI2: PARAMETER(0), CALCULATED_PARAMETER(1), INPUT(2), OUTPUT(3), LOCAL(4), INDEPENDENT(5), UNKNOWN(6)
-      if ((inputOutput == 0) && (causality == 2)) return false;// cannot disable an input
-      if ((inputOutput == 1) && (causality == 3)) return false;// cannot turn an output to input
-      if ((inputOutput == 1) && (causality == 1)) return false;// cannot turn a calculated input to input
-      if ((inputOutput == 1) && (causality == 4)) return false;// cannot turn a local to input
-      if ((inputOutput == 2) && (causality == 2)) return false;// cannot turn an input to output
-      if ((inputOutput == 2) && (causality == 0)) return false;// cannot turn a parameter to output
+      // causality codes depend on the FMI version, otfmi accepts inputs with
+      // input/parameter causality and outputs with output/local causality
+      const UnsignedInteger inputCausality = getInputCausality();
+      const UnsignedInteger outputCausality = getOutputCausality();
+      if ((inputOutput == 0) && (causality == static_cast<int>(inputCausality))) return false;// cannot disable an input
+      if (inputOutput == 1)
+      {
+        if (causality == static_cast<int>(outputCausality)) return false;// cannot turn an output to input
+        if (fmiVersion_ == "3.0")
+        {
+          if (causality == 0) return false;// cannot turn a structural parameter to input
+          if (causality == 2) return false;// cannot turn a calculated parameter to input
+          if (causality == 5) return false;// cannot turn a local to input
+        }
+        else if (fmiVersion_ == "1.0")
+        {
+          if (causality != static_cast<int>(inputCausality)) return false;// only inputs can be inputs
+        }
+        else
+        {
+          if (causality == 1) return false;// cannot turn a calculated parameter to input
+          if (causality == 4) return false;// cannot turn a local to input
+        }
+      }
+      if (inputOutput == 2)
+      {
+        if (causality == static_cast<int>(inputCausality)) return false;// cannot turn an input to output
+        if (fmiVersion_ == "3.0")
+        {
+          if (causality == 0) return false;// cannot turn a structural parameter to output
+          if (causality == 1) return false;// cannot turn a parameter to output
+        }
+        else if (fmiVersion_ == "1.0")
+        {
+          if (causality != static_cast<int>(outputCausality)) return false;// only outputs can be outputs
+        }
+        else
+        {
+          if (causality == 0) return false;// cannot turn a parameter to output
+        }
+      }
 
       inputOutput_[index.row()] = inputOutput;
 
@@ -794,6 +806,7 @@ void DataTableModel::loadData(const FMUInfo & info)
   values_ = Point(variableNames_.getSize(), 0.0);
   causality_ = info.getCausality();
   variability_ = info.getVariability();
+  fmiVersion_ = info.getFMIVersion();
   inputOutput_ = Indices(causality_.getSize());
   startKeys_ = info.getStartKeys();
   startValues_ = info.getStartValues();
@@ -822,11 +835,11 @@ void DataTableModel::loadData(const FMUInfo & info)
     outputDescriptions[outputs[i].getName()] = outputs[i].getDescription();
     outputValues[outputs[i].getName()] = outputs[i].getValue();
   }
-  Indices causalityCount(7);
+  Indices causalityCount(8);
   for (UnsignedInteger i = 0; i < variableNames_.getSize(); ++ i)
   {
     int causality = causality_[i];
-    if (causality > 6) throw InternalException(HERE) << "Invalid causality value: " << causality;
+    if (causality > 7) throw InternalException(HERE) << "Invalid causality value: " << causality;
     ++ causalityCount[causality];
 
     const auto itIn = inputDescriptions.find(variableNames_[i]);
@@ -861,7 +874,17 @@ void DataTableModel::loadData(const FMUInfo & info)
   properties_.add(info.getDateTime());
   properties_.add(info.getGUID());
   properties_.add(OSS() << variableNames_.getSize());
-  properties_.add(QString(tr("parameter:%1, input:%2, output:%3, local:%4")).arg(causalityCount[0]).arg(causalityCount[2]).arg(causalityCount[3]).arg(causalityCount[4]).toStdString());
+  if (fmiVersion_ == "1.0")
+  {
+    properties_.add(QString(tr("input:%1, output:%2")).arg(causalityCount[getInputCausality()]).arg(causalityCount[getOutputCausality()]).toStdString());
+  }
+  else
+  {
+    // FMI 3.0 structural parameters counted with parameters; local is 4 for FMI 2.0, 5 for FMI 3.0
+    const UnsignedInteger parameterCount = (fmiVersion_ == "3.0" ? causalityCount[0] + causalityCount[1] : causalityCount[0]);
+    const UnsignedInteger localCausality = (fmiVersion_ == "3.0" ? 5 : 4);
+    properties_.add(QString(tr("parameter:%1, input:%2, output:%3, local:%4")).arg(parameterCount).arg(causalityCount[getInputCausality()]).arg(causalityCount[getOutputCausality()]).arg(causalityCount[localCausality]).toStdString());
+  }
   endResetModel();
 }
 
@@ -879,6 +902,118 @@ Indices DataTableModel::getIO() const
 Description DataTableModel::getProperties() const
 {
   return properties_;
+}
+
+String DataTableModel::getFMIVersion() const
+{
+  return fmiVersion_;
+}
+
+UnsignedInteger DataTableModel::getInputCausality() const
+{
+  if (fmiVersion_ == "3.0")
+    return 3;
+  if (fmiVersion_ == "1.0")
+    return 0;
+  return 2;
+}
+
+UnsignedInteger DataTableModel::getOutputCausality() const
+{
+  if (fmiVersion_ == "3.0")
+    return 4;
+  if (fmiVersion_ == "1.0")
+    return 1;
+  return 3;
+}
+
+QString DataTableModel::getCausalityName(const int causality) const
+{
+  if (fmiVersion_ == "3.0")
+  {
+    switch (causality)
+    {
+      case 0:
+        return tr("Structural parameter");
+      case 1:
+        return tr("Parameter");
+      case 2:
+        return tr("Calculated parameter");
+      case 3:
+        return tr("Input");
+      case 4:
+        return tr("Output");
+      case 5:
+        return tr("Local");
+      case 6:
+        return tr("Independent");
+      case 7:
+        return tr("Unknown");
+      default:
+        break;
+    }
+  }
+  else if (fmiVersion_ == "1.0")
+  {
+    switch (causality)
+    {
+      case 0:
+        return tr("Input");
+      case 1:
+        return tr("Output");
+      case 2:
+        return tr("Internal");
+      case 3:
+        return tr("None");
+      case 4:
+        return tr("Unknown");
+      default:
+        break;
+    }
+  }
+  else
+  {
+    switch (causality)
+    {
+      case 0:
+        return tr("Parameter");
+      case 1:
+        return tr("Calculated parameter");
+      case 2:
+        return tr("Input");
+      case 3:
+        return tr("Output");
+      case 4:
+        return tr("Local");
+      case 5:
+        return tr("Independent");
+      case 6:
+        return tr("Unknown");
+      default:
+        break;
+    }
+  }
+  return QString();
+}
+
+QStringList DataTableModel::getCausalityNames() const
+{
+  QStringList names;
+  if (fmiVersion_ == "3.0")
+  {
+    names << tr("Structural parameter") << tr("Parameter") << tr("Calculated parameter") << tr("Input")
+          << tr("Output") << tr("Local") << tr("Independent") << tr("Unknown");
+  }
+  else if (fmiVersion_ == "1.0")
+  {
+    names << tr("Input") << tr("Output") << tr("Internal") << tr("None") << tr("Unknown");
+  }
+  else
+  {
+    names << tr("Parameter") << tr("Calculated parameter") << tr("Input") << tr("Output")
+          << tr("Local") << tr("Independent") << tr("Unknown");
+  }
+  return names;
 }
 
 Description DataTableModel::filterIOVariables(const UnsignedInteger io) const
