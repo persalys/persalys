@@ -360,6 +360,7 @@ private:
   TreeModel *tree_model_ = nullptr;
   QTableView * propertiesTable_ = nullptr;
   QLabel * ioCountLabel_ = nullptr;
+  QLabel * timeInfoLabel_ = nullptr;
   QTabWidget * tabWidget_ = nullptr;
 
   CopyableTableView * differentiationTableView_ = nullptr;

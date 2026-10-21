@@ -205,18 +205,18 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
   ioCountLabel_ = new QLabel;
   QPushButton * evaluateOutputsButton = new QPushButton(QIcon(":/images/system-run.png"), tr("Check model"));
   evaluateOutputsButton->setToolTip(tr("Evaluate the outputs"));
-  QLabel * timeInfo = new QLabel();
+  timeInfoLabel_ = new QLabel;
   connect(evaluateOutputsButton, &QPushButton::clicked,  [ = ] (bool)
   {
-    timeInfo->clear();
+    timeInfoLabel_->clear();
     evaluateOutputs();
     if(physicalModel_.getEvalTime() > 0)
-      timeInfo->setText(tr("Elapsed time") + ": " + QtOT::FormatDuration(physicalModel_.getEvalTime()));
+      timeInfoLabel_->setText(tr("Elapsed time") + ": " + QtOT::FormatDuration(physicalModel_.getEvalTime()));
   });
   QGridLayout * evaluationLayout = new QGridLayout;
   evaluationLayout->addWidget(ioCountLabel_, 0, 0);
   evaluationLayout->setColumnStretch(0, 2);
-  evaluationLayout->addWidget(timeInfo, 1, 0);
+  evaluationLayout->addWidget(timeInfoLabel_, 1, 0);
   evaluationLayout->addWidget(evaluateOutputsButton, 0, 1);
   variablesLayout->addLayout(evaluationLayout);
 
@@ -367,6 +367,11 @@ void FMIPhysicalModelWindow::selectImportFileDialogRequested()
 void FMIPhysicalModelWindow::loadModel(const FMUInfo & info)
 {
   variablesTableModel_->loadData(info);
+
+  // the previous evaluation time no longer applies to the new FMU
+  physicalModel_.setEvalTime(0.0);
+  if (timeInfoLabel_)
+    timeInfoLabel_->clear();
 
   // causality labels and I/O rules depend on the FMI version
   causalityField_->resetItemNames(variablesTableModel_->getCausalityNames());
