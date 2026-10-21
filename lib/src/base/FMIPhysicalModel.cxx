@@ -175,8 +175,14 @@ void FMIPhysicalModel::reassignVariables(const Description & inputNames,
   code << "    inputs = " << Parameters::GetOTDescriptionStr(inputNames) << "\n";
   code << "    outputs = " << Parameters::GetOTDescriptionStr(outputNames) << "\n";
   code << "    kind = " << (fmuType_ == "auto" ? String("None") : "'" + fmuType_ + "'") << "\n";
-  code << "    if not hasattr(_exec, 'model_fmu'):\n";
+  // the cached model is keyed on the FMU identity, not just its presence:
+  // the worker processes of the parallel pool reuse _exec across batches,
+  // so a function object must never keep serving a model built from
+  // different parameters
+  code << "    fmu_id = (path_fmu, tuple(inputs), tuple(outputs), kind)\n";
+  code << "    if getattr(_exec, 'model_fmu_id', None) != fmu_id:\n";
   code << "        _exec.model_fmu = otfmi.OpenTURNSFMUFunction(path_fmu, inputs_fmu=inputs, outputs_fmu=outputs, kind=kind)\n";
+  code << "        _exec.model_fmu_id = fmu_id\n";
   code << "    __X = [" << inputNamesUnderscoreStr << "]\n";
 
   code << "    " << outputNamesUnderscoreStr;
