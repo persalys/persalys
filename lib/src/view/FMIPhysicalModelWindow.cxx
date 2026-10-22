@@ -392,8 +392,8 @@ void FMIPhysicalModelWindow::updateFilters()
   // filter variability
   {
     QStringList names(variabilityField_->getItemNames());
-    QSet<QString> checked(variabilityField_->getCheckedItemNames().begin(),
-                          variabilityField_->getCheckedItemNames().end());
+    const QStringList checkedNames(variabilityField_->getCheckedItemNames());
+    const QSet<QString> checked(checkedNames.begin(), checkedNames.end());
     QList<int> indices;
     for (int i = 0; i < names.size(); ++i)
       if (checked.contains(names[i]))
@@ -404,8 +404,8 @@ void FMIPhysicalModelWindow::updateFilters()
   // filter causality
   {
     QStringList names(causalityField_->getItemNames());
-    QSet<QString> checked(causalityField_->getCheckedItemNames().begin(),
-                          causalityField_->getCheckedItemNames().end());
+    const QStringList checkedNames(causalityField_->getCheckedItemNames());
+    const QSet<QString> checked(checkedNames.begin(), checkedNames.end());
     QList<int> indices;
     for (int i = 0; i < names.size(); ++i)
       if (checked.contains(names[i]))
@@ -416,8 +416,8 @@ void FMIPhysicalModelWindow::updateFilters()
   // filter I/O
   {
     QStringList names(ioField_->getItemNames());
-    QSet<QString> checked(ioField_->getCheckedItemNames().begin(),
-                          ioField_->getCheckedItemNames().end());
+    const QStringList checkedNames(ioField_->getCheckedItemNames());
+    const QSet<QString> checked(checkedNames.begin(), checkedNames.end());
     QList<int> indices;
     for (int i = 0; i < names.size(); ++i)
       if (checked.contains(names[i]))
