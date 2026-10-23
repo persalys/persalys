@@ -7,3 +7,4 @@ build*/
 CMakeLists.txt.user
 .cache
 .clinerules
+__pycache__/
