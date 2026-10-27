@@ -20,6 +20,7 @@ public:
   {
     return PV_REPRESENTATION_TYPE;
   }
+  void updateTable(const OT::Sample& sample, const OT::UnsignedInteger repr_ind = 0) override;
 public:
   static const char PV_VIEW_TYPE[];
   static const char PV_REPRESENTATION_TYPE[];

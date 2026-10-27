@@ -10,6 +10,7 @@
 #include <vtkCommand.h>
 #include <vtkAbstractContextItem.h>
 #include <vtkInformation.h>
+#include <vtkVector.h>
 
 namespace
 {
@@ -107,6 +108,51 @@ PVMatrixPlotViewWidget::~PVMatrixPlotViewWidget()
       {
         if (matrix->GetAnnotationLink())
           matrix->GetAnnotationLink()->RemoveObserver(linkObserver_);
+      }
+    }
+  }
+}
+
+
+void PVMatrixPlotViewWidget::updateTable(const OT::Sample& sample, const OT::UnsignedInteger repr_ind)
+{
+  // Refreshing the table content (e.g. switching between values and ranks)
+  // makes the representation push the table to the matrix again on the next
+  // render, which resets the cell selected by the user (active plot) to the
+  // default first cell. Flush that render now and restore the selected pair
+  // afterwards so the selection survives the refresh.
+  vtkVector2i activePlot(0, 0);
+  bool hasActivePlot = false;
+  if (const pqContextView * viewC = dynamic_cast<const pqContextView *>(getView()))
+  {
+    if (vtkScatterPlotMatrix * matrix = vtkScatterPlotMatrix::SafeDownCast(
+          viewC->getContextViewProxy()->GetContextItem()))
+    {
+      activePlot = matrix->GetActivePlot();
+      hasActivePlot = true;
+    }
+  }
+
+  PVViewWidget::updateTable(sample, repr_ind);
+
+  // updateTable only schedules a render: force it now so the matrix layout
+  // rebuild (and the active plot reset) happens synchronously here
+  getView()->forceRender();
+
+  if (hasActivePlot)
+  {
+    if (const pqContextView * viewC = dynamic_cast<const pqContextView *>(getView()))
+    {
+      if (vtkScatterPlotMatrix * matrix = vtkScatterPlotMatrix::SafeDownCast(
+            viewC->getContextViewProxy()->GetContextItem()))
+      {
+        const vtkVector2i currentPlot = matrix->GetActivePlot();
+        if (currentPlot.GetX() != activePlot.GetX() || currentPlot.GetY() != activePlot.GetY())
+        {
+          matrix->SetActivePlot(activePlot);
+          // repaint with the restored active plot
+          getView()->forceRender();
+        }
       }
     }
   }

@@ -58,7 +58,7 @@ public:
   void setAxisToShow(const std::vector<std::string>& axis);
   void setAxisToShow(const OT::Description& sampleDescription);
   virtual const char *getRepresentationName() const = 0;
-  void updateTable(const OT::Sample& sample, const OT::UnsignedInteger repr_ind = 0);
+  virtual void updateTable(const OT::Sample& sample, const OT::UnsignedInteger repr_ind = 0);
   pqOutputPort *getPort(const OT::UnsignedInteger ind = 0) const
   {
     return ports_[ind];
