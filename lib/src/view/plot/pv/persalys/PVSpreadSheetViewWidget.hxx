@@ -22,6 +22,7 @@ signals:
   void copyDataRequested();
 public slots:
   void contextMenu(const QPoint & pos);
+  void copyToClipboard();
 
 public:
   static const char PV_VIEW_TYPE[];

@@ -24,6 +24,14 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QLabel>
+#include <QTableView>
+#include <QApplication>
+#include <QClipboard>
+#include <QItemSelectionModel>
+#include <QAction>
+#include <QKeySequence>
+
+#include <set>
 
 namespace PERSALYS
 {
@@ -48,18 +56,73 @@ PVSpreadSheetViewWidget::~PVSpreadSheetViewWidget()
 // show the context menu when right clicking
 void PVSpreadSheetViewWidget::contextMenu(const QPoint& pos)
 {
-  // action
-  QAction * exportDataAction = new QAction(QIcon(":/images/document-export-table.png"), tr("Export"), this);
+  QMenu menu;
+  QAction * exportDataAction = menu.addAction(QIcon(":/images/document-export-table.png"), tr("Export"));
   connect(exportDataAction, SIGNAL(triggered(bool)), this, SIGNAL(exportDataRequested()));
 
-  QAction * copyDataAction = new QAction(QIcon(":/images/document-export.png"), tr("Copy"), this);
+  QAction * copyDataAction = menu.addAction(QIcon(":/images/document-export.png"), tr("Copy"));
   connect(copyDataAction, SIGNAL(triggered(bool)), this, SIGNAL(copyDataRequested()));
 
-  // menu
-  QMenu * contextMenu(new QMenu(this));
-  contextMenu->addAction(exportDataAction);
-  contextMenu->addAction(copyDataAction);
-  contextMenu->popup(mapToGlobal(pos));
+  menu.exec(mapToGlobal(pos));
+}
+
+
+void PVSpreadSheetViewWidget::copyToClipboard()
+{
+  pqSpreadSheetView * view = qobject_cast<pqSpreadSheetView*>(getView());
+  if (!view)
+    return;
+  QTableView * table = view->widget()->findChild<QTableView*>();
+  if (!table)
+    return;
+  QItemSelectionModel * selModel = table->selectionModel();
+  if (!selModel || !selModel->hasSelection())
+    return;
+  QModelIndexList selected = selModel->selectedIndexes();
+  if (selected.isEmpty())
+    return;
+  // visible columns only (skip __vtkIsSelected__, masks, ...)
+  // in model order, which follows the ordered column list
+  std::set<int> columns;
+  std::set<int> rows;
+  for (const QModelIndex & idx : selected)
+  {
+    if (!table->isColumnHidden(idx.column()))
+    {
+      columns.insert(idx.column());
+      rows.insert(idx.row());
+    }
+  }
+  if (columns.empty() || rows.empty())
+    return;
+
+  const QAbstractItemModel * model = table->model();
+  QString result;
+  // header
+  bool first = true;
+  for (int col : columns)
+  {
+    if (!first)
+      result.append(',');
+    first = false;
+    result.append(model->headerData(col, Qt::Horizontal, Qt::DisplayRole).toString());
+  }
+  result.append('\n');
+  // data, rows sorted, comma separated
+  for (int row : rows)
+  {
+    first = true;
+    for (int col : columns)
+    {
+      if (!first)
+        result.append(',');
+      first = false;
+      result.append(model->data(model->index(row, col)).toString());
+    }
+    result.append('\n');
+  }
+
+  QApplication::clipboard()->setText(result);
 }
 
 
@@ -155,7 +218,20 @@ QWidget * PVSpreadSheetViewWidget::GetSpreadSheetViewWidget(PVSpreadSheetViewWid
       }
     }
 
-    connect(pvWidget, SIGNAL(copyDataRequested()), decorator, SLOT(copyToClipboard()));
+    connect(pvWidget, SIGNAL(copyDataRequested()), pvWidget, SLOT(copyToClipboard()));
+
+    // pqSpreadSheetViewDecorator::copyToClipboard() toggles "SelectionOnly"
+    // and re-renders the view, causing flicker and scrollbar reset.
+    // Use the flicker-free copy above instead and drop its Copy-shortcut filter.
+    mainWidget->removeEventFilter(decorator);
+    if (QTableView * pvTable = view->widget()->findChild<QTableView*>())
+    {
+      QAction * copyShortcut = new QAction(pvTable);
+      copyShortcut->setShortcut(QKeySequence::Copy);
+      copyShortcut->setShortcutContext(Qt::WidgetShortcut);
+      QObject::connect(copyShortcut, SIGNAL(triggered()), pvWidget, SLOT(copyToClipboard()));
+      pvTable->addAction(copyShortcut);
+    }
   }
 
   return mainWidget;
