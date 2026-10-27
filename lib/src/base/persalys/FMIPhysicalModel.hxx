@@ -53,6 +53,7 @@ public:
   /** Accessor to the FMU file name */
   OT::String getFMUFileName() const;
   void setFMUFileName(const OT::String & fileName);
+  void setFMUFileName(const OT::String & fileName, const FMUInfo & info);
 
   /** Accessor to the FMU type */
   OT::String getFMUType() const;

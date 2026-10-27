@@ -103,7 +103,13 @@ String FMIPhysicalModel::getFMUFileName() const
 
 void FMIPhysicalModel::setFMUFileName(const String & fileName)
 {
-  fmuInfo_ = FMUInfo(fileName, fmuType_);
+  setFMUFileName(fileName, FMUInfo(fileName, fmuType_));
+}
+
+
+void FMIPhysicalModel::setFMUFileName(const String & fileName, const FMUInfo & info)
+{
+  fmuInfo_ = info;
   Description allVars(fmuInfo_.getVariableNames());
   Indices allCausalities(fmuInfo_.getCausality());
 

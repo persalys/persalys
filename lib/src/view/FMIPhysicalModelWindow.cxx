@@ -45,6 +45,9 @@
 #include <QGroupBox>
 #include <QScrollArea>
 #include <QSet>
+#include <QThread>
+#include <future>
+#include <chrono>
 
 using namespace OT;
 
@@ -344,20 +347,43 @@ void FMIPhysicalModelWindow::selectImportFileDialogRequested()
     }
     else
     {
-      FMUfileNameEdit_->setText(fileName);
       FMIPhysicalModel* fmiModel = getFMIPhysicalModel();
+      const OT::String fmuType = FMUTypeCombobox_->currentText().toStdString();
+      const OT::String fmuFile = fileName.toUtf8().data();
+
+      // load_fmu unzips the archive and dlopens the binary: it can take
+      // seconds during which the Windows message pump must keep running,
+      // otherwise the OS reports "persalys is not responding".
+      // Load FMUInfo in a worker thread while the GUI thread pumps events.
       QApplication::setOverrideCursor(Qt::WaitCursor);
+      setEnabled(false);
+      QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+
+      std::future<FMUInfo> futureInfo = std::async(std::launch::async,
+        [fmuFile, fmuType]()
+        {
+          return FMUInfo(fmuFile, fmuType);
+        });
+      while (futureInfo.wait_for(std::chrono::milliseconds(50)) != std::future_status::ready)
+      {
+        QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+        QThread::msleep(10);
+      }
       try
       {
-        fmiModel->setFMUType(FMUTypeCombobox_->currentText().toStdString());
-        fmiModel->setFMUFileName(fileName.toUtf8().data());
+        FMUInfo info = futureInfo.get();
+        fmiModel->setFMUType(fmuType);
+        fmiModel->setFMUFileName(fmuFile, info);
+        FMUfileNameEdit_->setText(fileName);
         errorWidget_->reset();
+        QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
         loadModel(fmiModel->getFMUInfo());
       }
       catch (const std::exception & ex)
       {
         errorWidget_->setFramelessErrorMessage(ex.what());
       }
+      setEnabled(true);
       QApplication::restoreOverrideCursor();
     }
   }
@@ -843,6 +869,8 @@ void DataTableModel::loadData(const FMUInfo & info)
   Indices causalityCount(8);
   for (UnsignedInteger i = 0; i < variableNames_.getSize(); ++ i)
   {
+    if ((i % 5000) == 0)
+      QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
     int causality = causality_[i];
     if (causality > 7) throw InternalException(HERE) << "Invalid causality value: " << causality;
     ++ causalityCount[causality];
@@ -1307,6 +1335,8 @@ void TreeModel::setupModelData(const Description & variableNames)
 
   for (UnsignedInteger i = 0; i < sortedVariables.getSize(); ++ i)
   {
+    if ((i % 5000) == 0)
+      QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
     QString varName(QString::fromStdString(sortedVariables[i]));
 
     QStringList chunks(varName.split('.'));
