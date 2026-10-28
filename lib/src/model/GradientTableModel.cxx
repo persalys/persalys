@@ -57,9 +57,17 @@ Qt::ItemFlags GradientTableModel::flags(const QModelIndex & index) const
 QVariant GradientTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
   if (role == Qt::DisplayRole && orientation == Qt::Horizontal)
+  {
+    if (section < 0 || static_cast<UnsignedInteger>(section) >= physicalModel_.getSelectedOutputsNames().getSize())
+      return QVariant();
     return QString::fromUtf8(physicalModel_.getSelectedOutputsNames()[section].c_str());
+  }
   else if (role == Qt::DisplayRole && orientation == Qt::Vertical)
+  {
+    if (section < 0 || static_cast<UnsignedInteger>(section) >= physicalModel_.getInputs().getSize())
+      return QVariant();
     return QString::fromUtf8(physicalModel_.getInputs()[section].getName().c_str());
+  }
 
   return QAbstractTableModel::headerData(section, orientation, role);
 }
@@ -68,6 +76,8 @@ QVariant GradientTableModel::headerData(int section, Qt::Orientation orientation
 QVariant GradientTableModel::data(const QModelIndex& index, int role) const
 {
   if (!index.isValid())
+    return QVariant();
+  if (index.row() < 0 || index.row() >= rowCount() || index.column() < 0 || index.column() >= columnCount())
     return QVariant();
 
   if (gradient_.getNbRows() != static_cast<UnsignedInteger>(rowCount()) ||
@@ -112,9 +122,12 @@ void GradientTableModel::updateData()
 void GradientTableModel::evaluateGradient()
 {
   errorMessage_.clear();
-  // if no outputs do nothing
-  if (!physicalModel_.getSelectedOutputsNames().getSize())
+  // if no inputs/outputs do nothing
+  if (!physicalModel_.getSelectedOutputsNames().getSize() || !physicalModel_.getInputDimension())
+  {
+    gradient_ = Matrix();
     return;
+  }
 
   ModelEvaluation eval("anEval", physicalModel_);
   try
