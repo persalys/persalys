@@ -99,15 +99,15 @@ void DiagramPushButton::paintEvent(QPaintEvent*)
   if (placeholder_)
   {
     // a placeholder button is a hint, not an action: draw it with a dashed
-    // border, a flat muted background and an italic font so that it cannot be
-    // mistaken for a regular button
+    // border, no background and an italic font so that it cannot be mistaken
+    // for a regular button
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
     const QRectF rect(1.0, 1.0, width() - 2.0, height() - 2.0);
 
     painter.setPen(QPen(QColor(ApplicationColor["darkColor"]), 2, Qt::DashLine));
-    painter.setBrush(QColor(ApplicationColor["lighterColor"]));
+    painter.setBrush(Qt::NoBrush);
     painter.drawRoundedRect(rect, 10, 10);
 
     QFont font(this->font());
@@ -115,8 +115,8 @@ void DiagramPushButton::paintEvent(QPaintEvent*)
     font.setItalic(true);
     painter.setFont(font);
 
-    // dark text on the light background, unlike the white text of the regular
-    // buttons, to reinforce that this box is a hint rather than an action
+    // dark text, unlike the white text of the regular buttons, to reinforce
+    // that this box is a hint rather than an action
     painter.setPen(QColor(ApplicationColor["darkColor"]));
     painter.drawText(rect, Qt::AlignCenter, text());
 

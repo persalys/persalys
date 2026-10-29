@@ -66,8 +66,8 @@ public:
   explicit DiagramPushButton(const QString& text = "", QWidget* parent = nullptr);
 
   // A placeholder button is a non interactive hint: it is painted with a dashed
-  // border, a flat muted background and an italic font, and it never reacts to
-  // mouse clicks so that it cannot be mistaken for a regular button.
+  // border, no background and an italic font, and it never reacts to mouse
+  // clicks so that it cannot be mistaken for a regular button.
   void setPlaceholder(bool placeholder);
   bool isPlaceholder() const;
 

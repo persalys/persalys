@@ -108,15 +108,14 @@ void StudyWindow::buildInterface()
 
   // functionalities list
   textEdit = new QLabel;
-  QString text = QString("- %1\n- %2\n- %3\n- %4\n- %5\n- %6\n- %7\n- %8")
+  QString text = QString("- %1\n- %2\n- %3\n- %4\n- %5\n- %6\n- %7")
                  .arg(tr("Evaluation"))
                  .arg(tr("Calibration"))
                  .arg(tr("Optimization"))
                  .arg(tr("Design of experiments"))
                  .arg(tr("Central tendency"))
                  .arg(tr("Sensitivity"))
-                 .arg(tr("Reliability"))
-                 .arg(tr("Metamodel"));
+                 .arg(tr("Reliability"));
 #ifdef PERSALYS_HAVE_OTMORRIS
   text.append(QString("\n- %1").arg(tr("Morris")));
 #endif
@@ -178,9 +177,10 @@ void StudyWindow::buildInterface()
 
   // functionalities list
   textEdit = new QLabel;
-  text = QString("- %1\n- %2\n- %3\n- %4\n- %5")
+  text = QString("- %1\n- %2\n- %3\n- %4\n- %5\n- %6")
          .arg(tr("Data analysis"))
          .arg(tr("Sensitivity analysis"))
+         .arg(tr("Quantile analysis"))
          .arg(tr("Marginals inference"))
          .arg(tr("Dependence inference"))
          .arg(tr("Metamodel"));
