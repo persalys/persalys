@@ -50,8 +50,8 @@ When the mouse pointer is hovered over a box, an information message appears at 
 the window in order to specify what sort of actions the box proposes. If the box is disabled the
 message indicates why the previous one is not valid.
 
-Some boxes are not actions but hints: they are drawn with a dashed border, a lighter
-background and an italic font, and they cannot be clicked. For instance, the
+Some boxes are not actions but hints: they are drawn with a dashed border and an
+italic font, without background, and they cannot be clicked. For instance, the
 **Sensitivity, Quantile, Metamodel, ...** box indicates the analyses that become
 available once a design of experiments has been evaluated and exported.
 
