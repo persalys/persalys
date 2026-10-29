@@ -265,24 +265,22 @@ void StudyTreeView::onCustomContextMenu(const QPoint &point)
 
   // if the item is editable:
   // add rename action at the first position
-  QAction * renameAction = nullptr;
-  if (item->isEditable())
-  {
-    renameAction = new QAction(tr("Rename"), this);
-    actions.insert(0, renameAction);
-  }
+  QAction renameAction(tr("Rename"), this);
+  if (item && item->isEditable())
+    actions.insert(0, &renameAction);
 
   // build the context menu
-  QMenu contextMenu(this);
+  // Note: the menu parent must be a top level window (Qt6 warns otherwise:
+  // "QWidgetWindow must be a top level window" when setting the transient parent)
+  QMenu contextMenu(window());
   contextMenu.addActions(actions);
   const QAction * triggeredAction = contextMenu.exec(viewport()->mapToGlobal(point));
 
   // if rename action
-  if (triggeredAction && triggeredAction == renameAction)
+  if (triggeredAction && triggeredAction == &renameAction)
   {
     // start editing the item
     edit(index);
-    delete renameAction;
   }
 }
 
