@@ -91,15 +91,6 @@ int main(int, char *[])
 
   try
   {
-    FileMemoizeEvaluation multi(new SymbolicEvaluation(Description({"x"}), Description({"y0", "y1", "y2", "y3", "y4"}), Description({"x", "x^2", "x^3", "x^4", "x^5"})), "input1.csv", "output1.csv");
-    Function memoMulti(multi);
-    // memoMulti(input);
-    Indices indices = {3, 1};
-    Function marginal(memoMulti.getMarginal(indices));
-    fullprint << "memoized marginal=" << marginal << std::endl;
-    remove("input1.csv");
-    remove("output1.csv");
-    
     FileMemoizeEvaluation g2(new SymbolicEvaluation(Description({"x"}), Description({"y"}), Description(1, "x^3")), "input2.csv", "output2.csv");
     Function f2(g2);
     fullprint << "default gradient=" << f2.getUseDefaultGradientImplementation() << std::endl;

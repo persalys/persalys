@@ -32,3 +32,5 @@ f2.out     [ y0  y1  y2  ]
 f2.hits 10
 f2.calls 10
 f2.evals 0
+memoized marginal= [x]->[x^4,x^2]
+marginal at x=2: [16,4]
