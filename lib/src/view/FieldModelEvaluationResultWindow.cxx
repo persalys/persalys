@@ -34,6 +34,7 @@
 #include "persalys/ResizableStackedWidget.hxx"
 #include "persalys/GraphConfigurationWidget.hxx"
 #include "persalys/PlotMatrixConfigurationWidget.hxx"
+#include "persalys/PlotMatrixWidget.hxx"
 
 #ifdef PERSALYS_HAVE_PARAVIEW
 #include "persalys/PVServerManagerInterface.hxx"
@@ -376,6 +377,25 @@ void FieldAnalysisResultWindow::addDecompositionTab()
         // setting widget
         MultiPlotSettingWidget * matrixSettingWidget = new MultiPlotSettingWidget(pvmatrixWidget, xi_sample, Sample(), this);
 
+        connect(matrixSettingWidget, &MultiPlotSettingWidget::displayQWTPlotMatrix, [this, xiTab, xi_sample](bool displayQWT){
+          if (displayQWT)
+          {
+            if (!xiFullPlotMatrixTab_)
+            {
+              PlotMatrixWidget * plotMatrixWidget = new PlotMatrixWidget(xi_sample, xi_sample);
+              PlotMatrixConfigurationWidget * plotMatrixSettingWidget = new PlotMatrixConfigurationWidget(plotMatrixWidget, this);
+              xiFullPlotMatrixTab_ = new WidgetBoundToDockWidget(plotMatrixWidget, plotMatrixSettingWidget, this);
+            }
+            xiTab->addTab(xiFullPlotMatrixTab_, tr("Full Plot Matrix"));
+          }
+          else if (xiFullPlotMatrixTab_)
+          {
+            const int idx = xiTab->indexOf(xiFullPlotMatrixTab_);
+            if (idx >= 0)
+              xiTab->removeTab(idx);
+          }
+        });
+
         xiMatrixStackedWidget->addWidget(new WidgetBoundToDockWidget(pvmatrixWidget, matrixSettingWidget, this));
       }
 #endif
@@ -646,6 +666,25 @@ void FieldModelEvaluationResultWidget::addParaviewWidgetsTabs()
 
     // setting widget
     MultiPlotSettingWidget * matrixSettingWidget = new MultiPlotSettingWidget(pvmatrixWidget, inputSample_, sampleRank, this);
+
+    connect(matrixSettingWidget, &MultiPlotSettingWidget::displayQWTPlotMatrix, [this, inTabWidget](bool displayQWT){
+      if (displayQWT)
+      {
+        if (!inputFullPlotMatrixTab_)
+        {
+          PlotMatrixWidget * plotMatrixWidget = new PlotMatrixWidget(this->inputSample_, this->inputSample_);
+          PlotMatrixConfigurationWidget * plotMatrixSettingWidget = new PlotMatrixConfigurationWidget(plotMatrixWidget, this);
+          inputFullPlotMatrixTab_ = new WidgetBoundToDockWidget(plotMatrixWidget, plotMatrixSettingWidget, this);
+        }
+        inTabWidget->addTab(inputFullPlotMatrixTab_, tr("Full Plot Matrix"));
+      }
+      else if (inputFullPlotMatrixTab_)
+      {
+        const int idx = inTabWidget->indexOf(inputFullPlotMatrixTab_);
+        if (idx >= 0)
+          inTabWidget->removeTab(idx);
+      }
+    });
 
     inTabWidget->addTab(new WidgetBoundToDockWidget(pvmatrixWidget, matrixSettingWidget, this), tr("Plot matrix"));
 
