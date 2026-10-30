@@ -26,6 +26,7 @@
 #include "persalys/FieldMonteCarloResult.hxx"
 
 #include <QTabWidget>
+#include "persalys/WidgetBoundToDockWidget.hxx"
 
 namespace PERSALYS
 {
@@ -55,6 +56,8 @@ private:
   OT::Sample meanSample_;
   OT::Sample lowerQuantileSample_;
   OT::Sample upperQuantileSample_;
+  WidgetBoundToDockWidget * inputFullPlotMatrixTab_ = nullptr;
+  WidgetBoundToDockWidget * xiFullPlotMatrixTab_ = nullptr;
 };
 
 
@@ -92,6 +95,7 @@ protected:
 private:
   QString errorMessage_;
   FieldModelEvaluationResultWidget * mainWidget_;
+  WidgetBoundToDockWidget * xiFullPlotMatrixTab_ = nullptr;
 };
 
 

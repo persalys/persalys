@@ -24,6 +24,7 @@
 #include "persalys/PersalysPrivate.hxx"
 
 #include <QPlainTextEdit>
+#include <QShowEvent>
 #include <QTextCursor>
 #include <QTimeLine>
 
@@ -52,6 +53,7 @@ public slots:
   void setTemporaryFramelessErrorMessage(const QString & message);
 
 protected:
+  void showEvent(QShowEvent *event) override;
   void resizeEvent(QResizeEvent *event) override;
 
 private:
