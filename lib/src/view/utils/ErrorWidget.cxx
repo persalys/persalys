@@ -23,6 +23,7 @@
 #include <iostream>
 #include <cmath>
 #include <QLabel>
+#include <QTimer>
 
 namespace PERSALYS
 {
@@ -92,6 +93,15 @@ void ErrorWidget::setMessage(const QString& message, MessageType type, bool temp
   if (!userFixedHeight_)
     setFixedHeight(computeHeight());
   centerContentVertically();
+
+  QTimer::singleShot(0, this, [this]()
+  {
+    if (!userFixedHeight_)
+    {
+      setFixedHeight(computeHeight());
+      centerContentVertically();
+    }
+  });
 
   if (temporary)
   {
@@ -193,6 +203,22 @@ void ErrorWidget::applyStyle(MessageType type, bool useFrame)
   styleSheet += " }";
 
   setStyleSheet(styleSheet);
+}
+
+void ErrorWidget::showEvent(QShowEvent *event)
+{
+  QPlainTextEdit::showEvent(event);
+  if (!userFixedHeight_)
+  {
+    QTimer::singleShot(0, this, [this]()
+    {
+      if (!userFixedHeight_)
+      {
+        setFixedHeight(computeHeight());
+        centerContentVertically();
+      }
+    });
+  }
 }
 
 void ErrorWidget::resizeEvent(QResizeEvent *event)
