@@ -742,12 +742,16 @@ void DataAnalysisWindow::addPlotMatrixTab()
 
   const QString tabName = canUseParaview_ ? tr("Full Plot Matrix") : tr("Plot matrix");
   plotMatrixTabIndex_ = tabWidget_->addTab(boundPlotMatrixWidget_, tabName);
+  lazyTabsBuilt_.insert(plotMatrixTabIndex_);
 }
 
 void DataAnalysisWindow::removePlotMatrixTab()
 {
   if (plotMatrixTabIndex_ > 0)
+  {
     tabWidget_->removeTab(plotMatrixTabIndex_);
+    lazyTabsBuilt_.remove(plotMatrixTabIndex_);
+  }
   
   plotMatrixTabIndex_ = -1;
 }
