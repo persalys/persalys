@@ -69,7 +69,7 @@ void ListWidgetWithCheckBox::buildInterface()
     addItem(item);
   }
   setCheckedNames(checkedItemNames_);
-  connect(this, SIGNAL(itemPressed(QListWidgetItem *)), this, SLOT(updateCheckState(QListWidgetItem *)));
+  connect(this, SIGNAL(itemPressed(QListWidgetItem *)), this, SLOT(updateCheckState(QListWidgetItem *)), Qt::UniqueConnection);
 }
 
 
@@ -98,6 +98,19 @@ QStringList ListWidgetWithCheckBox::getCheckedItemNames() const
 QStringList ListWidgetWithCheckBox::getItemNames() const
 {
   return itemNames_;
+}
+
+
+void ListWidgetWithCheckBox::resetItemNames(const QStringList &itemNames)
+{
+  blockSignals(true);
+  clear();
+  itemNames_ = itemNames;
+  checkedItemNames_ = itemNames;
+  buildInterface();
+  blockSignals(false);
+
+  emit checkedItemsChanged(checkedItemNames_);
 }
 
 

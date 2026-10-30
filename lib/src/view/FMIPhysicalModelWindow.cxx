@@ -45,6 +45,9 @@
 #include <QGroupBox>
 #include <QScrollArea>
 #include <QSet>
+#include <QThread>
+#include <future>
+#include <chrono>
 
 using namespace OT;
 
@@ -205,23 +208,24 @@ FMIPhysicalModelWindow::FMIPhysicalModelWindow(PhysicalModelItem * item, QWidget
   ioCountLabel_ = new QLabel;
   QPushButton * evaluateOutputsButton = new QPushButton(QIcon(":/images/system-run.png"), tr("Check model"));
   evaluateOutputsButton->setToolTip(tr("Evaluate the outputs"));
-  QLabel * timeInfo = new QLabel();
+  timeInfoLabel_ = new QLabel;
   connect(evaluateOutputsButton, &QPushButton::clicked,  [ = ] (bool)
   {
-    timeInfo->clear();
+    timeInfoLabel_->clear();
     evaluateOutputs();
     if(physicalModel_.getEvalTime() > 0)
-      timeInfo->setText(tr("Elapsed time") + ": " + QtOT::FormatDuration(physicalModel_.getEvalTime()));
+      timeInfoLabel_->setText(tr("Elapsed time") + ": " + QtOT::FormatDuration(physicalModel_.getEvalTime()));
   });
   QGridLayout * evaluationLayout = new QGridLayout;
   evaluationLayout->addWidget(ioCountLabel_, 0, 0);
   evaluationLayout->setColumnStretch(0, 2);
-  evaluationLayout->addWidget(timeInfo, 1, 0);
+  evaluationLayout->addWidget(timeInfoLabel_, 1, 0);
   evaluationLayout->addWidget(evaluateOutputsButton, 0, 1);
   variablesLayout->addLayout(evaluationLayout);
 
   // error message
   errorWidget_ = new ErrorWidget;
+  errorWidget_->setHeight(80); // fixed height with scrollbar because evaluation errors can be long (e.g. FMU tracebacks)
   variablesLayout->addWidget(errorWidget_);
 
   tabWidget_->addTab(variablesWidget, tr("Variables"));
@@ -343,20 +347,43 @@ void FMIPhysicalModelWindow::selectImportFileDialogRequested()
     }
     else
     {
-      FMUfileNameEdit_->setText(fileName);
       FMIPhysicalModel* fmiModel = getFMIPhysicalModel();
+      const OT::String fmuType = FMUTypeCombobox_->currentText().toStdString();
+      const OT::String fmuFile = fileName.toUtf8().data();
+
+      // load_fmu unzips the archive and dlopens the binary: it can take
+      // seconds during which the Windows message pump must keep running,
+      // otherwise the OS reports "persalys is not responding".
+      // Load FMUInfo in a worker thread while the GUI thread pumps events.
       QApplication::setOverrideCursor(Qt::WaitCursor);
+      setEnabled(false);
+      QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+
+      std::future<FMUInfo> futureInfo = std::async(std::launch::async,
+        [fmuFile, fmuType]()
+        {
+          return FMUInfo(fmuFile, fmuType);
+        });
+      while (futureInfo.wait_for(std::chrono::milliseconds(50)) != std::future_status::ready)
+      {
+        QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+        QThread::msleep(10);
+      }
       try
       {
-        fmiModel->setFMUType(FMUTypeCombobox_->currentText().toStdString());
-        fmiModel->setFMUFileName(fileName.toUtf8().data());
+        FMUInfo info = futureInfo.get();
+        fmiModel->setFMUType(fmuType);
+        fmiModel->setFMUFileName(fmuFile, info);
+        FMUfileNameEdit_->setText(fileName);
         errorWidget_->reset();
+        QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
         loadModel(fmiModel->getFMUInfo());
       }
       catch (const std::exception & ex)
       {
         errorWidget_->setFramelessErrorMessage(ex.what());
       }
+      setEnabled(true);
       QApplication::restoreOverrideCursor();
     }
   }
@@ -366,6 +393,16 @@ void FMIPhysicalModelWindow::selectImportFileDialogRequested()
 void FMIPhysicalModelWindow::loadModel(const FMUInfo & info)
 {
   variablesTableModel_->loadData(info);
+
+  // the previous evaluation time no longer applies to the new FMU
+  physicalModel_.setEvalTime(0.0);
+  if (timeInfoLabel_)
+    timeInfoLabel_->clear();
+
+  // causality labels and I/O rules depend on the FMI version
+  causalityField_->resetItemNames(variablesTableModel_->getCausalityNames());
+  if (ioDelegate_)
+    ioDelegate_->setFMIVersion(QString::fromStdString(variablesTableModel_->getFMIVersion()));
 
   Description properties(variablesTableModel_->getProperties());
   for(int i = 0; i < propertiesTable_->model()->rowCount(); ++ i)
@@ -377,7 +414,6 @@ void FMIPhysicalModelWindow::loadModel(const FMUInfo & info)
   updateIOCount();
   filterTextEdit_->setText("");
   tabWidget_->setCurrentIndex(1);
-  updatePersistentEditor();
 }
 
 
@@ -391,8 +427,8 @@ void FMIPhysicalModelWindow::updateFilters()
   // filter variability
   {
     QStringList names(variabilityField_->getItemNames());
-    QSet<QString> checked(variabilityField_->getCheckedItemNames().begin(),
-                          variabilityField_->getCheckedItemNames().end());
+    const QStringList checkedNames(variabilityField_->getCheckedItemNames());
+    const QSet<QString> checked(checkedNames.begin(), checkedNames.end());
     QList<int> indices;
     for (int i = 0; i < names.size(); ++i)
       if (checked.contains(names[i]))
@@ -403,8 +439,8 @@ void FMIPhysicalModelWindow::updateFilters()
   // filter causality
   {
     QStringList names(causalityField_->getItemNames());
-    QSet<QString> checked(causalityField_->getCheckedItemNames().begin(),
-                          causalityField_->getCheckedItemNames().end());
+    const QStringList checkedNames(causalityField_->getCheckedItemNames());
+    const QSet<QString> checked(checkedNames.begin(), checkedNames.end());
     QList<int> indices;
     for (int i = 0; i < names.size(); ++i)
       if (checked.contains(names[i]))
@@ -415,15 +451,14 @@ void FMIPhysicalModelWindow::updateFilters()
   // filter I/O
   {
     QStringList names(ioField_->getItemNames());
-    QSet<QString> checked(ioField_->getCheckedItemNames().begin(),
-                          ioField_->getCheckedItemNames().end());
+    const QStringList checkedNames(ioField_->getCheckedItemNames());
+    const QSet<QString> checked(checkedNames.begin(), checkedNames.end());
     QList<int> indices;
     for (int i = 0; i < names.size(); ++i)
       if (checked.contains(names[i]))
         indices.append(i);
     proxyModel_->setIOFilter(indices);
   }
-  updatePersistentEditor();
 }
 
 
@@ -447,13 +482,6 @@ void FMIPhysicalModelWindow::updateIOCount()
     }
   }
   ioCountLabel_->setText(QString(tr("Selected variables: input:%1, output:%2")).arg(inVar).arg(outVar));
-}
-
-void FMIPhysicalModelWindow::updatePersistentEditor()
-{
-  // leave the comboboxes apparent to suggest the column is editable
-  for(int iRow = 0; iRow < proxyModel_->rowCount(proxyModel_->index(0, 4)); ++ iRow)
-    variablesTableView_->openPersistentEditor(proxyModel_->index(iRow, 4));
 }
 
 void FMIPhysicalModelWindow::clearFilters()
@@ -499,8 +527,8 @@ void FMIPhysicalModelWindow::updateVariablesTableModel()
   proxyModel_->setDynamicSortFilter(true);
 
   variablesTableView_->setModel(proxyModel_);
-  QItemDelegate * delegate = new EnumDelegate(QStringList() << tr("Disabled") << tr("Input") << tr("Output"), variablesTableView_);
-  variablesTableView_->setItemDelegateForColumn(4, delegate);
+  ioDelegate_ = new EnumDelegate(QStringList() << tr("Disabled") << tr("Input") << tr("Output"), variablesTableView_);
+  variablesTableView_->setItemDelegateForColumn(4, ioDelegate_);
 
   QItemDelegate * fdelegate = new FloatDelegate(variablesTableView_);
   variablesTableView_->setItemDelegateForColumn(5, fdelegate);
@@ -574,17 +602,8 @@ QVariant DataTableModel::data(const QModelIndex & index, int role) const
       case 0://name
         return QString::fromUtf8(variableNames_[index.row()].c_str());
       case 1://description
-      {
-        String varName(variableNames_[index.row()]);
-        String desc;
-        if (physicalModel_.hasInputNamed(varName))
-          desc = physicalModel_.getInputByName(varName).getDescription();
-        else if (physicalModel_.hasOutputNamed(varName))
-          desc = physicalModel_.getOutputByName(varName).getDescription();
-        else
-          desc = descriptions_[index.row()];
-        return QString::fromUtf8(desc.c_str());
-      }
+        // cached: data() must stay O(1) without physical model lookups
+        return QString::fromUtf8(descriptions_[index.row()].c_str());
       case 2://variability
       {
         if (role == Qt::DisplayRole)
@@ -618,34 +637,7 @@ QVariant DataTableModel::data(const QModelIndex & index, int role) const
       case 3://causality
       {
         if (role == Qt::DisplayRole)
-        {
-          switch(causality_[index.row()])
-          {
-            case 0:
-              return tr("Parameter");
-              break;
-            case 1:
-              return tr("Calculated parameter");
-              break;
-            case 2:
-              return tr("Input");
-              break;
-            case 3:
-              return tr("Output");
-              break;
-            case 4:
-              return tr("Local");
-              break;
-            case 5:
-              return tr("Independent");
-              break;
-            case 6:
-              return tr("Unknown");
-              break;
-            default:
-              break;
-          }
-        }
+          return getCausalityName(causality_[index.row()]);
         return static_cast<int>(causality_[index.row()]);
       }
       case 4://input/output
@@ -670,24 +662,8 @@ QVariant DataTableModel::data(const QModelIndex & index, int role) const
         return static_cast<int>(inputOutput_[index.row()]);
       }
       case 5://value
-      {
-        Scalar value = 0.0;
-        String varName(variableNames_[index.row()]);
-        if (physicalModel_.hasInputNamed(varName))
-          value = physicalModel_.getInputByName(varName).getValue();
-        else if (physicalModel_.hasOutputNamed(varName))
-          value = physicalModel_.getOutputByName(varName).getValue();
-        else if (startKeys_.contains(varName))
-        {
-          for (UnsignedInteger i = 0; i < startKeys_.getSize(); ++i)
-            if (startKeys_[i] == varName)
-            {
-              value = startValues_[i];
-              break;
-            }
-        }
-        return QString::number(value, 'g', StudyTreeViewModel::DefaultSignificantDigits);
-      }
+        // cached: data() must stay O(1) without physical model lookups
+        return QString::number(values_[index.row()], 'g', StudyTreeViewModel::DefaultSignificantDigits);
       default:
         break;
     }
@@ -710,16 +686,13 @@ bool DataTableModel::setData(const QModelIndex & index, const QVariant & value, 
       String description(value.toString().toUtf8().constData());
       if (description == descriptions_[index.row()]) return false;
       descriptions_[index.row()] = description;
-      String varName(variableNames_[index.row()]);
+      const String varName(variableNames_[index.row()]);
       physicalModel_.blockNotification("PhysicalModelDefinitionItem");
-      if (physicalModel_.hasInputNamed(varName))
-      {
+      const OT::UnsignedInteger io = inputOutput_[index.row()];
+      if (io == 1)
         physicalModel_.setInputDescription(varName, description);
-      }
-      else if (physicalModel_.hasOutputNamed(varName))
-      {
+      else if (io == 2)
         physicalModel_.setOutputDescription(varName, description);
-      }
       physicalModel_.blockNotification();
       break;
     }
@@ -728,52 +701,76 @@ bool DataTableModel::setData(const QModelIndex & index, const QVariant & value, 
       int inputOutput = value.toInt();
       int oldInputOutput = static_cast<int>(inputOutput_[index.row()]);
       if (inputOutput == oldInputOutput) return false;
-      int causality = causality_[index.row()];
+      const int causality = causality_[index.row()];
       if ((inputOutput < 0) || (inputOutput > 2)) return false;
-      // FMI2: PARAMETER(0), CALCULATED_PARAMETER(1), INPUT(2), OUTPUT(3), LOCAL(4), INDEPENDENT(5), UNKNOWN(6)
-      if ((inputOutput == 0) && (causality == 2)) return false;// cannot disable an input
-      if ((inputOutput == 1) && (causality == 3)) return false;// cannot turn an output to input
-      if ((inputOutput == 1) && (causality == 1)) return false;// cannot turn a calculated input to input
-      if ((inputOutput == 1) && (causality == 4)) return false;// cannot turn a local to input
-      if ((inputOutput == 2) && (causality == 2)) return false;// cannot turn an input to output
-      if ((inputOutput == 2) && (causality == 0)) return false;// cannot turn a parameter to output
+      // causality codes depend on the FMI version, otfmi accepts inputs with
+      // input/parameter causality and outputs with output/local causality
+      const UnsignedInteger inputCausality = getInputCausality();
+      const UnsignedInteger outputCausality = getOutputCausality();
+      if ((inputOutput == 0) && (causality == static_cast<int>(inputCausality))) return false;// cannot disable an input
+      if (inputOutput == 1)
+      {
+        if (causality == static_cast<int>(outputCausality)) return false;// cannot turn an output to input
+        if (fmiVersion_ == "3.0")
+        {
+          if (causality == 0) return false;// cannot turn a structural parameter to input
+          if (causality == 2) return false;// cannot turn a calculated parameter to input
+          if (causality == 5) return false;// cannot turn a local to input
+        }
+        else if (fmiVersion_ == "1.0")
+        {
+          if (causality != static_cast<int>(inputCausality)) return false;// only inputs can be inputs
+        }
+        else
+        {
+          if (causality == 1) return false;// cannot turn a calculated parameter to input
+          if (causality == 4) return false;// cannot turn a local to input
+        }
+      }
+      if (inputOutput == 2)
+      {
+        if (causality == static_cast<int>(inputCausality)) return false;// cannot turn an input to output
+        if (fmiVersion_ == "3.0")
+        {
+          if (causality == 0) return false;// cannot turn a structural parameter to output
+          if (causality == 1) return false;// cannot turn a parameter to output
+        }
+        else if (fmiVersion_ == "1.0")
+        {
+          if (causality != static_cast<int>(outputCausality)) return false;// only outputs can be outputs
+        }
+        else
+        {
+          if (causality == 0) return false;// cannot turn a parameter to output
+        }
+      }
 
       inputOutput_[index.row()] = inputOutput;
 
-      String varName(variableNames_[index.row()]);
+      const String varName(variableNames_[index.row()]);
 
       physicalModel_.blockNotification("PhysicalModelDefinitionItem");
       dynamic_cast<FMIPhysicalModel*>(physicalModel_.getImplementation().get())->reassignVariables(getInputVariableNames(), getOutputVariableNames());
-      if (physicalModel_.hasInputNamed(varName) && startKeys_.contains(varName))
+      // reassignVariables preserves values/descriptions of surviving variables
+      // (including dotted names); only the toggled row may need its FMU start
+      // value when it becomes newly enabled, or its display value reset when disabled
       {
-        for (UnsignedInteger i = 0; i < startKeys_.getSize(); ++i)
-          if (startKeys_[i] == varName)
-          {
-            physicalModel_.getInputByName(varName).setValue(startValues_[i]);
-            break;
-          }
-      }
-      if (physicalModel_.hasOutputNamed(varName) && startKeys_.contains(varName))
-      {
-        for (UnsignedInteger i = 0; i < startKeys_.getSize(); ++i)
-          if (startKeys_[i] == varName)
-          {
-            physicalModel_.getOutputByName(varName).setValue(startValues_[i]);
-            break;
-          }
-      }
-      // refresh descriptions
-      for (int i = 0; i < rowCount(); ++ i)
-      {
-        const String varName_i(variableNames_[i]);
-        if (physicalModel_.hasInputNamed(varName_i))
+        const auto it = startValuesMap_.find(varName);
+        const double startValue = (it != startValuesMap_.end() ? it->second : 0.0);
+        if (inputOutput == 1)
         {
-          physicalModel_.setInputDescription(varName_i, descriptions_[i]);
+          if (it != startValuesMap_.end())
+            physicalModel_.getInputByName(varName).setValue(it->second);
+          values_[index.row()] = physicalModel_.getInputByName(varName).getValue();
         }
-        else if (physicalModel_.hasOutputNamed(varName_i))
+        else if (inputOutput == 2)
         {
-          physicalModel_.setOutputDescription(varName_i, descriptions_[i]);
+          if (it != startValuesMap_.end())
+            physicalModel_.getOutputByName(varName).setValue(it->second);
+          values_[index.row()] = physicalModel_.getOutputByName(varName).getValue();
         }
+        else
+          values_[index.row()] = startValue;
       }
       physicalModel_.blockNotification();
 
@@ -784,12 +781,17 @@ bool DataTableModel::setData(const QModelIndex & index, const QVariant & value, 
     case 5://value
     {
       const double dvalue = value.toDouble();
-      String varName(variableNames_[index.row()]);
+      if (dvalue == values_[index.row()]) return false;
+      values_[index.row()] = dvalue;
+      const String varName(variableNames_[index.row()]);
       physicalModel_.blockNotification("PhysicalModelDefinitionItem");
-      if (physicalModel_.hasInputNamed(varName))
+      const OT::UnsignedInteger io = inputOutput_[index.row()];
+      if (io == 1)
         physicalModel_.getInputByName(varName).setValue(dvalue);
-      else if (physicalModel_.hasOutputNamed(varName))
+      else if (io == 2)
         physicalModel_.getOutputByName(varName).setValue(dvalue);
+      else
+        startValuesMap_[varName] = dvalue;
       physicalModel_.blockNotification();
       break;
     }
@@ -802,6 +804,14 @@ bool DataTableModel::setData(const QModelIndex & index, const QVariant & value, 
 
 void DataTableModel::updateOutputValues()
 {
+  // resync cached values for outputs in O(nIO) via row lookup
+  const OutputCollection outputs(physicalModel_.getOutputs());
+  for (OT::UnsignedInteger i = 0; i < outputs.getSize(); ++ i)
+  {
+    const auto it = rowByName_.find(outputs[i].getName());
+    if (it != rowByName_.end())
+      values_[it->second] = outputs[i].getValue();
+  }
   // refresh value column
   QModelIndex topleft = createIndex(0, 5);
   QModelIndex bottomright = createIndex(rowCount(), 5);
@@ -824,29 +834,66 @@ void DataTableModel::loadData(const FMUInfo & info)
   beginResetModel();
   variableNames_ = info.getVariableNames();
   descriptions_ = Description(variableNames_.getSize());
+  values_ = Point(variableNames_.getSize(), 0.0);
   causality_ = info.getCausality();
   variability_ = info.getVariability();
+  fmiVersion_ = info.getFMIVersion();
   inputOutput_ = Indices(causality_.getSize());
   startKeys_ = info.getStartKeys();
   startValues_ = info.getStartValues();
-  insertRows(0, variableNames_.getSize());
-  Indices causalityCount(7);
+  startValuesMap_.clear();
+  for (UnsignedInteger i = 0; i < startKeys_.getSize(); ++ i)
+    startValuesMap_[startKeys_[i]] = startValues_[i];
+  rowByName_.clear();
+  for (UnsignedInteger i = 0; i < variableNames_.getSize(); ++ i)
+    rowByName_[variableNames_[i]] = i;
+  // Build IO lookups once: per-row hasInputNamed()/getInputByName()
+  // scans made loadData O(N * nIO). Hoist collections to avoid
+  // per-iteration copies.
+  const InputCollection inputs(physicalModel_.getInputs());
+  const OutputCollection outputs(physicalModel_.getOutputs());
+  std::unordered_map<std::string, std::string> inputDescriptions;
+  std::unordered_map<std::string, double> inputValues;
+  for (UnsignedInteger i = 0; i < inputs.getSize(); ++ i)
+  {
+    inputDescriptions[inputs[i].getName()] = inputs[i].getDescription();
+    inputValues[inputs[i].getName()] = inputs[i].getValue();
+  }
+  std::unordered_map<std::string, std::string> outputDescriptions;
+  std::unordered_map<std::string, double> outputValues;
+  for (UnsignedInteger i = 0; i < outputs.getSize(); ++ i)
+  {
+    outputDescriptions[outputs[i].getName()] = outputs[i].getDescription();
+    outputValues[outputs[i].getName()] = outputs[i].getValue();
+  }
+  Indices causalityCount(8);
   for (UnsignedInteger i = 0; i < variableNames_.getSize(); ++ i)
   {
+    if ((i % 5000) == 0)
+      QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
     int causality = causality_[i];
-    if (causality > 6) throw InternalException(HERE) << "Invalid causality value: " << causality;
+    if (causality > 7) throw InternalException(HERE) << "Invalid causality value: " << causality;
     ++ causalityCount[causality];
 
-    if (physicalModel_.hasInputNamed(variableNames_[i]))
+    const auto itIn = inputDescriptions.find(variableNames_[i]);
+    if (itIn != inputDescriptions.end())
     {
       inputOutput_[i] = 1;
-      descriptions_[i] = physicalModel_.getInputByName(variableNames_[i]).getDescription();
+      descriptions_[i] = itIn->second;
+      values_[i] = inputValues[variableNames_[i]];
+      continue;
     }
-    else if (physicalModel_.hasOutputNamed(variableNames_[i]))
+    const auto itOut = outputDescriptions.find(variableNames_[i]);
+    if (itOut != outputDescriptions.end())
     {
       inputOutput_[i] = 2;
-      descriptions_[i] = physicalModel_.getOutputByName(variableNames_[i]).getDescription();
+      descriptions_[i] = itOut->second;
+      values_[i] = outputValues[variableNames_[i]];
+      continue;
     }
+    const auto itStart = startValuesMap_.find(variableNames_[i]);
+    if (itStart != startValuesMap_.end())
+      values_[i] = itStart->second;
   }
   properties_.clear();
   properties_.add(info.getIdentifier());
@@ -860,7 +907,17 @@ void DataTableModel::loadData(const FMUInfo & info)
   properties_.add(info.getDateTime());
   properties_.add(info.getGUID());
   properties_.add(OSS() << variableNames_.getSize());
-  properties_.add(QString(tr("parameter:%1, input:%2, output:%3, local:%4")).arg(causalityCount[0]).arg(causalityCount[2]).arg(causalityCount[3]).arg(causalityCount[4]).toStdString());
+  if (fmiVersion_ == "1.0")
+  {
+    properties_.add(QString(tr("input:%1, output:%2")).arg(causalityCount[getInputCausality()]).arg(causalityCount[getOutputCausality()]).toStdString());
+  }
+  else
+  {
+    // FMI 3.0 structural parameters counted with parameters; local is 4 for FMI 2.0, 5 for FMI 3.0
+    const UnsignedInteger parameterCount = (fmiVersion_ == "3.0" ? causalityCount[0] + causalityCount[1] : causalityCount[0]);
+    const UnsignedInteger localCausality = (fmiVersion_ == "3.0" ? 5 : 4);
+    properties_.add(QString(tr("parameter:%1, input:%2, output:%3, local:%4")).arg(parameterCount).arg(causalityCount[getInputCausality()]).arg(causalityCount[getOutputCausality()]).arg(causalityCount[localCausality]).toStdString());
+  }
   endResetModel();
 }
 
@@ -878,6 +935,118 @@ Indices DataTableModel::getIO() const
 Description DataTableModel::getProperties() const
 {
   return properties_;
+}
+
+String DataTableModel::getFMIVersion() const
+{
+  return fmiVersion_;
+}
+
+UnsignedInteger DataTableModel::getInputCausality() const
+{
+  if (fmiVersion_ == "3.0")
+    return 3;
+  if (fmiVersion_ == "1.0")
+    return 0;
+  return 2;
+}
+
+UnsignedInteger DataTableModel::getOutputCausality() const
+{
+  if (fmiVersion_ == "3.0")
+    return 4;
+  if (fmiVersion_ == "1.0")
+    return 1;
+  return 3;
+}
+
+QString DataTableModel::getCausalityName(const int causality) const
+{
+  if (fmiVersion_ == "3.0")
+  {
+    switch (causality)
+    {
+      case 0:
+        return tr("Structural parameter");
+      case 1:
+        return tr("Parameter");
+      case 2:
+        return tr("Calculated parameter");
+      case 3:
+        return tr("Input");
+      case 4:
+        return tr("Output");
+      case 5:
+        return tr("Local");
+      case 6:
+        return tr("Independent");
+      case 7:
+        return tr("Unknown");
+      default:
+        break;
+    }
+  }
+  else if (fmiVersion_ == "1.0")
+  {
+    switch (causality)
+    {
+      case 0:
+        return tr("Input");
+      case 1:
+        return tr("Output");
+      case 2:
+        return tr("Internal");
+      case 3:
+        return tr("None");
+      case 4:
+        return tr("Unknown");
+      default:
+        break;
+    }
+  }
+  else
+  {
+    switch (causality)
+    {
+      case 0:
+        return tr("Parameter");
+      case 1:
+        return tr("Calculated parameter");
+      case 2:
+        return tr("Input");
+      case 3:
+        return tr("Output");
+      case 4:
+        return tr("Local");
+      case 5:
+        return tr("Independent");
+      case 6:
+        return tr("Unknown");
+      default:
+        break;
+    }
+  }
+  return QString();
+}
+
+QStringList DataTableModel::getCausalityNames() const
+{
+  QStringList names;
+  if (fmiVersion_ == "3.0")
+  {
+    names << tr("Structural parameter") << tr("Parameter") << tr("Calculated parameter") << tr("Input")
+          << tr("Output") << tr("Local") << tr("Independent") << tr("Unknown");
+  }
+  else if (fmiVersion_ == "1.0")
+  {
+    names << tr("Input") << tr("Output") << tr("Internal") << tr("None") << tr("Unknown");
+  }
+  else
+  {
+    names << tr("Parameter") << tr("Calculated parameter") << tr("Input") << tr("Output")
+          << tr("Local") << tr("Independent") << tr("Unknown");
+  }
+  return names;
 }
 
 Description DataTableModel::filterIOVariables(const UnsignedInteger io) const
@@ -1166,6 +1335,8 @@ void TreeModel::setupModelData(const Description & variableNames)
 
   for (UnsignedInteger i = 0; i < sortedVariables.getSize(); ++ i)
   {
+    if ((i % 5000) == 0)
+      QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
     QString varName(QString::fromStdString(sortedVariables[i]));
 
     QStringList chunks(varName.split('.'));

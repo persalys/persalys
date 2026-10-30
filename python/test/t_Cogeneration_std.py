@@ -2,6 +2,7 @@
 
 import openturns as ot
 import openturns.testing
+import os
 import persalys
 
 myStudy = persalys.Study("myStudy")
@@ -42,6 +43,22 @@ aDesign.run()
 # Comparaison
 openturns.testing.assert_almost_equal(
     outputSample, aDesign.getResult().getDesignOfExperiment().getOutputSample(), 1e-5
+)
+
+# Second parametric analysis: CSV export/import round-trip
+filename = "tCogenSample.csv"
+aDesign.getResult().getDesignOfExperiment().getInputSample().exportToCSVFile(filename)
+anotherDesign = persalys.ImportedDesignOfExperiment(
+    "anotherDesign", model, filename, [0, 1, 2]
+)
+myStudy.add(anotherDesign)
+anotherDesign.run()
+
+# Comparaison
+openturns.testing.assert_almost_equal(
+    aDesign.getResult().getDesignOfExperiment().getOutputSample(),
+    anotherDesign.getResult().getDesignOfExperiment().getOutputSample(),
+    1e-16,
 )
 
 # Taylor Expansions ##
@@ -166,3 +183,5 @@ openturns.testing.assert_almost_equal(chaosResult.getSobolResult().getTotalIndic
 script = myStudy.getPythonScript()
 print(script)
 exec(script)
+
+os.remove(filename)

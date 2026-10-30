@@ -40,6 +40,8 @@
 #include <QTreeView>
 #include <QMouseEvent>
 
+#include <unordered_map>
+
 namespace PERSALYS
 {
 
@@ -64,6 +66,15 @@ public:
   OT::Description getVariableNames() const;
   OT::Indices getIO() const;
   OT::Description getProperties() const;
+  // causality codes depend on the FMI version, see otfmi:
+  // 1.0: INPUT(0), OUTPUT(1), INTERNAL(2), NONE(3), UNKNOWN(4)
+  // 2.0: PARAMETER(0), CALCULATED_PARAMETER(1), INPUT(2), OUTPUT(3), LOCAL(4), INDEPENDENT(5), UNKNOWN(6)
+  // 3.0: STRUCTURAL_PARAMETER(0), PARAMETER(1), CALCULATED_PARAMETER(2), INPUT(3), OUTPUT(4), LOCAL(5), INDEPENDENT(6), UNKNOWN(7)
+  OT::String getFMIVersion() const;
+  OT::UnsignedInteger getInputCausality() const;
+  OT::UnsignedInteger getOutputCausality() const;
+  QString getCausalityName(const int causality) const;
+  QStringList getCausalityNames() const;
 public slots:
   void updateOutputValues();
 
@@ -84,8 +95,17 @@ private:
   OT::Indices causality_;
   OT::Indices inputOutput_;//0:none; 1:input; 2:output
 
+  OT::String fmiVersion_ = "2.0";
   OT::Description startKeys_;
   OT::Point startValues_;
+  // O(1) lookup of FMU start values: the linear scan of startKeys_
+  // inside data() made each cell access O(N)
+  std::unordered_map<std::string, double> startValuesMap_;
+  // Cached display values: data() must not touch the physical model
+  // (getInput/OutputByName scans are O(nIO) per cell)
+  OT::Point values_;
+  // Row index by variable name for O(nIO) resync of output values
+  std::unordered_map<std::string, OT::UnsignedInteger> rowByName_;
 };
 
 
@@ -100,6 +120,11 @@ public:
   {
   }
 
+  void setFMIVersion(const QString & version)
+  {
+    fmiVersion_ = version;
+  }
+
   QWidget *createEditor(QWidget * parent, const QStyleOptionViewItem & /*option*/, const QModelIndex & index) const override
   {
     QComboBox * editor = new QComboBox(parent);
@@ -109,15 +134,7 @@ public:
     {
       QStandardItemModel * model = qobject_cast<QStandardItemModel *>(editor->model());
       if (model)
-      {
-        // FMI2: PARAMETER(0), CALCULATED_PARAMETER(1), INPUT(2), OUTPUT(3), LOCAL(4), INDEPENDENT(5), UNKNOWN(6)
-        if (causality == 2 && model->item(0))
-          model->item(0)->setEnabled(false); // Disabled
-        if ((causality == 0 || causality == 2) && model->item(2))
-          model->item(2)->setEnabled(false); // Output
-        if ((causality == 3 || causality == 4) && model->item(1))
-          model->item(1)->setEnabled(false); // Input
-      }
+        applyCausalityRules(model, causality);
     }
     return editor;
   }
@@ -134,15 +151,7 @@ public:
     {
       QStandardItemModel * model = qobject_cast<QStandardItemModel *>(comboBox->model());
       if (model)
-      {
-        // FMI2: PARAMETER(0), CALCULATED_PARAMETER(1), INPUT(2), OUTPUT(3), LOCAL(4), INDEPENDENT(5), UNKNOWN(6)
-        if (causality == 2 && model->item(0))
-          model->item(0)->setEnabled(false); // Disabled
-        if ((causality == 0 || causality == 2) && model->item(2))
-          model->item(2)->setEnabled(false); // Output
-        if ((causality == 3 || causality == 4) && model->item(1))
-          model->item(1)->setEnabled(false); // Input
-      }
+        applyCausalityRules(model, causality);
     }
   }
 
@@ -157,8 +166,39 @@ public:
     }
   }
 
-private:
+ private:
+  // mirrors DataTableModel::setData I/O rules so forbidden transitions
+  // are greyed out; item 0=Disabled, 1=Input, 2=Output
+  void applyCausalityRules(QStandardItemModel * model, const int causality) const
+  {
+    const bool is30 = (fmiVersion_ == "3.0");
+    const bool is10 = (fmiVersion_ == "1.0");
+    const int inputC = is30 ? 3 : (is10 ? 0 : 2);
+    const int outputC = is30 ? 4 : (is10 ? 1 : 3);
+    // cannot disable an input
+    if (causality == inputC && model->item(0))
+      model->item(0)->setEnabled(false); // Disabled
+    // cannot turn into an input: outputs, calculated parameters, locals
+    // (+ structural parameters for FMI 3.0)
+    bool noInput = (causality == outputC);
+    if (is30)
+      noInput = noInput || causality == 0 || causality == 2 || causality == 5;
+    else if (!is10)
+      noInput = noInput || causality == 1 || causality == 4;
+    if (noInput && model->item(1))
+      model->item(1)->setEnabled(false); // Input
+    // cannot turn into an output: inputs, (structural) parameters
+    bool noOutput = (causality == inputC);
+    if (is30)
+      noOutput = noOutput || causality == 0 || causality == 1;
+    else if (!is10)
+      noOutput = noOutput || causality == 0;
+    if (noOutput && model->item(2))
+      model->item(2)->setEnabled(false); // Output
+  }
+
   QStringList enumLabels_;
+  QString fmiVersion_ = "2.0";
 };
 
 
@@ -294,7 +334,6 @@ public slots:
   void selectImportFileDialogRequested();
   void loadModel(const FMUInfo & info);
   void updateFilters();
-  void updatePersistentEditor();
   void clearFilters();
   void updateIOCount();
   void treeSelect(const QModelIndex & current, const QModelIndex & previous);
@@ -316,10 +355,12 @@ private:
   QCheckBox * filterCausalityComboBox_[7] = {};
   CopyableTableView * variablesTableView_ = nullptr;
   DataTableModel * variablesTableModel_ = nullptr;
+  EnumDelegate * ioDelegate_ = nullptr;
   DataFilterProxyModel * proxyModel_ = nullptr;
   TreeModel *tree_model_ = nullptr;
   QTableView * propertiesTable_ = nullptr;
   QLabel * ioCountLabel_ = nullptr;
+  QLabel * timeInfoLabel_ = nullptr;
   QTabWidget * tabWidget_ = nullptr;
 
   CopyableTableView * differentiationTableView_ = nullptr;

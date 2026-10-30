@@ -102,8 +102,8 @@ The points are generated according to the structure of a box design of experimen
 This deterministic design of experiments has 8 points obtained by regularly discretizing
 the pavement :math:`[10035.5, 10364.5] \times [2975.33, 3024.67] \times [3901.31, 4098.69]`.
 
-The minimum value of :math:`Ep` is 0.0292239 with X=[10364.5 2975.33 3901.31].
-The maximum value of :math:`Ep` is 0.0892877 with X=[10035.5 3024.67 4098.69].
+The minimum value of :math:`Ep` is 0.0292232 with X=[10364.5 2975.33 3901.31].
+The maximum value of :math:`Ep` is 0.0892884 with X=[10035.5 3024.67 4098.69].
 
 
 3-2-1 Figures
@@ -186,7 +186,7 @@ Block size                       1
 =================== ======================== =============================================
 Failure probability Coefficient of variation Confidence interval at 95%
 =================== ======================== =============================================
-0.0001              0.99995                  :math:`\left[0; 0.000295987\right]`
+0.0001              0.99995                  :math:`\left[-9.6e-5; 0.000295987\right]`
 =================== ======================== =============================================
 
 2-2-2 Figures
@@ -238,7 +238,7 @@ Errors (abs., rel., res., con.)  1e-05
 =================== ======================== =============================================
 Failure probability Coefficient of variation Confidence interval at 95%
 =================== ======================== =============================================
-0.000218778         0.0204222                :math:`\left[0.00021021, 0.000227535\right]`
+0.000221975         0.0206289                :math:`\left[0.000213, 0.000230949\right]`
 =================== ======================== =============================================
 
 3-2-2 Figures
@@ -329,17 +329,15 @@ New Study
 
   - item Study_0 appears in the tree view
 
-  - a 'study' window with 7(+2) buttons appears:
+  - a 'study' window with 7(+1 optional) buttons appears:
 
     - Symbolic model
 
     - Python model
 
-    - Coupling
-
-    - Python model on cluster (optional)
-
     - FMI model (optional)
+
+    - Coupling model
 
     - Symbolic Field Model
 
@@ -406,13 +404,9 @@ Export/Import Study
 
 - close the interface with Menu->File->Exit
 
-  - close without saving all the studies (except myOTStudy3)
+- close without saving all the studies (except myOTStudy3)
 
 - open the interface
-
-- click on button Import Python script in the midArea
-
-  - choose test.py
 
 - click on the icon Import Python of the tool bar
 
@@ -420,23 +414,18 @@ Export/Import Study
 
 - close myOTStudy3
 
-- click on Menu->File->Import Python...
+- from the menu: File->Import Python...
 
-  - choose test.py
+- choose test.py
 
 - close the interface in pressing CTRL + Q
 
-  - close without saving
+- close without saving
 
 Models
 ```````
 
 - open the interface
-
-  .. code-block:: console
-
-      cd persalys_dir/build_dir
-      ./persalys.sh
 
 - Import the file ../python/test/t_deterministic_analyses.py
 
@@ -453,7 +442,8 @@ Models
 
 - click on 'Evaluate gradient'
     - View switches to Differentiation tab
-    - Check values
+    - Check values: dy0/dx1~=-0.0499, dy0/dx2~=0.362
+    - dy0/dx3=0 + warning icon
 
   .. image:: /developer_manual/validation/model1grad.png
       :align: center
@@ -465,7 +455,7 @@ Models
     - first header item is checked
 
 - click on 'Evaluate model' button
-    - fake_var is evaluated
+    - fake_var is evaluated (0.2)
 
 - change x2 value to 1.5 + press enter
     - outputs values and gradient table are reinitialized
@@ -485,13 +475,13 @@ Models
 
 - change x2 value to 1.2 + press enter
 
-- check the doc link
+- check the doc link ("i" icon top-right)
 
 - Right click on 'pythonModel'
 
   - Rename, Define (greyed out), Duplicate, Remove, Properties
 
-  - Click Properties
+  - Click Properties; process number window pops up
 
   - Change the value then press OK
 
@@ -504,11 +494,12 @@ Models
   .. image:: /developer_manual/validation/model2.png
       :align: center
 
-- check the doc link
+- check the doc link ("i" icon top-right)
 
 - click on 'Definition' child item of 'couplingModel' item
 
   - click on 'Input' tab
+    - Fix input template path to beam_input_template.xml if needed
 
     - Edit any input value and associated format
 
@@ -533,9 +524,9 @@ Models
 
       - check that the output value for deviation has been updated in the table
 
-    - remove the coupling step by clicking 'X' on the step tab
+    - remove the coupling step by clicking 'X' on the step tab => step 1 resets
 
-    - confirm variables removal
+    - confirm variables removal in Summary tab
 
     - click on 'Run Ansys wizard'
 
@@ -603,7 +594,7 @@ Models
           .. image:: /developer_manual/validation/ansysWizardSummary.png
               :align: center
 
-- check the doc link
+- check the doc link ("i" icon top right)
 
 - click on 'Definition' child item of 'fixedDataModel' item
 
@@ -632,7 +623,7 @@ Models
 
   - click on reload button: the troublesome line is back, along with the message
 
-  - run the data cleaning wizard using the popup right click menu
+  - run the data cleaning wizard using the contextual  menu (right click on table)
 
   - choose one of the replacement/removing feature
 
@@ -642,9 +633,9 @@ Models
 
     - click Quantile analysis
 
-    - check the doc link
+    - check the doc link (help button bottom left)
 
-      - Continue
+      - choose "asymptotic law", Continue
 
         - the page shows an error message : Sample size is too small to ensure quantile validity...
 
@@ -652,7 +643,7 @@ Models
 
     - go back
 
-      - choose GDP, click continue
+      - choose Excess with GDP, click continue
 
         - click the lower header check box : all lower checkboxes are checked
 
@@ -691,7 +682,7 @@ Models
       :align: center
 
 
-- check the doc link
+- check the doc link ("i" icon upper right)
 
 - save the study as a new study of your choice
 
@@ -740,6 +731,8 @@ Deterministic analyses
           :align: center
 
       - results only for y0 and y1
+
+      - y0~=1.927, y1~=2.927
 
   - Optimization: item optim
 
@@ -1204,13 +1197,13 @@ Designs of experiments
       .. image:: /developer_manual/validation/design_3_Table.png
           :align: center
 
-      - 10 tabs: Summary - PDF/CDF - Boxplots - Dependence - Table - Parallel coordinates plot - Plot matrix - Scatter plot - Parameters - Model
-      - Summary and PDF/CDF tabs:
+      - 10 tabs: Summary - Distribution - Boxplots - Dependence - Table - Parallel coordinates plot - Plot matrix - Scatter plot - Parameters - Model
+      - Summary and Distribution tabs:
 
         - when changing the variable, the tabs are updated
         - when changing either Probability or Empirical quantile spinboxes values both are updated
         - when changing confidence interval level spinbox value, CI length is updated
-        - PDF, CDF and survival function are available in Graph settings widget from PDF/CDF tab plots
+        - PDF, CDF and survival function are available in Graph settings widget from Distribution tab plots
 
       - Other Plots tabs and Table tab:
 
@@ -1323,7 +1316,7 @@ Probabilistic analyses
           :align: center
 
       - left side: 4 variables in the list view
-      - right side, tabs: Summary - PDF/CDF - Box plots - Dependance - Table - Parallel coordinates plot - Plot matrix - Scatter plots - Parameters - Model
+      - right side, tabs: Summary - Distribution - Box plots - Dependance - Table - Parallel coordinates plot - Plot matrix - Scatter plots - Parameters - Model
       - when changing the variable, the tabs are updated
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
       - check the tabs (Table - Parallel coordinates plot - Plot matrix - Scatter plots) are linked:
@@ -1397,9 +1390,7 @@ Probabilistic analyses
       .. image:: /developer_manual/validation/monteCarlo_reliability_result.png
           :align: center
 
-      - left side: 1 variable in the list view
-
-      - right side, tabs: Summary - Histogram - Convergence graph - Parameters - Model
+      - tabs: Summary - Histogram - Convergence graph - Parameters - Model
 
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
 
@@ -1459,8 +1450,7 @@ Probabilistic analyses
       .. image:: /developer_manual/validation/FORM_IS_reliability_result.png
           :align: center
 
-      - left side: 1 variable in the list view
-      - right side, tabs: Summary - Histogram - Convergence graph - FORM results - Parameters- Model
+      - tabs: Summary - Histogram - Convergence graph - FORM results - Parameters- Model
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
       - FORM results tab :
 
@@ -1502,8 +1492,7 @@ Probabilistic analyses
       .. image:: /developer_manual/validation/FORM_result.png
           :align: center
 
-      - left side: 1 variable in the list view
-      - right side, tabs: Summary - Design point - Sensitivities - Parameters - Model
+      - tabs: Summary - Design point - Sensitivities - Parameters - Model
       - check tables are well drawn
 
   - SORM: SORM item
@@ -1537,8 +1526,7 @@ Probabilistic analyses
       .. image:: /developer_manual/validation/SORM_result.png
           :align: center
 
-      - left side: 1 variable in the list view
-      - right side, tabs: Summary - Design point - Sensitivities - Parameters - Model
+      - tabs: Summary - Design point - Sensitivities - Parameters - Model
       - check tables are well drawn
 
   - Sobol: Sobol item
@@ -1584,7 +1572,7 @@ Probabilistic analyses
           :align: center
 
       - top combo box: 2 variables available
-      - right side, tabs: Indices - Aggregated Indices - Stopping criteria - Parameters - Model
+      - tabs: Indices - Aggregated Indices - Stopping criteria - Parameters - Model
       - when changing the variable, the Indices tab is updated
       - when indices plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
       - Indices tab:
@@ -1871,8 +1859,8 @@ Probabilistic analyses
 
         - x_1 the output is the first item of the list
 
-      - right side, tabs: Summary - PDF/CDF - Box plots - Dependence - Table - Parallel coordinates plot - Plot matrix - Scatter plots
-      - when changing the variable, the tabs (Summary - PDF/CDF) are updated
+      - right side, tabs: Summary - Distribution - Box plots - Dependence - Table - Parallel coordinates plot - Plot matrix - Scatter plots
+      - when changing the variable, the tabs (Summary - Distribution) are updated
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
       - check the tabs (Table - Parallel coordinates plot - Plot matrix - Scatter plots) are linked:
         do several selections in a tab and check the selection is the same in the others tabs
@@ -1982,7 +1970,7 @@ Probabilistic analyses
 
       - left side: 2 sets of variables in the list view
       - right side, 1 tab: Summary
-      - the right side of the window contains 2 parts: a copulas list and 3 tabs: PDF/CDF - Kendall Plot - Parameters
+      - the right side of the window contains 2 parts: a copulas list and 3 tabs: Distribution - Kendall Plot - Parameters
       - when selecting a copula, the tab widget is updated
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
       - check tables are well drawn

@@ -103,25 +103,40 @@ String FMIPhysicalModel::getFMUFileName() const
 
 void FMIPhysicalModel::setFMUFileName(const String & fileName)
 {
-  fmuInfo_ = FMUInfo(fileName, fmuType_);
+  setFMUFileName(fileName, FMUInfo(fileName, fmuType_));
+}
+
+
+void FMIPhysicalModel::setFMUFileName(const String & fileName, const FMUInfo & info)
+{
+  fmuInfo_ = info;
   Description allVars(fmuInfo_.getVariableNames());
   Indices allCausalities(fmuInfo_.getCausality());
+
+  // default IO selection follows the causality codes of the FMU version:
+  // FMI 1.0: INPUT(0), OUTPUT(1); FMI 2.0: INPUT(2), OUTPUT(3);
+  // FMI 3.0: INPUT(3), OUTPUT(4)
+  UnsignedInteger inputCausality = 2;
+  UnsignedInteger outputCausality = 3;
+  if (fmuInfo_.getFMIVersion() == "3.0")
+  {
+    inputCausality = 3;
+    outputCausality = 4;
+  }
+  else if (fmuInfo_.getFMIVersion() == "1.0")
+  {
+    inputCausality = 0;
+    outputCausality = 1;
+  }
 
   Description inputVars;
   Description outputVars;
   for (UnsignedInteger i = 0; i < allVars.getSize(); ++ i)
   {
-    switch (allCausalities[i])
-    {
-      case 2:// input
-        inputVars.add(allVars[i]);
-        break;
-      case 3:// output
-        outputVars.add(allVars[i]);
-        break;
-      default:
-        break;
-    }
+    if (allCausalities[i] == inputCausality)
+      inputVars.add(allVars[i]);
+    else if (allCausalities[i] == outputCausality)
+      outputVars.add(allVars[i]);
   }
 
   fmuFileName_ = fileName;
@@ -165,9 +180,15 @@ void FMIPhysicalModel::reassignVariables(const Description & inputNames,
   code << "    path_fmu = '" << fmuFileName_ << "'\n";
   code << "    inputs = " << Parameters::GetOTDescriptionStr(inputNames) << "\n";
   code << "    outputs = " << Parameters::GetOTDescriptionStr(outputNames) << "\n";
-  code << "    kind = '" << fmuType_ << "'\n";
-  code << "    if not hasattr(_exec, 'model_fmu'):\n";
+  code << "    kind = " << (fmuType_ == "auto" ? String("None") : "'" + fmuType_ + "'") << "\n";
+  // the cached model is keyed on the FMU identity, not just its presence:
+  // the worker processes of the parallel pool reuse _exec across batches,
+  // so a function object must never keep serving a model built from
+  // different parameters
+  code << "    fmu_id = (path_fmu, tuple(inputs), tuple(outputs), kind)\n";
+  code << "    if getattr(_exec, 'model_fmu_id', None) != fmu_id:\n";
   code << "        _exec.model_fmu = otfmi.OpenTURNSFMUFunction(path_fmu, inputs_fmu=inputs, outputs_fmu=outputs, kind=kind)\n";
+  code << "        _exec.model_fmu_id = fmu_id\n";
   code << "    __X = [" << inputNamesUnderscoreStr << "]\n";
 
   code << "    " << outputNamesUnderscoreStr;
@@ -176,19 +197,26 @@ void FMIPhysicalModel::reassignVariables(const Description & inputNames,
 
   code << "    return " << outputNamesUnderscoreStr << "\n";
 
-  // save values because setCode drops renamed variables
+  // save values/descriptions because setCode drops renamed variables
   std::map<String, Scalar> valueMap;
+  std::map<String, String> descriptionMap;
   for(UnsignedInteger i = 0; i < inputNames.getSize(); ++ i)
   {
     const String varName(inputNames[i]);
     if (hasInputNamed(varName))
+    {
       valueMap[varName] = getInputByName(varName).getValue();
+      descriptionMap[varName] = getInputByName(varName).getDescription();
+    }
   }
   for(UnsignedInteger i = 0; i < outputNames.getSize(); ++ i)
   {
     const String varName(outputNames[i]);
     if (hasOutputNamed(varName))
+    {
       valueMap[varName] = getOutputByName(varName).getValue();
+      descriptionMap[varName] = getOutputByName(varName).getDescription();
+    }
   }
 
   setCode(code);
@@ -202,6 +230,7 @@ void FMIPhysicalModel::reassignVariables(const Description & inputNames,
     {
       getInputByName(newName).setName(oldName);
       getInputByName(oldName).setValue(valueMap[oldName]);// restore lost value
+      getInputByName(oldName).setDescription(descriptionMap[oldName]);// restore lost description
     }
   }
   for(UnsignedInteger i = 0; i < outputNames.getSize(); ++ i)
@@ -212,6 +241,7 @@ void FMIPhysicalModel::reassignVariables(const Description & inputNames,
     {
       getOutputByName(newName).setName(oldName);
       getOutputByName(oldName).setValue(valueMap[oldName]);// restore lost value
+      getOutputByName(oldName).setDescription(descriptionMap[oldName]);// restore lost description
     }
   }
 }

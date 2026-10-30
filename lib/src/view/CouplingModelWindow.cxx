@@ -280,6 +280,7 @@ CouplingModelWindow::CouplingModelWindow(PhysicalModelItem *item, QWidget *paren
 
   // - error message label
   errorMessageWidget_ = buttons->getErrorMessageWidget();
+  errorMessageWidget_->setHeight(80); // fixed height with scrollbar because evaluation errors can be long (e.g. code tracebacks)
 
   connect(buttons, &CheckModelButtonGroup::evaluateOutputsRequested, [this, timeInfo, mainTabWidget] ()
   {

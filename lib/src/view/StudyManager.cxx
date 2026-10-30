@@ -580,10 +580,16 @@ bool StudyManager::saveAs(QObject* obj)
     return false;
   }
 
-  const QString fileName = QFileDialog::getSaveFileName(mainWidget_,
+  QString fileName = QFileDialog::getSaveFileName(mainWidget_,
                            tr("Save study..."),
                            FileTools::GetCurrentDir() + QDir::separator() + studyItem->data(Qt::DisplayRole).toString(),
                            tr("XML files (*.xml)"));
+
+  if (fileName.isEmpty())
+    return false;
+
+  if (!fileName.endsWith(".xml"))
+    fileName += ".xml";
 
   const bool ret = studyItem->save(fileName);
   if (ret)

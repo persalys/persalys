@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
 import openturns as ot
+import openturns.testing
 import persalys
 import os
 
@@ -27,3 +28,15 @@ print("f2.evals", f2.getEvaluationCallsNumber())
 
 os.remove(f.getCacheInputFile())
 os.remove(f.getCacheOutputFile())
+
+# Memoized marginal (FileMemoizeEvaluation)
+g_multi = ot.SymbolicFunction(["x"], ["x", "x^2", "x^3", "x^4", "x^5"])
+memo_multi = persalys.FileMemoizeEvaluation(g_multi.getEvaluation(), "input1.csv", "output1.csv")
+memo_multi_func = ot.Function(memo_multi)
+marginal = memo_multi_func.getMarginal([3, 1])
+print("memoized marginal=", marginal)
+print("marginal at x=2:", marginal([2.0]))
+openturns.testing.assert_almost_equal(marginal([2.0]), [16.0, 4.0], 1e-12)
+
+os.remove("input1.csv")
+os.remove("output1.csv")

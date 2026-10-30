@@ -44,6 +44,7 @@ protected:
 
 public slots:
   void setCheckedNames(const QStringList &selectedItemNames);
+  void resetItemNames(const QStringList &itemNames);
   void updateCheckState(QListWidgetItem *);
 signals:
   void checkedItemsChanged(const QStringList &itemsNames);

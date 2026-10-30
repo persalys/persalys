@@ -2036,6 +2036,13 @@ interestVariables = ['Ep']
 aDesign_0.setInterestVariables(interestVariables)
 aDesign_0.run()
 myStudy.add(aDesign_0)
+inputColumns = [0, 1, 2]
+anotherDesign = persalys.ImportedDesignOfExperiment('anotherDesign', myPhysicalModel, 'tCogenSample.csv', inputColumns)
+anotherDesign.setBlockSize(1)
+interestVariables = ['Ep']
+anotherDesign.setInterestVariables(interestVariables)
+anotherDesign.setType(persalys.DataModel.UK)
+myStudy.add(anotherDesign)
 myTaylorExpansionMoments = persalys.TaylorExpansionMomentsAnalysis('myTaylorExpansionMoments', myPhysicalModel)
 myStudy.add(myTaylorExpansionMoments)
 myMonteCarlo = persalys.MonteCarloAnalysis('myMonteCarlo', myPhysicalModel)
