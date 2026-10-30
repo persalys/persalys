@@ -1,7 +1,16 @@
+= 21.0 release (2026-10-30)
+
+ * Added support for system reliability
+ * Calibration result window improvement
+ * Heavy plot tabs are now lazy loaded (performance increase when opening a study)
+ * New color palette and new shortcuts
+ * Improved FMI models
+ * Various bug fixes and improvements
+
 = 20.1 release (2026-06-15)
 
- * Various bug fixes and improvments
- * improvments on the sensitivity analysis wizard
+ * Various bug fixes and improvements
+ * improvements on the sensitivity analysis wizard
  * added the possibility to duplicate a data set
  * multiple selection now working in paraview graphs
  * computations can be interrupted with ydefx
