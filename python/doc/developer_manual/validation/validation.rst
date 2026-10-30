@@ -1197,13 +1197,13 @@ Designs of experiments
       .. image:: /developer_manual/validation/design_3_Table.png
           :align: center
 
-      - 10 tabs: Summary - PDF/CDF - Boxplots - Dependence - Table - Parallel coordinates plot - Plot matrix - Scatter plot - Parameters - Model
-      - Summary and PDF/CDF tabs:
+      - 10 tabs: Summary - Distribution - Boxplots - Dependence - Table - Parallel coordinates plot - Plot matrix - Scatter plot - Parameters - Model
+      - Summary and Distribution tabs:
 
         - when changing the variable, the tabs are updated
         - when changing either Probability or Empirical quantile spinboxes values both are updated
         - when changing confidence interval level spinbox value, CI length is updated
-        - PDF, CDF and survival function are available in Graph settings widget from PDF/CDF tab plots
+        - PDF, CDF and survival function are available in Graph settings widget from Distribution tab plots
 
       - Other Plots tabs and Table tab:
 
@@ -1316,7 +1316,7 @@ Probabilistic analyses
           :align: center
 
       - left side: 4 variables in the list view
-      - right side, tabs: Summary - PDF/CDF - Box plots - Dependance - Table - Parallel coordinates plot - Plot matrix - Scatter plots - Parameters - Model
+      - right side, tabs: Summary - Distribution - Box plots - Dependance - Table - Parallel coordinates plot - Plot matrix - Scatter plots - Parameters - Model
       - when changing the variable, the tabs are updated
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
       - check the tabs (Table - Parallel coordinates plot - Plot matrix - Scatter plots) are linked:
@@ -1390,9 +1390,7 @@ Probabilistic analyses
       .. image:: /developer_manual/validation/monteCarlo_reliability_result.png
           :align: center
 
-      - left side: 1 variable in the list view
-
-      - right side, tabs: Summary - Histogram - Convergence graph - Parameters - Model
+      - tabs: Summary - Histogram - Convergence graph - Parameters - Model
 
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
 
@@ -1452,8 +1450,7 @@ Probabilistic analyses
       .. image:: /developer_manual/validation/FORM_IS_reliability_result.png
           :align: center
 
-      - left side: 1 variable in the list view
-      - right side, tabs: Summary - Histogram - Convergence graph - FORM results - Parameters- Model
+      - tabs: Summary - Histogram - Convergence graph - FORM results - Parameters- Model
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
       - FORM results tab :
 
@@ -1495,8 +1492,7 @@ Probabilistic analyses
       .. image:: /developer_manual/validation/FORM_result.png
           :align: center
 
-      - left side: 1 variable in the list view
-      - right side, tabs: Summary - Design point - Sensitivities - Parameters - Model
+      - tabs: Summary - Design point - Sensitivities - Parameters - Model
       - check tables are well drawn
 
   - SORM: SORM item
@@ -1530,8 +1526,7 @@ Probabilistic analyses
       .. image:: /developer_manual/validation/SORM_result.png
           :align: center
 
-      - left side: 1 variable in the list view
-      - right side, tabs: Summary - Design point - Sensitivities - Parameters - Model
+      - tabs: Summary - Design point - Sensitivities - Parameters - Model
       - check tables are well drawn
 
   - Sobol: Sobol item
@@ -1577,7 +1572,7 @@ Probabilistic analyses
           :align: center
 
       - top combo box: 2 variables available
-      - right side, tabs: Indices - Aggregated Indices - Stopping criteria - Parameters - Model
+      - tabs: Indices - Aggregated Indices - Stopping criteria - Parameters - Model
       - when changing the variable, the Indices tab is updated
       - when indices plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
       - Indices tab:
@@ -1864,8 +1859,8 @@ Probabilistic analyses
 
         - x_1 the output is the first item of the list
 
-      - right side, tabs: Summary - PDF/CDF - Box plots - Dependence - Table - Parallel coordinates plot - Plot matrix - Scatter plots
-      - when changing the variable, the tabs (Summary - PDF/CDF) are updated
+      - right side, tabs: Summary - Distribution - Box plots - Dependence - Table - Parallel coordinates plot - Plot matrix - Scatter plots
+      - when changing the variable, the tabs (Summary - Distribution) are updated
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
       - check the tabs (Table - Parallel coordinates plot - Plot matrix - Scatter plots) are linked:
         do several selections in a tab and check the selection is the same in the others tabs
@@ -1975,7 +1970,7 @@ Probabilistic analyses
 
       - left side: 2 sets of variables in the list view
       - right side, 1 tab: Summary
-      - the right side of the window contains 2 parts: a copulas list and 3 tabs: PDF/CDF - Kendall Plot - Parameters
+      - the right side of the window contains 2 parts: a copulas list and 3 tabs: Distribution - Kendall Plot - Parameters
       - when selecting a copula, the tab widget is updated
       - when a plot is displayed, a Graph setting widget appears at the bottom of the tree view: check its behavior
       - check tables are well drawn
