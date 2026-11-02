@@ -173,7 +173,7 @@ void DesignOfExperimentDefinitionItem::appendEvaluationItem()
   insertRow(0, evaluationItem);
 
   // emit signal to StudyTreeView to create a window
-  emit windowRequested(evaluationItem);
+  emit windowRequested(static_cast<QObject*>(evaluationItem));
 }
 
 

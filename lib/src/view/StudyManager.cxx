@@ -21,6 +21,7 @@
 #include "persalys/StudyManager.hxx"
 
 #include "persalys/StudyItem.hxx"
+#include "persalys/AnalysisItem.hxx"
 #include "persalys/WindowFactory.hxx"
 
 #include "persalys/AnalysisWindow.hxx"
@@ -123,8 +124,9 @@ void StudyManager::openAnalysisWizard(QObject *obj, const Analysis &analysis, co
 }
 
 
-void StudyManager::modifyAnalysis(AnalysisItem* item)
+void StudyManager::modifyAnalysis(QObject* obj)
 {
+  auto * item = qobject_cast<AnalysisItem*>(obj);
   Q_ASSERT(item);
   QPointer<AnalysisWizard> wizard{WindowFactory::GetAnalysisWizard(item->getAnalysis(), false, mainWidget_)};
 
@@ -332,7 +334,7 @@ void StudyManager::createWindow(Item *item)
   connect(item, SIGNAL(analysisRequested(QObject*, Analysis)), this, SLOT(openAnalysisWindow(QObject*, Analysis)));
 
   connect(item, SIGNAL(windowRequested(Item*)), this, SLOT(createWindow(Item*)));
-  connect(item, SIGNAL(windowRequested(AnalysisItem*)), this, SLOT(createAnalysisWindow(AnalysisItem*)));
+  connect(item, SIGNAL(windowRequested(QObject*, bool)), this, SLOT(createAnalysisWindow(QObject*, bool)));
 
   connect(item, SIGNAL(exportRequested()), this, SLOT(exportPythonScript()));
   connect(item, SIGNAL(saveRequested(QObject*)), this, SLOT(save(QObject*)));
@@ -345,8 +347,9 @@ void StudyManager::createWindow(Item *item)
 }
 
 
-void StudyManager::createAnalysisWindow(AnalysisItem* item, const bool createConnections)
+void StudyManager::createAnalysisWindow(QObject* obj, const bool createConnections)
 {
+  auto * item = qobject_cast<AnalysisItem*>(obj);
   if (!item)
     return;
 
@@ -354,9 +357,9 @@ void StudyManager::createAnalysisWindow(AnalysisItem* item, const bool createCon
   {
     // connections
     connect(item, SIGNAL(showErrorMessageRequested(QString)), this, SLOT(showErrorMessage(QString)));
-    connect(item, SIGNAL(modifyAnalysisRequested(AnalysisItem*)), this, SLOT(modifyAnalysis(AnalysisItem*)));
+    connect(item, SIGNAL(modifyAnalysisRequested(QObject*)), this, SLOT(modifyAnalysis(QObject*)));
     connect(item, SIGNAL(dataExtractionWizardRequested(QObject*, Analysis)), this, SLOT(openExtractDataFieldWizard(QObject*, Analysis)));
-    connect(item, SIGNAL(windowRequested(AnalysisItem*, bool)), this, SLOT(createAnalysisWindow(AnalysisItem*, bool)));
+    connect(item, SIGNAL(windowRequested(QObject*, bool)), this, SLOT(createAnalysisWindow(QObject*, bool)));
     connect(item, SIGNAL(wizardRequested(QObject*, Analysis)), this, SLOT(openAnalysisWizard(QObject*, Analysis)));
     connect(item, SIGNAL(doeEvaluationWizardRequested(Analysis)), this, SLOT(openDesignOfExperimentEvaluationWizard(Analysis)));
     connect(item, SIGNAL(pythonMetamodelExportRequested(PhysicalModel)), this, SLOT(exportMetamodelPython(PhysicalModel)));

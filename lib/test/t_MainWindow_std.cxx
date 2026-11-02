@@ -255,7 +255,7 @@ private slots:
         QPushButton * runButton = analysisWindow->findChild<QPushButton*>("runbutton");
         analysisWindow = nullptr;
         QVERIFY(runButton != nullptr);
-        QSignalSpy spy(item, SIGNAL(windowRequested(AnalysisItem*, bool)));
+        QSignalSpy spy(item, SIGNAL(windowRequested(QObject*, bool)));
         runButton->click();
         // Wait 2 sec for result
         spy.wait(2000);

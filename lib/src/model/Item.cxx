@@ -181,6 +181,6 @@ void Item::appendAnalysisItem(const Analysis &analysis)
     appendRow(newItem);
 
   // emit signal to StudyTreeView to create a window
-  emit windowRequested(newItem);
+  emit windowRequested(static_cast<QObject*>(newItem));
 }
 }
