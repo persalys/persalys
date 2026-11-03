@@ -63,7 +63,7 @@ signals:
   void analysisRemoved(QStandardItem*);
   void messageChanged(QString);
   void progressValueChanged(int);
-  void modifyAnalysisRequested(AnalysisItem*);
+  void modifyAnalysisRequested(QObject*);
   void dataExtractionWizardRequested(QObject*, Analysis);
   void pythonMetamodelExportRequested(PhysicalModel);
   void evaluationsImportRequested(const QObject*, const Analysis&);

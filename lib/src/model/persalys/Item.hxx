@@ -27,7 +27,6 @@
 
 namespace PERSALYS
 {
-class AnalysisItem;
 class PERSALYS_MODEL_API Item : public ItemFactory, public QStandardItem
 {
   Q_OBJECT
@@ -64,7 +63,7 @@ signals:
   // signals for StudyManager
   void showErrorMessageRequested(QString);
   void changeCurrentItemRequested(QModelIndex);
-  void windowRequested(AnalysisItem*, bool createConnections = true);
+  void windowRequested(QObject*, bool createConnections = true);
   void windowRequested(Item*);
 
   void exportRequested();

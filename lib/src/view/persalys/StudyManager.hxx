@@ -51,7 +51,7 @@ public slots:
   void openMetamodelExportWizard(QObject *item, const Analysis& model, const bool isGeneralWizard = false);
   void openDesignOfExperimentExportWizard(const QObject *item);
   void openProperties(Item* item) const;
-  void modifyAnalysis(AnalysisItem* item);
+  void modifyAnalysis(QObject* obj);
   void openImportEvaluationsWizard(const QObject *item, const Analysis &analysis);
 
   // open windows
@@ -59,7 +59,7 @@ public slots:
 
   // create windows
   void createWindow(Item *item);
-  void createAnalysisWindow(AnalysisItem* item, const bool createConnections = true);
+  void createAnalysisWindow(QObject* obj, const bool createConnections = true);
 
   // import/export/save/open/close study
   void importPythonScript(const QString& fileName = "");
